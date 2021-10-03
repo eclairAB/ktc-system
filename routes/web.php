@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('vendor/voyager/login');
+    return redirect()->route('voyager.login');
 });
 
 
