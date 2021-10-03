@@ -30,8 +30,8 @@
     <div class="login-container">
 
         <div>
-            <div class="hidden-sm hidden-md hidden-lg" style="color: black; font-weight: bold; text-align: center; font-size: 20px; margin-bottom: 30px ;">
-                <div style="color: white;">KUDOS TRUCKING CO. SYSTEM</div>
+            <div style="color: black; font-weight: bold; text-align: center; font-size: 20px; margin-bottom: 30px ;">
+                Kudos Trucking Corporation System
             </div>
             <p>{{ __('voyager::login.signin_below') }}</p>
 
@@ -65,10 +65,6 @@
                 <div class="login_credits">&#169; 2021</div>
 
             </form>
-
-            <div class="hidden-sm hidden-md hidden-lg" style="margin-top: 30px;">
-                <img src="{{ Voyager::image( Voyager::setting('admin.login_image_mobile'), voyager_asset('images/bg.jpg') ) }}" style="width: 100%">
-            </div>
 
             <div style="clear:both"></div>
 
