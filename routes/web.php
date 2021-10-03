@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('vendor/voyager/login');
+});
 
 
-Route::group(['prefix' => '/'], function () {
+Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
