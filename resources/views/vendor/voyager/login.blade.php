@@ -31,7 +31,7 @@
 
         <div>
             <div class="hidden-sm hidden-md hidden-lg" style="color: black; font-weight: bold; text-align: center; font-size: 20px; margin-bottom: 30px ;">
-                KUDOS TRUCKING CO. SYSTEM
+                <div style="color: white;">KUDOS TRUCKING CO. SYSTEM</div>
             </div>
             <p>{{ __('voyager::login.signin_below') }}</p>
 
@@ -62,7 +62,7 @@
                     <span class="signin">{{ __('voyager::generic.login') }}</span>
                 </button>
 
-                <div class="login_credits">&#169; Developed by Infosoft and USAID</div>
+                <div class="login_credits">&#169; 2021</div>
 
             </form>
 
