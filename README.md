@@ -37,6 +37,13 @@
   <a href="https://app.saucelabs.com/builds/50f8372d79f743a3b25fb6ca4851ca4c"><img src="https://app.saucelabs.com/buildstatus/vuejs" alt="Build Status"></a>
 </p>
 
+# Apache ECharts
+
+<a href="https://echarts.apache.org/"><img style="vertical-align: top;" src="https://github.com/apache/echarts/raw/master/asset/logo.png?raw=true" alt="logo" height="50px"></a>
+
+[![Build Status](https://travis-ci.org/apache/echarts.svg?branch=master)](https://travis-ci.org/apache/echarts) [![](https://img.shields.io/npm/dw/echarts.svg?label=npm%20downloads&style=flat)](https://www.npmjs.com/package/echarts) [![Last npm release](https://img.shields.io/npm/v/echarts)](https://www.npmjs.com/package/echarts)
+
+
 ***
 
 ### Setting up:
