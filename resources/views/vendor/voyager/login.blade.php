@@ -31,7 +31,7 @@
 
         <div>
             <div style="color: black; font-weight: bold; text-align: center; font-size: 20px; margin-bottom: 30px ;">
-                Kudos Trucking Corporation System
+                <img src = "{{ asset('/images/kudos.png') }}" width="80%" /><br>
             </div>
             <p>{{ __('voyager::login.signin_below') }}</p>
 
@@ -57,7 +57,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-block login-button" style="margin-bottom: 20px;">
+                <button type="submit" class="btn btn-block login-button" style="margin-bottom: 20px; background: #081e48 !important;">
                     <span class="signingin hidden"><span class="voyager-refresh"></span> {{ __('voyager::login.loggingin') }}...</span>
                     <span class="signin">{{ __('voyager::generic.login') }}</span>
                 </button>
