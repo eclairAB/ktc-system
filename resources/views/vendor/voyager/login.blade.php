@@ -31,7 +31,7 @@
 
         <div>
             <div style="color: black; font-weight: bold; text-align: center; font-size: 20px; margin-bottom: 30px ;">
-                <img src = "{{ asset('/images/kudos.png') }}" width="80%" /><br>
+                <img src = "{{ asset('/images/kudos.png') }}" width="200px" /><br>
             </div>
             <p>{{ __('voyager::login.signin_below') }}</p>
 
