@@ -17,10 +17,10 @@ class CreateContainerReleasingsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->bigInteger('booking_no')->nullable();
-            $table->string('conglone')->nullable();
+            $table->string('consignee')->nullable();
             $table->string('hauler')->nullable();
             $table->text('plate_no')->nullable();
-            $table->text('seac_no')->nullable();
+            $table->text('seal_no')->nullable();
             $table->text('upload_photo')->nullable();
             $table->text('signature')->nullable();
         });
