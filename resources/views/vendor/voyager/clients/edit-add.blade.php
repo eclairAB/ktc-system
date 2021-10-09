@@ -26,40 +26,28 @@
             <div class="col-md-12">
 
                 <div class="panel panel-bordered">
-                    <!-- form start -->
-                    <form role="form"
-                            class="form-edit-add"
-                            action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
-                            method="POST" enctype="multipart/form-data">
-                        <!-- PUT Method if we are editing -->
-                        @if($edit)
-                            {{ method_field("PUT") }}
-                        @endif
-
-                        <!-- CSRF TOKEN -->
-                        {{ csrf_field() }}
-
+                    <div id="clientForm">
                         <div class="panel-body">
                             <div class="row" style="padding: 0px 10px;">
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="dqr" id="dqr" class="form-control" style="height: 37px;">
-                                <label for="dqr" class="form-control-placeholder"> Code Name</label>
+                                <input type="text" name="code_name" id="code_name" v-model="form.code_name" class="form-control" style="height: 37px;">
+                                <label for="code_name" class="form-control-placeholder"> Code Name</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="dqr" id="dqr" class="form-control" style="height: 37px;">
-                                <label for="dqr" class="form-control-placeholder"> Contact Number</label>
+                                <input type="text" name="contact_number" id="contact_number" v-model="form.contact_number" class="form-control" style="height: 37px;">
+                                <label for="contact_number" class="form-control-placeholder"> Contact Number</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="dqr" id="dqr" class="form-control" style="height: 37px;">
-                                <label for="dqr" class="form-control-placeholder"> User Name</label>
+                                <input type="text" name="username" id="username" v-model="form.username" class="form-control" style="height: 37px;">
+                                <label for="username" class="form-control-placeholder"> User Name</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="dqr" id="dqr" class="form-control" style="height: 37px;">
-                                <label for="dqr" class="form-control-placeholder"> Password</label>
+                                <input type="text" name="password" id="password" v-model="form.password" class="form-control" style="height: 37px;">
+                                <label for="password" class="form-control-placeholder"> Password</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="dqr" id="dqr" class="form-control" style="height: 37px;">
-                                <label for="dqr" class="form-control-placeholder"> Confirm Password</label>
+                                <input type="text" name="confirm_password" id="confirm_password" v-model="form.confirm_password" class="form-control" style="height: 37px;">
+                                <label for="confirm_password" class="form-control-placeholder"> Confirm Password</label>
                               </div>
                             </div>
                         </div>
@@ -67,7 +55,7 @@
                         <div class="panel-footer" style="display: flex; justify-content: flex-end;">
                             <button type="submit" class="btn btn-primary save">Save</button>
                         </div>
-                    </form>
+                    </div>
 
                     <iframe id="form_target" name="form_target" style="display:none"></iframe>
                     <form id="my_form" action="{{ route('voyager.upload') }}" target="form_target" method="post"
@@ -180,4 +168,21 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
+
+    <!-- VUE -->
+    <script type="text/javascript">
+        var app = new Vue({
+        el: '#clientForm',
+        data: {
+          form: {}
+        },
+        methods:{
+          
+        }
+      })
+    </script>
+    <!--  -->
 @stop

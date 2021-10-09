@@ -30,32 +30,32 @@
                         <div class="panel-body">
                             <div class="row" style="padding: 0px 10px;">
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="dqr" id="dqr" class="form-control" style="height: 37px;">
-                                <label for="dqr" class="form-control-placeholder"> ID No.</label>
+                                <input type="text" name="id_no" id="id_no" v-model="form.id_no" class="form-control" style="height: 37px;">
+                                <label for="id_no" class="form-control-placeholder"> ID No.</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="dqr" id="dqr" class="form-control" style="height: 37px;">
-                                <label for="dqr" class="form-control-placeholder"> First Name</label>
+                                <input type="text" name="firstname" id="firstname" v-model="form.firstname" class="form-control" style="height: 37px;">
+                                <label for="firstname" class="form-control-placeholder"> First Name</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="dqr" id="dqr" class="form-control" style="height: 37px;">
-                                <label for="dqr" class="form-control-placeholder"> Last Name</label>
+                                <input type="text" name="lastname" id="lastname" v-model="form.lastname" class="form-control" style="height: 37px;">
+                                <label for="lastname" class="form-control-placeholder"> Last Name</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="dqr" id="dqr" class="form-control" style="height: 37px;">
-                                <label for="dqr" class="form-control-placeholder"> Contact Number</label>
+                                <input type="text" name="contact_number" id="contact_number" v-model="form.contact_number" class="form-control" style="height: 37px;">
+                                <label for="contact_number" class="form-control-placeholder"> Contact Number</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="dqr" id="dqr" class="form-control" style="height: 37px;">
-                                <label for="dqr" class="form-control-placeholder"> User Name</label>
+                                <input type="text" name="username" id="username" v-model="form.username" class="form-control" style="height: 37px;">
+                                <label for="username" class="form-control-placeholder"> User Name</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="dqr" id="dqr" class="form-control" style="height: 37px;">
-                                <label for="dqr" class="form-control-placeholder"> Password</label>
+                                <input type="text" name="password" id="password" v-model="form.password" class="form-control" style="height: 37px;">
+                                <label for="password" class="form-control-placeholder"> Password</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="dqr" id="dqr" class="form-control" style="height: 37px;">
-                                <label for="dqr" class="form-control-placeholder"> Confirm Password</label>
+                                <input type="text" name="confirm_password" id="confirm_password" v-model="form.confirm_password" class="form-control" style="height: 37px;">
+                                <label for="confirm_password" class="form-control-placeholder"> Confirm Password</label>
                               </div>
                             </div>
                         </div>
@@ -185,7 +185,7 @@
         var app = new Vue({
         el: '#staffForm',
         data: {
-          pasmo: 'PASMO KA'
+          form: {}
         },
         methods:{
           
