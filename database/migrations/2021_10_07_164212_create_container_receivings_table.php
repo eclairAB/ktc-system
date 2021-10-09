@@ -16,15 +16,15 @@ class CreateContainerReceivingsTable extends Migration
         Schema::create('container_receivings', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->bigInteger('eir_no')->nullable();
-            $table->bigInteger('inspected_by')->nullable();
-            $table->bigInteger('container_no')->nullable();
+            $table->timestampTz('inspected_date')->nullable();
+            $table->bigInteger('inspected_by')->nullable();    
             $table->bigInteger('client_id')->nullable();
             $table->bigInteger('size_type')->nullable();
-            $table->string('class')->nullable();
-            $table->string('type')->nullable();
-            $table->string('height')->nullable();
+            $table->bigInteger('class')->nullable();
+            $table->bigInteger('height')->nullable();
+            $table->string('container_no')->nullable();
             $table->string('empty_loaded')->nullable();
+            $table->string('type')->nullable();
             $table->timestampTz('manufactured_date')->nullable();
             $table->string('yard_loacation')->nullable();
             $table->text('acceptance_no')->nullable();
