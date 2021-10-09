@@ -1,0 +1,44 @@
+.form-group {
+    margin-top: 10px !important;
+}
+
+@media screen and (max-width: 992px) {
+  .form-group {
+    margin-top: 20px !important;
+   }
+}
+
+.form-control-placeholder {
+  position: absolute;
+  top: 0;
+  transition: all 100ms;
+  font-size: 75%;
+  font-weight: bold;
+  padding: 7px 0 0 0px;
+  transform: translate3d(0, -70%, 0);
+  opacity: 1;
+  background-color: white;
+}
+.form-control, span.select2-selection.select2-selection--single {
+    height: 45px !important;
+}
+
+span.select2.select2-container.select2-container--default.select2-container--below, span.select2.select2-container.select2-container--default {
+    display: block;
+    z-index: 0;
+}
+
+span#select2--container, span.select2-selection__arrow, .select2-container--default .select2-selection--single .select2-selection__arrow {
+    display: flex !important;
+    align-items: center !important;
+    margin-top: 5px;
+}
+
+span.select2-selection.select2-selection--single {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.select2-selection {
+    display: flex;
+}
