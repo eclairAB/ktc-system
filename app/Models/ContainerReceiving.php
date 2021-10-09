@@ -9,8 +9,8 @@ class ContainerReceiving extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'eir_no',
         'inspected_by',
+        'inspected_date',
         'container_no',
         'client_id',
         'size_type',
