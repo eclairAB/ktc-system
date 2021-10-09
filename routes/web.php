@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ViewsController;
+use App\Http\Controllers\QueriesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,4 +23,7 @@ Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 
     Route::get('admin', [ViewsController::class, "roleRedirect"]);
+    Route::get('/container/classes',[QueriesController::class,"getContainterClass"]);
+    Route::get('/container/heights',[QueriesController::class,"getContainterHeight"]);
+    Route::get('/container/size_type',[QueriesController::class,"getContainterSizeType"]);
 });
