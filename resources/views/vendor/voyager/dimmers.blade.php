@@ -71,6 +71,11 @@ $dimmerGroups = Voyager::dimmers();
         <div id="chart3"></div>
       </figure>
     </div>
+
+    @php
+      echo Auth::user()->role->name;
+    @endphp
+
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.1/dist/echarts.min.js" integrity="sha256-EJb5T/UXVVwHY/BJ33bAFqyyzsAqdl4ZCElh3UYvaLk=" crossorigin="anonymous"></script>
     <script>

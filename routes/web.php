@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ViewsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,4 +20,6 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
+
+    Route::get('admin', [ViewsController::class, "roleRedirect"]);
 });
