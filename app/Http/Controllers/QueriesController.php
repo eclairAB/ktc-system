@@ -15,21 +15,27 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return $q->where('class_code', 'ilike', '%'.$request->keyword.'%')
             ->orwhere('class_name', 'ilike', '%'.$request->keyword.'%');
         })->get();
+
+        return $class;
     }
 
     public function getContainterHeight(Request $request)
     {
-        $class = ContainerHeight::when(!empty($request->keyword), function ($q) use ($request){
+        $height = ContainerHeight::when(!empty($request->keyword), function ($q) use ($request){
             return $q->where('height_code', 'ilike', '%'.$request->keyword.'%')
             ->orwhere('height_name', 'ilike', '%'.$request->keyword.'%');
         })->get();
+
+        return $height;
     }
 
     public function getContainterSizeType(Request $request)
     {
-        $class = ContainerSizeType::when(!empty($request->keyword), function ($q) use ($request){
+        $sizetype = ContainerSizeType::when(!empty($request->keyword), function ($q) use ($request){
             return $q->where('code', 'ilike', '%'.$request->keyword.'%')
             ->orwhere('name', 'ilike', '%'.$request->keyword.'%');
         })->get();
+
+        return $sizetype;
     }
 }
