@@ -42,3 +42,17 @@ span.select2-selection.select2-selection--single {
 .select2-selection {
     display: flex;
 }
+
+.vs--searchable .vs__dropdown-toggle {
+    height: 44px !important;
+    padding: 0 !important;
+}
+
+.v-select {
+    padding: 0 !important;
+    border: 0px;
+}
+
+.vs__dropdown-toggle {
+    border: 1px solid #e4eaec !important;
+}
