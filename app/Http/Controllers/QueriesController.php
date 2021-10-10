@@ -6,7 +6,7 @@ use App\Models\ContainerHeight;
 use App\Models\ContainerSizeType;
 use Illuminate\Http\Request;
 
-class QueriesController extends VoyagerBaseController
+class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
 {
     //
     public function getContainterClass(Request $request)
