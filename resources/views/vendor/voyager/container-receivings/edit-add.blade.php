@@ -39,7 +39,32 @@
                                 <label for="firstname" class="form-control-placeholder"> Container No.</label>
                               </div>
                               <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <v-select class="form-control" :options="sizeTypeList" v-model="form.size_type"></v-select>
+                                <v-select
+                                  class="form-control" 
+                                  :options="sizeTypeList"
+                                  v-model="form.size_type"
+                                  label="name"
+                                  :filter="fuseSize"
+                                  @option:selected="clearSize()"
+                                  :reset-on-options-change='true'
+                                  :reduce="name => name.id"
+                                >
+                                  <template #search="{attributes, events}">
+                                    <input
+                                      class="vs__search"
+                                      v-bind="attributes"
+                                      v-on="events"
+                                      v-model="sizeSearch"
+                                      @input="searchSize()"
+                                    />
+                                  </template>
+                                  <template slot="selected-option" slot-scope="option">
+                                    <span>Code: @{{option.code}} - Name: @{{option.name}}</span>
+                                  </template>
+                                  <template slot="option" slot-scope="option">
+                                      Code: @{{option.code}} - Name: @{{option.name}}
+                                  </template>
+                                </v-select>
                                 <label for="lastname" class="form-control-placeholder"> Size Type</label>
                               </div>
                               <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
@@ -48,16 +73,43 @@
                                   :options="classList"
                                   v-model="form.class"
                                   label="class_name"
-                                ></v-select>
+                                  :filter="fuseClass"
+                                  @option:selected="clearClass()"
+                                  :reset-on-options-change='true'
+                                  :reduce="class_name => class_name.id"
+                                >
+                                  <template #search="{attributes, events}">
+                                    <input
+                                      class="vs__search"
+                                      v-bind="attributes"
+                                      v-on="events"
+                                      v-model="classSearch"
+                                      @input="searchClass()"
+                                    />
+                                  </template>
+                                  <template slot="selected-option" slot-scope="option">
+                                    <span>Code: @{{option.class_code}} - Name: @{{option.class_name}}</span>
+                                  </template>
+                                  <template slot="option" slot-scope="option">
+                                      Code: @{{option.class_code}} - Name: @{{option.class_name}}
+                                  </template>
+                                </v-select>
                                 <label for="contact_number" class="form-control-placeholder"> Class</label>
                               </div>
-                              
                               <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                                 <input type="text" name="empty_loaded" id="empty_loaded" v-model="form.empty_loaded" class="form-control" style="height: 37px;">
                                 <label for="empty_loaded" class="form-control-placeholder"> Empty Loaded</label>
                               </div>
                               <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="manufactured_date" id="manufactured_date" v-model="form.manufactured_date" class="form-control" style="height: 37px;">
+                                <vuejs-datepicker
+                                  v-model="form.manufactured_date"
+                                  placeholder="mm/dd/yyyyy"
+                                  :input-class="'form-control'"
+                                  :typeable="true"
+                                  name="manufactured_date"
+                                  :format="dateFormat"
+                                  :required="true">
+                                </vuejs-datepicker>
                                 <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
                               </div>
                               <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
@@ -65,7 +117,32 @@
                                 <label for="username" class="form-control-placeholder"> Type</label>
                               </div>
                               <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <v-select class="form-control" :options="heightList" v-model="form.height"></v-select>
+                                <v-select
+                                  class="form-control" 
+                                  :options="heightList"
+                                  v-model="form.height"
+                                  label="height_name"
+                                  :filter="fuseHeight"
+                                  @option:selected="clearHeight()"
+                                  :reset-on-options-change='true'
+                                  :reduce="height_name => height_name.id"
+                                >
+                                  <template #search="{attributes, events}">
+                                    <input
+                                      class="vs__search"
+                                      v-bind="attributes"
+                                      v-on="events"
+                                      v-model="heightSearch"
+                                      @input="searchHeight()"
+                                    />
+                                  </template>
+                                  <template slot="selected-option" slot-scope="option">
+                                    <span>Code: @{{option.height_code}} - Name: @{{option.height_name}}</span>
+                                  </template>
+                                  <template slot="option" slot-scope="option">
+                                      Code: @{{option.height_code}} - Name: @{{option.height_name}}
+                                  </template>
+                                </v-select>
                                 <label for="password" class="form-control-placeholder"> Height</label>
                               </div>
                               <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
@@ -237,29 +314,133 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="https://unpkg.com/vue-select@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-date-dropdown@1.0.5/dist/vue-date-dropdown.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuejs-datepicker@1.6.2/dist/vuejs-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
 
     <!-- VUE -->
     <script type="text/javascript">
       Vue.component('v-select', VueSelect.VueSelect)
+
       var app = new Vue({
         el: '#containerReceiving',
+        components: {
+          vuejsDatepicker,
+        },
         data: {
           form: {},
           clientList: [],
           sizeTypeList: [],
           classList: [],
           heightList: [],
-          images: []
+          images: [],
+          classSearch: '',
+          sizeSearch: '',
+          heightSearch: ''
         },
         methods:{
+          dateFormat(date) {
+            return moment(date).format('MM/DD/yyyy');
+          },
+          fuseSize(options, search) {
+            const fuse = new Fuse(options, {
+              keys: ['code', 'name'],
+              shouldSort: true,
+            })
+            return search.length
+              ? fuse.search(search).map(({ item }) => item)
+              : fuse.list
+          },
+          clearSize () {
+            this.sizeSearch = ''
+          },
+          searchSize () {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              const payload = {
+                keyword: this.sizeSearch
+              }
+              axios.get(`/admin/container/size_type?keyword=${payload.keyword}`, payload)
+              .then(data => {
+                this.sizeTypeList = data.data
+              })
+            }, 1000)
+          },
+          async getSize () {
+            let search = {
+              keyword: ''
+            }
+            await axios.get(`/admin/container/size_type?keyword=${search.keyword}`, search).then( data => {
+              this.sizeTypeList = data.data
+            }).catch(error => {
+              console.log('error: ', error)
+            })
+          },
+          fuseClass(options, search) {
+            const fuse = new Fuse(options, {
+              keys: ['class_code', 'class_name'],
+              shouldSort: true,
+            })
+            return search.length
+              ? fuse.search(search).map(({ item }) => item)
+              : fuse.list
+          },
+          clearClass () {
+            this.classSearch = ''
+          },
+          searchClass () {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              const payload = {
+                keyword: this.classSearch
+              }
+              axios.get(`/admin/container/classes?keyword=${payload.keyword}`, payload)
+              .then(data => {
+                this.classList = data.data
+              })
+            }, 1000)
+          },
           async getClass () {
             let search = {
-              keyword: 'Class 2'
+              keyword: ''
             }
-            console.log(search)
-            await axios.get('/admin/container/classes', search).then( data => {
-              // this.classList = data.data
-              console.log('data: ', data)
+            await axios.get(`/admin/container/classes?keyword=${search.keyword}`, search).then( data => {
+              this.classList = data.data
+            }).catch(error => {
+              console.log('error: ', error)
+            })
+          },
+          fuseHeight(options, search) {
+            const fuse = new Fuse(options, {
+              keys: ['height_code', 'height_name'],
+              shouldSort: true,
+            })
+            return search.length
+              ? fuse.search(search).map(({ item }) => item)
+              : fuse.list
+          },
+          clearHeight () {
+            this.heightSearch = ''
+          },
+          searchHeight () {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              const payload = {
+                keyword: this.heightSearch
+              }
+              axios.get(`/admin/container/heights?keyword=${payload.keyword}`, payload)
+              .then(data => {
+                this.heightList = data.data
+              })
+            }, 1000)
+          },
+          async getHeight () {
+            let search = {
+              keyword: ''
+            }
+            await axios.get(`/admin/container/heights?keyword=${search.keyword}`, search).then( data => {
+              this.heightList = data.data
             }).catch(error => {
               console.log('error: ', error)
             })
@@ -274,7 +455,9 @@
           }
         },
         mounted () {
+          this.getSize()
           this.getClass()
+          this.getHeight()
         }
       })
     </script>
