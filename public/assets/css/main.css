@@ -23,6 +23,10 @@
     height: 45px !important;
 }
 
+input.form-control {
+    height: 37px !important;
+}
+
 span.select2.select2-container.select2-container--default.select2-container--below, span.select2.select2-container.select2-container--default {
     display: block;
     z-index: 0;
