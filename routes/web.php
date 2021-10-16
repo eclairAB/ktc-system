@@ -18,12 +18,10 @@ Route::get('/', function () {
     return redirect()->route('voyager.login');
 });
 
-Voyager::routes();
 Route::group(['prefix' => 'admin'], function () {
+    require __DIR__.'/voyager.php';
 
-    Route::get('', [ViewsController::class,"roleRedirect"]);
     Route::get('/{role}', [ViewsController::class, "roleView"]);
-
     Route::get('/container/classes',[QueriesController::class,"getContainterClass"]);
     Route::get('/container/heights',[QueriesController::class,"getContainterHeight"]);
     Route::get('/container/size_type',[QueriesController::class,"getContainterSizeType"]);
