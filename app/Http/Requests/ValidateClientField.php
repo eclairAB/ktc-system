@@ -36,7 +36,7 @@ class ValidateClientField extends FormRequest
     {
         return [
             'email.required' => 'Invalid email.',
-            'email.unique' => 'Email already in use.'
+            'email.unique' => 'Email already in use.',
             'password_confirmation.required' => 'Password does not match.',
             'code_name.required' => 'Code name required.',
             'contact_no.required' => 'Contact number required.',
