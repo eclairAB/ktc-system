@@ -59,8 +59,8 @@
                               <label for="id_no" class="form-control-placeholder"> EIR No.</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <input type="text" name="firstname" id="firstname" v-model="form.firstname" class="form-control" style="height: 37px;">
-                              <label for="firstname" class="form-control-placeholder"> Container No.</label>
+                              <input type="text" name="container_no" id="container_no" v-model="form.container_no" class="form-control" style="height: 37px;">
+                              <label for="container_no" class="form-control-placeholder"> Container No.</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                               <v-select
@@ -137,8 +137,8 @@
                               <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <input type="text" name="username" id="username" v-model="form.username" class="form-control" style="height: 37px;">
-                              <label for="username" class="form-control-placeholder"> Type</label>
+                              <input type="text" name="type" id="type" v-model="form.type" class="form-control" style="height: 37px;">
+                              <label for="type" class="form-control-placeholder"> Type</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                               <v-select
@@ -193,11 +193,6 @@
                               <v-select class="form-control" :options="clientList" v-model="form.client"></v-select>
                               <label for="client" class="form-control-placeholder"> Client</label>
                             </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <input type="text" name="inspected_by" id="inspected_by" v-model="form.inspected_by" class="form-control" style="height: 37px;">
-                              <label for="inspected_by" class="form-control-placeholder"> Inspected By</label>
-                            </div>
-                            <!-- <input name="image" id="upload_file" type="file"> -->
                           </div>
                       </div>
                   </div>
