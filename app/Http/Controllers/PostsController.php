@@ -83,8 +83,8 @@ class PostsController extends Controller
         $releasing = $request->validated();
         $file_sig = $releasing['signature'];
         $file_photo = $releasing['signature'];
-        $path_sig  = $file->store('uploads/releasing/signatures', 'public');
-        $path_photo  = $file->store('uploads/releasing/photos', 'public');
+        $path_sig  = $file_sig->store('uploads/releasing/signatures', 'public');
+        $path_photo  = $file_photo->store('uploads/releasing/photos', 'public');
         $releasing['upload_photo'] = $path_photo;
         $releasing['signature'] = $path_sig;
 
@@ -96,8 +96,8 @@ class PostsController extends Controller
         $receiving = $request->validated();
         $file_sig = $receiving['signature'];
         $file_photo = $receiving['signature'];
-        $path_sig  = $file->store('uploads/receiving/signatures', 'public');
-        $path_photo  = $file->store('uploads/receiving/photos', 'public');
+        $path_sig  = $file_sig->store('uploads/receiving/signatures', 'public');
+        $path_photo  = $file_photo->store('uploads/receiving/photos', 'public');
         $receiving['upload_photo'] = $path_photo;
         $receiving['signature'] = $path_sig;
         $receiving['inspected_by'] = Auth::user()->id;
