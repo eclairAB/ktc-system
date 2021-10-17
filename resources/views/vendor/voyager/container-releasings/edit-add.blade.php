@@ -39,12 +39,12 @@
                                 <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="seac_no" id="seac_no" v-model="form.seac_no" class="form-control" style="height: 37px;">
-                                <label for="seac_no" class="form-control-placeholder"> Seal No</label>
+                                <input type="text" name="seal_no" id="seal_no" v-model="form.seal_no" class="form-control" style="height: 37px;">
+                                <label for="seal_no" class="form-control-placeholder"> Seal No</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="conglone" id="conglone" v-model="form.conglone" class="form-control" style="height: 37px;">
-                                <label for="conglone" class="form-control-placeholder"> Consignee</label>
+                                <input type="text" name="consignee" id="consignee" v-model="form.consignee" class="form-control" style="height: 37px;">
+                                <label for="consignee" class="form-control-placeholder"> Consignee</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                                 <input type="text" name="hauler" id="hauler" v-model="form.hauler" class="form-control" style="height: 37px;">
@@ -65,7 +65,7 @@
                             <div style="font-weight: 700; font-size: 15px; color: black;">Pictures</div>
                           </div>
                           <div class="col-xs-12">
-                            <input style="padding: 8px;" type="file" class="form-control" id="images" name="images" @change="preview_images" multiple/>
+                            <input style="padding: 8px;" type="file" class="form-control" id="images" name="images" @change="preview_images"/>
                           </div>
                           <div class="col-xs-12">
                             <div class="row" id="image_preview"></div>
@@ -140,8 +140,7 @@
         var cancelButton = document.getElementById('clear');
 
         saveButton.addEventListener('click', function (event) {
-          // var data = signaturePad.toDataURL('image/png');
-          document.getElementById('containerReleasing').__vue__.fuckkk(signaturePad)
+          document.getElementById('containerReleasing').__vue__.saveReleasing(signaturePad.toDataURL('image/png'))
         });
 
         cancelButton.addEventListener('click', function (event) {
@@ -248,14 +247,21 @@
            this.images = event.target.files
            for ( var i = 0; i < total_file; i++ ) {
             this.getBase64(event.target.files[i]).then(data => {
-              console.log('Base64 ni siya: ',data)
+              this.form.upload_photo = data
             });
             $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'></div>");
            }
           },
-          fuckkk (data) {
+          async saveReleasing (data) {
+            this.form.signature = data
             console.log(this.form)
-            console.log(data)
+            await axios.post('/admin/create_releasing', this.form).then(data => {
+              console.log('Data: ',data)
+              this.errors = {}
+            }).catch(error => {
+              console.log('Error: ',error)
+              this.errors = error.response.data.errors
+            })
           }
         }
       })
