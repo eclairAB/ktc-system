@@ -38,15 +38,15 @@ class ValidateStaffField extends FormRequest
     public function messages()
     {
         return [
-            'email.required' => 'Invalid email.'
-            'email.unique' => 'Email already in use.'
-            'password_confirmation.required' => 'Password does not match.'
-            'id_no.required' => 'ID number is required.'
-            'firstname.required' => 'First name is required.'
-            'lastname.required' => 'Last name is required.'
-            'user_id.required' => 'User ID is required.'
-            'user_type.required' => 'User Type is required.'
-            'contact_no.required' => 'Contact number is required.'
+            'email.required' => 'Invalid email.',
+            'email.unique' => 'Email already in use.',
+            'password_confirmation.required' => 'Password does not match.',
+            'id_no.required' => 'ID number is required.',
+            'firstname.required' => 'First name is required.',
+            'lastname.required' => 'Last name is required.',
+            'user_id.required' => 'User ID is required.',
+            'user_type.required' => 'User Type is required.',
+            'contact_no.required' => 'Contact number is required.',
         ];
     }
 }
