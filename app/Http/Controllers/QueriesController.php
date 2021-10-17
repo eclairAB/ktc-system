@@ -6,6 +6,7 @@ use App\Models\ContainerHeight;
 use App\Models\ContainerSizeType;
 use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
@@ -39,6 +40,15 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         })->get();
 
         return $sizetype;
+    }
+
+    public function getClient(Request $request)
+    {
+        $client = Client::when(!empty($request->keyword), function ($q) use ($request){
+            return $q->where('code_name', 'ilike', '%'.$request->keyword.'%');
+        })->get();
+
+        return $client;
     }
 
     public function prntReleasing($id)
