@@ -32,7 +32,7 @@
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
                                 <input type="text" name="id_no" id="id_no" v-model="form.id_no" class="form-control" :class="errors.id_no ? 'isError' : ''">
                                 <label for="id_no" class="form-control-placeholder"> ID No.</label>
-                                <div class="customErrorText"><small>@{{ errors.id_no }}</small></div>
+                                <div class="customErrorText"><small>@{{ errors.id_no  }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
                                 <input type="text" name="firstname" id="firstname" v-model="form.firstname" class="form-control" :class="errors.firstname ? 'isError' : ''">
@@ -45,9 +45,9 @@
                                 <div class="customErrorText"><small>@{{ errors.lastname }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
-                                <input type="text" name="contact_number" id="contact_number" v-model="form.contact_number" class="form-control" :class="errors.contact_number ? 'isError' : ''">
-                                <label for="contact_number" class="form-control-placeholder"> Contact Number</label>
-                                <div class="customErrorText"><small>@{{ errors.contact_number }}</small></div>
+                                <input type="text" name="contact_no" id="contact_no" v-model="form.contact_no" class="form-control" :class="errors.contact_no ? 'isError' : ''">
+                                <label for="contact_no" class="form-control-placeholder"> Contact Number</label>
+                                <div class="customErrorText"><small>@{{ errors.contact_no }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
                                 <input type="text" name="user_id" id="user_id" v-model="form.user_id" class="form-control" :class="errors.user_id ? 'isError' : ''">
@@ -199,9 +199,8 @@
           async saveStaff () {
             await axios.post('/admin/create_Staff', this.form).then(data => {
               this.errors = {}
-              console.log('Data: ', data)
             }).catch(error => {
-              this.errors = error.errors
+              this.errors = error.response.data.errors
             })
           }
         }

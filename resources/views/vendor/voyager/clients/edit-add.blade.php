@@ -189,10 +189,8 @@
           async saveClient () {
             await axios.post('/admin/create_client', this.form).then(data => {
               this.errors = {}
-              console.log('Data: ', data)
             }).catch(error => {
-                console.log('Error ni: ', error)
-              this.errors = error.errors
+              this.errors = error.response.data.errors
             })
           }
         }
