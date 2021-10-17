@@ -17,50 +17,53 @@ class PostsController extends Controller
 {
     public function createUser($params, $role)
     {
+        $dbrole = DB::table('roles')->where('name', $role)->pluck('id');
+        if(!isset($dbrole[0])) return response('Role "'. $role . '" does not exist.', 404);
         $credentials = [
             'name' => strtoupper($params->firstname . ' ' . $params->lastname),
-            // 'email' => 
-            'role_id' => DB::table('roles')->where('name', $role)->pluck('id')[0],
+            'role_id' => $dbrole[0],
         ];
+        if(isset($params->email)) {
+            $credentials['email'] = $params->email;
+        }
+        else {
+            $dbuser = User::latest('id')->first();
+            if(is_null($dbuser)) $dbuser = 1;
+            else $dbuser = $dbuser->id+1;
+            $credentials['email'] = $role . $dbuser . '@kudostrucking.com';
+        }
         if(isset($params->password)) {
             $credentials['password'] = bcrypt($params->password);
         }
         else {
             $credentials['password'] = bcrypt('password');
         }
-        if(isset($params->email)) {
-            $credentials['email'] = $params->email;
-        }
-        else {
-            $client = Client::latest('created_at')->first();
-            if(is_null($client)) $client = 1;
-            else $client = intval($client->pluck('id')[0])+1;
-            $credentials['email'] = $role . $client . '@kudostrucking.com';
-        }
 
-        return User::create($credentials)->id;
+        return User::create($credentials);
     }
 
     public function createClient(ValidateClientField $request)
     {
-        $account_id = $this->createUser($request, 'client');
+        $account = $this->createUser($request, 'client');
 
         $params = [
-            'account_id' => $account_id,
+            'account_id' => $account->id,
             'code_name' => $request->code_name,
             'contact_no' => $request->contact_no,
             'user_id' => $request->user_id,
         ];
 
-        return Client::create($params);
+        $client = Client::create($params);
+        $account['client'] = $client;
+        return $account;
     }
 
     public function createStaff(ValidateStaffField $request)
     {
-        $account_id = $this->createUser($request, 'staff');
+        $account = $this->createUser($request, 'staff');
 
         $params = [
-            'account_id' => $account_id,
+            'account_id' => $account->id,
             'id_no' => $request->id_no,
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
@@ -69,7 +72,9 @@ class PostsController extends Controller
             'contact_no' => $request->contact_no,
         ];
 
-        return Staff::create($params);
+        $staff = Staff::create($params);
+        $account['staff'] = $staff;
+        return $account;
     }
 
     public function createReleasing(ValidateContainerReleasing $request)
