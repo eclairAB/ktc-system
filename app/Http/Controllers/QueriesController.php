@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\ContainerClass;
 use App\Models\ContainerHeight;
 use App\Models\ContainerSizeType;
+use App\Models\ContainerReceiving;
+use App\Models\ContainerReleasing;
 use Illuminate\Http\Request;
 
 class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
@@ -37,5 +39,17 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         })->get();
 
         return $sizetype;
+    }
+
+    public function prntReleasing($id)
+    {
+        $releasing = ContainerReleasing::where('id',$id)->first();
+        return view('print_releasing')->with('releasing', $releasing);;
+    }
+
+    public function prntReceiving($id)
+    {
+        $receiving = ContainerReceiving::where('id',$id)->first();
+        return view('print_receiving')->with('receiving', $receiving);
     }
 }

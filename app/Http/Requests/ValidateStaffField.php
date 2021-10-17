@@ -40,7 +40,6 @@ class ValidateStaffField extends FormRequest
         return [
             'email.required' => 'Invalid email.',
             'email.unique' => 'Email already in use.',
-            'password_confirmation.required' => 'Password does not match.',
             'id_no.required' => 'ID number is required.',
             'firstname.required' => 'First name is required.',
             'lastname.required' => 'Last name is required.',
