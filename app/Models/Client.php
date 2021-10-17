@@ -12,7 +12,6 @@ class Client extends Model
         'account_id',
         'code_name',
         'contact_no',
-        'email',
         'user_id',
     ];
 }
