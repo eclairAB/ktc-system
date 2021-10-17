@@ -9,30 +9,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
-    <style type="text/css">
-        .wrapper {
-          position: relative;
-          width: 400px;
-          height: 200px;
-          -moz-user-select: none;
-          -webkit-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-        }
-        img {
-          position: absolute;
-          left: 0;
-          top: 0;
-        }
-
-        .signature-pad {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width:400px;
-          height:200px;
-        }
-    </style>
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
@@ -222,8 +198,7 @@
                       </div>
                       <div class="col-xs-12">
                         <div style="font-weight: 700;">Draw Signature Here</div>
-                        <div class="wrapper" style="border: 4px solid #e5e7eb; border-radius: .5rem;
-  ">
+                        <div class="wrapper-custom">
                           <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
                         </div>
                         <div>
@@ -496,11 +471,21 @@
               console.log('error: ', error)
             })
           },
+          getBase64(file) {
+            return new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = error => reject(error);
+            });
+          },
           preview_images () {
            var total_file=document.getElementById("images").files.length;
            this.images = event.target.files
            for ( var i = 0; i < total_file; i++ ) {
-            console.log(event.target.files[i])
+            this.getBase64(event.target.files[i]).then(data => {
+              console.log('Base64 ni siya: ',data)
+            });
             $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'></div>");
            }
           },
