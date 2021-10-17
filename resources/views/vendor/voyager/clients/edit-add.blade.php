@@ -191,6 +191,7 @@
               this.errors = {}
               console.log('Data: ', data)
             }).catch(error => {
+                console.log('Error ni: ', error)
               this.errors = error.errors
             })
           }
