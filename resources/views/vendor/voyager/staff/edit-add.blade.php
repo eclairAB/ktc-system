@@ -29,39 +29,46 @@
                     <div id="staffForm">
                         <div class="panel-body">
                             <div class="row" style="padding: 0px 10px;">
-                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="id_no" id="id_no" v-model="form.id_no" class="form-control" style="height: 37px;">
+                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
+                                <input type="text" name="id_no" id="id_no" v-model="form.id_no" class="form-control" :class="errors.id_no ? 'isError' : ''">
                                 <label for="id_no" class="form-control-placeholder"> ID No.</label>
+                                <div class="customErrorText"><small>@{{ errors.id_no }}</small></div>
                               </div>
-                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="firstname" id="firstname" v-model="form.firstname" class="form-control" style="height: 37px;">
+                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
+                                <input type="text" name="firstname" id="firstname" v-model="form.firstname" class="form-control" :class="errors.firstname ? 'isError' : ''">
                                 <label for="firstname" class="form-control-placeholder"> First Name</label>
+                                <div class="customErrorText"><small>@{{ errors.firstname }}</small></div>
                               </div>
-                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="lastname" id="lastname" v-model="form.lastname" class="form-control" style="height: 37px;">
+                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
+                                <input type="text" name="lastname" id="lastname" v-model="form.lastname" class="form-control" :class="errors.lastname ? 'isError' : ''">
                                 <label for="lastname" class="form-control-placeholder"> Last Name</label>
+                                <div class="customErrorText"><small>@{{ errors.lastname }}</small></div>
                               </div>
-                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="contact_number" id="contact_number" v-model="form.contact_number" class="form-control" style="height: 37px;">
+                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
+                                <input type="text" name="contact_number" id="contact_number" v-model="form.contact_number" class="form-control" :class="errors.contact_number ? 'isError' : ''">
                                 <label for="contact_number" class="form-control-placeholder"> Contact Number</label>
+                                <div class="customErrorText"><small>@{{ errors.contact_number }}</small></div>
                               </div>
-                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="username" id="username" v-model="form.username" class="form-control" style="height: 37px;">
-                                <label for="username" class="form-control-placeholder"> User Name</label>
+                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
+                                <input type="text" name="user_id" id="user_id" v-model="form.user_id" class="form-control" :class="errors.user_id ? 'isError' : ''">
+                                <label for="user_id" class="form-control-placeholder"> User Name</label>
+                                <div class="customErrorText"><small>@{{ errors.user_id }}</small></div>
                               </div>
-                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="password" id="password" v-model="form.password" class="form-control" style="height: 37px;">
+                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
+                                <input type="text" name="password" id="password" v-model="form.password" class="form-control" :class="errors.password ? 'isError' : ''">
                                 <label for="password" class="form-control-placeholder"> Password</label>
+                                <div class="customErrorText"><small>@{{ errors.password }}</small></div>
                               </div>
-                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="confirm_password" id="confirm_password" v-model="form.confirm_password" class="form-control" style="height: 37px;">
-                                <label for="confirm_password" class="form-control-placeholder"> Confirm Password</label>
+                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
+                                <input type="text" name="password_confirmation" id="password_confirmation" v-model="form.password_confirmation" class="form-control" :class="errors.password_confirmation ? 'isError' : ''">
+                                <label for="password_confirmation" class="form-control-placeholder"> Confirm Password</label>
+                                <div class="customErrorText"><small>@{{ errors.password_confirmation }}</small></div>
                               </div>
                             </div>
                         </div>
 
                         <div class="panel-footer" style="display: flex; justify-content: flex-end;">
-                            <button type="submit" class="btn btn-primary save">Save</button>
+                            <button type="submit" class="btn btn-primary save" @click="saveStaff">Save</button>
                         </div>
                     </div>
 
@@ -185,10 +192,18 @@
         var app = new Vue({
         el: '#staffForm',
         data: {
-          form: {}
+          form: {},
+          errors: {}
         },
         methods:{
-          
+          async saveStaff () {
+            await axios.post('/admin/create_Staff', this.form).then(data => {
+              this.errors = {}
+              console.log('Data: ', data)
+            }).catch(error => {
+              this.errors = error.errors
+            })
+          }
         }
       })
     </script>

@@ -9,13 +9,30 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
+    <style type="text/css">
+        .wrapper {
+          position: relative;
+          width: 400px;
+          height: 200px;
+          -moz-user-select: none;
+          -webkit-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+        img {
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" />     
-    <link rel="stylesheet" type="text/css" href="http://keith-wood.name/css/jquery.signature.css">
-    <style>
-        .kbw-signature { width: 100%; height: 200px;}
-        #sig canvas{ width: 100% !important; height: auto;}
-    </style>  
+        .signature-pad {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width:400px;
+          height:200px;
+        }
+    </style>
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
@@ -34,212 +51,198 @@
             <div class="col-md-12">
 
                 <div id="containerReceiving">
-                    <div class="panel panel-bordered">
-                        <div class="panel-body" style="padding: 15px 15px 0 15px;">
-                            <div class="row" style="padding: 0px 10px;">
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="id_no" id="id_no" placeholder="AUTO GENERATED" readonly v-model="form.id_no" class="form-control" style="height: 37px;">
-                                <label for="id_no" class="form-control-placeholder"> EIR No.</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="firstname" id="firstname" v-model="form.firstname" class="form-control" style="height: 37px;">
-                                <label for="firstname" class="form-control-placeholder"> Container No.</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <v-select
-                                  class="form-control" 
-                                  :options="sizeTypeList"
-                                  v-model="form.size_type"
-                                  label="name"
-                                  :filter="fuseSize"
-                                  @option:selected="clearSize()"
-                                  :reset-on-options-change='true'
-                                  :reduce="name => name.id"
-                                >
-                                  <template #search="{attributes, events}">
-                                    <input
-                                      class="vs__search"
-                                      v-bind="attributes"
-                                      v-on="events"
-                                      v-model="sizeSearch"
-                                      @input="searchSize()"
-                                    />
-                                  </template>
-                                  <template slot="selected-option" slot-scope="option">
-                                    <span>Code: @{{option.code}} - Name: @{{option.name}}</span>
-                                  </template>
-                                  <template slot="option" slot-scope="option">
-                                      Code: @{{option.code}} - Name: @{{option.name}}
-                                  </template>
-                                </v-select>
-                                <label for="lastname" class="form-control-placeholder"> Size Type</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <v-select
-                                  class="form-control" 
-                                  :options="classList"
-                                  v-model="form.class"
-                                  label="class_name"
-                                  :filter="fuseClass"
-                                  @option:selected="clearClass()"
-                                  :reset-on-options-change='true'
-                                  :reduce="class_name => class_name.id"
-                                >
-                                  <template #search="{attributes, events}">
-                                    <input
-                                      class="vs__search"
-                                      v-bind="attributes"
-                                      v-on="events"
-                                      v-model="classSearch"
-                                      @input="searchClass()"
-                                    />
-                                  </template>
-                                  <template slot="selected-option" slot-scope="option">
-                                    <span>Code: @{{option.class_code}} - Name: @{{option.class_name}}</span>
-                                  </template>
-                                  <template slot="option" slot-scope="option">
-                                      Code: @{{option.class_code}} - Name: @{{option.class_name}}
-                                  </template>
-                                </v-select>
-                                <label for="contact_number" class="form-control-placeholder"> Class</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="empty_loaded" id="empty_loaded" v-model="form.empty_loaded" class="form-control" style="height: 37px;">
-                                <label for="empty_loaded" class="form-control-placeholder"> Empty Loaded</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <vuejs-datepicker
-                                  v-model="form.manufactured_date"
-                                  placeholder="mm/dd/yyyyy"
-                                  :input-class="'form-control'"
-                                  :typeable="true"
-                                  name="manufactured_date"
-                                  :format="dateFormat"
-                                  :required="true">
-                                </vuejs-datepicker>
-                                <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="username" id="username" v-model="form.username" class="form-control" style="height: 37px;">
-                                <label for="username" class="form-control-placeholder"> Type</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <v-select
-                                  class="form-control" 
-                                  :options="heightList"
-                                  v-model="form.height"
-                                  label="height_name"
-                                  :filter="fuseHeight"
-                                  @option:selected="clearHeight()"
-                                  :reset-on-options-change='true'
-                                  :reduce="height_name => height_name.id"
-                                >
-                                  <template #search="{attributes, events}">
-                                    <input
-                                      class="vs__search"
-                                      v-bind="attributes"
-                                      v-on="events"
-                                      v-model="heightSearch"
-                                      @input="searchHeight()"
-                                    />
-                                  </template>
-                                  <template slot="selected-option" slot-scope="option">
-                                    <span>Code: @{{option.height_code}} - Name: @{{option.height_name}}</span>
-                                  </template>
-                                  <template slot="option" slot-scope="option">
-                                      Code: @{{option.height_code}} - Name: @{{option.height_name}}
-                                  </template>
-                                </v-select>
-                                <label for="password" class="form-control-placeholder"> Height</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="yard_location" id="yard_location" v-model="form.yard_location" class="form-control" style="height: 37px;">
-                                <label for="yard_location" class="form-control-placeholder"> Yard Location</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="acceptance_no" id="acceptance_no" v-model="form.acceptance_no" class="form-control" style="height: 37px;">
-                                <label for="acceptance_no" class="form-control-placeholder"> Acceptance No.</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="consignee" id="consignee" v-model="form.consignee" class="form-control" style="height: 37px;">
-                                <label for="consignee" class="form-control-placeholder"> Consignee</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="hauler" id="hauler" v-model="form.hauler" class="form-control" style="height: 37px;">
-                                <label for="hauler" class="form-control-placeholder"> Hauler</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="plate_no" id="plate_no" v-model="form.plate_no" class="form-control" style="height: 37px;">
-                                <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <v-select class="form-control" :options="clientList" v-model="form.client"></v-select>
-                                <label for="client" class="form-control-placeholder"> Client</label>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="inspected_by" id="inspected_by" v-model="form.inspected_by" class="form-control" style="height: 37px;">
-                                <label for="inspected_by" class="form-control-placeholder"> Inspected By</label>
-                              </div>
-                              <!-- <input name="image" id="upload_file" type="file"> -->
+                  <div class="panel panel-bordered">
+                      <div class="panel-body" style="padding: 15px 15px 0 15px;">
+                          <div class="row" style="padding: 0px 10px;">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <input type="text" name="id_no" id="id_no" placeholder="AUTO GENERATED" readonly v-model="form.id_no" class="form-control" style="height: 37px;">
+                              <label for="id_no" class="form-control-placeholder"> EIR No.</label>
                             </div>
-                        </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <input type="text" name="firstname" id="firstname" v-model="form.firstname" class="form-control" style="height: 37px;">
+                              <label for="firstname" class="form-control-placeholder"> Container No.</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <v-select
+                                class="form-control" 
+                                :options="sizeTypeList"
+                                v-model="form.size_type"
+                                label="name"
+                                :filter="fuseSize"
+                                @option:selected="clearSize()"
+                                :reset-on-options-change='true'
+                                :reduce="name => name.id"
+                              >
+                                <template #search="{attributes, events}">
+                                  <input
+                                    class="vs__search"
+                                    v-bind="attributes"
+                                    v-on="events"
+                                    v-model="sizeSearch"
+                                    @input="searchSize()"
+                                  />
+                                </template>
+                                <template slot="selected-option" slot-scope="option">
+                                  <span>Code: @{{option.code}} - Name: @{{option.name}}</span>
+                                </template>
+                                <template slot="option" slot-scope="option">
+                                    Code: @{{option.code}} - Name: @{{option.name}}
+                                </template>
+                              </v-select>
+                              <label for="lastname" class="form-control-placeholder"> Size Type</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <v-select
+                                class="form-control" 
+                                :options="classList"
+                                v-model="form.class"
+                                label="class_name"
+                                :filter="fuseClass"
+                                @option:selected="clearClass()"
+                                :reset-on-options-change='true'
+                                :reduce="class_name => class_name.id"
+                              >
+                                <template #search="{attributes, events}">
+                                  <input
+                                    class="vs__search"
+                                    v-bind="attributes"
+                                    v-on="events"
+                                    v-model="classSearch"
+                                    @input="searchClass()"
+                                  />
+                                </template>
+                                <template slot="selected-option" slot-scope="option">
+                                  <span>Code: @{{option.class_code}} - Name: @{{option.class_name}}</span>
+                                </template>
+                                <template slot="option" slot-scope="option">
+                                    Code: @{{option.class_code}} - Name: @{{option.class_name}}
+                                </template>
+                              </v-select>
+                              <label for="contact_number" class="form-control-placeholder"> Class</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <input type="text" name="empty_loaded" id="empty_loaded" v-model="form.empty_loaded" class="form-control" style="height: 37px;">
+                              <label for="empty_loaded" class="form-control-placeholder"> Empty Loaded</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <vuejs-datepicker
+                                v-model="form.manufactured_date"
+                                placeholder="mm/dd/yyyyy"
+                                :input-class="'form-control'"
+                                :typeable="true"
+                                name="manufactured_date"
+                                :format="dateFormat"
+                                :required="true">
+                              </vuejs-datepicker>
+                              <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <input type="text" name="username" id="username" v-model="form.username" class="form-control" style="height: 37px;">
+                              <label for="username" class="form-control-placeholder"> Type</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <v-select
+                                class="form-control" 
+                                :options="heightList"
+                                v-model="form.height"
+                                label="height_name"
+                                :filter="fuseHeight"
+                                @option:selected="clearHeight()"
+                                :reset-on-options-change='true'
+                                :reduce="height_name => height_name.id"
+                              >
+                                <template #search="{attributes, events}">
+                                  <input
+                                    class="vs__search"
+                                    v-bind="attributes"
+                                    v-on="events"
+                                    v-model="heightSearch"
+                                    @input="searchHeight()"
+                                  />
+                                </template>
+                                <template slot="selected-option" slot-scope="option">
+                                  <span>Code: @{{option.height_code}} - Name: @{{option.height_name}}</span>
+                                </template>
+                                <template slot="option" slot-scope="option">
+                                    Code: @{{option.height_code}} - Name: @{{option.height_name}}
+                                </template>
+                              </v-select>
+                              <label for="password" class="form-control-placeholder"> Height</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <input type="text" name="yard_location" id="yard_location" v-model="form.yard_location" class="form-control" style="height: 37px;">
+                              <label for="yard_location" class="form-control-placeholder"> Yard Location</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <input type="text" name="acceptance_no" id="acceptance_no" v-model="form.acceptance_no" class="form-control" style="height: 37px;">
+                              <label for="acceptance_no" class="form-control-placeholder"> Acceptance No.</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <input type="text" name="consignee" id="consignee" v-model="form.consignee" class="form-control" style="height: 37px;">
+                              <label for="consignee" class="form-control-placeholder"> Consignee</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <input type="text" name="hauler" id="hauler" v-model="form.hauler" class="form-control" style="height: 37px;">
+                              <label for="hauler" class="form-control-placeholder"> Hauler</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <input type="text" name="plate_no" id="plate_no" v-model="form.plate_no" class="form-control" style="height: 37px;">
+                              <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <v-select class="form-control" :options="clientList" v-model="form.client"></v-select>
+                              <label for="client" class="form-control-placeholder"> Client</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                              <input type="text" name="inspected_by" id="inspected_by" v-model="form.inspected_by" class="form-control" style="height: 37px;">
+                              <label for="inspected_by" class="form-control-placeholder"> Inspected By</label>
+                            </div>
+                            <!-- <input name="image" id="upload_file" type="file"> -->
+                          </div>
+                      </div>
+                  </div>
 
-                        <div class="panel-footer" style="display: flex; justify-content: flex-end; padding-top: 0;">
-                            <button type="submit" class="btn btn-primary save">Save</button>
+                  <div class="panel panel-bordered">
+                    <div class="panel-body" style="padding: 15px;">
+                      <div class="row" style="padding: 0px 10px;">
+                        <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
+                          <div style="font-weight: 700; font-size: 15px; color: black;">Pictures</div>
                         </div>
-                    </div>
-
-                    <div class="panel panel-bordered">
-                      <div class="panel-body" style="padding: 15px;">
-                        <div class="row" style="padding: 0px 10px;">
-                          <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
-                            <div style="font-weight: 700; font-size: 15px; color: black;">Pictures</div>
-                          </div>
-                          <div class="col-xs-12">
-                            <input style="padding: 8px;" type="file" class="form-control" id="images" name="images" @change="preview_images" multiple/>
-                          </div>
-                          <div class="col-xs-12">
-                            <div class="row" id="image_preview"></div>
-                          </div>
+                        <div class="col-xs-12">
+                          <input style="padding: 8px;" type="file" class="form-control" id="images" name="images" @change="preview_images" multiple/>
+                        </div>
+                        <div class="col-xs-12">
+                          <div class="row" id="image_preview"></div>
                         </div>
                       </div>
                     </div>
-
-                    <div class="panel panel-bordered">
-                      <div class="panel-body" style="padding: 15px;">
-                        <div class="row" style="padding: 0px 10px;">
-                          <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
-                            <div style="font-weight: 700; font-size: 15px; color: black;">Signature</div>
-                          </div>
-                          <div class="col-md-6 offset-md-3 mt-5">
-                            <div class="card">
-                              <div class="card-body">
-                                  @if ($message = Session::get('success'))
-                                      <div class="alert alert-success  alert-dismissible">
-                                          <button type="button" class="close" data-dismiss="alert">×</button>  
-                                          <strong>{{ $message }}</strong>
-                                      </div>
-                                  @endif
-                                  <form>
-                                      @csrf
-                                      <div class="col-md-12">
-                                          <label class="" for="">Draw Signature:</label>
-                                          <br/>
-                                          <div id="sig_receiving"></div>
-                                          <br><br>
-                                          <button id="clear" class="btn btn-danger">Clear Signature</button>
-                                          <button class="btn btn-success">Save</button>
-                                          <textarea id="signature_receiving" name="signature" style="display: none"></textarea>
-                                      </div>
-                                  </form>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
+                  </div>
                 </div>
+
+                <div class="panel panel-bordered">
+                  <div class="panel-body" style="padding: 15px;">
+                    <div class="row" style="padding: 0px 10px;">
+                      <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
+                        <div style="font-weight: 700; font-size: 15px; color: black;">Signature</div>
+                      </div>
+                      <div class="col-xs-12">
+                        <div style="font-weight: 700;">Draw Signature Here</div>
+                        <div class="wrapper" style="border: 4px solid #e5e7eb; border-radius: .5rem;
+  ">
+                          <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
+                        </div>
+                        <div>
+                          <button id="clear" class="btn btn-danger">Clear</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; padding-top: 0;">
+                    <button style="width: 100px;" id="save" class="btn btn-primary save">Save</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -269,17 +272,28 @@
 @stop
 
 @section('javascript')
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script> 
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="http://keith-wood.name/js/jquery.signature.js"></script>
-    <script type="text/javascript">
-        var sig_receiving = $('#sig_receiving').signature({syncField: '#signature_receiving', syncFormat: 'PNG'});
-        $('#clear').click(function(e) {
-            e.preventDefault();
-            sig_receiving.signature('clear');
-            $("#signature_receiving").val('');
+    
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@3.0.0-beta.4/dist/signature_pad.umd.min.js"></script>
+
+    <script>
+        var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
+          backgroundColor: 'rgba(255, 255, 255, 0)',
+          penColor: 'rgb(0, 0, 0)'
         });
+        var saveButton = document.getElementById('save');
+        var cancelButton = document.getElementById('clear');
+
+        saveButton.addEventListener('click', function (event) {
+          // var data = signaturePad.toDataURL('image/png');
+          document.getElementById('containerReceiving').__vue__.fuckkk(signaturePad)
+        });
+
+        cancelButton.addEventListener('click', function (event) {
+          signaturePad.clear();
+        });
+
     </script>
+    
     <script>
         var params = {};
         var $file;
@@ -494,6 +508,10 @@
             console.log(event.target.files[i])
             $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'></div>");
            }
+          },
+          fuckkk (data) {
+            console.log(this.form)
+            console.log(data)
           }
         },
         mounted () {
