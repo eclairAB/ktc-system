@@ -26,6 +26,7 @@ class ValidateContainerReleasing extends FormRequest
         return [
             'booking_no'=> 'required',
             'consignee'=> 'required',
+            'container_no'=> 'required',
             'hauler'=> 'required',
             'plate_no'=> 'required',
             'seal_no'=> 'required',
@@ -37,6 +38,7 @@ class ValidateContainerReleasing extends FormRequest
     public function messages()
     {
         return [
+            'container_no.required' => 'Container No. field not match.',
             'booking_no.required' => 'Booking No. field not match.',
             'consignee.required' => 'Consignee field required.',
             'hauler.required' => 'Hauler  fieldrequired.',

@@ -26,6 +26,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/container/classes',[QueriesController::class,"getContainterClass"]);
     Route::get('/container/heights',[QueriesController::class,"getContainterHeight"]);
     Route::get('/container/size_type',[QueriesController::class,"getContainterSizeType"]);
+    Route::get('/print/releasing/{id}',[QueriesController::class,"prntReleasing"]);
+    Route::get('/print/receiving/{id}',[QueriesController::class,"prntReceiving"]);
 
     Route::POST('/create_client', [PostsController::class, "createClient"]);
     Route::POST('/create_Staff', [PostsController::class, "createStaff"]);

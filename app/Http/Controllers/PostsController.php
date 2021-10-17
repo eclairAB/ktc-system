@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\ContainerReleasing;
 use App\Models\ContainerReceiving;
 use DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -99,6 +100,7 @@ class PostsController extends Controller
         $path_photo  = $file->store('uploads/receiving/photos', 'public');
         $receiving['upload_photo'] = $path_photo;
         $receiving['signature'] = $path_sig;
+        $receiving['inspected_by'] = Auth::user()->id;
         return  ContainerReceiving::create($receiving); 
     }
 }
