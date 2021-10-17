@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\ValidateClientField;
 use App\Http\Requests\ValidateStaffField;
+use App\Http\Requests\ValidateContainerReleasing;
+use App\Http\Requests\ValidateContainerReceiving;
 use App\Models\Client;
 use App\Models\Staff;
 use App\Models\User;
+use App\Models\ContainerReleasing;
+use App\Models\ContainerReceiving;
 use DB;
 use Illuminate\Http\Request;
 
@@ -66,5 +70,30 @@ class PostsController extends Controller
         ];
 
         return Staff::create($params);
+    }
+
+    public function createReleasing(ValidateContainerReleasing $request)
+    {
+        $releasing = $request->validated();
+        $file_sig = $releasing['signature'];
+        $file_photo = $releasing['signature'];
+        $path_sig  = $file->store('uploads/releasing/signatures', 'public');
+        $path_photo  = $file->store('uploads/releasing/photos', 'public');
+        $releasing['upload_photo'] = $path_photo;
+        $releasing['signature'] = $path_sig;
+
+        return  ContainerReleasing::create($releasing);
+    }
+
+    public function createReceiving(ValidateContainerReceiving $request)
+    {
+        $receiving = $request->validated();
+        $file_sig = $receiving['signature'];
+        $file_photo = $receiving['signature'];
+        $path_sig  = $file->store('uploads/receiving/signatures', 'public');
+        $path_photo  = $file->store('uploads/receiving/photos', 'public');
+        $receiving['upload_photo'] = $path_photo;
+        $receiving['signature'] = $path_sig;
+        return  ContainerReceiving::create($receiving); 
     }
 }
