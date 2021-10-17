@@ -24,7 +24,7 @@ class ValidateClientField extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'email',
+            'email' => 'email|unique',
             'password_confirmation' => 'same:password',
             'code_name' => 'required',
             'contact_no' => 'required',
@@ -35,11 +35,12 @@ class ValidateClientField extends FormRequest
     public function messages()
     {
         return [
-            'email' => 'Invalid email.',
-            'password_confirmation' => 'Password does not match.',
-            'code_name' => 'Code name required.',
-            'contact_no' => 'Contact number required.',
-            'user_id' => 'User ID required.',
+            'email.required' => 'Invalid email.',
+            'email.unique' => 'Email already in use.'
+            'password_confirmation.required' => 'Password does not match.',
+            'code_name.required' => 'Code name required.',
+            'contact_no.required' => 'Contact number required.',
+            'user_id.required' => 'User ID required.',
         ];
     }
 }
