@@ -95,3 +95,10 @@ span.select2-selection.select2-selection--single {
     z-index: 2;
     position: relative;
 }
+
+table {
+    border: 2px solid #c8c8c8 !important;
+    border-collapse: collapse !important;
+    font-family: sans-serif !important;
+    font-size: 12px !important;
+}
