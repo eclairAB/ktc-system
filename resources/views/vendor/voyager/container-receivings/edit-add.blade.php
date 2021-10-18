@@ -9,30 +9,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
-    <style type="text/css">
-        .wrapper {
-          position: relative;
-          width: 400px;
-          height: 200px;
-          -moz-user-select: none;
-          -webkit-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-        }
-        img {
-          position: absolute;
-          left: 0;
-          top: 0;
-        }
-
-        .signature-pad {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width:400px;
-          height:200px;
-        }
-    </style>
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
@@ -170,8 +146,8 @@
                               <label for="password" class="form-control-placeholder"> Height</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <input type="text" name="yard_location" id="yard_location" v-model="form.yard_location" class="form-control" style="height: 37px;">
-                              <label for="yard_location" class="form-control-placeholder"> Yard Location</label>
+                              <input type="text" name="yard_loacation" id="yard_loacation" v-model="form.yard_loacation" class="form-control" style="height: 37px;">
+                              <label for="yard_loacation" class="form-control-placeholder"> Yard Location</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                               <input type="text" name="acceptance_no" id="acceptance_no" v-model="form.acceptance_no" class="form-control" style="height: 37px;">
@@ -190,7 +166,32 @@
                               <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <v-select class="form-control" :options="clientList" v-model="form.client"></v-select>
+                              <v-select
+                                class="form-control" 
+                                :options="clientList"
+                                v-model="form.client_id"
+                                label="code_name"
+                                :filter="fuseClient"
+                                @option:selected="clearClient()"
+                                :reset-on-options-change='true'
+                                :reduce="code_name => code_name.id"
+                              >
+                                <template #search="{attributes, events}">
+                                  <input
+                                    class="vs__search"
+                                    v-bind="attributes"
+                                    v-on="events"
+                                    v-model="clientSearch"
+                                    @input="searchClient()"
+                                  />
+                                </template>
+                                <template slot="selected-option" slot-scope="option">
+                                  <span>@{{option.code_name}}</span>
+                                </template>
+                                <template slot="option" slot-scope="option">
+                                    @{{option.code_name}}
+                                </template>
+                              </v-select>
                               <label for="client" class="form-control-placeholder"> Client</label>
                             </div>
                           </div>
@@ -222,8 +223,7 @@
                       </div>
                       <div class="col-xs-12">
                         <div style="font-weight: 700;">Draw Signature Here</div>
-                        <div class="wrapper" style="border: 4px solid #e5e7eb; border-radius: .5rem;
-  ">
+                        <div class="wrapper-custom">
                           <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
                         </div>
                         <div>
@@ -279,8 +279,7 @@
         var cancelButton = document.getElementById('clear');
 
         saveButton.addEventListener('click', function (event) {
-          // var data = signaturePad.toDataURL('image/png');
-          document.getElementById('containerReceiving').__vue__.fuckkk(signaturePad)
+          document.getElementById('containerReceiving').__vue__.saveReceiving(signaturePad.toDataURL('image/png'))
         });
 
         cancelButton.addEventListener('click', function (event) {
@@ -388,7 +387,8 @@
           images: [],
           classSearch: '',
           sizeSearch: '',
-          heightSearch: ''
+          heightSearch: '',
+          clientSearch: ''
         },
         methods:{
           dateFormat(date) {
@@ -496,21 +496,72 @@
               console.log('error: ', error)
             })
           },
+          fuseClient(options, search) {
+            const fuse = new Fuse(options, {
+              keys: ['code_name'],
+              shouldSort: true,
+            })
+            return search.length
+              ? fuse.search(search).map(({ item }) => item)
+              : fuse.list
+          },
+          clearClient () {
+            this.sizeSearch = ''
+          },
+          searchClient () {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              const payload = {
+                keyword: this.clientSearch
+              }
+              axios.get(`/admin/clients?keyword=${payload.keyword}`, payload)
+              .then(data => {
+                this.clientList = data.data
+              })
+            }, 1000)
+          },
+          async getClient () {
+            let search = {
+              keyword: ''
+            }
+            await axios.get(`/admin/clients?keyword=${search.keyword}`, search).then( data => {
+              this.clientList = data.data
+            }).catch(error => {
+              console.log('error: ', error)
+            })
+          },
+          getBase64(file) {
+            return new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = error => reject(error);
+            });
+          },
           preview_images () {
            var total_file=document.getElementById("images").files.length;
            this.images = event.target.files
            for ( var i = 0; i < total_file; i++ ) {
-            console.log(event.target.files[i])
+            this.getBase64(event.target.files[i]).then(data => {
+              this.form.upload_photo = data
+            });
             $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'></div>");
            }
           },
-          fuckkk (data) {
-            console.log(this.form)
-            console.log(data)
+          async saveReceiving (data) {
+            this.form.signature = data
+            await axios.post('/admin/create_receiving', this.form).then(data => {
+              console.log('Data: ',data)
+              this.errors = {}
+            }).catch(error => {
+              console.log('Error: ',error)
+              this.errors = error.response.data.errors
+            })
           }
         },
         mounted () {
           this.getSize()
+          this.getClient()
           this.getClass()
           this.getHeight()
         }

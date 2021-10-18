@@ -114,3 +114,22 @@ table {
     color: red;
     position: absolute;
 }
+
+.wrapper-custom {
+    position: relative;
+    width: 400px;
+    height: 200px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 4px solid #e5e7eb;
+    border-radius: .5rem;
+}
+.signature-pad {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width:400px;
+    height:200px;
+}

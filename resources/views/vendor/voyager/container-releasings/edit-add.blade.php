@@ -8,14 +8,7 @@
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
-  
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" />     
-    <link rel="stylesheet" type="text/css" href="http://keith-wood.name/css/jquery.signature.css">
-    <style>
-        .kbw-signature { width: 100%; height: 200px;}
-        #sig canvas{ width: 100% !important; height: auto;}
-    </style>  
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}"> 
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
@@ -46,12 +39,12 @@
                                 <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="seac_no" id="seac_no" v-model="form.seac_no" class="form-control" style="height: 37px;">
-                                <label for="seac_no" class="form-control-placeholder"> Seal No</label>
+                                <input type="text" name="seal_no" id="seal_no" v-model="form.seal_no" class="form-control" style="height: 37px;">
+                                <label for="seal_no" class="form-control-placeholder"> Seal No</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                                <input type="text" name="conglone" id="conglone" v-model="form.conglone" class="form-control" style="height: 37px;">
-                                <label for="conglone" class="form-control-placeholder"> Consignee</label>
+                                <input type="text" name="consignee" id="consignee" v-model="form.consignee" class="form-control" style="height: 37px;">
+                                <label for="consignee" class="form-control-placeholder"> Consignee</label>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                                 <input type="text" name="hauler" id="hauler" v-model="form.hauler" class="form-control" style="height: 37px;">
@@ -63,10 +56,6 @@
                             </div>
                             </div>
                         </div>
-
-                        <div class="panel-footer" style="display: flex; justify-content: flex-end; padding-top: 0;">
-                            <button type="submit" class="btn btn-primary save">Save</button>
-                        </div>
                     </div>
 
                     <div class="panel panel-bordered">
@@ -76,7 +65,7 @@
                             <div style="font-weight: 700; font-size: 15px; color: black;">Pictures</div>
                           </div>
                           <div class="col-xs-12">
-                            <input style="padding: 8px;" type="file" class="form-control" id="images" name="images" @change="preview_images" multiple/>
+                            <input style="padding: 8px;" type="file" class="form-control" id="images" name="images" @change="preview_images"/>
                           </div>
                           <div class="col-xs-12">
                             <div class="row" id="image_preview"></div>
@@ -85,41 +74,31 @@
                       </div>
                     </div>
 
-                    <div class="panel panel-bordered">
-                      <div class="panel-body" style="padding: 15px;">
-                        <div class="row" style="padding: 0px 10px;">
-                          <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
-                            <div style="font-weight: 700; font-size: 15px; color: black;">Signature</div>
-                          </div>
-                          <div class="col-md-6 offset-md-3 mt-5">
-                            <div class="card">
-                              <div class="card-body">
-                                  @if ($message = Session::get('success'))
-                                      <div class="alert alert-success  alert-dismissible">
-                                          <button type="button" class="close" data-dismiss="alert">×</button>  
-                                          <strong>{{ $message }}</strong>
-                                      </div>
-                                  @endif
-                                  <form>
-                                      @csrf
-                                      <div class="col-md-12">
-                                          <label class="" for="">Draw Signature:</label>
-                                          <br/>
-                                          <div id="sig_releasing"></div>
-                                          <br><br>
-                                          <button id="clear" class="btn btn-danger">Clear Signature</button>
-                                          <button class="btn btn-success">Save</button>
-                                          <textarea id="signature_releasing" name="signature" style="display: none"></textarea>
-                                      </div>
-                                  </form>
-                              </div>
-                            </div>
-                          </div>
+                </div>
+                
+                <div class="panel panel-bordered">
+                  <div class="panel-body" style="padding: 15px;">
+                    <div class="row" style="padding: 0px 10px;">
+                      <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
+                        <div style="font-weight: 700; font-size: 15px; color: black;">Signature</div>
+                      </div>
+                      <div class="col-xs-12">
+                        <div style="font-weight: 700;">Draw Signature Here</div>
+                        <div class="wrapper-custom">
+                          <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
+                        </div>
+                        <div>
+                          <button id="clear" class="btn btn-danger">Clear</button>
                         </div>
                       </div>
                     </div>
-
+                  </div>
                 </div>
+
+                <div style="display: flex; justify-content: flex-end; padding-top: 0;">
+                    <button style="width: 100px;" id="save" class="btn btn-primary save">Save</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -149,17 +128,27 @@
 @stop
 
 @section('javascript')
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script> 
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="http://keith-wood.name/js/jquery.signature.js"></script>
-    <script type="text/javascript">
-        var sig_releasing = $('#sig_releasing').signature({syncField: '#signature_releasing', syncFormat: 'PNG'});
-        $('#clear').click(function(e) {
-            e.preventDefault();
-            sig_releasing.signature('clear');
-            $("#signature_releasing").val('');
+    
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@3.0.0-beta.4/dist/signature_pad.umd.min.js"></script>
+
+    <script>
+        var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
+          backgroundColor: 'rgba(255, 255, 255, 0)',
+          penColor: 'rgb(0, 0, 0)'
         });
+        var saveButton = document.getElementById('save');
+        var cancelButton = document.getElementById('clear');
+
+        saveButton.addEventListener('click', function (event) {
+          document.getElementById('containerReleasing').__vue__.saveReleasing(signaturePad.toDataURL('image/png'))
+        });
+
+        cancelButton.addEventListener('click', function (event) {
+          signaturePad.clear();
+        });
+
     </script>
+
     <script>
         var params = {};
         var $file;
@@ -238,7 +227,6 @@
 
     <!-- VUE -->
     <script type="text/javascript">
-      Vue.component('v-select', VueSelect.VueSelect)
       var app = new Vue({
         el: '#containerReleasing',
         data: {
@@ -246,13 +234,34 @@
           images: []
         },
         methods:{
+          getBase64(file) {
+            return new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = error => reject(error);
+            });
+          },
           preview_images () {
            var total_file=document.getElementById("images").files.length;
            this.images = event.target.files
            for ( var i = 0; i < total_file; i++ ) {
-            console.log(event.target.files[i])
+            this.getBase64(event.target.files[i]).then(data => {
+              this.form.upload_photo = data
+            });
             $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'></div>");
            }
+          },
+          async saveReleasing (data) {
+            this.form.signature = data
+            console.log(this.form)
+            await axios.post('/admin/create_releasing', this.form).then(data => {
+              console.log('Data: ',data)
+              this.errors = {}
+            }).catch(error => {
+              console.log('Error: ',error)
+              this.errors = error.response.data.errors
+            })
           }
         }
       })
