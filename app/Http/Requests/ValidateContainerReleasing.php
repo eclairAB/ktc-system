@@ -32,7 +32,8 @@ class ValidateContainerReleasing extends FormRequest
             'hauler'=> 'required',
             'plate_no'=> 'required',
             'seal_no'=> 'required',
-            'upload_photo'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'upload_photo'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'upload_photo'=> 'required',
             'signature'=> 'required',
             'remarks'=> 'required',
         ];
@@ -49,7 +50,7 @@ class ValidateContainerReleasing extends FormRequest
             'hauler.required' => 'Hauler  fieldrequired.',
             'plate_no.required' => 'Plate No. field required.',
             'seal_no.required' => 'Seal No. field required.',
-            'upload_photo.max'  => 'Maximum size to upload is 2MB.',
+            // 'upload_photo.max'  => 'Maximum size to upload is 2MB.',
             'upload_photo.required'  => 'Photo is required.',
             'signature.required'  => 'Signature field is required.',
         ];

@@ -25,178 +25,239 @@
     <div class="page-content edit-add container-fluid">
         <div class="row">
             <div class="col-md-12">
-
                 <div id="containerReceiving">
+                  <!--  -->
                   <div class="panel panel-bordered">
-                      <div class="panel-body" style="padding: 15px 15px 0 15px;">
-                          <div class="row" style="padding: 0px 10px;">
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <input type="text" name="id_no" id="id_no" placeholder="AUTO GENERATED" readonly v-model="form.id_no" class="form-control" style="height: 37px;">
-                              <label for="id_no" class="form-control-placeholder"> EIR No.</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <input type="text" name="container_no" id="container_no" v-model="form.container_no" class="form-control" style="height: 37px;">
-                              <label for="container_no" class="form-control-placeholder"> Container No.</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <v-select
-                                class="form-control" 
-                                :options="sizeTypeList"
-                                v-model="form.size_type"
-                                label="name"
-                                :filter="fuseSize"
-                                @option:selected="clearSize()"
-                                :reset-on-options-change='true'
-                                :reduce="name => name.id"
-                              >
-                                <template #search="{attributes, events}">
-                                  <input
-                                    class="vs__search"
-                                    v-bind="attributes"
-                                    v-on="events"
-                                    v-model="sizeSearch"
-                                    @input="searchSize()"
-                                  />
-                                </template>
-                                <template slot="selected-option" slot-scope="option">
-                                  <span>Code: @{{option.code}} - Name: @{{option.name}}</span>
-                                </template>
-                                <template slot="option" slot-scope="option">
-                                    Code: @{{option.code}} - Name: @{{option.name}}
-                                </template>
-                              </v-select>
-                              <label for="lastname" class="form-control-placeholder"> Size Type</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <v-select
-                                class="form-control" 
-                                :options="classList"
-                                v-model="form.class"
-                                label="class_name"
-                                :filter="fuseClass"
-                                @option:selected="clearClass()"
-                                :reset-on-options-change='true'
-                                :reduce="class_name => class_name.id"
-                              >
-                                <template #search="{attributes, events}">
-                                  <input
-                                    class="vs__search"
-                                    v-bind="attributes"
-                                    v-on="events"
-                                    v-model="classSearch"
-                                    @input="searchClass()"
-                                  />
-                                </template>
-                                <template slot="selected-option" slot-scope="option">
-                                  <span>Code: @{{option.class_code}} - Name: @{{option.class_name}}</span>
-                                </template>
-                                <template slot="option" slot-scope="option">
-                                    Code: @{{option.class_code}} - Name: @{{option.class_name}}
-                                </template>
-                              </v-select>
-                              <label for="contact_number" class="form-control-placeholder"> Class</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <input type="text" name="empty_loaded" id="empty_loaded" v-model="form.empty_loaded" class="form-control" style="height: 37px;">
-                              <label for="empty_loaded" class="form-control-placeholder"> Empty Loaded</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <vuejs-datepicker
-                                v-model="form.manufactured_date"
-                                placeholder="mm/dd/yyyyy"
-                                :input-class="'form-control'"
-                                :typeable="true"
-                                name="manufactured_date"
-                                :format="dateFormat"
-                                :required="true">
-                              </vuejs-datepicker>
-                              <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <input type="text" name="type" id="type" v-model="form.type" class="form-control" style="height: 37px;">
-                              <label for="type" class="form-control-placeholder"> Type</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <v-select
-                                class="form-control" 
-                                :options="heightList"
-                                v-model="form.height"
-                                label="height_name"
-                                :filter="fuseHeight"
-                                @option:selected="clearHeight()"
-                                :reset-on-options-change='true'
-                                :reduce="height_name => height_name.id"
-                              >
-                                <template #search="{attributes, events}">
-                                  <input
-                                    class="vs__search"
-                                    v-bind="attributes"
-                                    v-on="events"
-                                    v-model="heightSearch"
-                                    @input="searchHeight()"
-                                  />
-                                </template>
-                                <template slot="selected-option" slot-scope="option">
-                                  <span>Code: @{{option.height_code}} - Name: @{{option.height_name}}</span>
-                                </template>
-                                <template slot="option" slot-scope="option">
-                                    Code: @{{option.height_code}} - Name: @{{option.height_name}}
-                                </template>
-                              </v-select>
-                              <label for="password" class="form-control-placeholder"> Height</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <input type="text" name="yard_loacation" id="yard_loacation" v-model="form.yard_loacation" class="form-control" style="height: 37px;">
-                              <label for="yard_loacation" class="form-control-placeholder"> Yard Location</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <input type="text" name="acceptance_no" id="acceptance_no" v-model="form.acceptance_no" class="form-control" style="height: 37px;">
-                              <label for="acceptance_no" class="form-control-placeholder"> Acceptance No.</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <input type="text" name="consignee" id="consignee" v-model="form.consignee" class="form-control" style="height: 37px;">
-                              <label for="consignee" class="form-control-placeholder"> Consignee</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <input type="text" name="hauler" id="hauler" v-model="form.hauler" class="form-control" style="height: 37px;">
-                              <label for="hauler" class="form-control-placeholder"> Hauler</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <input type="text" name="plate_no" id="plate_no" v-model="form.plate_no" class="form-control" style="height: 37px;">
-                              <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                              <v-select
-                                class="form-control" 
-                                :options="clientList"
-                                v-model="form.client_id"
-                                label="code_name"
-                                :filter="fuseClient"
-                                @option:selected="clearClient()"
-                                :reset-on-options-change='true'
-                                :reduce="code_name => code_name.id"
-                              >
-                                <template #search="{attributes, events}">
-                                  <input
-                                    class="vs__search"
-                                    v-bind="attributes"
-                                    v-on="events"
-                                    v-model="clientSearch"
-                                    @input="searchClient()"
-                                  />
-                                </template>
-                                <template slot="selected-option" slot-scope="option">
-                                  <span>@{{option.code_name}}</span>
-                                </template>
-                                <template slot="option" slot-scope="option">
-                                    @{{option.code_name}}
-                                </template>
-                              </v-select>
-                              <label for="client" class="form-control-placeholder"> Client</label>
-                            </div>
-                          </div>
+                    <div class="panel-body" style="padding: 15px 15px 0 15px;">
+                      <div class="row" style="padding: 0px 10px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" name="id_no" id="id_no" placeholder="AUTO GENERATED" readonly v-model="form.id_no" class="form-control" style="height: 37px;">
+                          <label for="id_no" class="form-control-placeholder"> EIR No.</label>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" name="id_no" id="id_no" readonly :value="moment().format('MMMM DD, YYYY')" class="form-control" style="height: 37px;">
+                          <label for="id_no" class="form-control-placeholder"> Inspection Date</label>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" name="id_no" id="id_no" readonly :value="moment().format('hh:mm')" class="form-control" style="height: 37px;">
+                          <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" name="id_no" id="id_no" readonly value="" class="form-control" style="height: 37px;">
+                          <label for="id_no" class="form-control-placeholder"> Inpection By</label>
+                        </div>
                       </div>
+                    </div>
                   </div>
+                  <!--  -->
+
+                  <!--  -->
+                  <div class="panel panel-bordered">
+                    <div class="panel-body" style="padding: 15px 15px 0 15px;">
+                      <div class="row" style="padding: 0px 10px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" name="container_no" id="container_no" v-model="form.container_no" class="form-control" style="height: 37px;">
+                          <label for="container_no" class="form-control-placeholder"> Container No.</label>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <v-select
+                            class="form-control" 
+                            :options="sizeTypeList"
+                            v-model="choosenSize"
+                            label="name"
+                            :filter="fuseSize"
+                            @option:selected="clearSize()"
+                            :reset-on-options-change='true'
+                          >
+                            <template #search="{attributes, events}">
+                              <input
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                                v-model="sizeSearch"
+                                @input="searchSize()"
+                              />
+                            </template>
+                            <template slot="selected-option" slot-scope="option">
+                              <span>@{{option.code}} - @{{option.name}}</span>
+                            </template>
+                            <template slot="option" slot-scope="option">
+                                @{{option.code}} - @{{option.name}}
+                            </template>
+                          </v-select>
+                          <label for="lastname" class="form-control-placeholder"> Size Type</label>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <v-select
+                            class="form-control" 
+                            :options="heightList"
+                            v-model="form.height"
+                            label="height_name"
+                            :filter="fuseHeight"
+                            @option:selected="clearHeight()"
+                            :reset-on-options-change='true'
+                            :reduce="height_name => height_name.id"
+                          >
+                            <template #search="{attributes, events}">
+                              <input
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                                v-model="heightSearch"
+                                @input="searchHeight()"
+                              />
+                            </template>
+                            <template slot="selected-option" slot-scope="option">
+                              <span>@{{option.height_code}} - @{{option.height_name}}</span>
+                            </template>
+                            <template slot="option" slot-scope="option">
+                                @{{option.height_code}} - @{{option.height_name}}
+                            </template>
+                          </v-select>
+                          <label for="password" class="form-control-placeholder"> Height</label>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <v-select
+                            class="form-control" 
+                            :options="clientList"
+                            v-model="form.client_id"
+                            label="code_name"
+                            :filter="fuseClient"
+                            @option:selected="clearClient()"
+                            :reset-on-options-change='true'
+                            :reduce="code_name => code_name.id"
+                          >
+                            <template #search="{attributes, events}">
+                              <input
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                                v-model="clientSearch"
+                                @input="searchClient()"
+                              />
+                            </template>
+                            <template slot="selected-option" slot-scope="option">
+                              <span>@{{option.code_name}}</span>
+                            </template>
+                            <template slot="option" slot-scope="option">
+                                @{{option.code_name}}
+                            </template>
+                          </v-select>
+                          <label for="client" class="form-control-placeholder"> Client</label>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <v-select
+                            class="form-control" 
+                            :options="yardList"
+                            v-model="form.yard_loacation"
+                            label="name"
+                            @option:selected="clearYard()"
+                            :reset-on-options-change='true'
+                            :reduce="name => name.id"
+                          >
+                            <template #search="{attributes, events}">
+                              <input
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                                v-model="yardSearch"
+                                @input="searchYard()"
+                              />
+                            </template>
+                            <template slot="selected-option" slot-scope="option">
+                              <span>@{{option.name}}</span>
+                            </template>
+                            <template slot="option" slot-scope="option">
+                                @{{option.name}}
+                            </template>
+                          </v-select>
+                          <label for="yard_loacation" class="form-control-placeholder"> Yard Location</label>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" name="type" id="type" readonly v-model="form.type" class="form-control" style="height: 37px;">
+                          <label for="type" class="form-control-placeholder"> Type</label>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" name="acceptance_no" id="acceptance_no" v-model="form.acceptance_no" class="form-control" style="height: 37px;">
+                          <label for="acceptance_no" class="form-control-placeholder"> Acceptance No.</label>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <v-select
+                            class="form-control" 
+                            :options="classList"
+                            v-model="form.class"
+                            label="class_name"
+                            :filter="fuseClass"
+                            @option:selected="clearClass()"
+                            :reset-on-options-change='true'
+                            :reduce="class_name => class_name.id"
+                          >
+                            <template #search="{attributes, events}">
+                              <input
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                                v-model="classSearch"
+                                @input="searchClass()"
+                              />
+                            </template>
+                            <template slot="selected-option" slot-scope="option">
+                              <span>@{{option.class_code}} - @{{option.class_name}}</span>
+                            </template>
+                            <template slot="option" slot-scope="option">
+                                @{{option.class_code}} - @{{option.class_name}}
+                            </template>
+                          </v-select>
+                          <label for="contact_number" class="form-control-placeholder"> Class</label>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <v-select
+                            class="form-control" 
+                            :options="emptyloaded"
+                            v-model="form.empty_loaded"
+                          ></v-select>
+                          <label for="empty_loaded" class="form-control-placeholder"> Empty/Loaded</label>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <vuejs-datepicker
+                            v-model="form.manufactured_date"
+                            placeholder="mm/dd/yyyyy"
+                            :input-class="'form-control'"
+                            :typeable="true"
+                            name="manufactured_date"
+                            :format="dateFormat"
+                            :required="true">
+                          </vuejs-datepicker>
+                          <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--  -->
+
+                  <!--  -->
+                  <div class="panel panel-bordered">
+                    <div class="panel-body" style="padding: 15px 15px 0 15px;">
+                      <div class="row" style="padding: 0px 10px;">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="margin: 0; margin-bottom: 10px;">
+                          <div style="font-weight: 700; font-size: 15px; color: black;">Shipment Details</div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" name="consignee" id="consignee" v-model="form.consignee" class="form-control" style="height: 37px;">
+                          <label for="consignee" class="form-control-placeholder"> Consignee</label>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" name="hauler" id="hauler" v-model="form.hauler" class="form-control" style="height: 37px;">
+                          <label for="hauler" class="form-control-placeholder"> Hauler</label>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" name="plate_no" id="plate_no" v-model="form.plate_no" class="form-control" style="height: 37px;">
+                          <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--  -->
 
                   <div class="panel panel-bordered">
                     <div class="panel-body" style="padding: 15px;">
@@ -379,16 +440,26 @@
           vuejsDatepicker,
         },
         data: {
-          form: {},
+          form: {
+            inspection_date: moment().format(),
+            inspection_by: {!! Auth::user()->role->id !!}
+          },
           clientList: [],
           sizeTypeList: [],
           classList: [],
           heightList: [],
+          yardList: [],
           images: [],
+          choosenSize: {},
           classSearch: '',
           sizeSearch: '',
           heightSearch: '',
-          clientSearch: ''
+          clientSearch: '',
+          yardSearch: '',
+          emptyloaded: [
+            'Empty',
+            'Loaded'
+          ]
         },
         methods:{
           dateFormat(date) {
@@ -404,6 +475,8 @@
               : fuse.list
           },
           clearSize () {
+            this.form.size_type = this.choosenSize.id
+            this.form.type = this.choosenSize.type
             this.sizeSearch = ''
           },
           searchSize () {
@@ -526,6 +599,31 @@
             }
             await axios.get(`/admin/clients?keyword=${search.keyword}`, search).then( data => {
               this.clientList = data.data
+            }).catch(error => {
+              console.log('error: ', error)
+            })
+          },
+          clearYard () {
+            this.yardSearch = ''
+          },
+          searchYard () {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              const payload = {
+                keyword: this.yardSearch
+              }
+              axios.get(`/admin/container/heights?keyword=${payload.keyword}`, payload)
+              .then(data => {
+                this.yardList = data.data
+              })
+            }, 1000)
+          },
+          async getYard () {
+            let search = {
+              keyword: ''
+            }
+            await axios.get(`/admin/container/heights?keyword=${search.keyword}`, search).then( data => {
+              this.yardList = data.data
             }).catch(error => {
               console.log('error: ', error)
             })
