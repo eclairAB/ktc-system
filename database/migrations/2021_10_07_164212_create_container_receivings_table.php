@@ -33,6 +33,7 @@ class CreateContainerReceivingsTable extends Migration
             $table->string('plate_no')->nullable();
             $table->text('upload_photo')->nullable();
             $table->text('signature')->nullable();
+            $table->text('remarks')->nullable();
         });
     }
 
