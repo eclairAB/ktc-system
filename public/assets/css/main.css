@@ -28,6 +28,7 @@
 
 input.form-control {
     height: 37px !important;
+    color: black;
 }
 
 span.select2.select2-container.select2-container--default.select2-container--below, span.select2.select2-container.select2-container--default {
@@ -132,4 +133,7 @@ table {
     top: 0;
     width:400px;
     height:200px;
+}
+.panel-bordered>.panel-body {
+    overflow: unset !important;
 }
