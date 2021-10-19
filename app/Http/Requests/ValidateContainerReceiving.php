@@ -39,7 +39,8 @@ class ValidateContainerReceiving extends FormRequest
             'consignee'=> 'required',
             'hauler'=> 'required',
             'plate_no'=> 'required',
-            'upload_photo'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'upload_photo'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'upload_photo'=> 'required',
             'signature'=> 'required',
             'remarks'=> 'nullable',
         ];
@@ -61,7 +62,7 @@ class ValidateContainerReceiving extends FormRequest
             'hauler.required' => 'Hauler  fieldrequired.',
             'plate_no.required' => 'Plate No. field required.',
             'acceptance_no.required' => 'Acceptance No. field required.',
-            'upload_photo.max'  => 'Maximum size to upload is 2MB.',
+            // 'upload_photo.max'  => 'Maximum size to upload is 2MB.',
             'upload_photo.required'  => 'Photo is required.',
             'signature.required'  => 'Signature field is required.',
         ];
