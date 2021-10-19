@@ -24,6 +24,8 @@ class ValidateContainerReleasing extends FormRequest
     public function rules()
     {
         return [
+            'inspected_by'=> 'required',
+            'inspected_date'=> 'required',
             'booking_no'=> 'required',
             'consignee'=> 'required',
             'container_no'=> 'required',
@@ -32,12 +34,15 @@ class ValidateContainerReleasing extends FormRequest
             'seal_no'=> 'required',
             'upload_photo'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'signature'=> 'required',
+            'remarks'=> 'required',
         ];
     }
 
     public function messages()
     {
         return [
+            'inspected_by.required' => 'Inspected By field required.',
+            'inspected_date.required' => 'Inspected Date field required.',
             'container_no.required' => 'Container No. field not match.',
             'booking_no.required' => 'Booking No. field not match.',
             'consignee.required' => 'Consignee field required.',

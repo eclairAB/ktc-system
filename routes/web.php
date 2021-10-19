@@ -23,7 +23,9 @@ Route::group(['prefix' => 'admin'], function () {
     require __DIR__.'/voyager.php';
 
     Route::get('/{role}', [ViewsController::class, "roleView"]);
+    Route::get('/yards',[QueriesController::class,"getYardLocation"]);
     Route::get('/clients',[QueriesController::class,"getClient"]);
+    Route::get('/receiving/details',[QueriesController::class,"getReceivingDetails"]);
     Route::get('/container/classes',[QueriesController::class,"getContainterClass"]);
     Route::get('/container/heights',[QueriesController::class,"getContainterHeight"]);
     Route::get('/container/size_type',[QueriesController::class,"getContainterSizeType"]);
