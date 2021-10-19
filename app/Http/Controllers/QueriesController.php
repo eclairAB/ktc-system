@@ -7,6 +7,7 @@ use App\Models\ContainerSizeType;
 use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
 use App\Models\Client;
+use App\Models\YardLocation;
 use Illuminate\Http\Request;
 
 class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
