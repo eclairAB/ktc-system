@@ -9,6 +9,8 @@ class ContainerReleasing extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'inspected_by',
+        'inspected_date',
         'container_no',
         'booking_no',
         'consignee',
@@ -17,5 +19,6 @@ class ContainerReleasing extends Model
         'seal_no',
         'upload_photo',
         'signature',
+        'remarks'
     ];
 }
