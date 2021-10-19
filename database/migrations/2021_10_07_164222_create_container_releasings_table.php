@@ -16,6 +16,8 @@ class CreateContainerReleasingsTable extends Migration
         Schema::create('container_releasings', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->timestampTz('inspected_date')->nullable();
+            $table->bigInteger('inspected_by')->nullable();
             $table->string('container_no')->nullable();
             $table->string('booking_no')->nullable();
             $table->string('consignee')->nullable();
@@ -24,6 +26,7 @@ class CreateContainerReleasingsTable extends Migration
             $table->string('seal_no')->nullable();
             $table->text('upload_photo')->nullable();
             $table->text('signature')->nullable();
+            $table->text('remarks')->nullable();
         });
     }
 

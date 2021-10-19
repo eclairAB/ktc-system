@@ -51,6 +51,38 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         return $client;
     }
 
+    public function getYardLocation(Request $request)
+    {
+        $yardloc = YardLocation::when(!empty($request->keyword), function ($q) use ($request){
+            return $q->where('name', 'ilike', '%'.$request->keyword.'%');
+        })->get();
+
+        return $yardloc;
+    }
+
+    public function getReceivingDetails(Request $request)
+    {
+        $details = ContainerReceiving::where('container_no',$request->container_no)
+        ->with('client:id,code_name','sizeType:id,code,name','class:id,code,name')->select(
+        'id',
+        'client_id',
+        'size_type',
+        'class',
+        'empty_loaded',
+        'manufactured_date')->first();
+
+        if($details)
+        {
+
+            return $details;
+        }
+        else{
+            $message = 'Container'.$request->container_no.' is not in the yard';
+            return $message;
+        }
+        
+    }
+
     public function prntReleasing($id)
     {
         $releasing = ContainerReleasing::where('id',$id)->first();

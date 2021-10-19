@@ -26,5 +26,21 @@ class ContainerReceiving extends Model
         'plate_no',
         'upload_photo',
         'signature',
+        'remarks'
     ];
+
+    public function client()
+    {
+        return $this->HasOne(Client::class, 'id','client_id');
+    }
+
+    public function sizeType()
+    {
+        return $this->HasOne(ContainerSizeType::class, 'id','size_type');
+    }
+
+    public function class()
+    {
+        return $this->HasOne(ContainerClass::class, 'id','class');
+    }
 }

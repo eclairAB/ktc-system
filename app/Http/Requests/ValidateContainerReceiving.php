@@ -41,6 +41,7 @@ class ValidateContainerReceiving extends FormRequest
             'plate_no'=> 'required',
             'upload_photo'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'signature'=> 'required',
+            'remarks'=> 'nullable',
         ];
     }
 
