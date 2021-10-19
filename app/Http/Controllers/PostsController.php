@@ -81,58 +81,60 @@ class PostsController extends Controller
     public function createReleasing(ValidateContainerReleasing $request)
     {
         $releasing = $request->validated();
-        $file_sig = $releasing['signature'];
-        $file_photo = $releasing['signature'];
-        $path_sig  = $file_sig->store('uploads/releasing/signatures', 'public');
-        $path_photo  = $file_photo->store('uploads/releasing/photos', 'public');
-        $releasing['upload_photo'] = $path_photo;
-        $releasing['signature'] = $path_sig;
+        $container = $releasing['upload_photo'];
+        $signature = $releasing['signature'];
+        $params->file_name = Str::random(32);
+        $params->type = 'releasing';
 
+        $this->imageUpload($params, $signature, true);
+        $this->imageUpload($params, $container, false);
+        $releasing['upload_photo'] = storage_path() . '/app/public/uploads/releasing/signature/' . $params->file_name;
+        $releasing['signature'] = storage_path() . '/app/public/uploads/releasing/container/' . $params->file_name;
         return  ContainerReleasing::create($releasing);
     }
 
     public function createReceiving(ValidateContainerReceiving $request)
     {
         $receiving = $request->validated();
-        $file_sig = $receiving['signature'];
-        $file_photo = $receiving['signature'];
-        $path_sig  = $file_sig->store('uploads/receiving/signatures', 'public');
-        $path_photo  = $file_photo->store('uploads/receiving/photos', 'public');
-        $receiving['upload_photo'] = $path_photo;
-        $receiving['signature'] = $path_sig;
+        $container = $receiving['upload_photo'];
+        $signature = $receiving['signature'];
+        $params->file_name = Str::random(32);
+        $params->type = 'receiving';
+
+        $this->imageUpload($params, $signature, true);
+        $this->imageUpload($params, $container, false);
+        $receiving['upload_photo'] = storage_path() . '/app/public/uploads/receiving/signature/' . $params->file_name;
+        $receiving['signature'] = storage_path() . '/app/public/uploads/receiving/container/' . $params->file_name;
         $receiving['inspected_by'] = Auth::user()->id;
         return  ContainerReceiving::create($receiving);
     }
 
-    public function imageUpload($payload)
+    public function imageUpload($payload, $photo, $isSignature)
     {
-        if(!is_null($payload->photo))
+        $exploded = explode(',', $photo);
+        $decode = base64_decode($exploded[1]);
+        if(str_contains($exploded[0], 'jpeg', 'jpg')) $extension = '.jpg';
+        elseif(str_contains($exploded[0], 'svg')) $extension = '.svg';
+        else $extension = '.png';
+
+        $the_path = storage_path() . '/app/public/uploads/';
+        !is_dir( storage_path() . '/app/public/uploads/' ) && mkdir(storage_path() . '/app/public/uploads/');
+        !is_dir( storage_path() . '/app/public/uploads/releasing/') && mkdir(storage_path() . '/app/public/uploads/releasing/');
+        !is_dir( storage_path() . '/app/public/uploads/receiving/') && mkdir(storage_path() . '/app/public/uploads/receiving/');
+        !is_dir( storage_path() . '/app/public/uploads/releasing/signature/') && mkdir(storage_path() . '/app/public/uploads/releasing/signature/');
+        !is_dir( storage_path() . '/app/public/uploads/releasing/container/') && mkdir(storage_path() . '/app/public/uploads/releasing/container/');
+        !is_dir( storage_path() . '/app/public/uploads/receiving/signature/') && mkdir(storage_path() . '/app/public/uploads/receiving/signature/');
+        !is_dir( storage_path() . '/app/public/uploads/receiving/container/') && mkdir(storage_path() . '/app/public/uploads/receiving/container/');
+
+        if($payload->type == 'releasing')
         {
-            $exploded = explode(',', $payload->photo);
-            $decode = base64_decode($exploded[1]);
-            if(str_contains($exploded[0], 'jpeg', 'jpg')) $extension = '.jpg';
-            elseif(str_contains($exploded[0], 'svg')) $extension = '.svg';
-            else $extension = '.png';
-
-            $the_path = storage_path() . '/app/public/uploads/';
-            !is_dir( storage_path() . '/app/public/uploads/' ) && mkdir(storage_path() . '/app/public/uploads/');
-            !is_dir( storage_path() . '/app/public/uploads/releasing/') && mkdir(storage_path() . '/app/public/uploads/releasing/');
-            !is_dir( storage_path() . '/app/public/uploads/receiving/') && mkdir(storage_path() . '/app/public/uploads/receiving/');
-            !is_dir( storage_path() . '/app/public/uploads/releasing/signature/') && mkdir(storage_path() . '/app/public/uploads/releasing/signature/');
-            !is_dir( storage_path() . '/app/public/uploads/releasing/container/') && mkdir(storage_path() . '/app/public/uploads/releasing/container/');
-            !is_dir( storage_path() . '/app/public/uploads/receiving/signature/') && mkdir(storage_path() . '/app/public/uploads/receiving/signature/');
-            !is_dir( storage_path() . '/app/public/uploads/receiving/container/') && mkdir(storage_path() . '/app/public/uploads/receiving/container/');
-
-            if($payload->type == 'releasing')
-            {
-                file_put_contents( $the_path . 'releasing/signature/' . $payload->file_name . $extension, $decode);
-                file_put_contents( $the_path . 'releasing/container/' . $payload->file_name . $extension, $decode);
-            }
-            elseif($payload->type == 'receiving')
-            {
-                file_put_contents( $the_path . 'receiving/signature/' . $payload->file_name . $extension, $decode);
-                file_put_contents( $the_path . 'receiving/container/' . $payload->file_name . $extension, $decode);
-            }
+            if($isSignature) file_put_contents( $the_path . 'releasing/signature/' . $payload->file_name . $extension, $decode);
+            else file_put_contents( $the_path . 'releasing/container/' . $payload->file_name . $extension, $decode);
+        }
+        elseif($payload->type == 'receiving')
+        {
+            if($isSignature) file_put_contents( $the_path . 'receiving/signature/' . $payload->file_name . $extension, $decode);
+            else file_put_contents( $the_path . 'receiving/container/' . $payload->file_name . $extension, $decode);
         }
     }
 }
