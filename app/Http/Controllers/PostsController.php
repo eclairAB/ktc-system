@@ -10,8 +10,11 @@ use App\Models\Staff;
 use App\Models\User;
 use App\Models\ContainerReleasing;
 use App\Models\ContainerReceiving;
+use App\Models\Containers;
+use App\Models\ContainerRemark;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -83,14 +86,41 @@ class PostsController extends Controller
         $releasing = $request->validated();
         $container = $releasing['upload_photo'];
         $signature = $releasing['signature'];
-        $params->file_name = Str::random(32);
-        $params->type = 'releasing';
+        $params = [];
+        $params['file_name'] = Str::random(32);
+        $params['type'] = 'releasing';
 
         $this->imageUpload($params, $signature, true);
         $this->imageUpload($params, $container, false);
-        $releasing['upload_photo'] = storage_path() . '/app/public/uploads/releasing/signature/' . $params->file_name;
-        $releasing['signature'] = storage_path() . '/app/public/uploads/releasing/container/' . $params->file_name;
-        return  ContainerReleasing::create($releasing);
+        $releasing['upload_photo'] = storage_path() . '/app/public/uploads/releasing/signature/' . $params['file_name'];
+        $releasing['signature'] = storage_path() . '/app/public/uploads/releasing/container/' . $params['file_name'];
+        $release =   ContainerReleasing::create($releasing);
+
+        if($release)
+        {
+            $receiving = ContainerReceiving::where('container_no',$releasing['container_no'])->first();
+            if($receiving)
+            {
+                $dataCont = [
+                    'container_no'=>$releasing['container_no'],
+                    'client_id'=>$receiving->client_id,
+                    'size_type'=>$receiving->size_type,
+                    'class'=>$receiving->class,
+                    'date_received'=>$release->created_at,
+                    'date_released'=>null,
+                ];
+                $cont = Containers::create($dataCont);
+    
+                $dataContRemark = [
+                    'status'=>'Released',
+                    'container_id'=>$cont->id,
+                    'remarks'=>$request->remarks,
+                ];
+                ContainerRemark::create($dataContRemark);
+            }
+        }
+
+        return $release;
     }
 
     public function createReceiving(ValidateContainerReceiving $request)
@@ -98,15 +128,38 @@ class PostsController extends Controller
         $receiving = $request->validated();
         $container = $receiving['upload_photo'];
         $signature = $receiving['signature'];
-        $params->file_name = Str::random(32);
-        $params->type = 'receiving';
+        $params = [];
+        $params['file_name'] = Str::random(32);
+        $params['type'] = 'receiving';
 
         $this->imageUpload($params, $signature, true);
         $this->imageUpload($params, $container, false);
-        $receiving['upload_photo'] = storage_path() . '/app/public/uploads/receiving/signature/' . $params->file_name;
-        $receiving['signature'] = storage_path() . '/app/public/uploads/receiving/container/' . $params->file_name;
+        $receiving['upload_photo'] = storage_path() . '/app/public/uploads/receiving/signature/' . $params['file_name'];
+        $receiving['signature'] = storage_path() . '/app/public/uploads/receiving/container/' . $params['file_name'];
         $receiving['inspected_by'] = Auth::user()->id;
-        return  ContainerReceiving::create($receiving);
+        $receive =   ContainerReceiving::create($receiving);
+
+        if($release)
+        {
+            $dataCont = [
+                'container_no'=>$receiving['container_no'],
+                'client_id'=>$receiving['client_id'],
+                'size_type'=>$receiving['size_type'],
+                'class'=>$receiving['class'],
+                'date_received'=>$receive->created_at,
+                'date_released'=>null,
+            ];
+            $cont = Containers::create($dataCont);
+
+            $dataContRemark = [
+                'status'=>'Received',
+                'container_id'=>$cont->id,
+                'remarks'=>$request->remarks,
+            ];
+            ContainerRemark::create($dataContRemark);
+        }
+
+        return $receive;
     }
 
     public function imageUpload($payload, $photo, $isSignature)
@@ -126,15 +179,15 @@ class PostsController extends Controller
         !is_dir( storage_path() . '/app/public/uploads/receiving/signature/') && mkdir(storage_path() . '/app/public/uploads/receiving/signature/');
         !is_dir( storage_path() . '/app/public/uploads/receiving/container/') && mkdir(storage_path() . '/app/public/uploads/receiving/container/');
 
-        if($payload->type == 'releasing')
+        if($payload['type'] == 'releasing')
         {
-            if($isSignature) file_put_contents( $the_path . 'releasing/signature/' . $payload->file_name . $extension, $decode);
+            if($isSignature) file_put_contents( $the_path . 'releasing/signature/' . $payload['file_name'] . $extension, $decode);
             else file_put_contents( $the_path . 'releasing/container/' . $payload->file_name . $extension, $decode);
         }
-        elseif($payload->type == 'receiving')
+        elseif($payload['type'] == 'receiving')
         {
-            if($isSignature) file_put_contents( $the_path . 'receiving/signature/' . $payload->file_name . $extension, $decode);
-            else file_put_contents( $the_path . 'receiving/container/' . $payload->file_name . $extension, $decode);
+            if($isSignature) file_put_contents( $the_path . 'receiving/signature/' . $payload['file_name'] . $extension, $decode);
+            else file_put_contents( $the_path . 'receiving/container/' . $payload['file_name'] . $extension, $decode);
         }
     }
 }
