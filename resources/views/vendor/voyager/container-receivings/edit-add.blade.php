@@ -498,7 +498,7 @@
               const payload = {
                 keyword: this.sizeSearch
               }
-              axios.get(`/admin/container/size_type?keyword=${payload.keyword}`, payload)
+              axios.get(`/admin/get/container/size_type?keyword=${payload.keyword}`, payload)
               .then(data => {
                 this.sizeTypeList = data.data
               })
@@ -508,7 +508,7 @@
             let search = {
               keyword: ''
             }
-            await axios.get(`/admin/container/size_type?keyword=${search.keyword}`, search).then( data => {
+            await axios.get(`/admin/get/container/size_type?keyword=${search.keyword}`, search).then( data => {
               this.sizeTypeList = data.data
             }).catch(error => {
               console.log('error: ', error)
@@ -532,7 +532,7 @@
               const payload = {
                 keyword: this.classSearch
               }
-              axios.get(`/admin/container/classes?keyword=${payload.keyword}`, payload)
+              axios.get(`/admin/get/container/classes?keyword=${payload.keyword}`, payload)
               .then(data => {
                 this.classList = data.data
               })
@@ -542,7 +542,7 @@
             let search = {
               keyword: ''
             }
-            await axios.get(`/admin/container/classes?keyword=${search.keyword}`, search).then( data => {
+            await axios.get(`/admin/get/container/classes?keyword=${search.keyword}`, search).then( data => {
               this.classList = data.data
             }).catch(error => {
               console.log('error: ', error)
@@ -566,7 +566,7 @@
               const payload = {
                 keyword: this.heightSearch
               }
-              axios.get(`/admin/container/heights?keyword=${payload.keyword}`, payload)
+              axios.get(`/admin/get/container/heights?keyword=${payload.keyword}`, payload)
               .then(data => {
                 this.heightList = data.data
               })
@@ -576,7 +576,7 @@
             let search = {
               keyword: ''
             }
-            await axios.get(`/admin/container/heights?keyword=${search.keyword}`, search).then( data => {
+            await axios.get(`/admin/get/container/heights?keyword=${search.keyword}`, search).then( data => {
               this.heightList = data.data
             }).catch(error => {
               console.log('error: ', error)
@@ -600,7 +600,7 @@
               const payload = {
                 keyword: this.clientSearch
               }
-              axios.get(`/admin/clients?keyword=${payload.keyword}`, payload)
+              axios.get(`/admin/get/clients?keyword=${payload.keyword}`, payload)
               .then(data => {
                 this.clientList = data.data
               })
@@ -610,7 +610,7 @@
             let search = {
               keyword: ''
             }
-            await axios.get(`/admin/clients?keyword=${search.keyword}`, search).then( data => {
+            await axios.get(`/admin/get/clients?keyword=${search.keyword}`, search).then( data => {
               this.clientList = data.data
             }).catch(error => {
               console.log('error: ', error)
@@ -625,7 +625,7 @@
               const payload = {
                 keyword: this.yardSearch
               }
-              axios.get(`/admin/yards?keyword=${payload.keyword}`, payload)
+              axios.get(`/admin/get/yards?keyword=${payload.keyword}`, payload)
               .then(data => {
                 this.yardList = data.data
               })
@@ -635,7 +635,7 @@
             let search = {
               keyword: ''
             }
-            await axios.get(`/admin/yards?keyword=${search.keyword}`, search).then( data => {
+            await axios.get(`/admin/get/yards?keyword=${search.keyword}`, search).then( data => {
               this.yardList = data.data
             }).catch(error => {
               console.log('error: ', error)
@@ -661,7 +661,7 @@
           },
           async saveReceiving (data) {
             this.form.signature = data
-            await axios.post('/admin/create_receiving', this.form).then(data => {
+            await axios.post('/admin/create/receiving', this.form).then(data => {
               console.log('Data: ',data)
               this.errors = {}
             }).catch(error => {
