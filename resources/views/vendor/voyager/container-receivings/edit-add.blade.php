@@ -259,6 +259,19 @@
                   </div>
                   <!--  -->
 
+                  <!--  -->
+                  <div class="panel panel-bordered">
+                    <div class="panel-body" style="padding: 15px 15px 0 15px;">
+                      <div class="row" style="padding: 0px 10px;">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <textarea v-model="form.remarks" rows="3" style="width: 100%; height: auto !important;" class="form-control" placeholder="Write Something..."></textarea>  
+                          <label for="consignee" class="form-control-placeholder"> Remarks</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--  -->
+
                   <div class="panel panel-bordered">
                     <div class="panel-body" style="padding: 15px;">
                       <div class="row" style="padding: 0px 10px;">
@@ -441,8 +454,8 @@
         },
         data: {
           form: {
-            inspection_date: moment().format(),
-            inspection_by: {!! Auth::user()->role->id !!}
+            inspected_date: moment().format(),
+            inspected_by: {!! Auth::user()->role->id !!}
           },
           clientList: [],
           sizeTypeList: [],
@@ -612,7 +625,7 @@
               const payload = {
                 keyword: this.yardSearch
               }
-              axios.get(`/admin/container/heights?keyword=${payload.keyword}`, payload)
+              axios.get(`/admin/yards?keyword=${payload.keyword}`, payload)
               .then(data => {
                 this.yardList = data.data
               })
@@ -622,7 +635,7 @@
             let search = {
               keyword: ''
             }
-            await axios.get(`/admin/container/heights?keyword=${search.keyword}`, search).then( data => {
+            await axios.get(`/admin/yards?keyword=${search.keyword}`, search).then( data => {
               this.yardList = data.data
             }).catch(error => {
               console.log('error: ', error)
@@ -660,6 +673,7 @@
         mounted () {
           this.getSize()
           this.getClient()
+          this.getYard()
           this.getClass()
           this.getHeight()
         }
