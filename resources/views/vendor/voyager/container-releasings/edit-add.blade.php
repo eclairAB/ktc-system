@@ -253,11 +253,12 @@
            }
           },
           async saveReleasing (data) {
+            let currentUrl = window.location.href
+            let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.form.signature = data
-            console.log(this.form)
             await axios.post('/admin/create_releasing', this.form).then(data => {
-              console.log('Data: ',data)
               this.errors = {}
+              window.location = checkedit
             }).catch(error => {
               console.log('Error: ',error)
               this.errors = error.response.data.errors
