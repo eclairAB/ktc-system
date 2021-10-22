@@ -60,27 +60,28 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" name="container_no" id="container_no" v-model="form.container_no" v-model="sizeSearch"
-                                @input="searchContainer()" class="form-control" style="height: 37px;">
+                                @input="searchContainer()" class="form-control" :class="containerError.message ? 'isError' : ''" style="height: 37px;">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
+                          <div class="customErrorText"><small>@{{ containerError.message }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="client" readonly id="client" v-model="form.client" class="form-control" style="height: 37px;">
+                          <input type="text" name="client" readonly id="client" :value="containerInfo.client ? containerInfo.client.code_name : ''" class="form-control" style="height: 37px;">
                           <label for="client" class="form-control-placeholder"> Client</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="size" readonly id="size" v-model="form.size" class="form-control" style="height: 37px;">
+                          <input type="text" name="size" readonly id="size" :value="containerInfo.size_type ? containerInfo.size_type.name : ''" class="form-control" style="height: 37px;">
                           <label for="size" class="form-control-placeholder"> Size</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="class" readonly id="class" v-model="form.class" class="form-control" style="height: 37px;">
+                          <input type="text" name="class" readonly id="class" :value="containerInfo.class ? containerInfo.class.class_name : ''" class="form-control" style="height: 37px;">
                           <label for="class" class="form-control-placeholder"> Class</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="manufactured_date" readonly id="manufactured_date" v-model="form.manufactured_date" class="form-control" style="height: 37px;">
+                          <input type="text" name="manufactured_date" readonly id="manufactured_date" :value="containerInfo.manufactured_date" class="form-control" style="height: 37px;">
                           <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="empty_loaded" readonly id="empty_loaded" v-model="form.empty_loaded" class="form-control" style="height: 37px;">
+                          <input type="text" name="empty_loaded" readonly id="empty_loaded" :value="containerInfo.empty_loaded" class="form-control" style="height: 37px;">
                           <label for="empty_loaded" class="form-control-placeholder"> Empty/Loaded</label>
                         </div>
                       </div>
@@ -294,28 +295,22 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-    <script src="https://unpkg.com/vue-select@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue-date-dropdown@1.0.5/dist/vue-date-dropdown.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuejs-datepicker@1.6.2/dist/vuejs-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- VUE -->
     <script type="text/javascript">
-      Vue.component('v-select', VueSelect.VueSelect)
-
       var app = new Vue({
         el: '#containerReceiving',
-        components: {
-          vuejsDatepicker,
-        },
         data: {
           form: {
             inspected_date: moment().format(),
             inspected_by: {!! Auth::user()->role->id !!}
           },
           images: [],
-          choosenSize: {}
+          choosenSize: {},
+          containerError: {},
+          containerInfo: {}
         },
         methods:{
           dateFormat(date) {
@@ -325,13 +320,15 @@
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
               const payload = {
-                keyword: this.form.container_no
+                container_no: this.form.container_no
               }
-              axios.get(`/admin/get/receiving/details?keyword=${payload.keyword}`, payload)
+              axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}`, payload)
               .then(data => {
-                console.log('Data: ',data)
+                this.containerError = {}
+                this.containerInfo = data.data
               }).catch(error => {
-                console.log('Error: ' ,error)
+                this.containerInfo = {}
+                this.containerError = error.response.data
               })
             }, 1000)
           },
