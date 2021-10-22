@@ -197,7 +197,7 @@
         },
         methods:{
           async saveStaff () {
-            await axios.post('/admin/create_Staff', this.form).then(data => {
+            await axios.post('/admin/create/Staff', this.form).then(data => {
               this.errors = {}
             }).catch(error => {
               this.errors = error.response.data.errors
