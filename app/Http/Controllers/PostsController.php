@@ -90,16 +90,17 @@ class PostsController extends Controller
         $params['file_name'] = Str::random(32);
         $params['type'] = 'releasing';
 
-        $this->imageUpload($params, $signature, true);
-        $this->imageUpload($params, $container, false);
-        $releasing['upload_photo'] = storage_path() . '/app/public/uploads/releasing/signature/' . $params['file_name'];
-        $releasing['signature'] = storage_path() . '/app/public/uploads/releasing/container/' . $params['file_name'];
-        $release =   ContainerReleasing::create($releasing);
-
-        if($release)
+        $receiving = ContainerReceiving::where('container_no',$releasing['container_no'])->first();
+        if($receiving)
         {
-            $receiving = ContainerReceiving::where('container_no',$releasing['container_no'])->first();
-            if($receiving)
+
+            $this->imageUpload($params, $signature, true);
+            $this->imageUpload($params, $container, false);
+            $releasing['upload_photo'] = storage_path() . '/app/public/uploads/releasing/signature/' . $params['file_name'];
+            $releasing['signature'] = storage_path() . '/app/public/uploads/releasing/container/' . $params['file_name'];
+            $release =   ContainerReleasing::create($releasing);
+
+            if($release)
             {
                 $dataCont = [
                     'container_no'=>$releasing['container_no'],
@@ -110,7 +111,7 @@ class PostsController extends Controller
                     'date_released'=>null,
                 ];
                 $cont = Containers::create($dataCont);
-    
+
                 $dataContRemark = [
                     'status'=>'Released',
                     'container_id'=>$cont->id,
@@ -118,9 +119,12 @@ class PostsController extends Controller
                 ];
                 ContainerRemark::create($dataContRemark);
             }
+            return $release;
         }
-
-        return $release;
+        else{
+            $message = 'Container'.$request->container_no.' is not in the yard';
+            return $message;
+        }
     }
 
     public function createReceiving(ValidateContainerReceiving $request)
