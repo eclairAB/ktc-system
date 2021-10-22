@@ -122,8 +122,9 @@ class PostsController extends Controller
             return $release;
         }
         else{
-            $message = 'Container'.$request->container_no.' is not in the yard';
-            return $message;
+            $message = 'Container '.$request->container_no.' is not in the yard';
+            $status = 'error';
+            return response()->json(compact('message','status'),404);
         }
     }
 

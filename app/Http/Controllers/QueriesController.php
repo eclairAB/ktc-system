@@ -79,8 +79,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return $details;
         }
         else{
-            $message = 'Container'.$request->container_no.' is not in the yard';
-            return $message;
+            $message = 'Container '.$request->container_no.' is not in the yard';
+            $status = 'error';
+            return response()->json(compact('message','status'),404);
         }
         
     }
