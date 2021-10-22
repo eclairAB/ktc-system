@@ -23,17 +23,17 @@ Route::group(['prefix' => 'admin'], function () {
     require __DIR__.'/voyager.php';
 
     Route::get('/{role}', [ViewsController::class, "roleView"]);
-    Route::get('/yards',[QueriesController::class,"getYardLocation"]);
-    Route::get('/clients',[QueriesController::class,"getClient"]);
-    Route::get('/receiving/details',[QueriesController::class,"getReceivingDetails"]);
-    Route::get('/container/classes',[QueriesController::class,"getContainterClass"]);
-    Route::get('/container/heights',[QueriesController::class,"getContainterHeight"]);
-    Route::get('/container/size_type',[QueriesController::class,"getContainterSizeType"]);
-    Route::get('/print/releasing/{id}',[QueriesController::class,"prntReleasing"]);
-    Route::get('/print/receiving/{id}',[QueriesController::class,"prntReceiving"]);
+    Route::get('/get/yards',[QueriesController::class,"getYardLocation"]);
+    Route::get('/get/clients',[QueriesController::class,"getClient"]);
+    Route::get('/get/receiving/details',[QueriesController::class,"getReceivingDetails"]);
+    Route::get('/get/container/classes',[QueriesController::class,"getContainterClass"]);
+    Route::get('/get/container/heights',[QueriesController::class,"getContainterHeight"]);
+    Route::get('/get/container/size_type',[QueriesController::class,"getContainterSizeType"]);
+    Route::get('/get/print/releasing/{id}',[QueriesController::class,"prntReleasing"]);
+    Route::get('/get/print/receiving/{id}',[QueriesController::class,"prntReceiving"]);
 
-    Route::POST('/create_client', [PostsController::class, "createClient"]);
-    Route::POST('/create_Staff', [PostsController::class, "createStaff"]);
-    Route::post('/create_releasing',[PostsController::class,"createReleasing"]);
-    Route::post('/create_receiving',[PostsController::class,"createReceiving"]);
+    Route::post('/create/client', [PostsController::class, "createClient"]);
+    Route::post('/create/Staff', [PostsController::class, "createStaff"]);
+    Route::post('/create/releasing',[PostsController::class,"createReleasing"]);
+    Route::post('/create/receiving',[PostsController::class,"createReceiving"]);
 });
