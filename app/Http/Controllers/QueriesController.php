@@ -64,7 +64,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function getReceivingDetails(Request $request)
     {
         $details = ContainerReceiving::where('container_no',$request->container_no)
-        ->with('client:id,code_name','sizeType:id,code,name','class:id,code,name')
+        ->with('client:id,code_name','sizeType:id,code,name','class:id,class_code,class_name')
         ->select(
             'id',
             'client_id',
