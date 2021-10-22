@@ -139,7 +139,7 @@ class PostsController extends Controller
         $receiving['inspected_by'] = Auth::user()->id;
         $receive =   ContainerReceiving::create($receiving);
 
-        if($release)
+        if($receive)
         {
             $dataCont = [
                 'container_no'=>$receiving['container_no'],
