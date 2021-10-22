@@ -8,6 +8,7 @@
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
@@ -32,43 +33,46 @@
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
                                 <input type="text" name="id_no" id="id_no" v-model="form.id_no" class="form-control" :class="errors.id_no ? 'isError' : ''">
                                 <label for="id_no" class="form-control-placeholder"> ID No.</label>
-                                <div class="customErrorText"><small>@{{ errors.id_no  }}</small></div>
+                                <div class="customErrorText"><small>@{{ errors.id_no ? errors.id_no[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
                                 <input type="text" name="firstname" id="firstname" v-model="form.firstname" class="form-control" :class="errors.firstname ? 'isError' : ''">
                                 <label for="firstname" class="form-control-placeholder"> First Name</label>
-                                <div class="customErrorText"><small>@{{ errors.firstname }}</small></div>
+                                <div class="customErrorText"><small>@{{ errors.firstname ? errors.firstname[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
                                 <input type="text" name="lastname" id="lastname" v-model="form.lastname" class="form-control" :class="errors.lastname ? 'isError' : ''">
                                 <label for="lastname" class="form-control-placeholder"> Last Name</label>
-                                <div class="customErrorText"><small>@{{ errors.lastname }}</small></div>
+                                <div class="customErrorText"><small>@{{ errors.lastname ? errors.lastname[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
                                 <input type="text" name="contact_no" id="contact_no" v-model="form.contact_no" class="form-control" :class="errors.contact_no ? 'isError' : ''">
                                 <label for="contact_no" class="form-control-placeholder"> Contact Number</label>
-                                <div class="customErrorText"><small>@{{ errors.contact_no }}</small></div>
+                                <div class="customErrorText"><small>@{{ errors.contact_no ? errors.contact_no[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
                                 <input type="text" name="user_id" id="user_id" v-model="form.user_id" class="form-control" :class="errors.user_id ? 'isError' : ''">
                                 <label for="user_id" class="form-control-placeholder"> User Name</label>
-                                <div class="customErrorText"><small>@{{ errors.user_id }}</small></div>
+                                <div class="customErrorText"><small>@{{ errors.user_id ? errors.user_id[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
                                 <input type="text" name="password" id="password" v-model="form.password" class="form-control" :class="errors.password ? 'isError' : ''">
                                 <label for="password" class="form-control-placeholder"> Password</label>
-                                <div class="customErrorText"><small>@{{ errors.password }}</small></div>
+                                <div class="customErrorText"><small>@{{ errors.password ? errors.password[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
                                 <input type="text" name="password_confirmation" id="password_confirmation" v-model="form.password_confirmation" class="form-control" :class="errors.password_confirmation ? 'isError' : ''">
                                 <label for="password_confirmation" class="form-control-placeholder"> Confirm Password</label>
-                                <div class="customErrorText"><small>@{{ errors.password_confirmation }}</small></div>
+                                <div class="customErrorText"><small>@{{ errors.password_confirmation ? errors.password_confirmation[0] : '' }}</small></div>
                               </div>
                             </div>
                         </div>
 
                         <div class="panel-footer" style="display: flex; justify-content: flex-end;">
-                            <button type="submit" class="btn btn-primary save" @click="saveStaff">Save</button>
+                            <button type="submit" class="btn btn-primary save buttonload" @click="saveStaff" style="display: flex; align-items:center;">
+                                <i :class="customload === false ? 'fa fa-save' : 'fa fa-refresh fa-spin'"></i>
+                                <div style="margin-left: 5px;">@{{ customload === false ? 'Save' : 'Loading' }}</div>
+                            </button>
                         </div>
                     </div>
 
@@ -193,13 +197,21 @@
         el: '#staffForm',
         data: {
           form: {},
-          errors: {}
+          errors: {},
+          customload: false
         },
         methods:{
           async saveStaff () {
+            this.customload = true
+            let currentUrl = window.location.href
+            this.form.user_type = 'Default'
+            let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             await axios.post('/admin/create/Staff', this.form).then(data => {
+              this.customload = false
               this.errors = {}
+              window.location = checkedit
             }).catch(error => {
+              this.customload = false
               this.errors = error.response.data.errors
             })
           }
