@@ -187,7 +187,7 @@ class PostsController extends Controller
         if($payload['type'] == 'releasing')
         {
             if($isSignature) file_put_contents( $the_path . 'releasing/signature/' . $payload['file_name'] . $extension, $decode);
-            else file_put_contents( $the_path . 'releasing/container/' . $payload->file_name . $extension, $decode);
+            else file_put_contents( $the_path . 'releasing/container/' . $payload['file_name'] . $extension, $decode);
         }
         elseif($payload['type'] == 'receiving')
         {
