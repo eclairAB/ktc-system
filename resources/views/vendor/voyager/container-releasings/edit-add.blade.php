@@ -96,20 +96,24 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="margin: 0; margin-bottom: 10px;">
                           <div style="font-weight: 700; font-size: 15px; color: black;">Shipment Details</div>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="consignee" id="consignee" v-model="form.consignee" class="form-control" style="height: 37px;">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" :readonly="!isOk" name="booking_no" id="booking_no" v-model="form.booking_no" class="form-control" style="height: 37px;">
+                          <label for="booking_no" class="form-control-placeholder"> Booking No.</label>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" :readonly="!isOk" name="consignee" id="consignee" v-model="form.consignee" class="form-control" style="height: 37px;">
                           <label for="consignee" class="form-control-placeholder"> Consignee</label>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="hauler" id="hauler" v-model="form.hauler" class="form-control" style="height: 37px;">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" :readonly="!isOk" name="hauler" id="hauler" v-model="form.hauler" class="form-control" style="height: 37px;">
                           <label for="hauler" class="form-control-placeholder"> Hauler</label>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="plate_no" id="plate_no" v-model="form.plate_no" class="form-control" style="height: 37px;">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" :readonly="!isOk" name="plate_no" id="plate_no" v-model="form.plate_no" class="form-control" style="height: 37px;">
                           <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="seal_no" id="seal_no" v-model="form.seal_no" class="form-control" style="height: 37px;">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" :readonly="!isOk" name="seal_no" id="seal_no" v-model="form.seal_no" class="form-control" style="height: 37px;">
                           <label for="seal_no" class="form-control-placeholder"> Seal No.</label>
                         </div>
                       </div>
@@ -122,7 +126,7 @@
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <textarea v-model="form.remarks" rows="3" style="width: 100%; height: auto !important;" class="form-control" placeholder="Write Something..."></textarea>  
+                          <textarea v-model="form.remarks" :readonly="!isOk" rows="3" style="width: 100%; height: auto !important;" class="form-control" placeholder="Write Something..."></textarea>  
                           <label for="consignee" class="form-control-placeholder"> Remarks</label>
                         </div>
                       </div>
@@ -137,7 +141,7 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Pictures</div>
                         </div>
                         <div class="col-xs-12">
-                          <input style="padding: 8px;" type="file" class="form-control" id="images" name="images" @change="preview_images" multiple/>
+                          <input style="padding: 8px;" :disabled="!isOk" type="file" class="form-control" id="images" name="images" @change="preview_images" multiple/>
                         </div>
                         <div class="col-xs-12">
                           <div class="row" id="image_preview"></div>
@@ -147,7 +151,7 @@
                   </div>
                 </div>
 
-                <div class="panel panel-bordered">
+                <div class="panel panel-bordered" id="signCard">
                   <div class="panel-body" style="padding: 15px;">
                     <div class="row" style="padding: 0px 10px;">
                       <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
@@ -167,7 +171,9 @@
                 </div>
 
                 <div style="display: flex; justify-content: flex-end; padding-top: 0;">
+                  <div id="saveBtn">
                     <button style="width: 100px;" id="save" class="btn btn-primary save">Save</button>
+                  </div>
                 </div>
 
             </div>
@@ -310,7 +316,8 @@
           images: [],
           choosenSize: {},
           containerError: {},
-          containerInfo: {}
+          containerInfo: {},
+          isOk: false
         },
         methods:{
           dateFormat(date) {
@@ -324,9 +331,15 @@
               }
               axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}`, payload)
               .then(data => {
+                document.getElementById("signCard").style.display = 'initial';
+                document.getElementById("saveBtn").style.display = 'initial';
+                this.isOk = true
                 this.containerError = {}
                 this.containerInfo = data.data
               }).catch(error => {
+                this.isOk = false
+                document.getElementById("signCard").style.display = 'none';
+                document.getElementById("saveBtn").style.display = 'none';
                 this.containerInfo = {}
                 this.containerError = error.response.data
               })
@@ -351,15 +364,20 @@
            }
           },
           async saveReceiving (data) {
+            let currentUrl = window.location.href
+            let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.form.signature = data
-            await axios.post('/admin/create/receiving', this.form).then(data => {
-              console.log('Data: ',data)
+            await axios.post('/admin/create/releasing', this.form).then(data => {
               this.errors = {}
+              window.location = checkedit
             }).catch(error => {
-              console.log('Error: ',error)
               this.errors = error.response.data.errors
             })
           }
+        },
+        mounted () {
+          document.getElementById("signCard").style.display = 'none';
+          document.getElementById("saveBtn").style.display = 'none';
         }
       })
     </script>
