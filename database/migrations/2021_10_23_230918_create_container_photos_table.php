@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateYardLocationsTable extends Migration
+class CreateContainerPhotosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateYardLocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('yard_locations', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->nullable();
+        Schema::create('container_photos', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('container_type', 255);
+            $table->text('storage_path');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateYardLocationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('yard_locations');
+        Schema::dropIfExists('container_photos');
     }
 }

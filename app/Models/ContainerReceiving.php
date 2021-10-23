@@ -24,7 +24,7 @@ class ContainerReceiving extends Model
         'consignee',
         'hauler',
         'plate_no',
-        'upload_photo',
+        'container_photo_id',
         'signature',
         'remarks'
     ];
