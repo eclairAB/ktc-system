@@ -47,6 +47,7 @@
         </div>
       </div>
       <div style="width: 55%; display: flex; border: 1px solid; align-items: center; padding: 0 5px; font-size: 10px;">
+        @if($receiving_details->empty_loaded == "Empty")
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
             <!-- &#9744; --> <!-- Unchecked -->
@@ -59,7 +60,26 @@
             &#9744; <!-- Unchecked -->
             <!-- &#9745; --> <!-- Checked -->
           </span>
-          <span>LADEN</span>
+          <span>LOADED</span>
+        </div>
+        @else
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; --> <!-- Unchecked -->
+            <!-- &#9745;          Checked -->
+            &#9744;
+          </span>
+          <span>EMPTY</span>
+        </div>
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; Unchecked -->
+            <!-- &#9745; --> <!-- Checked -->
+            &#9745;
+          </span>
+          <span>LOADED</span>
+        </div>
+        @endif
         </div>
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
@@ -148,7 +168,7 @@
       <div style="width: 70%; padding: 2px 5px; border-right: 1px solid; border-bottom: 1px solid; border-left: 1px solid;">
         REMARKS
         <div style="padding: 10px 0 5px 0; font-size: 12px;">
-          <b>jcbaskcbaskjcbsak</b>
+          <b>{{ $releasing->remarks }}</b>
         </div>
       </div>
       <div style="width: 30%; padding: 2px 5px; border-right: 1px solid; border-bottom: 1px solid;">
