@@ -43,7 +43,7 @@
                           <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" readonly value="" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" readonly :value="loginUser" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inpection By</label>
                         </div>
                       </div>
@@ -97,24 +97,29 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Shipment Details</div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :readonly="!isOk" name="booking_no" id="booking_no" v-model="form.booking_no" class="form-control" style="height: 37px;">
-                          <label for="booking_no" class="form-control-placeholder"> Booking No.</label>
+                          <input type="text" :readonly="!isOk" name="booking_no" id="booking_no" v-model="form.booking_no" class="form-control" style="height: 37px;" :class="errors.booking_no ? 'isError' : ''">
+                          <label for="booking_no" class="form-control-placeholder"> Booking No. <span style="color: red"> *</span></label>
+                          <div class="customErrorText"><small>@{{ errors.booking_no ? errors.booking_no[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :readonly="!isOk" name="consignee" id="consignee" v-model="form.consignee" class="form-control" style="height: 37px;">
-                          <label for="consignee" class="form-control-placeholder"> Consignee</label>
+                          <input type="text" :readonly="!isOk" name="consignee" id="consignee" v-model="form.consignee" class="form-control" style="height: 37px;" :class="errors.consignee ? 'isError' : ''">
+                          <label for="consignee" class="form-control-placeholder"> Consignee <span style="color: red"> *</span></label>
+                          <div class="customErrorText"><small>@{{ errors.consignee ? errors.consignee[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :readonly="!isOk" name="hauler" id="hauler" v-model="form.hauler" class="form-control" style="height: 37px;">
-                          <label for="hauler" class="form-control-placeholder"> Hauler</label>
+                          <input type="text" :readonly="!isOk" name="hauler" id="hauler" v-model="form.hauler" class="form-control" style="height: 37px;" :class="errors.hauler ? 'isError' : ''">
+                          <label for="hauler" class="form-control-placeholder"> Hauler <span style="color: red"> *</span></label>
+                          <div class="customErrorText"><small>@{{ errors.hauler ? errors.hauler[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :readonly="!isOk" name="plate_no" id="plate_no" v-model="form.plate_no" class="form-control" style="height: 37px;">
-                          <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
+                          <input type="text" :readonly="!isOk" name="plate_no" id="plate_no" v-model="form.plate_no" class="form-control" style="height: 37px;" :class="errors.plate_no ? 'isError' : ''">
+                          <label for="plate_no" class="form-control-placeholder"> Plate No. <span style="color: red"> *</span></label>
+                          <div class="customErrorText"><small>@{{ errors.plate_no ? errors.plate_no[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :readonly="!isOk" name="seal_no" id="seal_no" v-model="form.seal_no" class="form-control" style="height: 37px;">
-                          <label for="seal_no" class="form-control-placeholder"> Seal No.</label>
+                          <input type="text" :readonly="!isOk" name="seal_no" id="seal_no" v-model="form.seal_no" class="form-control" style="height: 37px;" :class="errors.seal_no ? 'isError' : ''">
+                          <label for="seal_no" class="form-control-placeholder"> Seal No. <span style="color: red"> *</span></label>
+                          <div class="customErrorText"><small>@{{ errors.seal_no ? errors.seal_no[0] : '' }}</small></div>
                         </div>
                       </div>
                     </div>
@@ -126,8 +131,9 @@
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <textarea v-model="form.remarks" :readonly="!isOk" rows="3" style="width: 100%; height: auto !important;" class="form-control" placeholder="Write Something..."></textarea>  
-                          <label for="consignee" class="form-control-placeholder"> Remarks</label>
+                          <textarea v-model="form.remarks" :readonly="!isOk" rows="3" :class="errors.remarks ? 'isError' : ''" style="width: 100%; height: auto !important;" class="form-control" placeholder="Write Something..."></textarea>  
+                          <label for="consignee" class="form-control-placeholder"> Remarks <span style="color: red"> *</span> </label>
+                          <div class="customErrorText"><small>@{{ errors.remarks ? errors.remarks[0] : '' }}</small></div>
                         </div>
                       </div>
                     </div>
@@ -313,11 +319,13 @@
             inspected_date: moment().format(),
             inspected_by: {!! Auth::user()->role->id !!}
           },
+          loginUser: `{!! Auth::user()->name !!}`,
           images: [],
           choosenSize: {},
           containerError: {},
           containerInfo: {},
-          isOk: false
+          isOk: false,
+          errors: {}
         },
         methods:{
           dateFormat(date) {
