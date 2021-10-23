@@ -64,13 +64,14 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function getReceivingDetails(Request $request)
     {
         $details = ContainerReceiving::where('container_no',$request->container_no)
-        ->with('client:id,code_name','sizeType:id,code,name','class:id,code,name')->select(
-        'id',
-        'client_id',
-        'size_type',
-        'class',
-        'empty_loaded',
-        'manufactured_date')->first();
+        ->with('client:id,code_name','sizeType:id,code,name','class:id,class_code,class_name')
+        ->select(
+            'id',
+            'client_id',
+            'size_type',
+            'class',
+            'empty_loaded',
+            'manufactured_date')->first();
 
         if($details)
         {
@@ -78,8 +79,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return $details;
         }
         else{
-            $message = 'Container'.$request->container_no.' is not in the yard';
-            return $message;
+            $message = 'Container '.$request->container_no.' is not in the yard';
+            $status = 'error';
+            return response()->json(compact('message','status'),404);
         }
         
     }

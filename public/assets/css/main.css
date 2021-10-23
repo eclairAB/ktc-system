@@ -137,3 +137,6 @@ table {
 .panel-bordered>.panel-body {
     overflow: unset !important;
 }
+.buttonload {
+  padding: 5px 24px; /* Some padding */
+}

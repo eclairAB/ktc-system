@@ -8,6 +8,7 @@
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
@@ -32,33 +33,36 @@
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
                                 <input type="text" name="code_name" id="code_name" v-model="form.code_name" class="form-control" :class="errors.code_name ? 'isError' : ''">
                                 <label for="code_name" class="form-control-placeholder"> Code Name</label>
-                                <div class="customErrorText"><small>@{{ errors.code_name }}</small></div>
+                                <div class="customErrorText"><small>@{{ errors.code_name ? errors.code_name[0] : ''  }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
                                 <input type="text" name="contact_no" id="contact_no" v-model="form.contact_no" class="form-control" :class="errors.contact_no ? 'isError' : ''">
                                 <label for="contact_no" class="form-control-placeholder"> Contact Number</label>
-                                <div class="customErrorText"><small>@{{ errors.contact_no }}</small></div>
+                                <div class="customErrorText"><small>@{{ errors.contact_no ? errors.contact_no[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
                                 <input type="text" name="user_id" id="user_id" v-model="form.user_id" class="form-control" :class="errors.user_id ? 'isError' : ''">
                                 <label for="user_id" class="form-control-placeholder"> User Name</label>
-                                <div class="customErrorText"><small>@{{ errors.user_id }}</small></div>
+                                <div class="customErrorText"><small>@{{ errors.user_id ? errors.user_id[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
                                 <input type="text" name="password" id="password" v-model="form.password" class="form-control" :class="errors.password ? 'isError' : ''">
                                 <label for="password" class="form-control-placeholder"> Password</label>
-                                <div class="customErrorText"><small>@{{ errors.password }}</small></div>
+                                <div class="customErrorText"><small>@{{ errors.password ? errors.password[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
                                 <input type="text" name="password_confirmation" id="password_confirmation" v-model="form.password_confirmation" class="form-control" :class="errors.password_confirmation ? 'isError' : ''">
                                 <label for="password_confirmation" class="form-control-placeholder"> Confirm Password</label>
-                                <div class="customErrorText"><small>@{{ errors.password_confirmation }}</small></div>
+                                <div class="customErrorText"><small>@{{ errors.password_confirmation ? errors.password_confirmation[0] : '' }}</small></div>
                               </div>
                             </div>
                         </div>
 
                         <div class="panel-footer" style="display: flex; justify-content: flex-end;">
-                            <button type="submit" class="btn btn-primary save" @click="saveClient">Save</button>
+                            <button type="submit" class="btn btn-primary save buttonload" @click="saveClient" style="display: flex; align-items:center;">
+                                <i :class="customload === false ? 'fa fa-save' : 'fa fa-refresh fa-spin'"></i>
+                                <div style="margin-left: 5px;">@{{ customload === false ? 'Save' : 'Loading' }}</div>
+                            </button>
                         </div>
                     </div>
 
@@ -183,13 +187,20 @@
         el: '#clientForm',
         data: {
           form: {},
-          errors: {}
+          errors: {},
+          customload: false
         },
         methods:{
           async saveClient () {
-            await axios.post('/admin/create_client', this.form).then(data => {
+            this.customload = true
+            let currentUrl = window.location.href
+            let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
+            await axios.post('/admin/create/client', this.form).then(data => {
+              this.customload = false
               this.errors = {}
+              window.location = checkedit
             }).catch(error => {
+              this.customload = false
               this.errors = error.response.data.errors
             })
           }
