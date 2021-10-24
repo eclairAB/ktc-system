@@ -5,6 +5,8 @@ use App\Http\Requests\ValidateClientField;
 use App\Http\Requests\ValidateStaffField;
 use App\Http\Requests\ValidateContainerReleasing;
 use App\Http\Requests\ValidateContainerReceiving;
+use App\Http\Requests\ValidateSizeType;
+use App\Models\ContainerSizeType;
 use App\Models\Client;
 use App\Models\Staff;
 use App\Models\User;
@@ -207,5 +209,17 @@ class PostsController extends Controller
             if($isSignature) file_put_contents( $the_path . 'receiving/signature/' . $payload['file_name'] . $extension, $decode);
             else file_put_contents( $the_path . 'receiving/container/' . $payload['file_name'] . $extension, $decode);
         }
+    }
+
+    public function createSizeType(ValidateSizeType $request)
+    {
+        $sizeType = $request->validated();
+        $dataSizeT = [
+            'code'=>$sizeType['code'],
+            'name'=>$sizeType['name'],
+            'size'=>$sizeType['size'],
+            'type'=>$sizeType['type']
+        ];
+        return ContainerSizeType::create($dataSizeT);
     }
 }

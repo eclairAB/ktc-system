@@ -89,13 +89,13 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function prntReleasing($id)
     {
         $releasing = ContainerReleasing::where('id',$id)->first();
-        $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->first();
+        $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->with('sizeType:id,code')->first();
         return view('print_releasing')->with('releasing', $releasing,'receiving_details',$receiving_details);
     }
 
     public function prntReceiving($id)
     {
-        $receiving = ContainerReceiving::where('id',$id)->first();
+        $receiving = ContainerReceiving::where('id',$id)->with('sizeType:id,code')->first();
         return view('print_receiving')->with('receiving', $receiving);
     }
 }
