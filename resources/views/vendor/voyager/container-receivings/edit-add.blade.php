@@ -728,8 +728,16 @@
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.form.signature = data
-            await axios.post('/admin/create/receiving', this.form).then(data => {
+            await axios.post('/admin/create/receiving', this.form).then(async data => {
               this.errors = {}
+              let customId = data.data[0].container_id
+              await axios.get(`/admin/get/print/receiving?id=${customId}`).then(data => {
+                let pasmo = data.data
+                let w = window.open();
+                w.document.write(pasmo);
+                w.print();
+                w.close();
+              })
               window.location = checkedit
             }).catch(error => {
               this.errors = error.response.data.errors
