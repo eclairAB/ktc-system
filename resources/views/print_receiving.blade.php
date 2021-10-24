@@ -122,7 +122,7 @@
           </span>
           <span>40&#176; RF</span>
         </div>
-        @else if($receiving->sizeType->code == "40")
+        @elseif($receiving->sizeType->code == "40")
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
             <!-- &#9744; Unchecked -->
@@ -155,7 +155,7 @@
           </span>
           <span>40&#176; RF</span>
         </div>
-        @else if($receiving->sizeType->code == "40HC")
+        @elseif($receiving->sizeType->code == "40HC")
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
             <!-- &#9744; Unchecked -->
@@ -188,7 +188,7 @@
           </span>
           <span>40&#176; RF</span>
         </div>
-        @else if($receiving->sizeType->code == "40RF")
+        @elseif($receiving->sizeType->code == "40RF")
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
             <!-- &#9744; Unchecked -->
