@@ -101,7 +101,7 @@ class PostsController extends Controller
                     'container_type' => $params['type'],
                     'storage_path' => storage_path() . '/app/public/uploads/releasing/container/' . $params['file_name'],
                 );
-                $this->imageUpload($params, $container, false);
+                $this->imageUpload($params, $container_photo[$key]['storage_path'], false);
             }
             $releasing['signature'] = storage_path() . '/app/public/uploads/releasing/signature/' . $params['file_name'];
             $release = ContainerReleasing::create($releasing)->photos()->createMany($container_photo);
@@ -151,7 +151,7 @@ class PostsController extends Controller
                     'container_type' => $params['type'],
                     'storage_path' => storage_path() . '/app/public/uploads/receiving/container/' . $params['file_name'],
                 );
-                $this->imageUpload($params, $container, false);
+                $this->imageUpload($params, $container_photo[$key]['storage_path'], false);
             }
         $receiving['signature'] = storage_path() . '/app/public/uploads/receiving/container/' . $params['file_name'];
         $receiving['inspected_by'] = Auth::user()->id;
