@@ -39,7 +39,7 @@
                           <label for="id_no" class="form-control-placeholder"> Inspection Date</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" readonly :value="moment().format('hh:mm')" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" readonly :value="moment().format('hh:mm A')" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
@@ -354,6 +354,7 @@
                 document.getElementById("signCard").style.display = 'none';
                 document.getElementById("saveBtn").style.display = 'none';
                 this.form = {}
+                this.form.container_no = payload.container_no
                 this.containerInfo = {}
                 this.containerError = error.response.data
               })
@@ -372,7 +373,10 @@
            this.images = event.target.files
            for ( var i = 0; i < total_file; i++ ) {
             this.getBase64(event.target.files[i]).then(data => {
-              this.form.container_photo.push(data)
+              let payload = {
+                storage_path: data
+              }
+              this.form.container_photo.push(payload)
             });
             $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'></div>");
            }
@@ -383,7 +387,7 @@
             this.form.signature = data
             await axios.post('/admin/create/releasing', this.form).then(data => {
               this.errors = {}
-              window.location = checkedit
+              // window.location = checkedit
             }).catch(error => {
               this.errors = error.response.data.errors
             })
