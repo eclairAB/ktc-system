@@ -9,6 +9,7 @@ class ContainerPhoto extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'container_id',
         'container_type',
         'storage_path',
     ];
