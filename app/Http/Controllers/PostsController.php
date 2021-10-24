@@ -117,7 +117,7 @@ class PostsController extends Controller
 
                 $dataContRemark = [
                     'status'=>'Released',
-                    'container_id'=>$cont->id,
+                    'container_id'=>$dataCont->id,
                     'remarks'=>$request->remarks,
                 ];
                 ContainerRemark::create($dataContRemark);
