@@ -88,46 +88,56 @@ class PostsController extends Controller
         $releasing = $request->validated();
         $signature = $releasing['signature'];
 
-        $receiving = ContainerReceiving::where('container_no',$releasing['container_no'])->first();
-        if($receiving)
+        $contReleasing = Containers::where('container_no',$releasing['container_no'])->whereNotNull('date_released')->latest('created_at')->first();
+
+        if(!$contReleasing)
         {
-            $signature_params = [];
-            $signature_params['file_name'] = Str::random(32);
-            $signature_params['type'] = 'releasing';
-            $this->imageUpload($signature_params, $signature, true);
-            foreach ($releasing['container_photo'] as $key => $value) {
-                $params = [];
-                $params['file_name'] = Str::random(32);
-                $params['type'] = 'releasing';
-                $container_photo[] = array(
-                    'container_type' => $params['type'],
-                    'storage_path' => storage_path() . '/app/public/uploads/releasing/container/' . $params['file_name'],
-                );
-                $this->imageUpload($params, $releasing['container_photo'][$key]['storage_path'], false);
-            }
-            $releasing['signature'] = storage_path() . '/app/public/uploads/releasing/signature/' . $params['file_name'];
-            $release = ContainerReleasing::create($releasing)->photos()->createMany($container_photo);
-
-            if($release)
+            $receiving = ContainerReceiving::where('container_no',$releasing['container_no'])->first();
+            if($receiving)
             {
-                $dataCont = [
-                    'container_no'=>$releasing['container_no'],
-                    'client_id'=>$receiving->client_id,
-                    'size_type'=>$receiving->size_type,
-                    'class'=>$receiving->class,
-                    'date_received'=>$release->created_at,
-                    'date_released'=>null,
-                ];
-                $cont = Containers::create($dataCont);
+                $signature_params = [];
+                $signature_params['file_name'] = Str::random(32);
+                $signature_params['type'] = 'releasing';
+                $this->imageUpload($signature_params, $signature, true);
+                foreach ($releasing['container_photo'] as $key => $value) {
+                    $params = [];
+                    $params['file_name'] = Str::random(32);
+                    $params['type'] = 'releasing';
+                    $container_photo[] = array(
+                        'container_type' => $params['type'],
+                        'storage_path' => storage_path() . '/app/public/uploads/releasing/container/' . $params['file_name'],
+                    );
+                    $this->imageUpload($params, $releasing['container_photo'][$key]['storage_path'], false);
+                }
+                $releasing['signature'] = storage_path() . '/app/public/uploads/releasing/signature/' . $params['file_name'];
+                $release = ContainerReleasing::create($releasing)->photos()->createMany($container_photo);
 
-                $dataContRemark = [
-                    'status'=>'Released',
-                    'container_id'=>$cont->id,
-                    'remarks'=>$request->remarks,
-                ];
-                ContainerRemark::create($dataContRemark);
+                if($release)
+                {
+                    $dataCont = [
+                        'container_no'=>$releasing['container_no'],
+                        'client_id'=>$receiving->client_id,
+                        'size_type'=>$receiving->size_type,
+                        'class'=>$receiving->class,
+                        'date_received'=>$release->created_at,
+                        'date_released'=>null,
+                    ];
+                    $cont = Containers::create($dataCont);
+
+                    $dataContRemark = [
+                        'status'=>'Released',
+                        'container_id'=>$cont->id,
+                        'remarks'=>$request->remarks,
+                    ];
+                    ContainerRemark::create($dataContRemark);
+                }
+                return $release;
             }
-            return $release;
+            else{
+                $message = 'Container '.$request->container_no.' is not in the yard';
+                $status = 'error';
+                return response()->json(compact('message','status'),404);
+            }
         }
         else{
             $message = 'Container '.$request->container_no.' is not in the yard';
@@ -141,45 +151,55 @@ class PostsController extends Controller
         $receiving = $request->validated();
         $signature = $receiving['signature'];
 
-        $signature_params = [];
-        $signature_params['file_name'] = Str::random(32);
-        $signature_params['type'] = 'receiving';
-        $this->imageUpload($signature_params, $signature, true);
-        foreach ($receiving['container_photo'] as $key => $value) {
-                $params = [];
-                $params['file_name'] = Str::random(32);
-                $params['type'] = 'receiving';
-                $container_photo[] = array(
-                    'container_type' => $params['type'],
-                    'storage_path' => storage_path() . '/app/public/uploads/receiving/container/' . $params['file_name'],
-                );
-                $this->imageUpload($params, $receiving['container_photo'][$key]['storage_path'], false);
-            }
-        $receiving['signature'] = storage_path() . '/app/public/uploads/receiving/container/' . $params['file_name'];
-        $receiving['inspected_by'] = Auth::user()->id;
-        $receive = ContainerReceiving::create($receiving)->photos()->createMany($container_photo);
+        $contReleasing = Containers::where('container_no',$releasing['container_no'])->whereNotNull('date_released')->latest('created_at')->first();
 
-        if($receive)
+        if(!$contReleasing)
         {
-            $dataCont = [
-                'container_no'=>$receiving['container_no'],
-                'client_id'=>$receiving['client_id'],
-                'size_type'=>$receiving['size_type'],
-                'class'=>$receiving['class'],
-                'date_received'=>$receive->created_at,
-                'date_released'=>null,
-            ];
-            $cont = Containers::create($dataCont);
 
-            $dataContRemark = [
-                'status'=>'Received',
-                'container_id'=>$cont->id,
-                'remarks'=>$request->remarks,
-            ];
-            ContainerRemark::create($dataContRemark);
+            $signature_params = [];
+            $signature_params['file_name'] = Str::random(32);
+            $signature_params['type'] = 'receiving';
+            $this->imageUpload($signature_params, $signature, true);
+            foreach ($receiving['container_photo'] as $key => $value) {
+                    $params = [];
+                    $params['file_name'] = Str::random(32);
+                    $params['type'] = 'receiving';
+                    $container_photo[] = array(
+                        'container_type' => $params['type'],
+                        'storage_path' => storage_path() . '/app/public/uploads/receiving/container/' . $params['file_name'],
+                    );
+                    $this->imageUpload($params, $receiving['container_photo'][$key]['storage_path'], false);
+                }
+            $receiving['signature'] = storage_path() . '/app/public/uploads/receiving/container/' . $params['file_name'];
+            $receiving['inspected_by'] = Auth::user()->id;
+            $receive = ContainerReceiving::create($receiving)->photos()->createMany($container_photo);
+
+            if($receive)
+            {
+                $dataCont = [
+                    'container_no'=>$receiving['container_no'],
+                    'client_id'=>$receiving['client_id'],
+                    'size_type'=>$receiving['size_type'],
+                    'class'=>$receiving['class'],
+                    'date_received'=>$receive->created_at,
+                    'date_released'=>null,
+                ];
+                $cont = Containers::create($dataCont);
+
+                $dataContRemark = [
+                    'status'=>'Received',
+                    'container_id'=>$cont->id,
+                    'remarks'=>$request->remarks,
+                ];
+                ContainerRemark::create($dataContRemark);
+            }
+            return $receive;
         }
-
-        return $receive;
+        else{
+            $message = 'Container '.$request->container_no.' is not in the yard';
+            $status = 'error';
+            return response()->json(compact('message','status'),404);
+        }
     }
 
     public function imageUpload($payload, $photo, $isSignature)
