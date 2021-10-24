@@ -14,6 +14,7 @@ use App\Models\ContainerReleasing;
 use App\Models\ContainerReceiving;
 use App\Models\Containers;
 use App\Models\ContainerRemark;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -115,7 +116,7 @@ class PostsController extends Controller
                     'client_id'=>$receiving->client_id,
                     'size_type'=>$receiving->size_type,
                     'class'=>$receiving->class,
-                    'date_received'=>$release->created_at,
+                    'date_received'=>Carbon::now(),
                     'date_released'=>null,
                 ];
                 $cont = Containers::create($dataCont);
@@ -166,7 +167,7 @@ class PostsController extends Controller
                 'client_id'=>$receiving['client_id'],
                 'size_type'=>$receiving['size_type'],
                 'class'=>$receiving['class'],
-                'date_received'=>$receive->created_at,
+                'date_received'=>Carbon::now(),
                 'date_released'=>null,
             ];
             $cont = Containers::create($dataCont);
