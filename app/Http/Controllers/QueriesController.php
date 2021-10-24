@@ -92,7 +92,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                     'size_type',
                     'class',
                     'empty_loaded',
-                    'manufactured_date')->first();
+                    'manufactured_date')->latest('created_at')->first();
     
                 // if($details)
                 // {
