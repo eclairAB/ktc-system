@@ -31,19 +31,19 @@
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" placeholder="AUTO GENERATED" readonly v-model="form.id_no" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" placeholder="AUTO GENERATED" disabled v-model="form.id_no" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> EIR No.</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" readonly :value="moment().format('MMMM DD, YYYY')" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="moment().format('MMMM DD, YYYY')" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inspection Date</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" readonly :value="moment().format('hh:mm A')" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="moment().format('hh:mm A')" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" readonly :value="loginUser" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="loginUser" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inpection By</label>
                         </div>
                       </div>
@@ -56,9 +56,9 @@
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="container_no" id="container_no" v-model="form.container_no" style="height: 37px;" :class="errors.container_no ? 'isError form-control' : 'form-control'">
-                          <label for="container_no" class="form-control-placeholder"> Container No.</label>
-                          <div class="customErrorText"><small>@{{ errors.container_no ? errors.container_no[0] : '' }}</small></div>
+                          <input type="text" name="container_no" id="container_no" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
+                          <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
+                          <div class="customErrorText"><small>@{{ containerError.message }}</small></div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <v-select
@@ -66,6 +66,7 @@
                             :options="sizeTypeList"
                             style="height: 37px !important;"
                             v-model="choosenSize"
+                            :disabled="!isOk"
                             label="name"
                             :filter="fuseSize"
                             @option:selected="clearSize()"
@@ -96,6 +97,7 @@
                             :class="errors.height ? 'isError form-control' : 'form-control'"
                             :options="heightList"
                             v-model="form.height"
+                            :disabled="!isOk"
                             label="height_name"
                             :filter="fuseHeight"
                             @option:selected="clearHeight()"
@@ -127,6 +129,7 @@
                             :class="errors.client_id ? 'isError form-control' : 'form-control'"
                             :options="clientList"
                             v-model="form.client_id"
+                            :disabled="!isOk"
                             label="code_name"
                             :filter="fuseClient"
                             @option:selected="clearClient()"
@@ -157,6 +160,7 @@
                             style="height: 37px !important;"
                             :class="errors.yard_loacation ? 'isError form-control' : 'form-control'"
                             :options="yardList"
+                            :disabled="!isOk"
                             v-model="form.yard_loacation"
                             label="name"
                             @option:selected="clearYard()"
@@ -183,12 +187,12 @@
                           <div class="customErrorText"><small>@{{ errors.yard_loacation ? errors.yard_loacation[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="type" id="type" readonly v-model="form.type" style="height: 37px;" :class="errors.type ? 'isError form-control' : 'form-control'">
+                          <input type="text" name="type" id="type" disabled v-model="form.type" style="height: 37px;" :class="errors.type ? 'isError form-control' : 'form-control'">
                           <label for="type" class="form-control-placeholder"> Type</label>
                           <div class="customErrorText"><small>@{{ errors.type ? errors.type[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="acceptance_no" id="acceptance_no" v-model="form.acceptance_no" style="height: 37px;" :class="errors.acceptance_no ? 'isError form-control' : 'form-control'">
+                          <input type="text" name="acceptance_no" :disabled="!isOk" id="acceptance_no" v-model="form.acceptance_no" style="height: 37px;" :class="errors.acceptance_no ? 'isError form-control' : 'form-control'">
                           <label for="acceptance_no" class="form-control-placeholder"> Acceptance No.</label>
                           <div class="customErrorText"><small>@{{ errors.acceptance_no ? errors.acceptance_no[0] : '' }}</small></div>
                         </div>
@@ -198,6 +202,7 @@
                             :class="errors.class ? 'isError form-control' : 'form-control'"
                             :options="classList"
                             v-model="form.class"
+                            :disabled="!isOk"
                             label="class_name"
                             :filter="fuseClass"
                             @option:selected="clearClass()"
@@ -227,6 +232,7 @@
                           <v-select
                             style="height: 37px !important;"
                             :class="errors.empty_loaded ? 'isError form-control' : 'form-control'"
+                            :disabled="!isOk"
                             :options="emptyloaded"
                             v-model="form.empty_loaded"
                           ></v-select>
@@ -237,6 +243,7 @@
                           <vuejs-datepicker
                             v-model="form.manufactured_date"
                             placeholder="mm/dd/yyyyy"
+                            :disabled="!isOk"
                             :input-class="errors.manufactured_date ? 'isError form-control' : 'form-control'"
                             :typeable="true"
                             name="manufactured_date"
@@ -259,17 +266,17 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Shipment Details</div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="consignee" id="consignee" v-model="form.consignee" style="height: 37px;" :class="errors.consignee ? 'isError form-control' : 'form-control'">
+                          <input type="text" name="consignee" id="consignee" v-model="form.consignee" :disabled="!isOk" style="height: 37px;" :class="errors.consignee ? 'isError form-control' : 'form-control'">
                           <label for="consignee" class="form-control-placeholder"> Consignee</label>
                           <div class="customErrorText"><small>@{{ errors.consignee ? errors.consignee[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="hauler" id="hauler" v-model="form.hauler" style="height: 37px;" :class="errors.hauler ? 'isError form-control' : 'form-control'">
+                          <input type="text" name="hauler" id="hauler" v-model="form.hauler" :disabled="!isOk" style="height: 37px;" :class="errors.hauler ? 'isError form-control' : 'form-control'">
                           <label for="hauler" class="form-control-placeholder"> Hauler</label>
                           <div class="customErrorText"><small>@{{ errors.hauler ? errors.hauler[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="plate_no" id="plate_no" v-model="form.plate_no" style="height: 37px;" :class="errors.plate_no ? 'isError form-control' : 'form-control'">
+                          <input type="text" name="plate_no" id="plate_no" v-model="form.plate_no" :disabled="!isOk" style="height: 37px;" :class="errors.plate_no ? 'isError form-control' : 'form-control'">
                           <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
                           <div class="customErrorText"><small>@{{ errors.plate_no ? errors.plate_no[0] : '' }}</small></div>
                         </div>
@@ -283,7 +290,7 @@
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <textarea v-model="form.remarks" rows="3" style="width: 100%; height: auto !important;" placeholder="Write Something..." :class="errors.remarks ? 'isError form-control' : 'form-control'"></textarea>  
+                          <textarea v-model="form.remarks" rows="3" style="width: 100%; height: auto !important;" :disabled="!isOk" placeholder="Write Something..." :class="errors.remarks ? 'isError form-control' : 'form-control'"></textarea>  
                           <label for="consignee" class="form-control-placeholder"> Remarks</label>
                         </div>
                       </div>
@@ -298,7 +305,7 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Pictures</div>
                         </div>
                         <div class="col-xs-12">
-                          <input style="padding: 8px;" type="file" class="form-control" id="images" name="images" @change="preview_images" multiple/>
+                          <input style="padding: 8px;" type="file" class="form-control" :disabled="!isOk" id="images" name="images" @change="preview_images" multiple/>
                         </div>
                         <div class="col-xs-12">
                           <div class="row" id="image_preview"></div>
@@ -308,7 +315,7 @@
                   </div>
                 </div>
 
-                <div class="panel panel-bordered">
+                <div class="panel panel-bordered" id="signCard">
                   <div class="panel-body" style="padding: 15px;">
                     <div class="row" style="padding: 0px 10px;">
                       <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
@@ -328,7 +335,9 @@
                 </div>
 
                 <div style="display: flex; justify-content: flex-end; padding-top: 0;">
+                  <div id="saveBtn">
                     <button style="width: 100px;" id="save" class="btn btn-primary save">Save</button>
+                  </div>
                 </div>
 
             </div>
@@ -494,7 +503,9 @@
             'Empty',
             'Loaded'
           ],
-          errors: {}
+          errors: {},
+          containerError: {},
+          isOk: false
         },
         methods:{
           dateFormat(date) {
@@ -663,6 +674,35 @@
               console.log('error: ', error)
             })
           },
+          searchContainer () {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              const payload = {
+                type: 'receiving',
+                container_no: this.form.container_no
+              }
+              axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}&type=receiving`)
+              .then(data => {
+                document.getElementById("signCard").style.display = 'initial';
+                document.getElementById("saveBtn").style.display = 'initial';
+                this.isOk = true
+                this.containerError = {}
+                this.containerInfo = data.data
+              }).catch(error => {
+                this.isOk = false
+                document.getElementById("signCard").style.display = 'none';
+                document.getElementById("saveBtn").style.display = 'none';
+                this.form = {
+                  inspected_date: moment().format(),
+                  inspected_by: {!! Auth::user()->role->id !!},
+                  container_photo: []
+                }
+                this.form.container_no = payload.container_no
+                this.containerInfo = {}
+                this.containerError = error.response.data
+              })
+            }, 1000)
+          },
           getBase64(file) {
             return new Promise((resolve, reject) => {
               const reader = new FileReader();
@@ -676,7 +716,10 @@
            this.images = event.target.files
            for ( var i = 0; i < total_file; i++ ) {
             this.getBase64(event.target.files[i]).then(data => {
-              this.form.container_photo.push(data)
+              let payload = {
+                storage_path: data
+              }
+              this.form.container_photo.push(payload)
             });
             $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'></div>");
            }
@@ -694,6 +737,8 @@
           }
         },
         mounted () {
+          document.getElementById("signCard").style.display = 'none';
+          document.getElementById("saveBtn").style.display = 'none';
           this.getSize()
           this.getClient()
           this.getYard()
