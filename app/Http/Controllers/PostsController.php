@@ -89,8 +89,10 @@ class PostsController extends Controller
         $receiving = ContainerReceiving::where('container_no',$releasing['container_no'])->first();
         if($receiving)
         {
-
-            $this->imageUpload($params, $signature, true);
+            $signature_params = [];
+            $signature_params['file_name'] = Str::random(32);
+            $signature_params['type'] = 'releasing';
+            $this->imageUpload($signature_params, $signature, true);
             foreach ($releasing['container_photo'] as $key => $value) {
                 $params = [];
                 $params['file_name'] = Str::random(32);
@@ -137,7 +139,10 @@ class PostsController extends Controller
         $receiving = $request->validated();
         $signature = $receiving['signature'];
 
-        $this->imageUpload($params, $signature, true);
+        $signature_params = [];
+        $signature_params['file_name'] = Str::random(32);
+        $signature_params['type'] = 'receiving';
+        $this->imageUpload($signature_params, $signature, true);
         foreach ($receiving['container_photo'] as $key => $value) {
                 $params = [];
                 $params['file_name'] = Str::random(32);
