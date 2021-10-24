@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterContainerReleasingsPhoto extends Migration
+class AlterContainerReceivingsPhoto extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AlterContainerReleasingsPhoto extends Migration
      */
     public function up()
     {
-        Schema::table('container_releasings', function (Blueprint $table) {
+        Schema::table('container_receivings', function (Blueprint $table) {
             $table->dropColumn('upload_photo');
             $table->bigInteger('container_photo_id')->nullable();
+            $table->foreign('container_photo_id')->references('id')->on('container_photos');
         });
     }
 
@@ -26,7 +27,7 @@ class AlterContainerReleasingsPhoto extends Migration
      */
     public function down()
     {
-        Schema::table('container_releasings', function (Blueprint $table) {
+        Schema::table('container_receivings', function (Blueprint $table) {
             $table->dropColumn('upload_photo');
         });
     }

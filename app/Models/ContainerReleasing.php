@@ -21,4 +21,9 @@ class ContainerReleasing extends Model
         'signature',
         'remarks'
     ];
+
+    public function photos()
+    {
+        return $this->hasMany(ContainerPhoto::class, 'id');
+    }
 }

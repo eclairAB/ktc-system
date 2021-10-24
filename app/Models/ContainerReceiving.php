@@ -29,6 +29,11 @@ class ContainerReceiving extends Model
         'remarks'
     ];
 
+    public function photos()
+    {
+        return $this->hasMany(ContainerPhoto::class, 'id');
+    }
+
     public function client()
     {
         return $this->HasOne(Client::class, 'id','client_id');

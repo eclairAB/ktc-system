@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ContainerPhoto extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'container_type',
+        'storage_path',
+    ];
 }

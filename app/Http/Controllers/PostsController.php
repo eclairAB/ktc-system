@@ -84,21 +84,25 @@ class PostsController extends Controller
     public function createReleasing(ValidateContainerReleasing $request)
     {
         $releasing = $request->validated();
-        $container = $releasing['upload_photo'];
         $signature = $releasing['signature'];
-        $params = [];
-        $params['file_name'] = Str::random(32);
-        $params['type'] = 'releasing';
 
         $receiving = ContainerReceiving::where('container_no',$releasing['container_no'])->first();
         if($receiving)
         {
 
             $this->imageUpload($params, $signature, true);
-            $this->imageUpload($params, $container, false);
-            $releasing['upload_photo'] = storage_path() . '/app/public/uploads/releasing/signature/' . $params['file_name'];
-            $releasing['signature'] = storage_path() . '/app/public/uploads/releasing/container/' . $params['file_name'];
-            $release =   ContainerReleasing::create($releasing);
+            foreach ($releasing['container_photo'] as $key => $value) {
+                $params = [];
+                $params['file_name'] = Str::random(32);
+                $params['type'] = 'releasing';
+                $container_photo[] = array(
+                    'container_type' => $params['type'],
+                    'storage_path' => storage_path() . '/app/public/uploads/releasing/container/' . $params['file_name'],
+                );
+                $this->imageUpload($params, $container, false);
+            }
+            $releasing['signature'] = storage_path() . '/app/public/uploads/releasing/signature/' . $params['file_name'];
+            $release = ContainerReleasing::create($releasing)->photos()->createMany($container_photo);
 
             if($release)
             {
@@ -131,18 +135,22 @@ class PostsController extends Controller
     public function createReceiving(ValidateContainerReceiving $request)
     {
         $receiving = $request->validated();
-        $container = $receiving['upload_photo'];
         $signature = $receiving['signature'];
-        $params = [];
-        $params['file_name'] = Str::random(32);
-        $params['type'] = 'receiving';
 
         $this->imageUpload($params, $signature, true);
-        $this->imageUpload($params, $container, false);
-        $receiving['upload_photo'] = storage_path() . '/app/public/uploads/receiving/signature/' . $params['file_name'];
+        foreach ($receiving['container_photo'] as $key => $value) {
+                $params = [];
+                $params['file_name'] = Str::random(32);
+                $params['type'] = 'receiving';
+                $container_photo[] = array(
+                    'container_type' => $params['type'],
+                    'storage_path' => storage_path() . '/app/public/uploads/receiving/container/' . $params['file_name'],
+                );
+                $this->imageUpload($params, $container, false);
+            }
         $receiving['signature'] = storage_path() . '/app/public/uploads/receiving/container/' . $params['file_name'];
         $receiving['inspected_by'] = Auth::user()->id;
-        $receive =   ContainerReceiving::create($receiving);
+        $receive = ContainerReceiving::create($receiving)->photos()->createMany($container_photo);
 
         if($receive)
         {
