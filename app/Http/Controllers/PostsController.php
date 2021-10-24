@@ -178,7 +178,6 @@ class PostsController extends Controller
             ];
             ContainerRemark::create($dataContRemark);
         }
-
         return $receive;
     }
 
