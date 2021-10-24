@@ -116,8 +116,8 @@ class PostsController extends Controller
                     'client_id'=>$receiving->client_id,
                     'size_type'=>$receiving->size_type,
                     'class'=>$receiving->class,
-                    'date_received'=>Carbon::now(),
-                    'date_released'=>null,
+                    'date_received'=>null,
+                    'date_released'=>Carbon::now(),
                 ];
                 $cont = Containers::create($dataCont);
 
