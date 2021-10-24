@@ -64,16 +64,16 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getReceivingDetails(Request $request)
     {
-        $contReleasing = Containers::where('container_no',$releasing['container_no'])->whereNull('date_released')->latest('created_at')->first();
-        $contRecieving = Containers::where('container_no',$releasing['container_no'])->whereNotNull('date_received')->latest('created_at')->first();
+        $contReleasing = Containers::where('container_no',$request->container_no)->whereNull('date_released')->latest('created_at')->first();
+        $contRecieving = Containers::where('container_no',$request->container_no)->whereNotNull('date_received')->latest('created_at')->first();
 
-        if($request->type = "receiving" && $contReleasing)
+        if($request->type == "receiving" && $contReleasing)
         {
             $message = 'Container '.$request->container_no.' is not in the yard';
             $status = 'error';
             return response()->json(compact('message','status'),404);
         }
-        else if($request->type = "releasing" && $contRecieving)
+        else if($request->type == "releasing" && $contRecieving)
         {
             $details = ContainerReceiving::where('container_no',$request->container_no)
             ->with('client:id,code_name','sizeType:id,code,name','class:id,class_code,class_name')
