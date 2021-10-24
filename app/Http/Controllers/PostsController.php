@@ -111,15 +111,10 @@ class PostsController extends Controller
 
             if($release)
             {
-                $cont = Containers::updateOrCreate([
-                    'container_no'=>$releasing['container_no'],
-                ],[
-                    'client_id'=>$receiving->client_id,
-                    'size_type'=>$receiving->size_type,
-                    'class'=>$receiving->class,
-                    // 'date_received'=>null,
-                    'date_released'=>Carbon::now(),
-                ]);
+                $dataCont = Containers::where('container_no',$releasing['container_no'])->whereNotNull('date_received')->latest('created_at')->first();
+                $dataCont->date_released = Carbon::now();
+                $dataCont->save();
+
                 $dataContRemark = [
                     'status'=>'Released',
                     'container_id'=>$cont->id,
@@ -161,15 +156,15 @@ class PostsController extends Controller
 
         if($receive)
         {
-            $cont = Containers::updateOrCreate([
+            $dataCont = [
                 'container_no'=>$receiving['container_no'],
-            ],[
                 'client_id'=>$receiving['client_id'],
                 'size_type'=>$receiving['size_type'],
                 'class'=>$receiving['class'],
                 'date_received'=>Carbon::now(),
                 'date_released'=>null,
-            ]);
+            ];
+            $cont = Containers::create($dataCont);
 
             $dataContRemark = [
                 'status'=>'Received',
