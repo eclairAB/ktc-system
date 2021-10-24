@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\ContainerClass;
 use App\Models\ContainerHeight;
+use App\Models\Containers;
 use App\Models\ContainerSizeType;
 use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
@@ -63,27 +64,54 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getReceivingDetails(Request $request)
     {
-        $details = ContainerReceiving::where('container_no',$request->container_no)
-        ->with('client:id,code_name','sizeType:id,code,name','class:id,class_code,class_name')
-        ->select(
-            'id',
-            'client_id',
-            'size_type',
-            'class',
-            'empty_loaded',
-            'manufactured_date')->first();
+        $contReleasing = Containers::where('container_no',$request->container_no)->whereNull('date_released')->latest('created_at')->first();
+        $contRecieving = Containers::where('container_no',$request->container_no)->whereNotNull('date_received')->latest('created_at')->first();
 
-        if($details)
+        if($request->type == "receiving")
         {
-
-            return $details;
+            if($request->type == "receiving" && $contReleasing)
+            {
+                $message = 'Container '.$request->container_no.' is not in the yard';
+                $status = 'error';
+                return response()->json(compact('message','status'),404);
+            }
+            
+            else
+            {
+                return null;
+            }
         }
         else{
-            $message = 'Container '.$request->container_no.' is not in the yard';
-            $status = 'error';
-            return response()->json(compact('message','status'),404);
+            if($request->type == "releasing" && $contRecieving)
+            {
+                $details = ContainerReceiving::where('container_no',$request->container_no)
+                ->with('client:id,code_name','sizeType:id,code,name','class:id,class_code,class_name')
+                ->select(
+                    'id',
+                    'client_id',
+                    'size_type',
+                    'class',
+                    'empty_loaded',
+                    'manufactured_date')->first();
+    
+                // if($details)
+                // {
+                   
+                // }
+                // else{
+                //     $message = 'Container '.$request->container_no.' is not in the yard';
+                //     $status = 'error';
+                //     return response()->json(compact('message','status'),404);
+                // }
+                // return $details;
+            }
+            else
+            {
+                $message = 'Container '.$request->container_no.' is not in the yard';
+                $status = 'error';
+                return response()->json(compact('message','status'),404);
+            }
         }
-        
     }
 
     public function prntReleasing($id)
