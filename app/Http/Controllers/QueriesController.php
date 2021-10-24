@@ -67,40 +67,50 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $contReleasing = Containers::where('container_no',$request->container_no)->whereNull('date_released')->latest('created_at')->first();
         $contRecieving = Containers::where('container_no',$request->container_no)->whereNotNull('date_received')->latest('created_at')->first();
 
-        if($request->type == "receiving" && $contReleasing)
+        if($request->type == "receiving")
         {
-            $message = 'Container '.$request->container_no.' is not in the yard';
-            $status = 'error';
-            return response()->json(compact('message','status'),404);
+            if($request->type == "receiving" && $contReleasing)
+            {
+                $message = 'Container '.$request->container_no.' is not in the yard';
+                $status = 'error';
+                return response()->json(compact('message','status'),404);
+            }
+            
+            else
+            {
+                return null;
+            }
         }
-        else if($request->type == "releasing" && $contRecieving)
-        {
-            $details = ContainerReceiving::where('container_no',$request->container_no)
-            ->with('client:id,code_name','sizeType:id,code,name','class:id,class_code,class_name')
-            ->select(
-                'id',
-                'client_id',
-                'size_type',
-                'class',
-                'empty_loaded',
-                'manufactured_date')->first();
-
-            // if($details)
-            // {
-               
-            // }
-            // else{
-            //     $message = 'Container '.$request->container_no.' is not in the yard';
-            //     $status = 'error';
-            //     return response()->json(compact('message','status'),404);
-            // }
-            return $details;
-        }
-        else
-        {
-            $message = 'Container '.$request->container_no.' is not in the yard';
-            $status = 'error';
-            return response()->json(compact('message','status'),404);
+        else{
+            if($request->type == "releasing" && $contRecieving)
+            {
+                $details = ContainerReceiving::where('container_no',$request->container_no)
+                ->with('client:id,code_name','sizeType:id,code,name','class:id,class_code,class_name')
+                ->select(
+                    'id',
+                    'client_id',
+                    'size_type',
+                    'class',
+                    'empty_loaded',
+                    'manufactured_date')->first();
+    
+                // if($details)
+                // {
+                   
+                // }
+                // else{
+                //     $message = 'Container '.$request->container_no.' is not in the yard';
+                //     $status = 'error';
+                //     return response()->json(compact('message','status'),404);
+                // }
+                // return $details;
+            }
+            else
+            {
+                $message = 'Container '.$request->container_no.' is not in the yard';
+                $status = 'error';
+                return response()->json(compact('message','status'),404);
+            }
         }
     }
 
