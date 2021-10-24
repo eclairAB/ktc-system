@@ -348,6 +348,7 @@
                 this.isOk = false
                 document.getElementById("signCard").style.display = 'none';
                 document.getElementById("saveBtn").style.display = 'none';
+                this.form = {}
                 this.containerInfo = {}
                 this.containerError = error.response.data
               })
@@ -366,7 +367,7 @@
            this.images = event.target.files
            for ( var i = 0; i < total_file; i++ ) {
             this.getBase64(event.target.files[i]).then(data => {
-              this.form.upload_photo = data
+              this.form.container_photo = data
             });
             $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'></div>");
            }
