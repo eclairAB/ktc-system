@@ -60,28 +60,28 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" name="container_no" id="container_no" v-model="form.container_no" v-model="sizeSearch"
-                                @input="searchContainer()" class="form-control" :class="containerError.message ? 'isError' : ''" style="height: 37px;">
+                                @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ containerError.message }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="client" readonly id="client" :value="containerInfo.client ? containerInfo.client.code_name : ''" class="form-control" style="height: 37px;">
+                          <input type="text" name="client" readonly id="client" :value="containerInfo.client ? containerInfo.client.code_name : ''" style="height: 37px;" class="form-control">
                           <label for="client" class="form-control-placeholder"> Client</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="size" readonly id="size" :value="containerInfo.size_type ? containerInfo.size_type.name : ''" class="form-control" style="height: 37px;">
+                          <input type="text" name="size" readonly id="size" :value="containerInfo.size_type ? containerInfo.size_type.name : ''" style="height: 37px;" class="form-control">
                           <label for="size" class="form-control-placeholder"> Size</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="class" readonly id="class" :value="containerInfo.class ? containerInfo.class.class_name : ''" class="form-control" style="height: 37px;">
+                          <input type="text" name="class" readonly id="class" :value="containerInfo.class ? containerInfo.class.class_name : ''" style="height: 37px;" class="form-control">
                           <label for="class" class="form-control-placeholder"> Class</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="manufactured_date" readonly id="manufactured_date" :value="containerInfo.manufactured_date" class="form-control" style="height: 37px;">
+                          <input type="text" name="manufactured_date" readonly id="manufactured_date" :value="containerInfo.manufactured_date" style="height: 37px;" class="form-control">
                           <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="empty_loaded" readonly id="empty_loaded" :value="containerInfo.empty_loaded" class="form-control" style="height: 37px;">
+                          <input type="text" name="empty_loaded" readonly id="empty_loaded" :value="containerInfo.empty_loaded" style="height: 37px;" class="form-control">
                           <label for="empty_loaded" class="form-control-placeholder"> Empty/Loaded</label>
                         </div>
                       </div>
@@ -97,27 +97,27 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Shipment Details</div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :readonly="!isOk" name="booking_no" id="booking_no" v-model="form.booking_no" class="form-control" style="height: 37px;" :class="errors.booking_no ? 'isError' : ''">
+                          <input type="text" :readonly="!isOk" name="booking_no" id="booking_no" v-model="form.booking_no" style="height: 37px;" :class="errors.booking_no ? 'isError form-control' : 'form-control'">
                           <label for="booking_no" class="form-control-placeholder"> Booking No. <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.booking_no ? errors.booking_no[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :readonly="!isOk" name="consignee" id="consignee" v-model="form.consignee" class="form-control" style="height: 37px;" :class="errors.consignee ? 'isError' : ''">
+                          <input type="text" :readonly="!isOk" name="consignee" id="consignee" v-model="form.consignee" style="height: 37px;" :class="errors.consignee ? 'isError form-control' : 'form-control'">
                           <label for="consignee" class="form-control-placeholder"> Consignee <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.consignee ? errors.consignee[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :readonly="!isOk" name="hauler" id="hauler" v-model="form.hauler" class="form-control" style="height: 37px;" :class="errors.hauler ? 'isError' : ''">
+                          <input type="text" :readonly="!isOk" name="hauler" id="hauler" v-model="form.hauler" style="height: 37px;" :class="errors.hauler ? 'isError form-control' : 'form-control'">
                           <label for="hauler" class="form-control-placeholder"> Hauler <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.hauler ? errors.hauler[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :readonly="!isOk" name="plate_no" id="plate_no" v-model="form.plate_no" class="form-control" style="height: 37px;" :class="errors.plate_no ? 'isError' : ''">
+                          <input type="text" :readonly="!isOk" name="plate_no" id="plate_no" v-model="form.plate_no" style="height: 37px;" :class="errors.plate_no ? 'isError form-control' : 'form-control'">
                           <label for="plate_no" class="form-control-placeholder"> Plate No. <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.plate_no ? errors.plate_no[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :readonly="!isOk" name="seal_no" id="seal_no" v-model="form.seal_no" class="form-control" style="height: 37px;" :class="errors.seal_no ? 'isError' : ''">
+                          <input type="text" :readonly="!isOk" name="seal_no" id="seal_no" v-model="form.seal_no" style="height: 37px;" :class="errors.seal_no ? 'isError form-control' : 'form-control'">
                           <label for="seal_no" class="form-control-placeholder"> Seal No. <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.seal_no ? errors.seal_no[0] : '' }}</small></div>
                         </div>
@@ -131,7 +131,7 @@
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <textarea v-model="form.remarks" :readonly="!isOk" rows="3" :class="errors.remarks ? 'isError' : ''" style="width: 100%; height: auto !important;" class="form-control" placeholder="Write Something..."></textarea>  
+                          <textarea v-model="form.remarks" :readonly="!isOk" rows="3" :class="errors.remarks ? 'isError form-control' : 'form-control'" style="width: 100%; height: auto !important;" placeholder="Write Something..."></textarea>  
                           <label for="consignee" class="form-control-placeholder"> Remarks <span style="color: red"> *</span> </label>
                           <div class="customErrorText"><small>@{{ errors.remarks ? errors.remarks[0] : '' }}</small></div>
                         </div>
@@ -140,6 +140,8 @@
                   </div>
                   <!--  -->
 
+
+                  <!--  -->
                   <div class="panel panel-bordered">
                     <div class="panel-body" style="padding: 15px;">
                       <div class="row" style="padding: 0px 10px;">
@@ -155,7 +157,9 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                  <!--  -->
+
+                </div> <!-- End of Vue Container -->
 
                 <div class="panel panel-bordered" id="signCard">
                   <div class="panel-body" style="padding: 15px;">
@@ -317,7 +321,8 @@
         data: {
           form: {
             inspected_date: moment().format(),
-            inspected_by: {!! Auth::user()->role->id !!}
+            inspected_by: {!! Auth::user()->role->id !!},
+            container_photo: []
           },
           loginUser: `{!! Auth::user()->name !!}`,
           images: [],
@@ -367,7 +372,7 @@
            this.images = event.target.files
            for ( var i = 0; i < total_file; i++ ) {
             this.getBase64(event.target.files[i]).then(data => {
-              this.form.container_photo = data
+              this.form.container_photo.push(data)
             });
             $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'></div>");
            }
