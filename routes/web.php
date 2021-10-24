@@ -36,4 +36,5 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/create/Staff', [PostsController::class, "createStaff"]);
     Route::post('/create/releasing',[PostsController::class,"createReleasing"]);
     Route::post('/create/receiving',[PostsController::class,"createReceiving"]);
+    Route::post('/create/sizeType',[PostsController::class,"createSizeType"]);
 });

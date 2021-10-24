@@ -51,14 +51,16 @@
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
             <!-- &#9744; --> <!-- Unchecked -->
-            &#9745;          <!-- Checked -->
+            <!-- &#9745;          Checked -->
+            &#9745;
           </span>
           <span>EMPTY</span>
         </div>
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
-            &#9744; <!-- Unchecked -->
+            <!-- &#9744; Unchecked -->
             <!-- &#9745; --> <!-- Checked -->
+            &#9744;
           </span>
           <span>LOADED</span>
         </div>
@@ -81,34 +83,139 @@
         </div>
         @endif
         </div>
+        @if($receiving_details->empty_loaded == "Loaded" && $receiving_details->sizeType->code == "20")
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
-            &#9744; <!-- Unchecked -->
+            <!-- &#9744; Unchecked -->
             <!-- &#9745; --> <!-- Checked -->
+            &#9745;
           </span>
           <span>20&#176;</span>
         </div>
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
-            &#9744; <!-- Unchecked -->
+            <!-- &#9744; Unchecked -->
             <!-- &#9745; --> <!-- Checked -->
+            &#9744;
           </span>
           <span>40&#176;</span>
         </div>
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
-            &#9744; <!-- Unchecked -->
+            <!-- &#9744; Unchecked -->
             <!-- &#9745; --> <!-- Checked -->
+            &#9744;
           </span>
           <span>40&#176; HC&#176;</span>
         </div>
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
-            &#9744; <!-- Unchecked -->
+            <!-- &#9744; Unchecked -->
             <!-- &#9745; --> <!-- Checked -->
+            &#9744;
           </span>
           <span>40&#176; RF</span>
         </div>
+        @else if($receiving_details->empty_loaded == "Loaded" && $receiving_details->sizeType->code == "40")
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; Unchecked -->
+            <!-- &#9745; --> <!-- Checked -->
+            &#9744;
+          </span>
+          <span>20&#176;</span>
+        </div>
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; Unchecked -->
+            <!-- &#9745; --> <!-- Checked -->
+            &#9745;
+          </span>
+          <span>40&#176;</span>
+        </div>
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; Unchecked -->
+            <!-- &#9745; --> <!-- Checked -->
+            &#9744;
+          </span>
+          <span>40&#176; HC&#176;</span>
+        </div>
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; Unchecked -->
+            <!-- &#9745; --> <!-- Checked -->
+            &#9744;
+          </span>
+          <span>40&#176; RF</span>
+        </div>
+        @else if($receiving_details->empty_loaded == "Loaded" && $receiving_details->sizeType->code == "40HC")
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; Unchecked -->
+            <!-- &#9745; --> <!-- Checked -->
+            &#9744;
+          </span>
+          <span>20&#176;</span>
+        </div>
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; Unchecked -->
+            <!-- &#9745; --> <!-- Checked -->
+            &#9744;
+          </span>
+          <span>40&#176;</span>
+        </div>
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; Unchecked -->
+            <!-- &#9745; --> <!-- Checked -->
+            &#9745;
+          </span>
+          <span>40&#176; HC&#176;</span>
+        </div>
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; Unchecked -->
+            <!-- &#9745; --> <!-- Checked -->
+            &#9744;
+          </span>
+          <span>40&#176; RF</span>
+        </div>
+        @else if($receiving_details->empty_loaded == "Loaded" && $receiving_details->sizeType->code == "40RF")
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; Unchecked -->
+            <!-- &#9745; --> <!-- Checked -->
+            &#9744;
+          </span>
+          <span>20&#176;</span>
+        </div>
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; Unchecked -->
+            <!-- &#9745; --> <!-- Checked -->
+            &#9744;
+          </span>
+          <span>40&#176;</span>
+        </div>
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; Unchecked -->
+            <!-- &#9745; --> <!-- Checked -->
+            &#9744;
+          </span>
+          <span>40&#176; HC&#176;</span>
+        </div>
+        <div style="margin-right: 10px; display: flex; align-items:center;">
+          <span style="font-size: 25px">
+            <!-- &#9744; Unchecked -->
+            <!-- &#9745; --> <!-- Checked -->
+            &#9745;
+          </span>
+          <span>40&#176; RF</span>
+        </div>
+        @endif
       </div>
     </div>
     <!-- END OF DATE TIME -->
@@ -142,7 +249,7 @@
         <div style="font-size: 25px; border: 1px solid; width: fit-content; margin: auto; padding: 3px 8px; margin-bottom: 5px;">
         {{ $releasing->container_no }}
         </div>
-        <b>CONTAINER NO.</b>
+        <b>CONTAINER NO.</b><br><br><br><br><br><br><br><br>
       </div>
     </div>
     <!-- END OF CONTAINER INFO -->
