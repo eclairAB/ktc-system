@@ -24,14 +24,13 @@ class ContainerReceiving extends Model
         'consignee',
         'hauler',
         'plate_no',
-        'container_photo_id',
         'signature',
         'remarks'
     ];
 
     public function photos()
     {
-        return $this->hasMany(ContainerPhoto::class, 'id');
+        return $this->hasMany(ContainerPhoto::class, 'container_id');
     }
 
     public function client()

@@ -17,13 +17,12 @@ class ContainerReleasing extends Model
         'hauler',
         'plate_no',
         'seal_no',
-        'container_photo_id',
         'signature',
         'remarks'
     ];
 
     public function photos()
     {
-        return $this->hasMany(ContainerPhoto::class, 'id');
+        return $this->hasMany(ContainerPhoto::class, 'container_id');
     }
 }
