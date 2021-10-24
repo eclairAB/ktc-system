@@ -103,7 +103,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 //     $status = 'error';
                 //     return response()->json(compact('message','status'),404);
                 // }
-                // return $details;
+                return $details;
             }
             else
             {

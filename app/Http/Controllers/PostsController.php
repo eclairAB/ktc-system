@@ -117,7 +117,7 @@ class PostsController extends Controller
                     'client_id'=>$receiving->client_id,
                     'size_type'=>$receiving->size_type,
                     'class'=>$receiving->class,
-                    'date_received'=>null,
+                    // 'date_received'=>null,
                     'date_released'=>Carbon::now(),
                 ]);
                 $dataContRemark = [
@@ -162,7 +162,7 @@ class PostsController extends Controller
         if($receive)
         {
             $cont = Containers::updateOrCreate([
-                'container_no'=>$releasing['container_no'],
+                'container_no'=>$receiving['container_no'],
             ],[
                 'client_id'=>$receiving['client_id'],
                 'size_type'=>$receiving['size_type'],
