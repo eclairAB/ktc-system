@@ -393,7 +393,7 @@
             await axios.post('/admin/create/releasing', this.form).then(async data => {
               this.errors = {}
               let customId = data.data[0].container_id
-              await axios.get(`/admin/get/print/releasing?id=${customId}`).then(data => {
+              await axios.get(`/admin/get/print/releasing/${customId}`).then(data => {
                 let pasmo = data.data
                 let w = window.open();
                 w.document.write(pasmo);
