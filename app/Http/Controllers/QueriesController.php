@@ -64,7 +64,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getReceivingDetails(Request $request)
     {
-        $contReleasing = Containers::where('container_no',$request->container_no)->whereNull('date_released')->whereNotNull('date_received')->latest('created_at')->first();
+        $contReleasing = Containers::where('container_no',$request->container_no)->whereNotNull('date_released')->whereNull('date_received')->latest('created_at')->first();
         $contRecieving = Containers::where('container_no',$request->container_no)->whereNull('date_released')->whereNotNull('date_received')->latest('created_at')->first();
 
         if($request->type == "receiving")
@@ -92,7 +92,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                     'size_type',
                     'class',
                     'empty_loaded',
-                    'manufactured_date')->first();
+                    'manufactured_date')->latest('created_at')->first();
     
                 // if($details)
                 // {
@@ -103,7 +103,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 //     $status = 'error';
                 //     return response()->json(compact('message','status'),404);
                 // }
-                // return $details;
+                return $details;
             }
             else
             {
@@ -114,16 +114,16 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         }
     }
 
-    public function prntReleasing($id)
+    public function prntReleasing(Request $request)
     {
-        $releasing = ContainerReleasing::where('id',$id)->first();
-        $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->with('sizeType:id,code')->first();
-        return view('print_releasing')->with('releasing', $releasing,'receiving_details',$receiving_details);
+        $releasing = ContainerReleasing::where('id',$request->id)->first();
+        $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->with('sizeType:id,code')->latest('created_at')->first();
+        return view('print_releasing')->with(compact('releasing', 'receiving_details'));
     }
 
-    public function prntReceiving($id)
+    public function prntReceiving(Request $request)
     {
-        $receiving = ContainerReceiving::where('id',$id)->with('sizeType:id,code')->first();
+        $receiving = ContainerReceiving::where('id',$request->id)->with('sizeType:id,code')->first();
         return view('print_receiving')->with('receiving', $receiving);
     }
 }
