@@ -48,13 +48,6 @@
       </div>
       <div style="width: 55%; display: flex; border: 1px solid; align-items: center; padding: 0 5px; font-size: 10px;">
         <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; --> <!-- Unchecked -->
-            &#9745;          <!-- Checked -->
-          </span>
-          <span>EMPTY</span>
-        </div>
-        <div style="margin-right: 10px; display: flex; align-items:center;">
         @if($receiving->empty_loaded == "Empty")
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
