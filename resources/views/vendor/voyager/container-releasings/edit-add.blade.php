@@ -59,7 +59,7 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Container Details</div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="container_no" id="container_no" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
+                          <input type="text" name="container_no" id="container_no" maxlength="11" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ containerError.message }}</small></div>
                         </div>
@@ -151,7 +151,13 @@
                           <input style="padding: 8px;" :disabled="!isOk" type="file" class="form-control" id="images" name="images" @change="preview_images" multiple/>
                         </div>
                         <div class="col-xs-12">
-                          <div class="row" id="image_preview"></div>
+                          <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" v-for="(item, index) in imagelist" :key="index">
+                              <div class="image-container" :style="photolink(item)">
+                                <!-- <button @click="pasmo(item)">Remove</button> -->
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -329,7 +335,8 @@
           containerError: {},
           containerInfo: {},
           isOk: false,
-          errors: {}
+          errors: {},
+          imagelist: []
         },
         methods:{
           dateFormat(date) {
@@ -373,6 +380,12 @@
               reader.onerror = error => reject(error);
             });
           },
+          photolink (payload) {
+            return `background: url(${payload.url})`
+          },
+          pasmo (i) {
+            console.log('yawa: ', i)
+          },
           preview_images () {
            var total_file=document.getElementById("images").files.length;
            this.images = event.target.files
@@ -383,14 +396,20 @@
               }
               this.form.container_photo.push(payload)
             });
-            $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'></div>");
+            let payload = {
+              id: i,
+              url: URL.createObjectURL(event.target.files[i])
+            }
+            this.imagelist.push(payload)
            }
           },
           async saveReceiving (data) {
+            $('#save').attr('disabled', 'disabled');
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.form.signature = data
             await axios.post('/admin/create/releasing', this.form).then(async data => {
+              document.getElementById("save").removeAttribute("disabled");
               this.errors = {}
               let customId = data.data[0].container_id
               await axios.get(`/admin/get/print/releasing/${customId}`).then(data => {
@@ -402,6 +421,7 @@
               })
               window.location = checkedit
             }).catch(error => {
+              document.getElementById("save").removeAttribute("disabled");
               this.errors = error.response.data.errors
             })
           }

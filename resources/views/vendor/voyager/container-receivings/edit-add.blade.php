@@ -56,7 +56,7 @@
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="container_no" id="container_no" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
+                          <input type="text" name="container_no" id="container_no" maxlength="11" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ containerError.message }}</small></div>
                         </div>
@@ -82,10 +82,10 @@
                               />
                             </template>
                             <template slot="selected-option" slot-scope="option">
-                              <span>@{{option.code}} - @{{option.name}}</span>
+                              <span>@{{option.code}}</span>
                             </template>
                             <template slot="option" slot-scope="option">
-                                @{{option.code}} - @{{option.name}}
+                                @{{option.code}}
                             </template>
                           </v-select>
                           <label for="lastname" class="form-control-placeholder"> Size Type</label>
@@ -219,10 +219,10 @@
                               />
                             </template>
                             <template slot="selected-option" slot-scope="option">
-                              <span>@{{option.class_code}} - @{{option.class_name}}</span>
+                              <span>@{{option.class_code}}</span>
                             </template>
                             <template slot="option" slot-scope="option">
-                                @{{option.class_code}} - @{{option.class_name}}
+                                @{{option.class_code}}
                             </template>
                           </v-select>
                           <label for="contact_number" class="form-control-placeholder"> Class</label>
@@ -308,7 +308,13 @@
                           <input style="padding: 8px;" type="file" class="form-control" :disabled="!isOk" id="images" name="images" @change="preview_images" multiple/>
                         </div>
                         <div class="col-xs-12">
-                          <div class="row" id="image_preview"></div>
+                          <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" v-for="(item, index) in imagelist" :key="index">
+                              <div class="image-container" :style="photolink(item)">
+                                <!-- <button @click="pasmo(item)">Remove</button> -->
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -505,11 +511,16 @@
           ],
           errors: {},
           containerError: {},
-          isOk: false
+          isOk: false,
+          imagelist: [],
+          customload: false
         },
         methods:{
           dateFormat(date) {
             return moment(date).format('MM/DD/yyyy');
+          },
+          photolink (payload) {
+            return `background: url(${payload.url})`
           },
           fuseSize(options, search) {
             const fuse = new Fuse(options, {
@@ -711,6 +722,9 @@
               reader.onerror = error => reject(error);
             });
           },
+          pasmo (i) {
+            console.log('yawa: ', i)
+          },
           preview_images () {
            var total_file=document.getElementById("images").files.length;
            this.images = event.target.files
@@ -721,14 +735,20 @@
               }
               this.form.container_photo.push(payload)
             });
-            $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'></div>");
+            let payload = {
+              id: i,
+              url: URL.createObjectURL(event.target.files[i])
+            }
+            this.imagelist.push(payload)
            }
           },
           async saveReceiving (data) {
+            $('#save').attr('disabled', 'disabled');
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.form.signature = data
             await axios.post('/admin/create/receiving', this.form).then(async data => {
+              document.getElementById("save").removeAttribute("disabled");
               this.errors = {}
               let customId = data.data[0].container_id
               await axios.get(`/admin/get/print/receiving/${customId}`).then(data => {
@@ -740,6 +760,7 @@
               })
               window.location = checkedit
             }).catch(error => {
+              document.getElementById("save").removeAttribute("disabled");
               this.errors = error.response.data.errors
             })
           }
