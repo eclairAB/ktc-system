@@ -88,7 +88,6 @@ class PostsController extends Controller
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'user_id' => $request->user_id,
-            'user_type' => $request->user_type,
             'contact_no' => $request->contact_no,
         ];
 
@@ -107,7 +106,6 @@ class PostsController extends Controller
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'user_id' => $request->user_id,
-            'user_type' => $request->user_type,
             'contact_no' => $request->contact_no,
         ];
 
