@@ -140,3 +140,8 @@ table {
 .buttonload {
   padding: 5px 24px; /* Some padding */
 }
+.image-container {
+    height: 200px;
+    background-position: center !important;
+    background-size: cover !important;
+}
