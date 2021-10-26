@@ -27,7 +27,7 @@ class ValidateClientField extends FormRequest
             'email' => 'email|unique',
             'password_confirmation' => 'same:password',
             'code_name' => 'required',
-            // 'contact_no' => 'required',
+            'contact_no' => 'nullable',
             'user_id' => 'required',
         ];
     }
