@@ -21,7 +21,6 @@ class CreateStaffTable extends Migration
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
             $table->text('user_id')->nullable();
-            $table->string('user_type')->nullable();
             $table->string('contact_no')->nullable();
         });
     }

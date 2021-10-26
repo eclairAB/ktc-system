@@ -204,7 +204,6 @@
           async saveStaff () {
             this.customload = true
             let currentUrl = window.location.href
-            this.form.user_type = 'Default'
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             await axios.post('/admin/create/Staff', this.form).then(data => {
               this.customload = false
