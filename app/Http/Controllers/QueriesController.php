@@ -114,16 +114,16 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         }
     }
 
-    public function prntReleasing(Request $request)
+    public function prntReleasing($id)
     {
-        $releasing = ContainerReleasing::where('id',$request->id)->first();
+        $releasing = ContainerReleasing::where('id',$id)->first();
         $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->with('sizeType:id,code')->latest('created_at')->first();
         return view('print_releasing')->with(compact('releasing', 'receiving_details'));
     }
 
-    public function prntReceiving(Request $request)
+    public function prntReceiving($id)
     {
-        $receiving = ContainerReceiving::where('id',$request->id)->with('sizeType:id,code')->first();
+        $receiving = ContainerReceiving::where('id',$id)->with('sizeType:id,code')->first();
         return view('print_receiving')->with('receiving', $receiving);
     }
 }

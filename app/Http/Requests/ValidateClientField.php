@@ -27,7 +27,7 @@ class ValidateClientField extends FormRequest
             'email' => 'email|unique',
             'password_confirmation' => 'same:password',
             'code_name' => 'required',
-            'contact_no' => 'required',
+            'contact_no' => 'nullable',
             'user_id' => 'required',
         ];
     }
@@ -39,7 +39,7 @@ class ValidateClientField extends FormRequest
             'email.unique' => 'Email already in use.',
             'password_confirmation.same' => 'Password does not match.',
             'code_name.required' => 'Code name required.',
-            'contact_no.required' => 'Contact number required.',
+            // 'contact_no.required' => 'Contact number required.',
             'user_id.required' => 'User ID required.',
         ];
     }
