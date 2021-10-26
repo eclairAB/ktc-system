@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\ValidateClientField;
 use App\Http\Requests\ValidateStaffField;
+use App\Http\Requests\ValidateCheckerField;
 use App\Http\Requests\ValidateContainerReleasing;
 use App\Http\Requests\ValidateContainerReceiving;
 use App\Http\Requests\ValidateSizeType;
@@ -22,12 +23,12 @@ use Illuminate\Http\Request;
 
 class PostsController extends Controller
 {
-    public function createUser($params, $role)
+    function createUser($params, $role)
     {
         $dbrole = DB::table('roles')->where('name', $role)->pluck('id');
         if(!isset($dbrole[0])) return response('Role "'. $role . '" does not exist.', 404);
         $credentials = [
-            'name' => strtoupper($params->firstname . ' ' . $params->lastname),
+            'name' => $this->setName($params),
             'role_id' => $dbrole[0],
         ];
         if(isset($params->email)) {
@@ -47,6 +48,18 @@ class PostsController extends Controller
         }
 
         return User::create($credentials);
+    }
+
+    function setName($params)
+    {
+        if(isset($params->code_name))
+        {
+            return $params->code_name;
+        }
+        else
+        {
+            return strtoupper($params->firstname . ' ' . $params->lastname);
+        }
     }
 
     public function createClient(ValidateClientField $request)
@@ -75,7 +88,24 @@ class PostsController extends Controller
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'user_id' => $request->user_id,
-            'user_type' => $request->user_type,
+            'contact_no' => $request->contact_no,
+        ];
+
+        $staff = Staff::create($params);
+        $account['staff'] = $staff;
+        return $account;
+    }
+
+    public function createChecker(ValidateCheckerField $request)
+    {
+        $account = $this->createUser($request, 'checker');
+
+        $params = [
+            'account_id' => $account->id,
+            'id_no' => $request->id_no,
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
+            'user_id' => $request->user_id,
             'contact_no' => $request->contact_no,
         ];
 
@@ -150,7 +180,7 @@ class PostsController extends Controller
                 );
                 $this->imageUpload($params, $receiving['container_photo'][$key]['storage_path'], false);
             }
-        $receiving['signature'] = storage_path() . '/app/public/uploads/receiving/container/' . $params['file_name'];
+        $receiving['signature'] = storage_path() . '/app/public/uploads/receiving/signature/' . $params['file_name'];
         $receiving['inspected_by'] = Auth::user()->id;
         $receive = ContainerReceiving::create($receiving)->photos()->createMany($container_photo);
 
