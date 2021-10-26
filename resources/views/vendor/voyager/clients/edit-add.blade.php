@@ -59,7 +59,7 @@
                         </div>
 
                         <div class="panel-footer" style="display: flex; justify-content: flex-end;">
-                            <button type="submit" class="btn btn-primary save buttonload" @click="saveClient" style="display: flex; align-items:center;">
+                            <button type="submit" :disabled="customload === true" class="btn btn-primary save buttonload" @click="saveClient" style="display: flex; align-items:center;">
                                 <i :class="customload === false ? 'fa fa-save' : 'fa fa-refresh fa-spin'"></i>
                                 <div style="margin-left: 5px;">@{{ customload === false ? 'Save' : 'Loading' }}</div>
                             </button>
