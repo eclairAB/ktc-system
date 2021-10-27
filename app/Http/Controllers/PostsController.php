@@ -211,7 +211,7 @@ class PostsController extends Controller
         $exploded = explode(',', $photo);
         $decode = base64_decode($exploded[1]);
         if(str_contains($exploded[0], 'jpg')) $extension = '.jpg';
-        elseif(str_contains($exploded[0], 'jpeg')) $extension = '.svg';
+        elseif(str_contains($exploded[0], 'jpeg')) $extension = '.jpg';
         elseif(str_contains($exploded[0], 'svg')) $extension = '.svg';
         else $extension = '.png';
 
