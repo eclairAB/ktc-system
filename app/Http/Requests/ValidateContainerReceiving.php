@@ -35,7 +35,7 @@ class ValidateContainerReceiving extends FormRequest
             'empty_loaded'=> 'required',
             'manufactured_date'=> 'required',
             'yard_loacation'=> 'required',
-            'acceptance_no'=> 'required',
+            // 'acceptance_no'=> 'required',
             'consignee'=> 'required',
             'hauler'=> 'required',
             'plate_no'=> 'required',
