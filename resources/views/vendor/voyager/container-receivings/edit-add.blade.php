@@ -91,38 +91,6 @@
                           <label for="lastname" class="form-control-placeholder"> Size Type</label>
                           <div class="customErrorText"><small>@{{ errors.size_type ? errors.size_type[0] : '' }}</small></div>
                         </div>
-                        <!-- <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <v-select
-                            style="height: 37px !important;"
-                            :class="errors.height ? 'isError form-control' : 'form-control'"
-                            :options="heightList"
-                            v-model="form.height"
-                            :disabled="!isOk"
-                            label="height_name"
-                            :filter="fuseHeight"
-                            @option:selected="clearHeight()"
-                            :reset-on-options-change='true'
-                            :reduce="height_name => height_name.id"
-                          >
-                            <template #search="{attributes, events}">
-                              <input
-                                class="vs__search"
-                                v-bind="attributes"
-                                v-on="events"
-                                v-model="heightSearch"
-                                @input="searchHeight()"
-                              />
-                            </template>
-                            <template slot="selected-option" slot-scope="option">
-                              <span>@{{option.height_code}} - @{{option.height_name}}</span>
-                            </template>
-                            <template slot="option" slot-scope="option">
-                                @{{option.height_code}} - @{{option.height_name}}
-                            </template>
-                          </v-select>
-                          <label for="password" class="form-control-placeholder"> Height</label>
-                          <div class="customErrorText"><small>@{{ errors.height ? errors.height[0] : '' }}</small></div>
-                        </div> -->
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <v-select
                             style="height: 37px !important;"
@@ -191,11 +159,6 @@
                           <label for="type" class="form-control-placeholder"> Type</label>
                           <div class="customErrorText"><small>@{{ errors.type ? errors.type[0] : '' }}</small></div>
                         </div>
-                        <!-- <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="acceptance_no" :disabled="!isOk" id="acceptance_no" v-model="form.acceptance_no" style="height: 37px;" :class="errors.acceptance_no ? 'isError form-control' : 'form-control'">
-                          <label for="acceptance_no" class="form-control-placeholder"> Acceptance No.</label>
-                          <div class="customErrorText"><small>@{{ errors.acceptance_no ? errors.acceptance_no[0] : '' }}</small></div>
-                        </div> -->
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <v-select
                             style="height: 37px !important;"
@@ -499,13 +462,11 @@
           clientList: [],
           sizeTypeList: [],
           classList: [],
-          heightList: [],
           yardList: [],
           images: [],
           choosenSize: {},
           classSearch: '',
           sizeSearch: '',
-          heightSearch: '',
           clientSearch: '',
           yardSearch: '',
           emptyloaded: [
@@ -590,40 +551,6 @@
             }
             await axios.get(`/admin/get/container/classes?keyword=${search.keyword}`, search).then( data => {
               this.classList = data.data
-            }).catch(error => {
-              console.log('error: ', error)
-            })
-          },
-          fuseHeight(options, search) {
-            const fuse = new Fuse(options, {
-              keys: ['height_code', 'height_name'],
-              shouldSort: true,
-            })
-            return search.length
-              ? fuse.search(search).map(({ item }) => item)
-              : fuse.list
-          },
-          clearHeight () {
-            this.heightSearch = ''
-          },
-          searchHeight () {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-              const payload = {
-                keyword: this.heightSearch
-              }
-              axios.get(`/admin/get/container/heights?keyword=${payload.keyword}`, payload)
-              .then(data => {
-                this.heightList = data.data
-              })
-            }, 1000)
-          },
-          async getHeight () {
-            let search = {
-              keyword: ''
-            }
-            await axios.get(`/admin/get/container/heights?keyword=${search.keyword}`, search).then( data => {
-              this.heightList = data.data
             }).catch(error => {
               console.log('error: ', error)
             })
@@ -770,7 +697,6 @@
           this.getClient()
           this.getYard()
           this.getClass()
-          this.getHeight()
         }
       })
     </script>

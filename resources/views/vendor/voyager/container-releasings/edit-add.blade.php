@@ -105,7 +105,7 @@
                           <label for="hauler" class="form-control-placeholder"> Hauler <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.hauler ? errors.hauler[0] : '' }}</small></div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" :disabled="!isOk" name="plate_no" id="plate_no" v-model="form.plate_no" style="height: 37px;" :class="errors.plate_no ? 'isError form-control' : 'form-control'">
                           <label for="plate_no" class="form-control-placeholder"> Plate No. <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.plate_no ? errors.plate_no[0] : '' }}</small></div>
