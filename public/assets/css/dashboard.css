@@ -1,0 +1,85 @@
+#dashboard {
+  padding: 0;
+  margin: 1vw 2vw;
+  /*border: solid red;*/
+}
+
+#dashboard > div {
+  text-align: center;
+}
+
+.dashboard-buttons {
+  width: 100%;
+  text-align: start;
+  position: relative;
+  /*background-image: url('https://mymodernmet.com/wp/wp-content/uploads/2018/05/how-to-make-a-mosaic-art-history-1.jpg');*/
+}
+
+.dashboard-buttons:hover {
+  transform: scale(100.5%);
+  transition: .2s;
+}
+
+.dashboard-buttons::after {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 10vw;
+  background-image: url('https://media.istockphoto.com/photos/stack-of-containers-cargo-ship-importexport-in-harbor-port-cargo-of-picture-id1269639971?b=1&k=20&m=1269639971&s=170667a&w=0&h=xuEUk-t0yglAtY__4rxNSDzajNzXQL7M5XR9NrzgTxI=');
+  top: 0;
+  right: 0;
+  box-shadow: inset #22a7f0 20px 0px 13px 0px;
+  border-left: solid #22a7f0;
+  opacity: 0.6;
+}
+
+#dashboard .chart {
+  /*border: solid;*/
+}
+
+#chart1, #chart2, #chart3 {
+  width: 400px;
+  height:300px;
+}
+
+figure.chart-container {
+  display: inline-block;
+  position: relative;
+  margin: .7em .7vw;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 8px;
+  box-shadow: 0 0 45px rgb(0 0 0 / 20%);
+  padding: 1.5em 2em;
+  background: white;
+  /*min-width: calc(40vw + 4em);*/
+}
+
+.app-container {
+  min-height: 100%;
+  position: relative;
+  background: #f9f9f9;
+  padding-bottom: 30px;
+  /*width: fit-content;*/
+}
+
+@media only screen and (max-width: 1082px) {
+  #chart1, #chart2, #chart3 {
+    width: 62vw;
+    height:300px;
+  }
+}
+
+.app-container {
+  background: 
+    linear-gradient(180deg, rgba(248, 184, 139,0) 20%, rgba(248, 184, 139,.1) 20%, rgba(248, 184, 139,.1) 40%, rgba(248, 184, 139,.2) 40%, rgba(248, 184, 139,.2) 60%, rgba(248, 184, 139,.4) 60%, rgba(248, 184, 139,.4) 80%, rgba(248, 184, 139,.5) 80%),
+    linear-gradient(45deg, rgba(250, 248, 132,.3) 20%, rgba(250, 248, 132,.4) 20%, rgba(250, 248, 132,.4) 40%, rgba(250, 248, 132,.5) 40%, rgba(250, 248, 132,.5) 60%, rgba(250, 248, 132,.6) 60%, rgba(250, 248, 132,.6) 80%, rgba(250, 248, 132,.7) 80%),
+    linear-gradient(-45deg, rgba(186, 237, 145,0) 20%, rgba(186, 237, 145,.1) 20%, rgba(186, 237, 145,.1) 40%, rgba(186, 237, 145,.2) 40%, rgba(186, 237, 145,.2) 60%, rgba(186, 237, 145,.4) 60%, rgba(186, 237, 145,.4) 80%, rgba(186, 237, 145,.6) 80%),
+    linear-gradient(90deg, rgba(178, 206, 254,0) 20%, rgba(178, 206, 254,.3) 20%, rgba(178, 206, 254,.3) 40%, rgba(178, 206, 254,.5) 40%, rgba(178, 206, 254,.5) 60%, rgba(178, 206, 254,.7) 60%, rgba(178, 206, 254,.7) 80%, rgba(178, 206, 254,.8) 80%),
+    linear-gradient(-90deg, rgba(242, 162, 232,0) 20%, rgba(242, 162, 232,.4) 20%, rgba(242, 162, 232,.4) 40%, rgba(242, 162, 232,.5) 40%, rgba(242, 162, 232,.5) 60%, rgba(242, 162, 232,.6) 60%, rgba(242, 162, 232,.6) 80%, rgba(242, 162, 232,.8) 80%),
+    linear-gradient(180deg, rgba(254, 163, 170,0) 20%, rgba(254, 163, 170,.4) 20%, rgba(254, 163, 170,.4) 40%, rgba(254, 163, 170,.6) 40%, rgba(254, 163, 170,.6) 60%, rgba(254, 163, 170,.8) 60%, rgba(254, 163, 170,.8) 80%, rgba(254, 163, 170,.9) 80%)
+;
+  background-color: rgb(254, 163, 170);
+  background-size: 100% 100%;
+  min-height: 100%;
+
+}
