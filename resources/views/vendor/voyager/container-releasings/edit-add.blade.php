@@ -25,7 +25,7 @@
     <div class="page-content edit-add container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div id="containerReceiving">
+                <div id="containerReleasing">
                   <!--  -->
                   <div class="panel panel-bordered">
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
@@ -96,11 +96,6 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Shipment Details</div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :disabled="!isOk" name="booking_no" id="booking_no" v-model="form.booking_no" style="height: 37px;" :class="errors.booking_no ? 'isError form-control' : 'form-control'">
-                          <label for="booking_no" class="form-control-placeholder"> Booking No. <span style="color: red"> *</span></label>
-                          <div class="customErrorText"><small>@{{ errors.booking_no ? errors.booking_no[0] : '' }}</small></div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" :disabled="!isOk" name="consignee" id="consignee" v-model="form.consignee" style="height: 37px;" :class="errors.consignee ? 'isError form-control' : 'form-control'">
                           <label for="consignee" class="form-control-placeholder"> Consignee <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.consignee ? errors.consignee[0] : '' }}</small></div>
@@ -110,10 +105,15 @@
                           <label for="hauler" class="form-control-placeholder"> Hauler <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.hauler ? errors.hauler[0] : '' }}</small></div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" :disabled="!isOk" name="plate_no" id="plate_no" v-model="form.plate_no" style="height: 37px;" :class="errors.plate_no ? 'isError form-control' : 'form-control'">
                           <label for="plate_no" class="form-control-placeholder"> Plate No. <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.plate_no ? errors.plate_no[0] : '' }}</small></div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                          <input type="text" :disabled="!isOk" name="booking_no" id="booking_no" v-model="form.booking_no" style="height: 37px;" :class="errors.booking_no ? 'isError form-control' : 'form-control'">
+                          <label for="booking_no" class="form-control-placeholder"> Booking No. <span style="color: red"> *</span></label>
+                          <div class="customErrorText"><small>@{{ errors.booking_no ? errors.booking_no[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" :disabled="!isOk" name="seal_no" id="seal_no" v-model="form.seal_no" style="height: 37px;" :class="errors.seal_no ? 'isError form-control' : 'form-control'">
@@ -152,9 +152,9 @@
                         </div>
                         <div class="col-xs-12">
                           <div class="row">
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" v-for="(item, index) in imagelist" :key="index">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" v-for="(item, index) in form.container_photo" :key="index">
                               <div class="image-container" :style="photolink(item)">
-                                <!-- <button @click="pasmo(item)">Remove</button> -->
+                                <a class="remove-image" @click="removeImage(item)" style="display: inline;">&#215;</a>
                               </div>
                             </div>
                           </div>
@@ -232,7 +232,9 @@
         var cancelButton = document.getElementById('clear');
 
         saveButton.addEventListener('click', function (event) {
-          document.getElementById('containerReceiving').__vue__.saveReceiving(signaturePad.toDataURL('image/png'))
+          if(!event.detail || event.detail == 1){ 
+            document.getElementById('containerReleasing').__vue__.saveReleasing(signaturePad.toDataURL('image/png'))
+          }
         });
 
         cancelButton.addEventListener('click', function (event) {
@@ -318,11 +320,12 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 
     <!-- VUE -->
     <script type="text/javascript">
       var app = new Vue({
-        el: '#containerReceiving',
+        el: '#containerReleasing',
         data: {
           form: {
             inspected_date: moment().format(),
@@ -335,8 +338,7 @@
           containerError: {},
           containerInfo: {},
           isOk: false,
-          errors: {},
-          imagelist: []
+          errors: {}
         },
         methods:{
           dateFormat(date) {
@@ -381,11 +383,12 @@
             });
           },
           photolink (payload) {
-            return `background: url(${payload.url})`
+            return `background: url(${payload.storage_path})`
           },
-          pasmo (i) {
-            console.log('yawa: ', i)
-          },
+          removeImage (imageData) {
+            let photoIndex = _.findIndex(this.form.container_photo, { storage_path: imageData.storage_path })
+            Vue.delete(this.form.container_photo, parseInt(photoIndex))
+           },
           preview_images () {
            var total_file=document.getElementById("images").files.length;
            this.images = event.target.files
@@ -396,14 +399,9 @@
               }
               this.form.container_photo.push(payload)
             });
-            let payload = {
-              id: i,
-              url: URL.createObjectURL(event.target.files[i])
-            }
-            this.imagelist.push(payload)
            }
           },
-          async saveReceiving (data) {
+          async saveReleasing (data) {
             $('#save').attr('disabled', 'disabled');
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
