@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 use App\Models\ContainerClass;
-use App\Models\ContainerHeight;
+// use App\Models\ContainerHeight;
 use App\Models\Containers;
 use App\Models\ContainerSizeType;
+use App\Models\ContainerComponent;
+use App\Models\ContainerDamage;
+use App\Models\ContainerRepair;
 use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
 use App\Models\Client;
+
 use App\Models\YardLocation;
 use Illuminate\Http\Request;
 
@@ -24,15 +28,15 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         return $class;
     }
 
-    public function getContainterHeight(Request $request)
-    {
-        $height = ContainerHeight::when(!empty($request->keyword), function ($q) use ($request){
-            return $q->where('height_code', 'ilike', '%'.$request->keyword.'%')
-            ->orwhere('height_name', 'ilike', '%'.$request->keyword.'%');
-        })->get();
+    // public function getContainterHeight(Request $request)
+    // {
+    //     $height = ContainerHeight::when(!empty($request->keyword), function ($q) use ($request){
+    //         return $q->where('height_code', 'ilike', '%'.$request->keyword.'%')
+    //         ->orwhere('height_name', 'ilike', '%'.$request->keyword.'%');
+    //     })->get();
 
-        return $height;
-    }
+    //     return $height;
+    // }
 
     public function getContainterSizeType(Request $request)
     {
@@ -60,6 +64,58 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         })->get();
 
         return $yardloc;
+    }
+
+    public function getContainerDamage(Request $request)
+    {
+        $dmgs = ContainerDamage::when(!empty($request->keyword), function ($q) use ($request){
+            return $q->where('code', 'ilike', '%'.$request->keyword.'%');
+        })->get();
+
+        return $dmgs;
+    }
+
+    public function getContainerRepair(Request $request)
+    {
+        $repairs = ContainerRepair::when(!empty($request->keyword), function ($q) use ($request){
+            return $q->where('code', 'ilike', '%'.$request->keyword.'%');
+        })->get();
+
+        return $repairs;
+    }
+
+    public function getContainerComponent(Request $request)
+    {
+        $comp = ContainerComponent::when(!empty($request->keyword), function ($q) use ($request){
+            return $q->where('code', 'ilike', '%'.$request->keyword.'%');
+        })->get();
+
+        return $comp;
+    }
+
+    public function getClientById($id)
+    {
+        return Client::where('id', $id)->first();
+    }
+
+    public function getSizeTypeById($id)
+    {
+        return ContainerSizeType::where('id', $id)->first();
+    }
+
+    public function getStaffById($id)
+    {
+        return Staff::where('id', $id)->first();
+    }
+
+    public function getReceivingById($id)
+    {
+        return ContainerReceiving::where('id', $id)->first();
+    }
+
+    public function getReleasingById($id)
+    {
+        return ContainerReleasing::where('id', $id)->first();
     }
 
     public function getReceivingDetails(Request $request)
