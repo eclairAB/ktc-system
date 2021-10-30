@@ -37,4 +37,16 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/create/releasing',[PostsController::class,"createReleasing"]);
     Route::post('/create/receiving',[PostsController::class,"createReceiving"]);
     Route::post('/create/sizeType',[PostsController::class,"createSizeType"]);
+
+    Route::post('/update/client', [UpdateController::class, "updateClient"]);
+    Route::post('/update/Staff', [UpdateController::class, "updateStaff"]);
+    Route::post('/update/releasing',[UpdateController::class,"updateReleasing"]);
+    Route::post('/update/receiving',[UpdateController::class,"updateReceiving"]);
+    Route::post('/update/sizeType',[UpdateController::class,"updateSizeType"]);
+
+    Route::get('/get/releasing/byId',[QueriesController::class,"getReleasingById"]);
+    Route::get('/get/receiving/byId',[QueriesController::class,"getReceivingById"]);
+    Route::get('/get/sizeType/byId',[QueriesController::class,"getSizeTypeById"]);
+    Route::get('/get/client/byId',[QueriesController::class,"getClientById"]);
+    Route::get('/get/Staff/byId',[QueriesController::class,"getStaffById"]);
 });
