@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ViewsController;
 use App\Http\Controllers\QueriesController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\UpdateController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,9 +46,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/update/receiving',[UpdateController::class,"updateReceiving"]);
     Route::post('/update/sizeType',[UpdateController::class,"updateSizeType"]);
 
-    Route::get('/get/releasing/byId',[QueriesController::class,"getReleasingById"]);
-    Route::get('/get/receiving/byId',[QueriesController::class,"getReceivingById"]);
-    Route::get('/get/sizeType/byId',[QueriesController::class,"getSizeTypeById"]);
-    Route::get('/get/client/byId',[QueriesController::class,"getClientById"]);
-    Route::get('/get/Staff/byId',[QueriesController::class,"getStaffById"]);
+    Route::get('/get/releasing/byId/{id}',[QueriesController::class,"getReleasingById"]);
+    Route::get('/get/receiving/byId/{id}',[QueriesController::class,"getReceivingById"]);
+    Route::get('/get/sizeType/byId/{id}',[QueriesController::class,"getSizeTypeById"]);
+    Route::get('/get/client/byId/{id}',[QueriesController::class,"getClientById"]);
+    Route::get('/get/Staff/byId/{id}',[QueriesController::class,"getStaffById"]);
 });

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\ValidateClientField;
 use App\Models\ContainerSizeType;
 use App\Models\Client;
 use App\Models\Staff;
