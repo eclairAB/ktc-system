@@ -1,62 +1,71 @@
 @extends('voyager::master')
 @section('content')
-{{-- <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}"> --}}
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-  #dashboard {
-    padding: 0;
-    margin: 1vw 2vw;
-  }
-
-  #dashboard .chart {
-    /*border: solid;*/
-  }
-
-  #chart1, #chart2, #chart3 {
-    width: 400px;
-    height:300px;
-  }
-
-  figure.chart-container {
-    display: inline-block;
-    position: relative;
-    margin: .7em .7vw;
-    border: 1px solid rgba(0,0,0,.1);
-    border-radius: 8px;
-    box-shadow: 0 0 45px rgb(0 0 0 / 20%);
-    padding: 1.5em 2em;
-    /*min-width: calc(40vw + 4em);*/
-  }
-
-  .app-container {
-    min-height: 100%;
-    position: relative;
-    background: #f9f9f9;
-    padding-bottom: 30px;
-    width: fit-content;
-  }
-
-  @media only screen and (max-width: 1082px) {
-    #chart1, #chart2, #chart3 {
-      width: 62vw;
-      height:300px;
-    }
-  }
-</style>
 <body>
-  Hello {{ $name }}!
-
+  {{-- Hello {{ $name }}! --}}
   <div id="dashboard" class="clearfix container-fluid row">
-    <figure class="chart-container chart">
-      <div id="chart1"></div>
-    </figure>
-    <figure class="chart-container chart">
-      <div id="chart2"></div>
-    </figure>
-    <br>
-    <figure class="chart-container chart">
-      <div id="chart3"></div>
-    </figure>
+    <div class="col-lg-4 col-md-12">
+      <div>
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+          {{-- <i class="voyager-search"></i> --}}
+          <h4>Container Receiving</h4>
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+          {{-- <i class="voyager-search"></i> --}}
+          <h4>Container Releasing</h4>
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+          {{-- <i class="voyager-search"></i> --}}
+          <h4>Container Aging and Inventory</h4>
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+          {{-- <i class="voyager-search"></i> --}}
+          <h4>Daily In Container</h4>
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+          {{-- <i class="voyager-search"></i> --}}
+          <h4>Daily Out Container</h4>
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+          {{-- <i class="voyager-search"></i> --}}
+          <h4>Container Inquiry</h4>
+        </button>
+      </div>
+      {{-- <div>
+        <button class="btn btn-success btn-lg dashboard-buttons" type="submit">
+          <i class="voyager-search"></i>
+          Owooo
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-warning btn-lg dashboard-buttons" type="submit">
+          <i class="voyager-search"></i>
+          Owooo
+        </button>
+      </div> --}}
+    </div>
+    <div class="col-lg-8 col-md-12">
+      <figure class="chart-container chart">
+        <div id="chart1"></div>
+      </figure>
+      <figure class="chart-container chart">
+        <div id="chart2"></div>
+      </figure>
+      <br>
+      <figure class="chart-container chart">
+        <div id="chart3"></div>
+      </figure>
+    </div>
   </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
@@ -161,24 +170,15 @@
         this.option1.vueChart = echarts.init(document.getElementById('chart1'), null, {renderer: 'svg'})
         this.option1.vueChart.setOption(this.option1.vueChartOtpion)
         this.setIntervalData()
-        /*window.onresize = function() {
-          this.option1.vueChart.resize()
-        }*/
       },
       initChart2() {
         this.option2.chart2 = echarts.init(document.getElementById('chart2'), null, {renderer: 'svg'})
         this.option2.chart2.setOption(this.option2)
-        /*window.onresize = function() {
-          this.option2.chart2.resize()
-        }*/
       },
       initChart3() {
         this.option3.chart = echarts.init(document.getElementById('chart3'), null, {renderer: 'svg'})
         this.option3.chart.setOption(this.option3)
         this.pieInterval()
-        /*window.onresize = function() {
-          this.option3.chart.resize()
-        }*/
       },
       setIntervalData(){
         setInterval(()=>{ 
