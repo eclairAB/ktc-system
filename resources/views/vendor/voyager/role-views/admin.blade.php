@@ -56,13 +56,16 @@
     </div>
     <div class="col-lg-8 col-md-12">
       <figure class="chart-container chart">
+        <span>Containers Received in the past 12 months</span>
         <div id="chart1"></div>
       </figure>
       <figure class="chart-container chart">
+        <span>Damaged products in the past 12 months</span>
         <div id="chart2"></div>
       </figure>
       <br>
       <figure class="chart-container chart">
+        <span>Containers</span>
         <div id="chart3"></div>
       </figure>
     </div>
