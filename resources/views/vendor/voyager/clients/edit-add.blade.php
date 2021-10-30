@@ -207,7 +207,7 @@
           async updateClient () {
             this.customload = true
             let currentUrl = window.location.origin
-            let browseUrl = `${currentUrl}/clients`
+            let browseUrl = `${currentUrl}/admin/clients`
             await axios.post('/admin/update/client', this.form).then(data => {
               this.customload = false
               this.errors = {}

@@ -65,9 +65,9 @@
                         </div>
 
                         <div class="panel-footer" style="display: flex; justify-content: flex-end;">
-                            <button type="submit" :disabled="customload" class="btn btn-primary save buttonload" @click="saveClient" style="display: flex; align-items:center;">
+                            <button type="submit" :disabled="customload" class="btn btn-primary save buttonload" @click="form.id ? updateSizeType() : saveSizeType()" style="display: flex; align-items:center;">
                                 <i :class="customload === false ? 'fa fa-save' : 'fa fa-refresh fa-spin'"></i>
-                                <div style="margin-left: 5px;">@{{ customload === false ? 'Save' : 'Loading' }}</div>
+                                <div style="margin-left: 5px;">@{{ customload === false ? (form.id ? 'Update' : 'Save') : 'Loading' }}</div>
                             </button>
                         </div>
                     </div>
@@ -216,7 +216,7 @@
           ]
         },
         methods:{
-          async saveClient () {
+          async saveSizeType () {
             this.customload = true
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
@@ -228,7 +228,38 @@
               this.customload = false
               this.errors = error.response.data.errors
             })
+          },
+          async updateSizeType () {
+            this.customload = true
+            let currentUrl = window.location.origin
+            let browseUrl = `${currentUrl}/admin/container-size-types`
+            await axios.post('/admin/update/sizeType', this.form).then(data => {
+              this.customload = false
+              this.errors = {}
+              window.location = browseUrl
+            }).catch(error => {
+              this.customload = false
+              this.errors = error.response.data.errors
+            })
+          },
+          async getdata () {
+            let currentUrl = window.location.href
+            let checkedit = currentUrl.split('/')[currentUrl.split('/').length - 1]
+            if (checkedit === 'edit') {
+              let dataId = currentUrl.split('/')[currentUrl.split('/').length - 2]
+              let payload = {
+                id: parseInt(dataId)
+              }
+              await axios.get(`/admin/get/sizeType/byId/${payload.id}`).then(data => {
+                this.form = data.data
+              }).catch(error => {
+                console.log('error: ', error)
+              })
+            }
           }
+        },
+        mounted () {
+          this.getdata()
         }
       })
     </script>
