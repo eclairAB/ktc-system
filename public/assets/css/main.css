@@ -145,3 +145,6 @@ table {
     background-position: center !important;
     background-size: cover !important;
 }
+.view {
+    margin-left: 5px !important;
+}
