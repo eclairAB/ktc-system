@@ -97,7 +97,7 @@
 
                         <div class="panel-footer" style="display: flex; justify-content: flex-end; padding-top: 0px;">
                             @section('submit-buttons')
-                                <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
+                                <button id="defaultSaveBtn" type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
                             @stop
                             @yield('submit-buttons')
                         </div>
@@ -142,6 +142,13 @@
 @stop
 
 @section('javascript')
+    <script>
+        $('#defaultSaveBtn').click(function(event) {
+          if(!event.detail || event.detail == 1){ return true; }
+          else { return false; }
+        })
+    </script>
+
     <script>
         var params = {};
         var $file;

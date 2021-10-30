@@ -42,7 +42,12 @@
                                 <div class="customErrorText"><small>@{{ errors.name ? errors.name[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
-                                <input type="text" name="size" id="size" v-model="form.size" class="form-control" :class="errors.size ? 'isError' : ''">
+                                <v-select
+                                  style="height: 37px !important;"
+                                  :class="errors.size ? 'isError form-control' : 'form-control'"
+                                  :options="sizelist"
+                                  v-model="form.size"
+                                ></v-select>
                                 <label for="size" class="form-control-placeholder"> Size</label>
                                 <div class="customErrorText"><small>@{{ errors.size ? errors.size[0] : '' }}</small></div>
                               </div>
@@ -60,7 +65,7 @@
                         </div>
 
                         <div class="panel-footer" style="display: flex; justify-content: flex-end;">
-                            <button type="submit" class="btn btn-primary save buttonload" @click="saveClient" style="display: flex; align-items:center;">
+                            <button type="submit" :disabled="customload" class="btn btn-primary save buttonload" @click="saveClient" style="display: flex; align-items:center;">
                                 <i :class="customload === false ? 'fa fa-save' : 'fa fa-refresh fa-spin'"></i>
                                 <div style="margin-left: 5px;">@{{ customload === false ? 'Save' : 'Loading' }}</div>
                             </button>
@@ -196,7 +201,18 @@
           typelist: [
             'Dry Box',
             'Reefer',
-            'ISO Tank'
+            'ISO Tank',
+            'Flattrack',
+            'Open Top',
+            'Trailer'
+          ],
+          sizelist: [
+            '10',
+            '20',
+            '40',
+            '45',
+            'HC',
+            'STD'
           ]
         },
         methods:{
