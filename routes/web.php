@@ -29,9 +29,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/container/classes',[QueriesController::class,"getContainterClass"]);
     Route::get('/get/container/heights',[QueriesController::class,"getContainterHeight"]);
     Route::get('/get/container/size_type',[QueriesController::class,"getContainterSizeType"]);
-    Route::get('/get/container/damage',[QueriesController::class,"getContainerDamage"]);
-    Route::get('/get/container/repair',[QueriesController::class,"getContainerRepair"]);
-    Route::get('/get/container/component',[QueriesController::class,"getContainerComponent"]);
     Route::get('/get/print/releasing/{id}',[QueriesController::class,"prntReleasing"]);
     Route::get('/get/print/receiving/{id}',[QueriesController::class,"prntReceiving"]);
 
@@ -52,5 +49,4 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/sizeType/byId',[QueriesController::class,"getSizeTypeById"]);
     Route::get('/get/client/byId',[QueriesController::class,"getClientById"]);
     Route::get('/get/Staff/byId',[QueriesController::class,"getStaffById"]);
-});
 });
