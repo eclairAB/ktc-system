@@ -1,12 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\ValidateClientField;
-use App\Models\ContainerSizeType;
+use App\Http\Requests\ValidateClientField;
+use App\Http\Requests\ValidateContainerReceiving;
+use App\Http\Requests\ValidateContainerReleasing;
+use App\Http\Requests\ValidateSizeType;
+use App\Http\Requests\ValidateStaffField;
 use App\Models\Client;
-use App\Models\Staff;
 use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
+use App\Models\ContainerSizeType;
+use App\Models\Staff;
 use Illuminate\Http\Request;
 
 class UpdateController extends Controller
