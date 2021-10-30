@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ViewsController;
 use App\Http\Controllers\QueriesController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\UpdateController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,6 +30,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/container/classes',[QueriesController::class,"getContainterClass"]);
     Route::get('/get/container/heights',[QueriesController::class,"getContainterHeight"]);
     Route::get('/get/container/size_type',[QueriesController::class,"getContainterSizeType"]);
+    Route::get('/get/container/damage',[QueriesController::class,"getContainerDamage"]);
+    Route::get('/get/container/repair',[QueriesController::class,"getContainerRepair"]);
+    Route::get('/get/container/component',[QueriesController::class,"getContainerComponent"]);
     Route::get('/get/print/releasing/{id}',[QueriesController::class,"prntReleasing"]);
     Route::get('/get/print/receiving/{id}',[QueriesController::class,"prntReceiving"]);
 
@@ -37,4 +41,16 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/create/releasing',[PostsController::class,"createReleasing"]);
     Route::post('/create/receiving',[PostsController::class,"createReceiving"]);
     Route::post('/create/sizeType',[PostsController::class,"createSizeType"]);
+
+    Route::post('/update/client', [UpdateController::class, "updateClient"]);
+    Route::post('/update/Staff', [UpdateController::class, "updateStaff"]);
+    Route::post('/update/releasing',[UpdateController::class,"updateReleasing"]);
+    Route::post('/update/receiving',[UpdateController::class,"updateReceiving"]);
+    Route::post('/update/sizeType',[UpdateController::class,"updateSizeType"]);
+
+    Route::get('/get/releasing/byId',[QueriesController::class,"getReleasingById"]);
+    Route::get('/get/receiving/byId',[QueriesController::class,"getReceivingById"]);
+    Route::get('/get/sizeType/byId',[QueriesController::class,"getSizeTypeById"]);
+    Route::get('/get/client/byId',[QueriesController::class,"getClientById"]);
+    Route::get('/get/Staff/byId',[QueriesController::class,"getStaffById"]);
 });
