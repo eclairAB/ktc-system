@@ -12,7 +12,14 @@
   width: 100%;
   text-align: start;
   position: relative;
-  /*background-image: url('https://mymodernmet.com/wp/wp-content/uploads/2018/05/how-to-make-a-mosaic-art-history-1.jpg');*/
+}
+
+.dashboard-buttons h4 {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: initial;
+  position: relative;
+  z-index: 1;
 }
 
 .dashboard-buttons:hover {
@@ -54,6 +61,10 @@ figure.chart-container {
   /*min-width: calc(40vw + 4em);*/
 }
 
+figure.chart-container span {
+  font-weight: bold;
+}
+
 .app-container {
   min-height: 100%;
   position: relative;
@@ -66,6 +77,12 @@ figure.chart-container {
   #chart1, #chart2, #chart3 {
     width: 62vw;
     height:300px;
+  }
+}
+
+@media only screen and (max-width: 1199px) {
+  .dashboard-buttons::after {
+    width: 23vw;
   }
 }
 
