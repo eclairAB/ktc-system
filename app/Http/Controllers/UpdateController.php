@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Requests\ValidateClientField;
-use App\Http\Requests\ValidateContainerReceiving;
-use App\Http\Requests\ValidateContainerReleasing;
-use App\Http\Requests\ValidateSizeType;
-use App\Http\Requests\ValidateStaffField;
+// use App\Http\Requests\ValidateClientField;
+// use App\Http\Requests\ValidateContainerReceiving;
+// use App\Http\Requests\ValidateContainerReleasing;
+// use App\Http\Requests\ValidateSizeType;
+// use App\Http\Requests\ValidateStaffField;
 use App\Models\Client;
 use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
@@ -17,45 +17,45 @@ class UpdateController extends Controller
 {
     //
 
-    public function updateSizeType(ValidateSizeType $request)
+    public function updateSizeType(Request $request)
     {
-        $validate_sizeType = $request->validated();
+        $validate_sizeType = $request->all();
         $sizeType = ContainerSizeType::where('id',$request->id)->first();
         $sizeType->update($validate_sizeType);
 
         return $sizeType;
     }
 
-    public function updateClient(ValidateClientField $request)
+    public function updateClient(Request $request)
     {
-        $validate_client = $request->validated();
+        $validate_client = $request->all();
         $client = Client::where('id',$request->id)->first();
         $client->update($validate_client);
         
         return $client;
     }
 
-    public function updateStaff(ValidateStaffField $request)
+    public function updateStaff(Request $request)
     {
-        $validate_staff = $request->validated();
+        $validate_staff = $request->all();
         $staff = Staff::where('id',$request->id)->first();
         $staff->update($validate_staff);
         
         return $staff;
     }
 
-    public function updateReceiving(ValidateContainerReceiving $request)
+    public function updateReceiving(Request $request)
     {
-        $validate_receiving = $request->validated();
+        $validate_receiving = $request->all();
         $receiving = ContainerReceiving::where('id',$request->id)->first();
         $receiving->update($validate_receiving);
         
         return $receiving;
     }
 
-    public function updateReleasing(ValidateContainerReleasing $request)
+    public function updateReleasing(Request $request)
     {
-        $validate_releasing = $request->validated();
+        $validate_releasing = $request->all();
         $releasing = ContainerReleasing::where('id',$request->id)->first();
         $releasing->update($validate_releasing);
         

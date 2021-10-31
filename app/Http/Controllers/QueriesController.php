@@ -111,7 +111,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getReceivingById($id)
     {
-        return ContainerReceiving::where('id', $id)->first();
+        return ContainerReceiving::where('id', $id)->with('client','sizeType','class')->first();
     }
 
     public function getReleasingById($id)
