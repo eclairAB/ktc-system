@@ -35,15 +35,15 @@
                           <label for="id_no" class="form-control-placeholder"> EIR No.</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="moment().format('MMMM DD, YYYY')" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('MMMM DD, YYYY')" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inspection Date</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="moment().format('hh:mm A')" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('hh:mm A')" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="loginUser" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="form.inspected_by" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inpection By</label>
                         </div>
                       </div>
@@ -78,6 +78,7 @@
                                 v-bind="attributes"
                                 v-on="events"
                                 v-model="sizeSearch"
+                                style="color: black;"
                                 @input="searchSize()"
                               />
                             </template>
@@ -109,6 +110,7 @@
                                 class="vs__search"
                                 v-bind="attributes"
                                 v-on="events"
+                                style="color: black;"
                                 v-model="clientSearch"
                                 @input="searchClient()"
                               />
@@ -140,6 +142,7 @@
                                 class="vs__search"
                                 v-bind="attributes"
                                 v-on="events"
+                                style="color: black;"
                                 v-model="yardSearch"
                                 @input="searchYard()"
                               />
@@ -177,6 +180,7 @@
                                 class="vs__search"
                                 v-bind="attributes"
                                 v-on="events"
+                                style="color: black;"
                                 v-model="classSearch"
                                 @input="searchClass()"
                               />
@@ -453,11 +457,7 @@
           vuejsDatepicker,
         },
         data: {
-          form: {
-            inspected_date: moment().format(),
-            inspected_by: {!! Auth::user()->role->id !!},
-            container_photo: []
-          },
+          form: {},
           loginUser: `{!! Auth::user()->name !!}`,
           clientList: [],
           sizeTypeList: [],
@@ -623,8 +623,8 @@
               }
               axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}&type=receiving`)
               .then(data => {
-                document.getElementById("signCard").style.display = 'initial';
-                document.getElementById("saveBtn").style.display = 'initial';
+                document.getElementById("signCard").style.display = 'inherit';
+                document.getElementById("saveBtn").style.display = 'inherit';
                 this.isOk = true
                 this.containerError = {}
                 this.containerInfo = data.data
@@ -688,11 +688,55 @@
               document.getElementById("save").removeAttribute("disabled");
               this.errors = error.response.data.errors
             })
+          },
+          async updateStaff () {
+            this.customload = true
+            let currentUrl = window.location.origin
+            let browseUrl = `${currentUrl}/admin/staff`
+            await axios.post('/admin/update/Staff', this.form).then(data => {
+              this.customload = false
+              this.errors = {}
+              window.location = browseUrl
+            }).catch(error => {
+              this.customload = false
+              this.errors = error.response.data.errors
+            })
+          },
+          async getdata () {
+            let currentUrl = window.location.href
+            let checkedit = currentUrl.split('/')[currentUrl.split('/').length - 1]
+            if (checkedit === 'edit') {
+              let dataId = currentUrl.split('/')[currentUrl.split('/').length - 2]
+              let payload = {
+                id: parseInt(dataId)
+              }
+              await axios.get(`/admin/get/receiving/byId/${payload.id}`).then(data => {
+                this.form = data.data
+                this.sizeSearch = data.data.size_type.code
+                this.form.size_type = data.data.size_type.id
+                this.clientSearch = data.data.client.code_name
+                this.form.clien_id = data.data.client.id
+                this.yardSearch = data.data.yard_loacation.name
+                this.form.yard_loacation = data.data.yard_loacation.id
+                this.classSearch = data.data.class.class_code
+                this.form.class = data.data.class.id
+                this.searchContainer()
+              }).catch(error => {
+                console.log('error: ', error)
+              })
+            } else {
+              this.form = {
+                inspected_date: moment().format(),
+                inspected_by: {!! Auth::user()->role->id !!},
+                container_photo: []
+              }
+            }
           }
         },
         mounted () {
           document.getElementById("signCard").style.display = 'none';
           document.getElementById("saveBtn").style.display = 'none';
+          this.getdata()
           this.getSize()
           this.getClient()
           this.getYard()

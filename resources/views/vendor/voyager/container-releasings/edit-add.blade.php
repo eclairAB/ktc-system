@@ -35,15 +35,15 @@
                           <label for="id_no" class="form-control-placeholder"> EIR No.</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="moment().format('MMMM DD, YYYY')" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('MMMM DD, YYYY')" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inspection Date</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="moment().format('hh:mm A')" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('hh:mm A')" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="loginUser" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="form.inspected_by" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inpection By</label>
                         </div>
                       </div>
@@ -327,11 +327,7 @@
       var app = new Vue({
         el: '#containerReleasing',
         data: {
-          form: {
-            inspected_date: moment().format(),
-            inspected_by: {!! Auth::user()->role->id !!},
-            container_photo: []
-          },
+          form: {},
           loginUser: `{!! Auth::user()->name !!}`,
           images: [],
           choosenSize: {},
@@ -354,8 +350,8 @@
               axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}&type=releasing`, payload)
               .then(data => {
                 console.log(data)
-                document.getElementById("signCard").style.display = 'initial';
-                document.getElementById("saveBtn").style.display = 'initial';
+                document.getElementById("signCard").style.display = 'inherit';
+                document.getElementById("saveBtn").style.display = 'inherit';
                 this.isOk = true
                 this.containerError = {}
                 this.containerInfo = data.data
@@ -422,11 +418,48 @@
               document.getElementById("save").removeAttribute("disabled");
               this.errors = error.response.data.errors
             })
+          },
+          async updateStaff () {
+            this.customload = true
+            let currentUrl = window.location.origin
+            let browseUrl = `${currentUrl}/admin/staff`
+            await axios.post('/admin/update/Staff', this.form).then(data => {
+              this.customload = false
+              this.errors = {}
+              window.location = browseUrl
+            }).catch(error => {
+              this.customload = false
+              this.errors = error.response.data.errors
+            })
+          },
+          async getdata () {
+            let currentUrl = window.location.href
+            let checkedit = currentUrl.split('/')[currentUrl.split('/').length - 1]
+            if (checkedit === 'edit') {
+              let dataId = currentUrl.split('/')[currentUrl.split('/').length - 2]
+              let payload = {
+                id: parseInt(dataId)
+              }
+              await axios.get(`/admin/get/releasing/byId/${payload.id}`).then(data => {
+                this.form = data.data
+                console.log('bfgbfbf',data)
+                // this.searchContainer()
+              }).catch(error => {
+                console.log('error: ', error)
+              })
+            } else {
+              this.form = {
+                inspected_date: moment().format(),
+                inspected_by: {!! Auth::user()->role->id !!},
+                container_photo: []
+              }
+            }
           }
         },
         mounted () {
           document.getElementById("signCard").style.display = 'none';
           document.getElementById("saveBtn").style.display = 'none';
+          this.getdata()
         }
       })
     </script>
