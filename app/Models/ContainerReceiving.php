@@ -50,6 +50,11 @@ class ContainerReceiving extends Model
 
     public function yardLocation()
     {
-        return $this->HasOne(YardLocation::class, 'id','yard_location');
+        return $this->belongsTo(YardLocation::class, 'yard_location');
+    }
+
+    public function inspector()
+    {
+        return $this->belongsTo(User::class, 'inspected_by');
     }
 }
