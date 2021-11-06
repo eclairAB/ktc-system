@@ -26,7 +26,7 @@ class CreateContainerReceivingsTable extends Migration
             $table->string('empty_loaded')->nullable();
             $table->string('type')->nullable();
             $table->timestampTz('manufactured_date')->nullable();
-            $table->string('yard_loacation')->nullable();
+            $table->bigInteger('yard_location')->nullable();
             $table->string('acceptance_no')->nullable();
             $table->string('consignee')->nullable();
             $table->string('hauler')->nullable();
