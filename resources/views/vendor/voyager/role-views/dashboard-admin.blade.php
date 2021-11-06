@@ -6,37 +6,37 @@
   <div id="dashboard" class="clearfix container-fluid row">
     <div class="col-lg-4 col-md-12">
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" onclick="window.location='{{ URL::route('vendor.voyager.container-receivings.browse'); }}">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Receiving</h4>
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" onclick="window.location='{{ URL::route('vendor.voyager.container-receivings.browse'); }}">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Releasing</h4>
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" onclick="window.location='{{ URL::route('vendor.voyager.container-receivings.browse'); }}">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Aging and Inventory</h4>
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" onclick="window.location='{{ URL::route('vendor.voyager.container-receivings.browse'); }}">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Daily In Container</h4>
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" onclick="window.location='{{ URL::route('vendor.voyager.container-receivings.browse'); }}">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Daily Out Container</h4>
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" onclick="window.location='{{ URL::route('vendor.voyager.container-receivings.browse'); }}">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Inquiry</h4>
         </button>

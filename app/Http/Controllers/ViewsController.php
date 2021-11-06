@@ -9,16 +9,16 @@ class ViewsController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControlle
 {
     public function roleRedirect()
     {
-        return redirect()->intended('/admin/' . Auth::user()->role->name);
+        return redirect()->intended('/admin/dashboard-' . Auth::user()->role->name);
     }
 
     public function roleView($url_role)
     {
         $role = Auth::user()->role->name;
 
-        if($url_role != $role) {
+        if($url_role != 'dashboard-' . $role) {
             return $this->roleRedirect();
         }
-        return view('vendor.voyager.role-views.'.$role, ['name' => $role]);
+        return view('vendor.voyager.role-views.dashboard-'.$role, ['name' => 'dashboard-' . $role]);
     }
 }
