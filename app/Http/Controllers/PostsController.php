@@ -15,6 +15,7 @@ use App\Models\ContainerReleasing;
 use App\Models\ContainerReceiving;
 use App\Models\Containers;
 use App\Models\ContainerRemark;
+use App\Models\ReceivingDamage;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Auth;
@@ -246,5 +247,11 @@ class PostsController extends Controller
             'type'=>$sizeType['type']
         ];
         return ContainerSizeType::create($dataSizeT);
+    }
+
+    public function ReceivingDamage(Request $request)
+    {
+        $data = $request->all();
+        return ReceivingDamage::create($data);
     }
 }

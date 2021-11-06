@@ -12,7 +12,7 @@ use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
 use App\Models\Client;
 use App\Models\Staff;
-
+use App\Models\ReceivingDamage;
 use App\Models\YardLocation;
 use Illuminate\Http\Request;
 
@@ -111,7 +111,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getReceivingById($id)
     {
-        return ContainerReceiving::where('id', $id)->with('client','sizeType','class')->first();
+        return ContainerReceiving::where('id', $id)->with('client','sizeType','class','yardLocation')->first();
     }
 
     public function getReleasingById($id)
@@ -182,5 +182,10 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         $receiving = ContainerReceiving::where('id',$id)->with('sizeType:id,code')->first();
         return view('print_receiving')->with('receiving', $receiving);
+    }
+
+    public function getReceivingDamage($receiving_id)
+    {
+        return ReceivingDamage::where('receiving_id',$receiving_id)->with('damage','component','repair')->get();
     }
 }
