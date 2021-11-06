@@ -701,7 +701,6 @@
                 let payload = {
                   storage_path: data
                 }
-                // this.form.container_photo.push(payload)
                 this.container_photo.push(payload)
               });
             }
@@ -733,7 +732,6 @@
             $('#supdate').attr('disabled', 'disabled');
             this.form.inspected_by = this.form.inspected_by.id
             delete this.form.signature
-            console.log(this.form)
             await axios.post('/admin/update/receiving', this.form).then(async data => {
               document.getElementById("update").removeAttribute("disabled");
               this.errors = {}
