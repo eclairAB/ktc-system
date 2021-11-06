@@ -43,4 +43,14 @@ class User extends \TCG\Voyager\Models\User
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function staff()
+    {
+        return $this->hasOne(Staff::class, 'account_id');
+    }
+
+    public function checker()
+    {
+        return $this->hasOne(Checker::class, 'account_id');
+    }
 }
