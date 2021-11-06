@@ -21,6 +21,11 @@ class ContainerReleasing extends Model
         'remarks'
     ];
 
+    public function inspector()
+    {
+        return $this->belongsTo(User::class, 'inspected_by');
+    }
+
     public function photos()
     {
         return $this->hasMany(ContainerPhoto::class, 'container_id');
