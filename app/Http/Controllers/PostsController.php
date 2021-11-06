@@ -138,7 +138,7 @@ class PostsController extends Controller
                 );
                 $this->imageUpload($params, $releasing['container_photo'][$key]['storage_path'], false);
             }
-            $releasing['signature'] = '/app/public/uploads/releasing/signature/' . $params['file_name'] . '.png';
+            $releasing['signature'] = '/app/public/uploads/releasing/signature/' . $signature_params['file_name'] . '.png';
             $release = ContainerReleasing::create($releasing)->photos()->createMany($container_photo);
 
             if($release)
@@ -182,7 +182,7 @@ class PostsController extends Controller
                 );
                 $this->imageUpload($params, $receiving['container_photo'][$key]['storage_path'], false);
             }
-        $receiving['signature'] = '/app/public/uploads/receiving/signature/' . $params['file_name'] . '.png';
+        $receiving['signature'] = '/app/public/uploads/receiving/signature/' . $signature_params['file_name'] . '.png';
         $receiving['inspected_by'] = Auth::user()->id;
         $receive = ContainerReceiving::create($receiving)->photos()->createMany($container_photo);
 
