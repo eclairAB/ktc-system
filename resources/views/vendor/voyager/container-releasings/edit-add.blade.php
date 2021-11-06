@@ -43,7 +43,7 @@
                           <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="form.inspected_by" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="form.id ? form.inspected_by.name : loginUser" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inpection By</label>
                         </div>
                       </div>
@@ -141,6 +141,7 @@
 
 
                   <!--  -->
+                  <div style="display: none;">@{{container_photo.length}}</div>
                   <div class="panel panel-bordered">
                     <div class="panel-body" style="padding: 15px;">
                       <div class="row" style="padding: 0px 10px;">
@@ -163,6 +164,20 @@
                     </div>
                   </div>
                   <!--  -->
+
+                  <div class="panel panel-bordered" v-if="form.id">
+                    <div class="panel-body" style="padding: 15px;">
+                      <div class="row" style="padding: 0px 10px;">
+                        <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
+                          <div style="font-weight: 700; font-size: 15px; color: black;">Signature</div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                          <div style="font-weight: 700;">Signature</div>
+                          <div class="image-container" :style="photolink(signature)" style="margin-top: 10px;border: 4px solid #e5e7eb; border-radius: 10px;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
                 </div> <!-- End of Vue Container -->
 
@@ -188,6 +203,9 @@
                 <div style="display: flex; justify-content: flex-end; padding-top: 0;">
                   <div id="saveBtn">
                     <button style="width: 100px;" id="save" class="btn btn-primary save">Save</button>
+                  </div>
+                  <div id="updateBtn">
+                    <button style="width: 100px;" id="update" class="btn btn-primary save">Update</button>
                   </div>
                 </div>
 
@@ -229,11 +247,18 @@
           penColor: 'rgb(0, 0, 0)'
         });
         var saveButton = document.getElementById('save');
+        var updateButton = document.getElementById('update');
         var cancelButton = document.getElementById('clear');
 
         saveButton.addEventListener('click', function (event) {
           if(!event.detail || event.detail == 1){ 
             document.getElementById('containerReleasing').__vue__.saveReleasing(signaturePad.toDataURL('image/png'))
+          }
+        });
+
+        updateButton.addEventListener('click', function (event) {
+          if(!event.detail || event.detail == 1){ 
+            document.getElementById('containerReleasing').__vue__.upadteReleasing()
           }
         });
 
@@ -327,7 +352,11 @@
       var app = new Vue({
         el: '#containerReleasing',
         data: {
-          form: {},
+          signature: {},
+          form: {
+            container_photo: []
+          },
+          container_photo: [],
           loginUser: `{!! Auth::user()->name !!}`,
           images: [],
           choosenSize: {},
@@ -349,9 +378,12 @@
               }
               axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}&type=releasing`, payload)
               .then(data => {
-                console.log(data)
-                document.getElementById("signCard").style.display = 'inherit';
-                document.getElementById("saveBtn").style.display = 'inherit';
+                if (!this.form.id) {
+                  document.getElementById("signCard").style.display = 'inherit'; 
+                  document.getElementById("saveBtn").style.display = 'inherit';
+                } else {
+                  document.getElementById("updateBtn").style.display = 'inherit'; 
+                }
                 this.isOk = true
                 this.containerError = {}
                 this.containerInfo = data.data
@@ -359,6 +391,7 @@
                 this.isOk = false
                 document.getElementById("signCard").style.display = 'none';
                 document.getElementById("saveBtn").style.display = 'none';
+                document.getElementById("updateBtn").style.display = 'none'; 
                 this.form = {
                   inspected_date: moment().format(),
                   inspected_by: {!! Auth::user()->role->id !!},
@@ -384,18 +417,24 @@
           removeImage (imageData) {
             let photoIndex = _.findIndex(this.form.container_photo, { storage_path: imageData.storage_path })
             Vue.delete(this.form.container_photo, parseInt(photoIndex))
-           },
+            this.removeSubImage(imageData.storage_path)
+          },
+          removeSubImage (imageData) {
+            let photoIndex = _.findIndex(this.container_photo, { storage_path: imageData.storage_path })
+            Vue.delete(this.container_photo, parseInt(photoIndex))
+          },
           preview_images () {
-           var total_file=document.getElementById("images").files.length;
-           this.images = event.target.files
-           for ( var i = 0; i < total_file; i++ ) {
-            this.getBase64(event.target.files[i]).then(data => {
-              let payload = {
-                storage_path: data
-              }
-              this.form.container_photo.push(payload)
-            });
-           }
+            var total_file=document.getElementById("images").files.length;
+            this.images = event.target.files
+            for ( var i = 0; i < total_file; i++ ) {
+              this.getBase64(event.target.files[i]).then(data => {
+                let payload = {
+                  storage_path: data
+                }
+                this.container_photo.push(payload)
+              });
+            }
+            this.form.container_photo = this.container_photo
           },
           async saveReleasing (data) {
             $('#save').attr('disabled', 'disabled');
@@ -416,6 +455,27 @@
               window.location = checkedit
             }).catch(error => {
               document.getElementById("save").removeAttribute("disabled");
+              this.errors = error.response.data.errors
+            })
+          },
+          async upadteReleasing () {
+            $('#supdate').attr('disabled', 'disabled');
+            this.form.inspected_by = this.form.inspected_by.id
+            delete this.form.signature
+            await axios.post('/admin/update/releasing', this.form).then(async data => {
+              document.getElementById("update").removeAttribute("disabled");
+              this.errors = {}
+              let customId = data.data.id
+              await axios.get(`/admin/get/print/releasing/${customId}`).then(data => {
+                let pasmo = data.data
+                let w = window.open();
+                w.document.write(pasmo);
+                w.print();
+                w.close();
+              })
+              window.location = checkedit
+            }).catch(error => {
+              document.getElementById("update").removeAttribute("disabled");
               this.errors = error.response.data.errors
             })
           },
@@ -442,8 +502,16 @@
               }
               await axios.get(`/admin/get/releasing/byId/${payload.id}`).then(data => {
                 this.form = data.data
-                console.log('bfgbfbf',data)
-                // this.searchContainer()
+                this.signature.storage_path = data.data.signature[0]
+                this.form.inspected_by = data.data.inspector
+                for (let index of Object.keys(data.data.photos)) {
+                  let wawex = {
+                    storage_path: data.data.photos[index].encoded[0]
+                  }
+                  this.container_photo.push(wawex)
+                }
+                this.form.container_photo = this.container_photo
+                this.isOk = true
               }).catch(error => {
                 console.log('error: ', error)
               })
