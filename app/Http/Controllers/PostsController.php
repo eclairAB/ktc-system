@@ -7,6 +7,7 @@ use App\Http\Requests\ValidateCheckerField;
 use App\Http\Requests\ValidateContainerReleasing;
 use App\Http\Requests\ValidateContainerReceiving;
 use App\Http\Requests\ValidateSizeType;
+use App\Http\Requests\ValidateReceivingDamage;
 use App\Models\ContainerSizeType;
 use App\Models\Client;
 use App\Models\Staff;
@@ -249,9 +250,9 @@ class PostsController extends Controller
         return ContainerSizeType::create($dataSizeT);
     }
 
-    public function ReceivingDamage(Request $request)
+    public function ReceivingDamage(ValidateReceivingDamage $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
         return ReceivingDamage::create($data);
     }
 }
