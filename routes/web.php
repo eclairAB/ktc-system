@@ -18,7 +18,7 @@ use App\Http\Controllers\UpdateController;
 */
 
 Route::get('/', function () {
-    return redirect()->route('voyager.login');
+    return view('voyager::login');
 });
 
 Route::group(['prefix' => 'admin'], function () {

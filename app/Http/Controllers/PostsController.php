@@ -7,6 +7,7 @@ use App\Http\Requests\ValidateCheckerField;
 use App\Http\Requests\ValidateContainerReleasing;
 use App\Http\Requests\ValidateContainerReceiving;
 use App\Http\Requests\ValidateSizeType;
+use App\Http\Requests\ValidateReceivingDamage;
 use App\Models\ContainerSizeType;
 use App\Models\Client;
 use App\Models\Staff;
@@ -15,6 +16,7 @@ use App\Models\ContainerReleasing;
 use App\Models\ContainerReceiving;
 use App\Models\Containers;
 use App\Models\ContainerRemark;
+use App\Models\ReceivingDamage;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Auth;
@@ -132,11 +134,11 @@ class PostsController extends Controller
                 $params['type'] = 'releasing';
                 $container_photo[] = array(
                     'container_type' => $params['type'],
-                    'storage_path' => storage_path() . '/app/public/uploads/releasing/container/' . $params['file_name'],
+                    'storage_path' => '/app/public/uploads/releasing/container/' . $params['file_name'] . '.png',
                 );
                 $this->imageUpload($params, $releasing['container_photo'][$key]['storage_path'], false);
             }
-            $releasing['signature'] = storage_path() . '/app/public/uploads/releasing/signature/' . $params['file_name'];
+            $releasing['signature'] = '/app/public/uploads/releasing/signature/' . $params['file_name'] . '.png';
             $release = ContainerReleasing::create($releasing)->photos()->createMany($container_photo);
 
             if($release)
@@ -176,11 +178,11 @@ class PostsController extends Controller
                 $params['type'] = 'receiving';
                 $container_photo[] = array(
                     'container_type' => $params['type'],
-                    'storage_path' => storage_path() . '/app/public/uploads/receiving/container/' . $params['file_name'],
+                    'storage_path' => '/app/public/uploads/receiving/container/' . $params['file_name'] . '.png',
                 );
                 $this->imageUpload($params, $receiving['container_photo'][$key]['storage_path'], false);
             }
-        $receiving['signature'] = storage_path() . '/app/public/uploads/receiving/signature/' . $params['file_name'];
+        $receiving['signature'] = '/app/public/uploads/receiving/signature/' . $params['file_name'] . '.png';
         $receiving['inspected_by'] = Auth::user()->id;
         $receive = ContainerReceiving::create($receiving)->photos()->createMany($container_photo);
 
@@ -210,10 +212,7 @@ class PostsController extends Controller
     {
         $exploded = explode(',', $photo);
         $decode = base64_decode($exploded[1]);
-        if(str_contains($exploded[0], 'jpg')) $extension = '.jpg';
-        elseif(str_contains($exploded[0], 'jpeg')) $extension = '.jpg';
-        elseif(str_contains($exploded[0], 'svg')) $extension = '.svg';
-        else $extension = '.png';
+        $extension = '.png';
 
         $the_path = storage_path() . '/app/public/uploads/';
         !is_dir( storage_path() . '/app/public/uploads/' ) && mkdir(storage_path() . '/app/public/uploads/');
@@ -246,5 +245,11 @@ class PostsController extends Controller
             'type'=>$sizeType['type']
         ];
         return ContainerSizeType::create($dataSizeT);
+    }
+
+    public function ReceivingDamage(ValidateReceivingDamage $request)
+    {
+        $data = $request->validated();
+        return ReceivingDamage::create($data);
     }
 }

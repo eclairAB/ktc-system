@@ -12,7 +12,7 @@ use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
 use App\Models\Client;
 use App\Models\Staff;
-
+use App\Models\ReceivingDamage;
 use App\Models\YardLocation;
 use Illuminate\Http\Request;
 
@@ -111,12 +111,22 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getReceivingById($id)
     {
-        return ContainerReceiving::where('id', $id)->with('client','sizeType','class')->first();
+        $container_receiving = ContainerReceiving::where('id', $id)->with('client', 'sizeType', 'class', 'yardLocation', 'inspector.staff', 'inspector.checker', 'photos')->first();
+        $container_receiving->signature = [$this->imageEncode($container_receiving->signature)];
+        foreach ($container_receiving->photos as $key => $value) {
+            $container_receiving->photos[$key]->encoded = [$this->imageEncode($container_receiving->photos[$key]->storage_path)];
+        }
+        return $container_receiving;
     }
 
     public function getReleasingById($id)
     {
-        return ContainerReleasing::where('id', $id)->first();
+        $container_releasing = ContainerReleasing::where('id', $id)->with('inspector.staff', 'inspector.checker', 'photos')->first();
+        $container_releasing->signature = [$this->imageEncode($container_releasing->signature)];
+        foreach ($container_releasing->photos as $key => $value) {
+            $container_releasing->photos[$key]->encoded = [$this->imageEncode($container_releasing->photos[$key]->storage_path)];
+        }
+        return $container_releasing;
     }
 
     public function getReceivingDetails(Request $request)
@@ -182,5 +192,16 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         $receiving = ContainerReceiving::where('id',$id)->with('sizeType:id,code')->first();
         return view('print_receiving')->with('receiving', $receiving);
+    }
+
+    public function getReceivingDamage($receiving_id)
+    {
+        return ReceivingDamage::where('receiving_id',$receiving_id)->with('damage','component','repair')->get();
+    }
+
+    function imageEncode($path) {
+        $imageUrl = file_get_contents( storage_path() . $path );
+        $image = base64_encode($imageUrl);
+        return 'data:image/png;base64,'.$image;
     }
 }
