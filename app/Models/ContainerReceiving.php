@@ -16,10 +16,10 @@ class ContainerReceiving extends Model
         'size_type',
         'class',
         'type',
-        'height',
+        // 'height'
         'empty_loaded',
         'manufactured_date',
-        'yard_loacation',
+        'yard_location',
         'acceptance_no',
         'consignee',
         'hauler',
@@ -46,5 +46,10 @@ class ContainerReceiving extends Model
     public function class()
     {
         return $this->HasOne(ContainerClass::class, 'id','class');
+    }
+
+    public function yardLocation()
+    {
+        return $this->HasOne(YardLocation::class, 'id','yard_location');
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\ValidateCheckerField;
 use App\Http\Requests\ValidateContainerReleasing;
 use App\Http\Requests\ValidateContainerReceiving;
 use App\Http\Requests\ValidateSizeType;
+use App\Http\Requests\ValidateReceivingDamage;
 use App\Models\ContainerSizeType;
 use App\Models\Client;
 use App\Models\Staff;
@@ -15,6 +16,7 @@ use App\Models\ContainerReleasing;
 use App\Models\ContainerReceiving;
 use App\Models\Containers;
 use App\Models\ContainerRemark;
+use App\Models\ReceivingDamage;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Auth;
@@ -246,5 +248,11 @@ class PostsController extends Controller
             'type'=>$sizeType['type']
         ];
         return ContainerSizeType::create($dataSizeT);
+    }
+
+    public function ReceivingDamage(ValidateReceivingDamage $request)
+    {
+        $data = $request->validated();
+        return ReceivingDamage::create($data);
     }
 }
