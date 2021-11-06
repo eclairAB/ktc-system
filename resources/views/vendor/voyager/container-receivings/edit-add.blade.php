@@ -128,10 +128,10 @@
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <v-select
                             style="height: 37px !important;"
-                            :class="errors.yard_loacation ? 'isError form-control' : 'form-control'"
+                            :class="errors.yard_location ? 'isError form-control' : 'form-control'"
                             :options="yardList"
                             :disabled="!isOk"
-                            v-model="form.yard_loacation"
+                            v-model="form.yard_location"
                             label="name"
                             @option:selected="clearYard()"
                             :reset-on-options-change='true'
@@ -154,8 +154,8 @@
                                 @{{option.name}}
                             </template>
                           </v-select>
-                          <label for="yard_loacation" class="form-control-placeholder"> Yard Location</label>
-                          <div class="customErrorText"><small>@{{ errors.yard_loacation ? errors.yard_loacation[0] : '' }}</small></div>
+                          <label for="yard_location" class="form-control-placeholder"> Yard Location</label>
+                          <div class="customErrorText"><small>@{{ errors.yard_location ? errors.yard_location[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" name="type" id="type" disabled v-model="form.type" style="height: 37px;" :class="errors.type ? 'isError form-control' : 'form-control'">
@@ -716,8 +716,8 @@
                 this.form.size_type = data.data.size_type.id
                 this.clientSearch = data.data.client.code_name
                 this.form.clien_id = data.data.client.id
-                this.yardSearch = data.data.yard_loacation.name
-                this.form.yard_loacation = data.data.yard_loacation.id
+                this.yardSearch = data.data.yard_location.name
+                this.form.yard_location = data.data.yard_location.id
                 this.classSearch = data.data.class.class_code
                 this.form.class = data.data.class.id
                 this.searchContainer()
