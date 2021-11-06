@@ -43,7 +43,7 @@
                           <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="form.id ? form.inspected_by.name : form.inspected_by" class="form-control" style="height: 37px;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="form.id ? form.inspected_by.name : loginUser" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inpection By</label>
                         </div>
                       </div>
@@ -484,9 +484,7 @@
         },
         data: {
           signature: {},
-          form: {
-            container_photo: []
-          },
+          form: {},
           container_photo: [],
           loginUser: `{!! Auth::user()->name !!}`,
           clientList: [],
@@ -666,7 +664,7 @@
                 this.isOk = false
                 document.getElementById("signCard").style.display = 'none';
                 document.getElementById("saveBtn").style.display = 'none';
-                document.getElementById("updateBtn").style.display = 'inherit'; 
+                document.getElementById("updateBtn").style.display = 'none'; 
                 this.form = {
                   inspected_date: moment().format(),
                   inspected_by: {!! Auth::user()->role->id !!},
@@ -775,7 +773,6 @@
                 id: parseInt(dataId)
               }
               await axios.get(`/admin/get/receiving/byId/${payload.id}`).then(data => {
-                let pasmo = []
                 this.form = data.data
                 this.sizeSearch = data.data.size_type.code
                 this.form.size_type = data.data.size_type.id
@@ -791,7 +788,7 @@
                   this.container_photo.push(wawex)
                 }
                 this.form.container_photo = this.container_photo
-                this.searchContainer()
+                this.isOk = true
               }).catch(error => {
                 console.log('error: ', error)
               })
