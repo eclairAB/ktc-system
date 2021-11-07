@@ -129,6 +129,19 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         return $container_releasing;
     }
 
+    public function geDetailsForUpdate(Request $request)
+    {
+        return ContainerReceiving::where('container_no',$request->container_no)
+        ->with('client:id,code_name','sizeType:id,code,name','class:id,class_code,class_name')
+        ->select(
+            'id',
+            'client_id',
+            'size_type',
+            'class',
+            'empty_loaded',
+            'manufactured_date')->latest('created_at')->first();
+    }
+
     public function getReceivingDetails(Request $request)
     {
         $contReleasing = Containers::where('container_no',$request->container_no)->whereNotNull('date_released')->whereNull('date_received')->latest('created_at')->first();
@@ -151,7 +164,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         else{
             if($request->type == "releasing" && $contRecieving)
             {
-                $details = ContainerReceiving::where('container_no',$request->container_no)
+                return ContainerReceiving::where('container_no',$request->container_no)
                 ->with('client:id,code_name','sizeType:id,code,name','class:id,class_code,class_name')
                 ->select(
                     'id',
@@ -160,17 +173,6 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                     'class',
                     'empty_loaded',
                     'manufactured_date')->latest('created_at')->first();
-    
-                // if($details)
-                // {
-                   
-                // }
-                // else{
-                //     $message = 'Container '.$request->container_no.' is not in the yard';
-                //     $status = 'error';
-                //     return response()->json(compact('message','status'),404);
-                // }
-                return $details;
             }
             else
             {
