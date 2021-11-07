@@ -30,6 +30,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/receiving/details',[QueriesController::class,"getReceivingDetails"]);
     Route::get('/get/details/forUpdate',[QueriesController::class,"geDetailsForUpdate"]);
     Route::get('/get/container/classes',[QueriesController::class,"getContainterClass"]);
+    Route::get('/get/container/size_type',[QueriesController::class,"getContainterSizeType"]);
     // Route::get('/get/container/heights',[QueriesController::class,"getContainterHeight"]);
     Route::get('/get/container/damage',[QueriesController::class,"getContainerDamage"]);
     Route::get('/get/container/component',[QueriesController::class,"getContainerComponent"]);
