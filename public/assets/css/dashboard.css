@@ -41,15 +41,12 @@
 }
 
 #dashboard .chart {
-  /*border: solid;*/
-}
-
-#chart1, #chart2, #chart3 {
-  width: 400px;
+  width: 100% !important;
   height:300px;
 }
 
 figure.chart-container {
+  width: 100%;
   display: inline-block;
   position: relative;
   margin: .7em .7vw;
@@ -58,7 +55,6 @@ figure.chart-container {
   box-shadow: 0 0 45px rgb(0 0 0 / 20%);
   padding: 1.5em 2em;
   background: white;
-  /*min-width: calc(40vw + 4em);*/
 }
 
 figure.chart-container span {
@@ -70,7 +66,10 @@ figure.chart-container span {
   position: relative;
   background: #f9f9f9;
   padding-bottom: 30px;
-  /*width: fit-content;*/
+}
+
+.container-width-basis {
+  border: solid;
 }
 
 @media only screen and (max-width: 1082px) {
