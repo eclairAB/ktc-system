@@ -59,7 +59,7 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Container Details</div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="container_no" id="container_no" maxlength="11" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
+                          <input type="text" name="container_no" id="container_no" maxlength="11" :disabled="form.id" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ containerError.message }}</small></div>
                         </div>
@@ -76,7 +76,7 @@
                           <label for="class" class="form-control-placeholder"> Class</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="manufactured_date" disabled id="manufactured_date" :value="containerInfo.manufactured_date" style="height: 37px;" class="form-control">
+                          <input type="text" name="manufactured_date" disabled id="manufactured_date" :value="moment(containerInfo.manufactured_date).format('MMMM DD, YYYY')" style="height: 37px;" class="form-control">
                           <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
@@ -502,6 +502,9 @@
               }
               await axios.get(`/admin/get/releasing/byId/${payload.id}`).then(data => {
                 this.form = data.data
+                axios.get(`/admin/get/details/forUpdate?container_no=${data.data.container_no}`, data.data).then(data => {
+                  this.containerInfo = data.data
+                })
                 this.signature.storage_path = data.data.signature[0]
                 this.form.inspected_by = data.data.inspector
                 for (let index of Object.keys(data.data.photos)) {
