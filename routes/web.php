@@ -30,10 +30,11 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/receiving/details',[QueriesController::class,"getReceivingDetails"]);
     Route::get('/get/details/forUpdate',[QueriesController::class,"geDetailsForUpdate"]);
     Route::get('/get/container/classes',[QueriesController::class,"getContainterClass"]);
-    Route::get('/get/container/heights',[QueriesController::class,"getContainterHeight"]);
-    Route::get('/get/container/size_type',[QueriesController::class,"getContainterSizeType"]);
-    Route::get('/get/print/releasing/{id}',[QueriesController::class,"prntReleasing"]);
-    Route::get('/get/print/receiving/{id}',[QueriesController::class,"prntReceiving"]);
+    // Route::get('/get/container/heights',[QueriesController::class,"getContainterHeight"]);
+    Route::get('/get/container/damage',[QueriesController::class,"getContainerDamage"]);
+    Route::get('/get/container/component',[QueriesController::class,"getContainerComponent"]);
+    Route::get('/get/container/repair',[QueriesController::class,"getContainerRepair"]);
+   
 
     Route::post('/create/client', [PostsController::class, "createClient"]);
     Route::post('/create/Staff', [PostsController::class, "createStaff"]);
@@ -54,4 +55,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/client/byId/{id}',[QueriesController::class,"getClientById"]);
     Route::get('/get/Staff/byId/{id}',[QueriesController::class,"getStaffById"]);
     Route::get('/get/damage/{receiving_id}',[QueriesController::class,"getReceivingDamage"]);
+    Route::get('/get/print/releasing/{id}',[QueriesController::class,"prntReleasing"]);
+    Route::get('/get/print/receiving/{id}',[QueriesController::class,"prntReceiving"]);
 });
