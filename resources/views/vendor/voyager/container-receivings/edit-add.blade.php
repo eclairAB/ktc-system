@@ -265,6 +265,72 @@
                   </div>
                   <!--  -->
 
+                  <!--  -->
+                  <div class="panel panel-bordered">
+                    <div class="panel-body" style="padding: 0 15px;">
+                      <div class="row" style="padding: 0px 10px;">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding: 0 !important; margin-top: 0 !important;">
+                          <div style="display: flex; justify-content: flex-end; padding-top: 0;">
+                            <button class="btn btn-success" @click="addNew"> Add Damage</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
+                    <div class="modal-success-dialog modal-dialog" role="document" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                      <div class="modal-content">
+                        <div class="modal-header" style="display: flex; align-items: center;">
+                          <h5 class="modal-title" id="dialogLabel">Add Damage</h5>
+                          <button type="button" @click="closeDialog" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: auto;">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <hr style="margin: 0">
+                        <div class="modal-body">
+                          <div class="col-lg-12 form-group mt-3">
+                            <input type="text" name="component" id="component" class="form-control" v-model="damages.component" style="height: 37px !important; margin-top: 10px;">
+                            <label for="component" class="form-control-placeholder"> Component</label>
+                          </div>
+                          <div class="col-lg-12 form-group mt-3">
+                            <input type="text" name="damage" id="damage" class="form-control" v-model="damages.damage" style="height: 37px !important; margin-top: 10px;">
+                            <label for="damage" class="form-control-placeholder"> Damage</label>
+                          </div>
+                          <div class="col-lg-12 form-group mt-3">
+                            <input type="text" name="repair" id="repair" class="form-control" v-model="damages.repair" style="height: 37px !important; margin-top: 10px;">
+                            <label for="repair" class="form-control-placeholder"> Repair</label>
+                          </div>
+                          <div class="col-lg-12 form-group mt-3">
+                            <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="height: 37px !important; margin-top: 10px;">
+                            <label for="location" class="form-control-placeholder"> Location</label>
+                          </div>
+                          <div class="col-lg-12 form-group mt-3">
+                            <input type="number" name="length" id="length" class="form-control" v-model="damages.length" style="height: 37px !important; margin-top: 10px;">
+                            <label for="length" class="form-control-placeholder"> Length</label>
+                          </div>
+                          <div class="col-lg-12 form-group mt-3">
+                            <input type="number" name="width" id="width" class="form-control" v-model="damages.width" style="height: 37px !important; margin-top: 10px;">
+                            <label for="width" class="form-control-placeholder"> Width</label>
+                          </div>
+                          <div class="col-lg-12 form-group mt-3">
+                            <input type="number" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="height: 37px !important; margin-top: 10px;">
+                            <label for="quantity" class="form-control-placeholder"> Quantity</label>
+                          </div>
+                          <div class="col-lg-12 form-group mt-3">
+                            <input type="text" disabled name="description" id="description" class="form-control" style="height: 37px !important; margin-top: 10px;">
+                            <label for="description" class="form-control-placeholder"> Description</label>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <!-- <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" :disabled="editloading" @click="updateMedicine"> @{{ editloading === false ? 'Update' : 'Loading...'}}</button> -->
+                          <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;"> Save</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--  -->
+
                   <div style="display: none;">@{{container_photo.length}}</div>
                   <div class="panel panel-bordered">
                     <div class="panel-body" style="padding: 15px;">
@@ -504,9 +570,16 @@
           errors: {},
           containerError: {},
           isOk: false,
-          customload: false
+          customload: false,
+          damages: {}
         },
         methods:{
+          addNew () {
+            $('#dialog').modal({backdrop: 'static', keyboard: false});
+          },
+          closeDialog () {
+            this.damages = {}
+          },
           dateFormat(date) {
             return moment(date).format('MM/DD/yyyy');
           },
