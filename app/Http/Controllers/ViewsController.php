@@ -14,6 +14,8 @@ class ViewsController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControlle
 
     public function roleView($url_role)
     {
+        if(is_null(Auth::user())) return view('voyager::login');
+
         $role = Auth::user()->role->name;
 
         if($url_role != 'dashboard-' . $role) {

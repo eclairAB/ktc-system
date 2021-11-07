@@ -4,7 +4,7 @@
 <body>
   {{-- Hello {{ $name }}! --}}
   <div id="dashboard" class="clearfix container-fluid row">
-    <div class="col-lg-4 col-md-12">
+    <div class="col-lg-5 col-md-12">
       <div>
         <button class="btn btn-info btn-lg dashboard-buttons" type="submit" onclick="location.href='{{ url('admin/container-receivings/create') }}'">
           {{-- <i class="voyager-search"></i> --}}
@@ -12,7 +12,7 @@
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" onclick="location.href='{{ url('admin/container-releasings/create') }}'">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Releasing</h4>
         </button>
@@ -54,19 +54,20 @@
         </button>
       </div> --}}
     </div>
-    <div class="col-lg-8 col-md-12">
-      <figure class="chart-container chart">
+    <div class="col-lg-7 col-md-12">
+      <div class="chart-container-width-basis"></div>
+      <figure class="chart-container">
         <span>Containers Received in the past 12 months</span>
-        <div id="chart1"></div>
+        <div id="chart1" class="chart"></div>
       </figure>
-      <figure class="chart-container chart">
+      <figure class="chart-container">
         <span>Damaged products in the past 12 months</span>
-        <div id="chart2"></div>
+        <div id="chart2" class="chart"></div>
       </figure>
       <br>
-      <figure class="chart-container chart">
+      <figure class="chart-container">
         <span>Containers</span>
-        <div id="chart3"></div>
+        <div id="chart3" class="chart"></div>
       </figure>
     </div>
   </div>
