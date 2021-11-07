@@ -28,6 +28,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/yards',[QueriesController::class,"getYardLocation"]);
     Route::get('/get/clients',[QueriesController::class,"getClient"]);
     Route::get('/get/receiving/details',[QueriesController::class,"getReceivingDetails"]);
+    Route::get('/get/details/forUpdate',[QueriesController::class,"geDetailsForUpdate"]);
     Route::get('/get/container/classes',[QueriesController::class,"getContainterClass"]);
     Route::get('/get/container/heights',[QueriesController::class,"getContainterHeight"]);
     Route::get('/get/container/size_type',[QueriesController::class,"getContainterSizeType"]);
