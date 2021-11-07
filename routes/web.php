@@ -40,6 +40,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/create/releasing',[PostsController::class,"createReleasing"]);
     Route::post('/create/receiving',[PostsController::class,"createReceiving"]);
     Route::post('/create/sizeType',[PostsController::class,"createSizeType"]);
+    Route::post('/create/damage',[PostsController::class,"ReceivingDamage"]);
 
     Route::post('/update/client', [UpdateController::class, "updateClient"]);
     Route::post('/update/Staff', [UpdateController::class, "updateStaff"]);
@@ -52,4 +53,5 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/sizeType/byId/{id}',[QueriesController::class,"getSizeTypeById"]);
     Route::get('/get/client/byId/{id}',[QueriesController::class,"getClientById"]);
     Route::get('/get/Staff/byId/{id}',[QueriesController::class,"getStaffById"]);
+    Route::get('/get/damage/{receiving_id}',[QueriesController::class,"getReceivingDamage"]);
 });
