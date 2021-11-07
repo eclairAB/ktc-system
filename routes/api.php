@@ -14,8 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/get/receiving/byId/{id}',[App\Http\Controllers\QueriesController::class,"getReceivingById"]);
-Route::get('/get/releasing/byId/{id}',[App\Http\Controllers\QueriesController::class,"getReleasingById"]);
+Route::post('/update/releasing',[App\Http\Controllers\UpdateController::class,"updateReleasing"]);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

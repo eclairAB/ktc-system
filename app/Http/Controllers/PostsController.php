@@ -208,7 +208,19 @@ class PostsController extends Controller
         return $receive;
     }
 
-    public function imageUpload($payload, $photo, $isSignature)
+    public function createSizeType(ValidateSizeType $request)
+    {
+        $sizeType = $request->validated();
+        $dataSizeT = [
+            'code'=>$sizeType['code'],
+            'name'=>$sizeType['name'],
+            'size'=>$sizeType['size'],
+            'type'=>$sizeType['type']
+        ];
+        return ContainerSizeType::create($dataSizeT);
+    }
+
+    function imageUpload($payload, $photo, $isSignature)
     {
         $exploded = explode(',', $photo);
         $decode = base64_decode($exploded[1]);
@@ -233,18 +245,6 @@ class PostsController extends Controller
             if($isSignature) file_put_contents( $the_path . 'receiving/signature/' . $payload['file_name'] . $extension, $decode);
             else file_put_contents( $the_path . 'receiving/container/' . $payload['file_name'] . $extension, $decode);
         }
-    }
-
-    public function createSizeType(ValidateSizeType $request)
-    {
-        $sizeType = $request->validated();
-        $dataSizeT = [
-            'code'=>$sizeType['code'],
-            'name'=>$sizeType['name'],
-            'size'=>$sizeType['size'],
-            'type'=>$sizeType['type']
-        ];
-        return ContainerSizeType::create($dataSizeT);
     }
 
     public function ReceivingDamage(ValidateReceivingDamage $request)
