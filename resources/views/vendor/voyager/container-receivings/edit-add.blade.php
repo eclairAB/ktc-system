@@ -998,6 +998,7 @@
                 }
                 this.form.container_photo = this.container_photo
                 this.isOk = true
+                document.getElementById("updateBtn").style.display = 'inherit';
                 this.getDamages()
               }).catch(error => {
                 console.log('error: ', error)
