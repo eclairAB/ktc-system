@@ -11,6 +11,7 @@ use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
 use App\Models\Client;
 use App\Models\Staff;
+use App\Models\Checker;
 use App\Models\ReceivingDamage;
 use App\Models\YardLocation;
 use Illuminate\Http\Request;
@@ -106,6 +107,11 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function getStaffById($id)
     {
         return Staff::where('id', $id)->first();
+    }
+
+    public function getCheckerById($id)
+    {
+        return Checker::where('id', $id)->first();
     }
 
     public function getReceivingById($id)
