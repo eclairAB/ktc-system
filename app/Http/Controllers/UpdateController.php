@@ -102,4 +102,17 @@ class UpdateController extends Controller
             else file_put_contents( $the_path . 'receiving/container/' . $payload['file_name'] . $extension, $decode);
         }
     }
+
+    public function ReceivingDamageUpdate(Request $request)
+    {
+        $updated_data = $request->all();
+        $dmg = ReceivingDamage::where('id',$request->id)->first();
+        $dmg->update($updated_data);
+        return $dmg;
+    }
+
+    public function ReceivingDamageDelete($id)
+    {
+        return ReceivingDamage::where('id',$id)->delete();
+    }
 }

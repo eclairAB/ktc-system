@@ -5,6 +5,7 @@ use App\Http\Controllers\ViewsController;
 use App\Http\Controllers\QueriesController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\UpdateController;
+use App\Http\Controllers\ExcelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,12 +44,14 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/create/receiving',[PostsController::class,"createReceiving"]);
     Route::post('/create/sizeType',[PostsController::class,"createSizeType"]);
     Route::post('/create/damage',[PostsController::class,"ReceivingDamage"]);
+    Route::post('/check/damage',[PostsController::class,"ReceivingDamageChecker"]);
 
     Route::post('/update/client', [UpdateController::class, "updateClient"]);
     Route::post('/update/Staff', [UpdateController::class, "updateStaff"]);
     Route::post('/update/releasing',[UpdateController::class,"updateReleasing"]);
     Route::post('/update/receiving',[UpdateController::class,"updateReceiving"]);
     Route::post('/update/sizeType',[UpdateController::class,"updateSizeType"]);
+    Route::post('/update/damage',[UpdateController::class,"ReceivingDamageUpdate"]);
 
     Route::get('/get/releasing/byId/{id}',[QueriesController::class,"getReleasingById"]);
     Route::get('/get/receiving/byId/{id}',[QueriesController::class,"getReceivingById"]);
@@ -58,4 +61,11 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/damage/{receiving_id}',[QueriesController::class,"getReceivingDamage"]);
     Route::get('/get/print/releasing/{id}',[QueriesController::class,"prntReleasing"]);
     Route::get('/get/print/receiving/{id}',[QueriesController::class,"prntReceiving"]);
+
+    Route::delete('/delete/damage/{id}',[UpdateController::class,"ReceivingDamageDelete"]);
+
 });
+
+  // EXCEL
+  Route::get('excel/daily_container_in/{sizeType}/{client}/{container_no}/{loc}/{from}/{to}',[ExcelController::class,"dailyContainerIn"])->name('excel.daily_container_in');
+  Route::get('excel/daily_container_out/{sizeType}/{client}/{container_no}/{booking_no}/{from}/{to}',[ExcelController::class,"dailyContainerOut"])->name('excel.daily_container_out');

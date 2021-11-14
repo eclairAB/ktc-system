@@ -30,4 +30,14 @@ class ContainerReleasing extends Model
     {
         return $this->hasMany(ContainerPhoto::class, 'container_id');
     }
+
+    public function container()
+    {
+        return $this->HasOne(Containers::class, 'container_no', 'container_no');
+    }
+
+    public function receiving()
+    {
+        return $this->HasOne(ContainerReceiving::class, 'container_no', 'container_no');
+    }
 }
