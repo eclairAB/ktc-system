@@ -50,6 +50,7 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::post('/update/client', [UpdateController::class, "updateClient"]);
     Route::post('/update/Staff', [UpdateController::class, "updateStaff"]);
+    Route::post('/update/checker', [UpdateController::class, "updateChecker"]);
     Route::post('/update/releasing',[UpdateController::class,"updateReleasing"]);
     Route::post('/update/receiving',[UpdateController::class,"updateReceiving"]);
     Route::post('/update/sizeType',[UpdateController::class,"updateSizeType"]);

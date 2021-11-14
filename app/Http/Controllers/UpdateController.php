@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Checker;
 use App\Models\Client;
 use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
@@ -38,6 +39,15 @@ class UpdateController extends Controller
         $staff->update($validate_staff);
         
         return $staff;
+    }
+
+    public function updateChecker(Request $request)
+    {
+        $validate_checker = $request->all();
+        $checker = Checker::where('id',$request->id)->first();
+        $checker->update($validate_checker);
+        
+        return $checker;
     }
 
     public function updateReceiving(Request $request)
