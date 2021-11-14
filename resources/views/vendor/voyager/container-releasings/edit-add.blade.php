@@ -72,7 +72,7 @@
                           <label for="size" class="form-control-placeholder"> Size</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="class" disabled id="class" :value="containerInfo.class ? containerInfo.class.class_name : ''" style="height: 37px;" class="form-control">
+                          <input type="text" name="class" disabled id="class" :value="containerInfo.class ? containerInfo.container_class.class_name : ''" style="height: 37px;" class="form-control">
                           <label for="class" class="form-control-placeholder"> Class</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
@@ -149,7 +149,7 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Pictures</div>
                         </div>
                         <div class="col-xs-12">
-                          <input style="padding: 8px;" :disabled="!isOk" type="file" class="form-control" id="images" name="images" @change="preview_images" multiple/>
+                          <input style="padding: 8px;" :disabled="!isOk" accept="image/*" type="file" class="form-control" id="images" name="images" @change="preview_images" multiple/>
                         </div>
                         <div class="col-xs-12">
                           <div class="row">
@@ -515,6 +515,7 @@
                 }
                 this.form.container_photo = this.container_photo
                 this.isOk = true
+                document.getElementById("updateBtn").style.display = 'inherit';
               }).catch(error => {
                 console.log('error: ', error)
               })
@@ -530,6 +531,7 @@
         mounted () {
           document.getElementById("signCard").style.display = 'none';
           document.getElementById("saveBtn").style.display = 'none';
+          document.getElementById("updateBtn").style.display = 'none';
           this.getdata()
         }
       })

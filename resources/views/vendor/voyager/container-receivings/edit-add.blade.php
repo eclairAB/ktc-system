@@ -366,7 +366,7 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Pictures</div>
                         </div>
                         <div class="col-xs-12">
-                          <input style="padding: 8px;" type="file" class="form-control" :disabled="!isOk" id="images" name="images" @change="preview_images" multiple/>
+                          <input style="padding: 8px;" type="file" accept="image/*" class="form-control" :disabled="!isOk" id="images" name="images" @change="preview_images" multiple/>
                         </div>
                         <div class="col-xs-12">
                           <div class="row">
@@ -987,7 +987,7 @@
                 this.form.size_type = data.data.size_type.id
                 this.form.clien_id = data.data.client.id
                 this.form.yard_location = data.data.yard_location.id
-                this.form.class = data.data.class.id
+                this.form.class = data.data.container_class.id
                 this.signature.storage_path = data.data.signature[0]
                 this.form.inspected_by = data.data.inspector
                 for (let index of Object.keys(data.data.photos)) {
@@ -998,6 +998,7 @@
                 }
                 this.form.container_photo = this.container_photo
                 this.isOk = true
+                document.getElementById("updateBtn").style.display = 'inherit';
                 this.getDamages()
               }).catch(error => {
                 console.log('error: ', error)
