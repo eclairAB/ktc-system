@@ -72,7 +72,7 @@
                           <label for="size" class="form-control-placeholder"> Size</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="class" disabled id="class" :value="containerInfo.class ? containerInfo.class.class_name : ''" style="height: 37px;" class="form-control">
+                          <input type="text" name="class" disabled id="class" :value="containerInfo.class ? containerInfo.container_class.class_name : ''" style="height: 37px;" class="form-control">
                           <label for="class" class="form-control-placeholder"> Class</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
