@@ -38,9 +38,9 @@
             <form action="{{ route('voyager.login') }}" method="POST">
                 {{ csrf_field() }}
                 <div class="form-group form-group-default" id="emailGroup">
-                    <label>{{ __('voyager::generic.email') }}</label>
+                    <label>Email / Username</label>
                     <div class="controls">
-                        <input type="text" name="account_identity" id="email" value="{{ old('email') }}" placeholder="{{ __('voyager::generic.email') }}" class="form-control" required>
+                        <input type="text" name="account_identity" id="email" value="{{ old('email') }}" placeholder="Email / Username" class="form-control" required>
                     </div>
                 </div>
                 

@@ -43,6 +43,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/create/receiving',[PostsController::class,"createReceiving"]);
     Route::post('/create/sizeType',[PostsController::class,"createSizeType"]);
     Route::post('/create/damage',[PostsController::class,"ReceivingDamage"]);
+    Route::post('/check/damage',[PostsController::class,"ReceivingDamageChecker"]);
 
     Route::post('/update/client', [UpdateController::class, "updateClient"]);
     Route::post('/update/Staff', [UpdateController::class, "updateStaff"]);
