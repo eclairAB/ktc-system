@@ -6,13 +6,14 @@
   <div id="dashboard" class="clearfix container-fluid row">
     <div class="col-lg-5 col-md-12">
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" onclick="location.href='{{ url('admin/container-receivings/create') }}'">
+        
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-receivings/create')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Receiving</h4>
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" onclick="location.href='{{ url('admin/container-releasings/create') }}'">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-releasings/create')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Releasing</h4>
         </button>
@@ -24,13 +25,13 @@
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-actions/in')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Daily In Container</h4>
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-actions/out')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Daily Out Container</h4>
         </button>
@@ -213,7 +214,10 @@
             dataIndex: this.option3.currentIndex
           })
         }, 1000)
-      }
+      },
+      reroute(x) {
+        location.href = x
+      },
     }
   })
 </script>
