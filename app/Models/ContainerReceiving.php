@@ -20,7 +20,7 @@ class ContainerReceiving extends Model
         'empty_loaded',
         'manufactured_date',
         'yard_location',
-        'acceptance_no',
+        // 'acceptance_no',
         'consignee',
         'hauler',
         'plate_no',
@@ -43,7 +43,7 @@ class ContainerReceiving extends Model
         return $this->HasOne(ContainerSizeType::class, 'id','size_type');
     }
 
-    public function class()
+    public function containerClass()
     {
         return $this->HasOne(ContainerClass::class, 'id','class');
     }
@@ -56,5 +56,10 @@ class ContainerReceiving extends Model
     public function inspector()
     {
         return $this->belongsTo(User::class, 'inspected_by');
+    }
+
+    public function container()
+    {
+        return $this->HasOne(Containers::class, 'container_no', 'container_no');
     }
 }

@@ -110,7 +110,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getReceivingById($id)
     {
-        $container_receiving = ContainerReceiving::where('id', $id)->with('client', 'sizeType', 'class', 'yardLocation', 'inspector.staff', 'inspector.checker', 'photos')->first();
+        $container_receiving = ContainerReceiving::where('id', $id)->with('client', 'sizeType', 'containerClass', 'yardLocation', 'inspector.staff', 'inspector.checker', 'photos')->first();
         $container_receiving->signature = [$this->imageEncode($container_receiving->signature)];
         foreach ($container_receiving->photos as $key => $value) {
             $container_receiving->photos[$key]->encoded = [$this->imageEncode($container_receiving->photos[$key]->storage_path)];
@@ -131,12 +131,12 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function geDetailsForUpdate(Request $request)
     {
         return ContainerReceiving::where('container_no',$request->container_no)
-        ->with('client:id,code_name','sizeType:id,code,name','class:id,class_code,class_name')
+        ->with('client:id,code_name','sizeType:id,code,name','containerClass:id,class_code,class_name')
         ->select(
             'id',
             'client_id',
             'size_type',
-            'class',
+            'containerClass',
             'empty_loaded',
             'manufactured_date')->latest('created_at')->first();
     }
@@ -164,12 +164,12 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             if($request->type == "releasing" && $contRecieving)
             {
                 return ContainerReceiving::where('container_no',$request->container_no)
-                ->with('client:id,code_name','sizeType:id,code,name','class:id,class_code,class_name')
+                ->with('client:id,code_name','sizeType:id,code,name','containerClass:id,class_code,class_name')
                 ->select(
                     'id',
                     'client_id',
                     'size_type',
-                    'class',
+                    'containerClass',
                     'empty_loaded',
                     'manufactured_date')->latest('created_at')->first();
             }
@@ -186,13 +186,15 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         $releasing = ContainerReleasing::where('id',$id)->first();
         $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->with('sizeType:id,code')->latest('created_at')->first();
+       
         return view('print_releasing')->with(compact('releasing', 'receiving_details'));
     }
 
     public function prntReceiving($id)
     {
         $receiving = ContainerReceiving::where('id',$id)->with('sizeType:id,code')->first();
-        return view('print_receiving')->with('receiving', $receiving);
+        $damages = ReceivingDamage::where('receiving_id',$id)->get();
+        return view('print_receiving')->with(compact('receiving', 'damages'));
     }
 
     public function getReceivingDamage($receiving_id)

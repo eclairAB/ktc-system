@@ -16,4 +16,19 @@ class Containers extends Model
         'date_received',
         'date_released',
     ];
+
+    public function client()
+    {
+        return $this->HasOne(Client::class, 'id','client_id');
+    }
+
+    public function sizeType()
+    {
+        return $this->HasOne(ContainerSizeType::class, 'id','size_type');
+    }
+
+    public function containerClass()
+    {
+        return $this->HasOne(ContainerClass::class, 'id','class');
+    }
 }
