@@ -84,139 +84,24 @@
         </div>
         @endif
         </div>
-        @if($receiving_details->sizeType->code == "20")
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9745;
-          </span>
-          <span>20&#176;</span>
-        </div>
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9744;
-          </span>
-          <span>40&#176;</span>
-        </div>
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9744;
-          </span>
-          <span>40&#176; HC&#176;</span>
-        </div>
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9744;
-          </span>
-          <span>40&#176; RF</span>
-        </div>
-        @elseif($receiving_details->sizeType->code == "40")
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9744;
-          </span>
-          <span>20&#176;</span>
-        </div>
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9745;
-          </span>
-          <span>40&#176;</span>
-        </div>
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9744;
-          </span>
-          <span>40&#176; HC&#176;</span>
-        </div>
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9744;
-          </span>
-          <span>40&#176; RF</span>
-        </div>
-        @elseif($receiving_details->sizeType->code == "40HC")
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9744;
-          </span>
-          <span>20&#176;</span>
-        </div>
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9744;
-          </span>
-          <span>40&#176;</span>
-        </div>
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9745;
-          </span>
-          <span>40&#176; HC&#176;</span>
-        </div>
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9744;
-          </span>
-          <span>40&#176; RF</span>
-        </div>
-        @elseif($receiving_details->sizeType->code == "40RF")
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9744;
-          </span>
-          <span>20&#176;</span>
-        </div>
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9744;
-          </span>
-          <span>40&#176;</span>
-        </div>
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9744;
-          </span>
-          <span>40&#176; HC&#176;</span>
-        </div>
-        <div style="margin-right: 10px; display: flex; align-items:center;">
-          <span style="font-size: 25px">
-            <!-- &#9744; Unchecked -->
-            <!-- &#9745; --> <!-- Checked -->
-            &#9745;
-          </span>
-          <span>40&#176; RF</span>
-        </div>
+        
+        @if($size_types ?? '')
+          @foreach($size_types as $value)
+
+            <div style="margin-right: 10px; display: flex; align-items:center;">
+              <span style="font-size: 25px">
+                @if($receiving_details->sizeType->code == $value->code)
+                &#9745;
+                @else
+                &#9744;
+                @endif
+              </span>
+              <span>{{ $value->code }}</span>
+            </div>
+
+          @endforeach
         @endif
+
       </div>
     </div>
     <!-- END OF DATE TIME -->
