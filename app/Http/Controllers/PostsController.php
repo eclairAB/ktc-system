@@ -11,6 +11,7 @@ use App\Http\Requests\ValidateReceivingDamage;
 use App\Http\Requests\ValidateEmptyReceivingDamage;
 use App\Models\ContainerSizeType;
 use App\Models\Client;
+use App\Models\Checker;
 use App\Models\Staff;
 use App\Models\User;
 use App\Models\ContainerReleasing;
@@ -117,8 +118,8 @@ class PostsController extends Controller
             'contact_no' => $request->contact_no,
         ];
 
-        $staff = Staff::create($params);
-        $account['staff'] = $staff;
+        $checker = Checker::create($params);
+        $account['checker'] = $checker;
         return $account;
     }
 
