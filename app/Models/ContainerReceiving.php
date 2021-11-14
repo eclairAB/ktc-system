@@ -30,7 +30,7 @@ class ContainerReceiving extends Model
 
     public function photos()
     {
-        return $this->hasMany(ContainerPhoto::class, 'container_id');
+        return $this->hasMany(ContainerPhoto::class, 'container_id')->where('container_type','receiving');
     }
 
     public function client()
