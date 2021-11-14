@@ -888,6 +888,12 @@
             await axios.post('/admin/create/receiving', this.form).then(async data => {
               document.getElementById("save").removeAttribute("disabled");
               this.errors = {}
+              for (let i = 0; i < this.damageList.length; i++) {
+                this.$set(this.damageList[i], 'receiving_id', (+data.data[0].container_id))
+                axios.post(`/admin/create/damage`, this.damageList[i]).then(data2 => {
+                  // console.log(i)
+                })
+              }
               let customId = data.data[0].container_id
               await axios.get(`/admin/get/print/receiving/${customId}`).then(data => {
                 let pasmo = data.data
@@ -961,6 +967,7 @@
                 }
                 this.form.container_photo = this.container_photo
                 this.isOk = true
+                this.getDamages()
               }).catch(error => {
                 console.log('error: ', error)
               })
@@ -971,6 +978,11 @@
                 container_photo: []
               }
             }
+          },
+          async getDamages () {
+            await axios.get(`/admin/get/damage/${this.form.id}`).then(data => {
+              this.damageList = data.data
+            })
           }
         },
         mounted () {
