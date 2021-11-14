@@ -136,7 +136,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             'id',
             'client_id',
             'size_type',
-            'containerClass',
+            'class',
             'empty_loaded',
             'manufactured_date')->latest('created_at')->first();
     }
@@ -169,7 +169,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                     'id',
                     'client_id',
                     'size_type',
-                    'containerClass',
+                    'class',
                     'empty_loaded',
                     'manufactured_date')->latest('created_at')->first();
             }
