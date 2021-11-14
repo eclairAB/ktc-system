@@ -277,8 +277,19 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="margin-top: 0 !important; margin-bottom: 10px;">
                           <div style="font-weight: 700; font-size: 15px; color: black;">Damages</div>
                         </div>
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="color: black !important; margin-top: 0 !important; margin-bottom: 10px;" v-for="(item, key) in damageList" :key="key">
-                          @{{key + 1}}.) @{{item.description}}
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="color: black !important; margin-top: 0 !important; margin-bottom: 10px;">
+                          <table border="1" cellspacing="0" cellpadding="" width="100%">
+                            <tbody align="left">
+                              <tr  v-for="(item, key) in damageList" :key="key">
+                                <td class="border-b" style="padding: 10px">@{{key + 1}}.) @{{item.description}}</td>
+                                <td>
+                                  <div style="display: flex; justify-content: center; width: 100%">
+                                    <button class="btn btn-danger" style="margin: 5px;" @click="item.id ? deleteActual : deleteFromList">Delete</button>  
+                                  </div>                                
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                     </div>
