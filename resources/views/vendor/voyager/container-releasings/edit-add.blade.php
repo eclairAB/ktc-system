@@ -530,6 +530,7 @@
         mounted () {
           document.getElementById("signCard").style.display = 'none';
           document.getElementById("saveBtn").style.display = 'none';
+          document.getElementById("updateBtn").style.display = 'none';
           this.getdata()
         }
       })

@@ -987,7 +987,7 @@
                 this.form.size_type = data.data.size_type.id
                 this.form.clien_id = data.data.client.id
                 this.form.yard_location = data.data.yard_location.id
-                this.form.class = data.data.class.id
+                this.form.class = data.data.container_class.id
                 this.signature.storage_path = data.data.signature[0]
                 this.form.inspected_by = data.data.inspector
                 for (let index of Object.keys(data.data.photos)) {
