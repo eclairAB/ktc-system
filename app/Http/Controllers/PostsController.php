@@ -29,8 +29,10 @@ class PostsController extends Controller
 {
     protected function createUser($params, $role)
     {
+        if ($this->userExists($params->user_id)) return 'exists';
+
         $dbrole = DB::table('roles')->where('name', $role)->pluck('id');
-        if(!isset($dbrole[0])) return response('Role "'. $role . '" does not exist.', 404);
+        if(!isset($dbrole[0])) return 'no_role';
         $credentials = [
             'name' => $this->setName($params),
             'role_id' => $dbrole[0],
@@ -66,14 +68,24 @@ class PostsController extends Controller
         }
     }
 
-    protected function checkUserNameDistinction($params)
+    protected function userExists($user_id)
     {
-        $staff = Staff::where('user_id');
+        $staff = Staff::where('user_id', $user_id)->pluck('user_id');
+        if(count($staff) > 0) return true;
+        
+        $checker = Checker::where('user_id', $user_id)->pluck('user_id');
+        if(count($checker) > 0) return true;
+
+        $client = Client::where('user_id', $user_id)->pluck('user_id');
+        if(count($client) > 0) return true;
+        else return false;
     }
 
     public function createClient(ValidateClientField $request)
     {
         $account = $this->createUser($request, 'client');
+        if( $account=='exists') return 'Username already in use.';
+        elseif ($account=='no_role') return 'Role "client" does not exist!';
 
         $params = [
             'account_id' => $account->id,
@@ -90,6 +102,8 @@ class PostsController extends Controller
     public function createStaff(ValidateStaffField $request)
     {
         $account = $this->createUser($request, 'staff');
+        if( $account=='exists') return 'Username already in use.';
+        elseif ($account=='no_role') return 'Role "staff" does not exist!';
 
         $params = [
             'account_id' => $account->id,
@@ -108,6 +122,8 @@ class PostsController extends Controller
     public function createChecker(ValidateCheckerField $request)
     {
         $account = $this->createUser($request, 'checker');
+        if( $account=='exists') return 'Username already in use.';
+        elseif ($account=='no_role') return 'Role "checker" does not exist!';
 
         $params = [
             'account_id' => $account->id,
