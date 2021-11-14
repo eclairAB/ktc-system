@@ -97,7 +97,7 @@
                             style="height: 37px !important;"
                             :class="errors.client_id ? 'isError form-control' : 'form-control'"
                             :options="clientList"
-                            v-model="form.client_id"
+                            v-model="choosenClient"
                             :disabled="!isOk"
                             label="code_name"
                             :filter="fuseClient"
@@ -131,7 +131,7 @@
                             :class="errors.yard_location ? 'isError form-control' : 'form-control'"
                             :options="yardList"
                             :disabled="!isOk"
-                            v-model="form.yard_location"
+                            v-model="choosenYard"
                             label="name"
                             @option:selected="clearYard()"
                             :reset-on-options-change='true'
@@ -167,7 +167,7 @@
                             style="height: 37px !important;"
                             :class="errors.class ? 'isError form-control' : 'form-control'"
                             :options="classList"
-                            v-model="form.class"
+                            v-model="choosenClass"
                             :disabled="!isOk"
                             label="class_name"
                             :filter="fuseClass"
@@ -587,6 +587,9 @@
           yardList: [],
           images: [],
           choosenSize: {},
+          choosenClient: {},
+          choosenYard: {},
+          choosenClass: {},
           classSearch: '',
           sizeSearch: '',
           clientSearch: '',
@@ -764,6 +767,7 @@
               : fuse.list
           },
           clearClass () {
+            this.form.class_id = this.choosenClass.id
             this.classSearch = ''
           },
           searchClass () {
@@ -798,6 +802,7 @@
               : fuse.list
           },
           clearClient () {
+            this.form.client_id = this.choosenClient.id
             this.sizeSearch = ''
           },
           searchClient () {
@@ -823,6 +828,7 @@
             })
           },
           clearYard () {
+            this.form.yard_location = this.choosenYard.id
             this.yardSearch = ''
           },
           searchYard () {
@@ -984,8 +990,11 @@
               await axios.get(`/admin/get/receiving/byId/${payload.id}`).then(data => {
                 this.form = data.data
                 this.sizeSearch = data.data.size_type.code
+                this.classSearch = data.data.container_class.class_code
+                this.yardSearch = data.data.yard_location.name
+                this.clientSearch = data.data.client.code_name
                 this.form.size_type = data.data.size_type.id
-                this.form.clien_id = data.data.client.id
+                this.form.client_id = data.data.client.id
                 this.form.yard_location = data.data.yard_location.id
                 this.form.class = data.data.container_class.id
                 this.signature.storage_path = data.data.signature[0]
