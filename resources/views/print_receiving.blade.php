@@ -249,6 +249,9 @@
         {{ $receiving->container_no }}
         </div>
         <b>CONTAINER NO.</b><br><br><br><br><br><br><br><br>
+        @foreach($damages as $key => $item)
+         <span style="font-size:12px;font-weight:bold;"> {{ $item->description }}</span>
+        @endforeach
       </div>
     </div>
     <!-- END OF CONTAINER INFO -->
