@@ -26,7 +26,7 @@ use Illuminate\Http\Request;
 
 class PostsController extends Controller
 {
-    function createUser($params, $role)
+    protected function createUser($params, $role)
     {
         $dbrole = DB::table('roles')->where('name', $role)->pluck('id');
         if(!isset($dbrole[0])) return response('Role "'. $role . '" does not exist.', 404);
@@ -53,7 +53,7 @@ class PostsController extends Controller
         return User::create($credentials);
     }
 
-    function setName($params)
+    protected function setName($params)
     {
         if(isset($params->code_name))
         {
@@ -63,6 +63,11 @@ class PostsController extends Controller
         {
             return strtoupper($params->firstname . ' ' . $params->lastname);
         }
+    }
+
+    protected function checkUserNameDistinction($params)
+    {
+        $staff = Staff::where('user_id');
     }
 
     public function createClient(ValidateClientField $request)
@@ -221,7 +226,7 @@ class PostsController extends Controller
         return ContainerSizeType::create($dataSizeT);
     }
 
-    function imageUpload($payload, $photo, $isSignature)
+    protected function imageUpload($payload, $photo, $isSignature)
     {
         $exploded = explode(',', $photo);
         $decode = base64_decode($exploded[1]);
