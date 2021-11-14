@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ViewsController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
 {
-    public function roleRedirect()
+    public function roleRedirect() // roleRedirect function is called at routes/voyager.php
     {
         return redirect()->intended('/admin/dashboard-' . Auth::user()->role->name);
     }
@@ -22,5 +22,10 @@ class ViewsController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControlle
             return $this->roleRedirect();
         }
         return view('vendor.voyager.role-views.dashboard-'.$role, ['name' => 'dashboard-' . $role]);
+    }
+
+    public function containerActions($action)
+    {
+        return view('vendor.voyager.container-actions', ['tab_action' => $action]);
     }
 }
