@@ -8,6 +8,7 @@ use App\Http\Requests\ValidateContainerReleasing;
 use App\Http\Requests\ValidateContainerReceiving;
 use App\Http\Requests\ValidateSizeType;
 use App\Http\Requests\ValidateReceivingDamage;
+use App\Http\Requests\ValidateEmptyReceivingDamage;
 use App\Models\ContainerSizeType;
 use App\Models\Client;
 use App\Models\Staff;
@@ -251,5 +252,10 @@ class PostsController extends Controller
     {
         $data = $request->validated();
         return ReceivingDamage::create($data);
+    }
+
+    public function ReceivingDamageChecker(ValidateEmptyReceivingDamage $request)
+    {
+        return 'success';
     }
 }

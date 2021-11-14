@@ -269,10 +269,16 @@
                   <div class="panel panel-bordered">
                     <div class="panel-body" style="padding: 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding: 0 !important; margin-top: 0 !important;">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding: 0 !important; margin: 0 !important;">
                           <div style="display: flex; justify-content: flex-end; padding-top: 0;">
                             <button class="btn btn-success" @click="addNew"> Add Damage</button>
                           </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="margin-top: 0 !important; margin-bottom: 10px;">
+                          <div style="font-weight: 700; font-size: 15px; color: black;">Damages</div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="color: black !important; margin-top: 0 !important; margin-bottom: 10px;" v-for="(item, key) in damageList" :key="key">
+                          @{{key + 1}}.) @{{item.description}}
                         </div>
                       </div>
                     </div>
@@ -289,17 +295,20 @@
                         </div>
                         <hr style="margin: 0">
                         <div class="modal-body">
-                          <div class="col-lg-12 form-group mt-3">
-                            <input type="text" name="component" id="component" class="form-control" v-model="damages.component" style="height: 37px !important; margin-top: 10px;">
+                          <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
+                            <input type="text" name="component" id="component" :class="damageError.component ? 'isError form-control' : 'form-control'" v-model="input.component" style="height: 37px !important; margin-top: 10px;" @input="inputComponent">
                             <label for="component" class="form-control-placeholder"> Component</label>
+                            <div class="customErrorText"><small>@{{ damageError.component }}</small></div>
                           </div>
-                          <div class="col-lg-12 form-group mt-3">
-                            <input type="text" name="damage" id="damage" class="form-control" v-model="damages.damage" style="height: 37px !important; margin-top: 10px;">
+                          <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
+                            <input type="text" name="damage" id="damage" :class="damageError.damage ? 'isError form-control' : 'form-control'" v-model="input.damage" style="height: 37px !important; margin-top: 10px;" @input="inputDamage">
                             <label for="damage" class="form-control-placeholder"> Damage</label>
+                            <div class="customErrorText"><small>@{{ damageError.damage }}</small></div>
                           </div>
-                          <div class="col-lg-12 form-group mt-3">
-                            <input type="text" name="repair" id="repair" class="form-control" v-model="damages.repair" style="height: 37px !important; margin-top: 10px;">
+                          <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
+                            <input type="text" name="repair" id="repair" :class="damageError.repair ? 'isError form-control' : 'form-control'" v-model="input.repair" style="height: 37px !important; margin-top: 10px;" @input="inputRepair">
                             <label for="repair" class="form-control-placeholder"> Repair</label>
+                            <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
                           </div>
                           <div class="col-lg-12 form-group mt-3">
                             <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="height: 37px !important; margin-top: 10px;">
@@ -318,13 +327,20 @@
                             <label for="quantity" class="form-control-placeholder"> Quantity</label>
                           </div>
                           <div class="col-lg-12 form-group mt-3">
-                            <input type="text" disabled name="description" id="description" class="form-control" style="height: 37px !important; margin-top: 10px;">
+                            <input 
+                              type="text" 
+                              disabled 
+                              name="description" 
+                              id="description" 
+                              class="form-control" 
+                              style="height: 37px !important; margin-top: 10px;" 
+                              v-model="damages.description"
+                            >
                             <label for="description" class="form-control-placeholder"> Description</label>
                           </div>
                         </div>
                         <div class="modal-footer">
-                          <!-- <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" :disabled="editloading" @click="updateMedicine"> @{{ editloading === false ? 'Update' : 'Loading...'}}</button> -->
-                          <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;"> Save</button>
+                          <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" @click="checkDamage"> Save</button>
                         </div>
                       </div>
                     </div>
@@ -571,14 +587,99 @@
           containerError: {},
           isOk: false,
           customload: false,
-          damages: {}
+          damages: {},
+          damageError: {},
+          input: {},
+          damageList: []
+        },
+        watch: {
+          'damages': {
+            handler () {
+              this.pasmo()
+            },
+            deep: true
+          }
         },
         methods:{
+          pasmo () {
+            this.damages.description = ((this.damages.component ? this.damages.component : '') + ' ' + (this.damages.damage ? this.damages.damage : '') + ' ' + (this.damages.repair ? this.damages.repair : '') + ' ' + (this.damages.location ? this.damages.location : '') + ' ' + (this.damages.width ? this.damages.width : '') + ' ' + (this.damages.length ? this.damages.length : '') + ' ' + (this.damages.quantity ? this.damages.quantity : ''))
+          },
+          inputComponent () {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              const payload = {
+                keyword: this.input.component
+              }
+              axios.get(`/admin/get/container/component?keyword=${payload.keyword}`, payload)
+              .then(data => {
+                this.damageError = {}
+                if (data.data[0] !== undefined) {
+                  this.damages.component = data.data[0].name
+                  this.damages.component_id = data.data[0].id
+                  this.pasmo()
+                } else {
+                  delete this.damages.component
+                  this.damageError.component = 'This component code is undefined.'
+                }
+              })
+            }, 1000)
+          },
+          inputDamage () {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              const payload = {
+                keyword: this.input.damage
+              }
+              axios.get(`/admin/get/container/damage?keyword=${payload.keyword}`, payload)
+              .then(data => {
+                this.damageError = {}
+                if (data.data[0] !== undefined) {
+                  this.damages.damage = data.data[0].name
+                  this.damages.damage_id = data.data[0].id
+                  this.pasmo()
+                } else {
+                  this.damages = {}
+                  this.damageError.damage = 'This damage code is undefined.'
+                }
+              })
+            }, 1000)
+          },
+          inputRepair () {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              const payload = {
+                keyword: this.input.repair
+              }
+              axios.get(`/admin/get/container/repair?keyword=${payload.keyword}`, payload)
+              .then(data => {
+                this.damageError = {}
+                if (data.data[0] !== undefined) {
+                  this.damages.repair = data.data[0].name
+                  this.damages.repair_id = data.data[0].id
+                  this.pasmo()
+                } else {
+                  this.damages = {}
+                  this.damageError.repair = 'This repair code is undefined.'
+                }
+              })
+            }, 1000)
+          },
+          async checkDamage () {
+            await axios.post('/admin/check/damage', this.damages).then(data => {
+              this.damageList.push(this.damages)
+              this.closeDialog()
+            }).catch(error => {
+              alert('Error')
+            })
+          },
           addNew () {
             $('#dialog').modal({backdrop: 'static', keyboard: false});
           },
           closeDialog () {
             this.damages = {}
+            this.damageError = {}
+            this.input = {}
+            $('#dialog').modal('hide');
           },
           dateFormat(date) {
             return moment(date).format('MM/DD/yyyy');
