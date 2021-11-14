@@ -5,6 +5,7 @@ use App\Models\Client;
 use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
 use App\Models\ContainerSizeType;
+use App\Models\ReceivingDamage;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 
