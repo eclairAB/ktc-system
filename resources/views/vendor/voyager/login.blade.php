@@ -40,7 +40,7 @@
                 <div class="form-group form-group-default" id="emailGroup">
                     <label>{{ __('voyager::generic.email') }}</label>
                     <div class="controls">
-                        <input type="text" name="email" id="email" value="{{ old('email') }}" placeholder="{{ __('voyager::generic.email') }}" class="form-control" required>
+                        <input type="text" name="account_identity" id="email" value="{{ old('email') }}" placeholder="{{ __('voyager::generic.email') }}" class="form-control" required>
                     </div>
                 </div>
                 
@@ -87,7 +87,7 @@
     <script>
         var btn = document.querySelector('button[type="submit"]');
         var form = document.forms[0];
-        var email = document.querySelector('[name="email"]');
+        var account_identity = document.querySelector('[name="email"]');
         var password = document.querySelector('[name="password"]');
         btn.addEventListener('click', function(ev){
             if (form.checkValidity()) {
@@ -97,14 +97,14 @@
                 ev.preventDefault();
             }
         });
-        email.focus();
+        account_identity.focus();
         document.getElementById('emailGroup').classList.add("focused");
 
         // Focus events for email and password fields
-        email.addEventListener('focusin', function(e){
+        account_identity.addEventListener('focusin', function(e){
             document.getElementById('emailGroup').classList.add("focused");
         });
-        email.addEventListener('focusout', function(e){
+        account_identity.addEventListener('focusout', function(e){
             document.getElementById('emailGroup').classList.remove("focused");
         });
 
