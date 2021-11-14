@@ -207,4 +207,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $image = base64_encode($imageUrl);
         return 'data:image/png;base64,'.$image;
     }
+
+    public function getSizeTypeByAll()
+    {
+        return ContainerSizeType::get();
+    }
 }
