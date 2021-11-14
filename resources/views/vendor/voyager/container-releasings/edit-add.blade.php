@@ -149,7 +149,7 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Pictures</div>
                         </div>
                         <div class="col-xs-12">
-                          <input style="padding: 8px;" :disabled="!isOk" type="file" class="form-control" id="images" name="images" @change="preview_images" multiple/>
+                          <input style="padding: 8px;" :disabled="!isOk" accept="image/*" type="file" class="form-control" id="images" name="images" @change="preview_images" multiple/>
                         </div>
                         <div class="col-xs-12">
                           <div class="row">
