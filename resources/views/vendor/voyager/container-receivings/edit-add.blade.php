@@ -284,7 +284,7 @@
                                 <td class="border-b" style="padding: 10px">@{{key + 1}}.) @{{item.description}}</td>
                                 <td>
                                   <div style="display: flex; justify-content: center; width: 100%">
-                                    <button class="btn btn-danger" style="margin: 5px;" @click="item.id ? deleteActual : deleteFromList">Delete</button>  
+                                    <button class="btn btn-danger" style="margin: 5px;" @click="item.id ? deleteActual(item) : deleteFromList(key)">Delete</button>  
                                   </div>                                
                                 </td>
                               </tr>
@@ -565,6 +565,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vuejs-datepicker@1.6.2/dist/vuejs-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- VUE -->
     <script type="text/javascript">
@@ -612,6 +613,25 @@
           }
         },
         methods:{
+          deleteFromList (payload) {
+            Vue.delete(this.damageList, parseInt(payload))
+            Swal.fire({
+              title: '',
+              text: 'Deleted succesfully!',
+              icon: 'success',
+            })
+          },
+          async deleteActual (payload) {
+            await axios.delete(`/admin/delete/damage/${payload.id}`).then(data => {
+              let index = _.findIndex(this.damageList, { id: payload.id })
+              Vue.delete(this.damageList, parseInt(index))
+              Swal.fire({
+                title: '',
+                text: 'Deleted succesfully!',
+                icon: 'success',
+              })
+            })
+          },
           pasmo () {
             this.damages.description = ((this.damages.component ? this.damages.component : '') + ' ' + (this.damages.damage ? this.damages.damage : '') + ' ' + (this.damages.repair ? this.damages.repair : '') + ' ' + (this.damages.location ? this.damages.location : '') + ' ' + (this.damages.width ? this.damages.width : '') + ' ' + (this.damages.length ? this.damages.length : '') + ' ' + (this.damages.quantity ? this.damages.quantity : ''))
           },
