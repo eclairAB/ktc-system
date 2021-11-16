@@ -767,7 +767,7 @@
               : fuse.list
           },
           clearClass () {
-            this.form.class_id = this.choosenClass.id
+            this.form.class = this.choosenClass.id
             this.classSearch = ''
           },
           searchClass () {
@@ -922,6 +922,9 @@
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.form.signature = data
+            this.form.class = this.choosenClass
+            this.form.client_id = this.choosenClient
+            this.form.yard_location = this.choosenYard
             await axios.post('/admin/create/receiving', this.form).then(async data => {
               document.getElementById("save").removeAttribute("disabled");
               this.errors = {}
