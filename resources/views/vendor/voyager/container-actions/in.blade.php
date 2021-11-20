@@ -55,7 +55,6 @@
                 :filter="fuseClient"
                 @option:selected="clearClient()"
                 :reset-on-options-change='true'
-                :reduce="code_name => code_name.id"
               >
                 <template #search="{attributes, events}">
                   <input
@@ -78,8 +77,33 @@
             </div>
             
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-            	<input type="text" name="loc" id="loc" v-model="form.loc" style="height: 37px;" :class="errors.loc ? 'isError form-control' : 'form-control'">
-              <label for="loc" class="form-control-placeholder"> Location</label>
+              <v-select
+                style="height: 37px !important;"
+                class="form-control"
+                :options="yardList"
+                v-model="choosenYard"
+                label="name"
+                @option:selected="clearYard()"
+                :reset-on-options-change='true'
+              >
+                <template #search="{attributes, events}">
+                  <input
+                    class="vs__search"
+                    v-bind="attributes"
+                    v-on="events"
+                    style="color: black;"
+                    v-model="yardSearch"
+                    @input="searchYard()"
+                  />
+                </template>
+                <template slot="selected-option" slot-scope="option">
+                  <span>@{{option.name}}</span>
+                </template>
+                <template slot="option" slot-scope="option">
+                    @{{option.name}}
+                </template>
+              </v-select>
+              <label for="loc" class="form-control-placeholder"> Yard Location</label>
             </div>
 
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -94,7 +118,6 @@
                     class="vs__search"
                     v-bind="attributes"
                     v-on="events"
-                    v-model="form.container_no"
                     style="color: black;"
                     @input="searchContainerNo()"
                   />
@@ -105,34 +128,32 @@
 
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
             	<vuejs-datepicker
-                v-model="form.manufactured_date"
+                v-model="form.from"
                 placeholder="mm/dd/yyyyy"
-                :input-class="errors.manufactured_date ? 'isError form-control' : 'form-control'"
+                input-class="form-control"
                 :typeable="true"
-                name="manufactured_date"
+                name="from"
                 :format="dateFormat"
                 :required="true">
               </vuejs-datepicker>
-              <label for="manufactured_date" class="form-control-placeholder"> Date From</label>
-              <div class="customErrorText"><small>@{{ errors.manufactured_date ? errors.manufactured_date[0] : '' }}</small></div>
+              <label for="from" class="form-control-placeholder"> Date From</label>
             </div>
 
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
             	<vuejs-datepicker
-                v-model="form.manufactured_date"
+                v-model="form.to"
                 placeholder="mm/dd/yyyyy"
-                :input-class="errors.manufactured_date ? 'isError form-control' : 'form-control'"
+                input-class="form-control"
                 :typeable="true"
-                name="manufactured_date"
+                name="to"
                 :format="dateFormat"
                 :required="true">
               </vuejs-datepicker>
-              <label for="manufactured_date" class="form-control-placeholder"> Date To</label>
-              <div class="customErrorText"><small>@{{ errors.manufactured_date ? errors.manufactured_date[0] : '' }}</small></div>
+              <label for="to" class="form-control-placeholder"> Date To</label>
             </div>
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px; display: flex; justify-content: flex-end;">
-            	<button class="btn btn-primary">Generate</button>
+            	<button class="btn btn-primary" @click="getContainerIn">Generate</button>
             </div>
 
           </div>
@@ -214,19 +235,58 @@
       vuejsDatepicker,
     },
     data: {
-      form: {},
+      form: {
+        sizeType: 'NA',
+        client: 'NA',
+        loc: 'NA',
+      },
       errors: [],
       clientList: [],
       sizeTypeList: [],
       bookingNoList: [],
       containerNoList: [],
+      yardList: [],
       choosenSize: {},
       choosenClient: {},
+      choosenYard: {},
       sizeSearch: '',
       clientSearch: '',
+      yardSearch: '',
       loading: false,
       containerInList: [],
       tableLoad: false
+    },
+    watch: {
+      'choosenSize': {
+        handler () {
+          if (this.choosenSize === null) {
+            if (this.form.sizeType){
+              this.form.sizeType = 'NA'
+            }
+          }
+        },
+        deep: true
+      },
+      'choosenClient': {
+        handler () {
+          if (this.choosenClient === null) {
+            if (this.form.client){
+              this.form.client = 'NA'
+            }
+          }
+        },
+        deep: true
+      },
+      'choosenYard': {
+        handler () {
+          if (this.choosenYard === null) {
+            if (this.form.loc){
+              this.form.loc = 'NA'
+            }
+          }
+        },
+        deep: true
+      }
     },
     methods: {
     	dateFormat(date) {
@@ -234,6 +294,21 @@
       },
       inputComponent () {
 
+      },
+      async getContainerIn () {
+        let payload = {
+          sizeType: this.form.sizeType,
+          client: this.form.client,
+          container_no: this.form.container_no === null || this.form.container_no === undefined ? 'NA' : this.form.container_no ,
+          loc: this.form.loc,
+          from: this.form.from === undefined || null ? 'NA' : this.form.from,
+          to: this.form.to === undefined || null ? 'NA' : this.form.to,
+        }
+        await axios.get(`/admin/get/daily_in`, payload).then(data => {
+          console.log(data.data)
+        }).catch(error => {
+          console.log(error)
+        })
       },
       fuseSize(options, search) {
         const fuse = new Fuse(options, {
@@ -245,8 +320,7 @@
           : fuse.list
       },
       clearSize () {
-        this.form.size_type = this.choosenSize.id
-        this.form.type = this.choosenSize.type
+        this.form.sizeType = this.choosenSize.id
         this.sizeSearch = ''
       },
       searchSize () {
@@ -281,8 +355,8 @@
           : fuse.list
       },
       clearClient () {
-        this.form.client_id = this.choosenClient.id
-        this.sizeSearch = ''
+        this.form.client = this.choosenClient.id
+        this.clientSearch = ''
       },
       searchClient () {
         clearTimeout(this.timer)
@@ -301,30 +375,33 @@
           keyword: ''
         }
         await axios.get(`/admin/get/clients?keyword=${search.keyword}`, search).then( data => {
-        	console.log('clientList: ', data.data)
           this.clientList = data.data
         }).catch(error => {
           console.log('error: ', error)
         })
       },
-      searchBookingNo () {
-      	clearTimeout(this.timer)
+      clearYard () {
+        this.form.loc = this.choosenYard.id
+        this.yardSearch = ''
+      },
+      searchYard () {
+        clearTimeout(this.timer)
         this.timer = setTimeout(() => {
           const payload = {
-            keyword: this.form.booking_no
+            keyword: this.yardSearch
           }
-          axios.get(`/admin/get/booking_no/all?keyword=${payload.keyword}`, payload)
+          axios.get(`/admin/get/yards?keyword=${payload.keyword}`, payload)
           .then(data => {
-            this.bookingNoList = data.data
+            this.yardList = data.data
           })
         }, 1000)
       },
-      async getBookingNo () {
+      async getYard () {
         let search = {
           keyword: ''
         }
-        await axios.get(`/admin/get/booking_no/all?keyword=${search.keyword}`, search).then( data => {
-          this.bookingNoList = data.data
+        await axios.get(`/admin/get/yards?keyword=${search.keyword}`, search).then( data => {
+          this.yardList = data.data
         }).catch(error => {
           console.log('error: ', error)
         })
@@ -355,8 +432,8 @@
     mounted () {
       this.getSize()
       this.getClient()
-      this.getBookingNo()
       this.getContainerNo()
+      this.getYard()
     }
   })
 
