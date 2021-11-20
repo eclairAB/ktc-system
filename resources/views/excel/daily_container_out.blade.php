@@ -21,7 +21,7 @@
           <td>{{ $item->id }}</td>
           <td>{{ $item->container_no }}</td>
           <td>{{ $item->container->sizeType->code }} - {{ $item->container->sizeType->name }}</td>
-          <td>{{ Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
+          <td>{{ Carbon\Carbon::parse($item->created_at)->format('F d, Y') }}</td>
           <td>{{ $item->booking_no }}</td>
           <td>{{ $item->seal_no }}</td>
           <td>{{ $item->container->client->code_name }}</td>
@@ -29,7 +29,7 @@
           <td>{{ $item->plate_no }}</td>
           <td>{{ $item->inspector->name }}</td>
           <td>{{ $item->container->containerClass->class_code }}</td>
-          <td>{{ Carbon\Carbon::parse($item->receiving->manufactured_date)->format('Y-m-d') }}</td>
+          <td>{{ Carbon\Carbon::parse($item->receiving->manufactured_date)->format('F d, Y') }}</td>
           <td>Released</td>
           <td>{{ $item->remarks }}</td>
         </tr>
