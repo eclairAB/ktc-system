@@ -6,7 +6,7 @@
       <div class="row">
         <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
           <span style="font-weight: bold; font-size: 18px;">Daily Container In Report</span>
-          <button class="btn btn-success">Export to Excel</button>
+          <button class="btn btn-success" @click="exportContainerIn">Export to Excel</button>
         </div>
         <div class="col-xs-12" style="margin-bottom: 0;">
           <hr style="margin: 5px 0;">
@@ -42,7 +42,7 @@
                     @{{option.code}}
                 </template>
               </v-select>
-              <label for="lastname" class="form-control-placeholder"> Size Type</label>
+              <label for="lastname" class="form-control-placeholder"> Size Type <span style="color: red;"> *</span></label>
             </div>
             
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -73,7 +73,7 @@
                     @{{option.code_name}}
                 </template>
               </v-select>
-              <label for="client" class="form-control-placeholder"> Client</label>
+              <label for="client" class="form-control-placeholder"> Client <span style="color: red;"> *</span></label>
             </div>
             
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -123,7 +123,7 @@
                   />
                 </template>
               </v-select>
-              <label for="lastname" class="form-control-placeholder"> Container No.</label>
+              <label for="lastname" class="form-control-placeholder"> Container No. <span style="color: red;"> *</span></label>
             </div>
 
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -188,18 +188,18 @@
         </thead>
         <tbody v-if="containerInList.length > 0">
           <tr v-for="(item, index) in containerInList" :key="index">
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
+            <td>@{{ item.id }}</td>
+            <td>@{{ item.container_no }}</td>
+            <td>@{{ item.size_type.code }} - @{{ item.size_type.name }}</td>
+            <td>@{{ moment(item.inspected_date).format('MMMM DD, YYYY') }}</td>
+            <td>@{{ item.client.code_name }}</td>
+            <td>@{{ item.hauler }}</td>
+            <td>@{{ item.plate_no }}</td>
+            <td>@{{ item.inspector.name }}</td>
+            <td>@{{ item.container_class.class_name }}</td>
+            <td>@{{ moment(item.manufactured_date).format('MMMM DD, YYYY') }}</td>
+            <td>Received</td>
+            <td>@{{ item.remarks }}</td>
           </tr>
         </tbody>
         <tbody v-else>
@@ -236,8 +236,6 @@
     },
     data: {
       form: {
-        sizeType: 'NA',
-        client: 'NA',
         loc: 'NA',
       },
       errors: [],
@@ -261,7 +259,7 @@
         handler () {
           if (this.choosenSize === null) {
             if (this.form.sizeType){
-              this.form.sizeType = 'NA'
+              delete this.form.sizeType
             }
           }
         },
@@ -271,7 +269,7 @@
         handler () {
           if (this.choosenClient === null) {
             if (this.form.client){
-              this.form.client = 'NA'
+              delete this.form.client
             }
           }
         },
@@ -292,23 +290,58 @@
     	dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
       },
-      inputComponent () {
-
-      },
       async getContainerIn () {
-        let payload = {
-          sizeType: this.form.sizeType,
-          client: this.form.client,
-          container_no: this.form.container_no === null || this.form.container_no === undefined ? 'NA' : this.form.container_no ,
-          loc: this.form.loc,
-          from: this.form.from === undefined || null ? 'NA' : this.form.from,
-          to: this.form.to === undefined || null ? 'NA' : this.form.to,
+        if (this.form.sizeType && this.form.client && this.form.container_no) {
+          let payload = {
+            sizeType: this.form.sizeType,
+            client: this.form.client,
+            container_no: this.form.container_no,
+            loc: this.form.loc,
+            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
+            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
+          }
+          await axios.post(`/admin/get/daily_in`, payload).then(data => {
+            this.containerInList = data.data
+            if (data.data.length === 0) {
+              Swal.fire({
+                title: '',
+                text: 'No record found!',
+                icon: 'error',
+              })
+            }
+          }).catch(error => {
+            console.log(error)
+          })
+        } else {
+          Swal.fire({
+            title: '',
+            text: 'Please fill out the required fields!',
+            icon: 'error',
+          })
         }
-        await axios.get(`/admin/get/daily_in`, payload).then(data => {
-          console.log(data.data)
-        }).catch(error => {
-          console.log(error)
-        })
+      },
+      async exportContainerIn () {
+        if (this.form.sizeType && this.form.client && this.form.container_no) {
+          let payload = {
+            sizeType: this.form.sizeType,
+            client: this.form.client,
+            container_no: this.form.container_no,
+            loc: this.form.loc,
+            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
+            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
+          }
+          await axios.get(`/excel/daily_container_in/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`).then(data => {
+            window.open(`${location.origin}/excel/daily_container_in/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`, "_blank");
+          }).catch(error => {
+            console.log(error)
+          })
+        } else {
+          Swal.fire({
+            title: '',
+            text: 'Please fill out the required fields!',
+            icon: 'error',
+          })
+        }
       },
       fuseSize(options, search) {
         const fuse = new Fuse(options, {
