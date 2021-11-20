@@ -11,10 +11,10 @@
         <div class="col-xs-12" style="margin-bottom: 0;">
           <hr style="margin: 5px 0;">
         </div>
-        <div class="col-xs-12">
+        <div class="col-xs-12" style="margin: 0;">
           <div class="row" style="padding: 0 15px;">
           	
-          	<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+          	<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
                 :options="sizeTypeList"
                 style="height: 37px !important;"
@@ -45,7 +45,7 @@
               <label for="lastname" class="form-control-placeholder"> Size Type</label>
             </div>
             
-            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
                 style="height: 37px !important;"
                 :options="clientList"
@@ -77,70 +77,33 @@
               <label for="client" class="form-control-placeholder"> Client</label>
             </div>
             
-            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-              <v-select
-                style="height: 37px !important;"
-                :options="clientList"
-                v-model="choosenClient"
-                label="code_name"
-                class="form-control"
-                :filter="fuseClient"
-                @option:selected="clearClient()"
-                :reset-on-options-change='true'
-                :reduce="code_name => code_name.id"
-              >
-                <template #search="{attributes, events}">
-                  <input
-                    class="vs__search"
-                    v-bind="attributes"
-                    v-on="events"
-                    style="color: black;"
-                    v-model="clientSearch"
-                    @input="searchClient()"
-                  />
-                </template>
-                <template slot="selected-option" slot-scope="option">
-                  <span>@{{option.code_name}}</span>
-                </template>
-                <template slot="option" slot-scope="option">
-                    @{{option.code_name}}
-                </template>
-              </v-select>
-              <label for="client" class="form-control-placeholder"> Booking No.</label>
+            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+            	<input type="text" name="loc" id="loc" v-model="form.loc" style="height: 37px;" :class="errors.loc ? 'isError form-control' : 'form-control'">
+              <label for="loc" class="form-control-placeholder"> Location</label>
             </div>
 
-            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
-                :options="sizeTypeList"
                 style="height: 37px !important;"
-                v-model="choosenSize"
-                class="form-control"
-                label="name"
-                :filter="fuseSize"
-                @option:selected="clearSize()"
-                :reset-on-options-change='true'
+                :class="errors.type ? 'isError form-control' : 'form-control'"
+                :options="containerNoList"
+                v-model="form.container_no"
               >
-                <template #search="{attributes, events}">
+              	<template #search="{attributes, events}">
                   <input
                     class="vs__search"
                     v-bind="attributes"
                     v-on="events"
-                    v-model="sizeSearch"
+                    v-model="form.container_no"
                     style="color: black;"
-                    @input="searchSize()"
+                    @input="searchContainerNo()"
                   />
-                </template>
-                <template slot="selected-option" slot-scope="option">
-                  <span>@{{option.code}}</span>
-                </template>
-                <template slot="option" slot-scope="option">
-                    @{{option.code}}
                 </template>
               </v-select>
               <label for="lastname" class="form-control-placeholder"> Container No.</label>
             </div>
 
-            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
             	<vuejs-datepicker
                 v-model="form.manufactured_date"
                 placeholder="mm/dd/yyyyy"
@@ -154,7 +117,7 @@
               <div class="customErrorText"><small>@{{ errors.manufactured_date ? errors.manufactured_date[0] : '' }}</small></div>
             </div>
 
-            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
             	<vuejs-datepicker
                 v-model="form.manufactured_date"
                 placeholder="mm/dd/yyyyy"
@@ -168,11 +131,67 @@
               <div class="customErrorText"><small>@{{ errors.manufactured_date ? errors.manufactured_date[0] : '' }}</small></div>
             </div>
 
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px; display: flex; justify-content: flex-end;">
+            	<button class="btn btn-primary">Generate</button>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
   
+  </div>
+
+  <div class="panel panel-default" style="margin-top: 15px;">
+    <div class="panel-body">
+      <div style="color: black; font-weight: bold; text-align: center; margin-bottom: 10px;">
+          <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
+          <span>Container Daily In Report</span>
+      </div>
+      <table class="table table-bordered" style="margin-bottom: 0; color: black;">
+        <thead>
+          <tr>
+            <th style="text-align: left;" scope="col">Eir No.</th>
+            <th scope="col">Container No.</th>
+            <th scope="col">Size/Type</th>
+            <th scope="col">Date In</th>
+            <th scope="col">Shipping Line</th>
+            <th scope="col">Truckers</th>
+            <th scope="col">Plate No.</th>
+            <th scope="col">Inspected By</th>
+            <th scope="col">Class</th>
+            <th scope="col">Manufactured Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Remarks</th>
+          </tr>
+        </thead>
+        <tbody v-if="containerInList.length > 0">
+          <tr v-for="(item, index) in containerInList" :key="index">
+            <td>sample</td>
+            <td>sample</td>
+            <td>sample</td>
+            <td>sample</td>
+            <td>sample</td>
+            <td>sample</td>
+            <td>sample</td>
+            <td>sample</td>
+            <td>sample</td>
+            <td>sample</td>
+            <td>sample</td>
+            <td>sample</td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr>
+            <td colspan="12" style="text-align: center;" v-if="tableLoad === true">
+              <div class="lds-facebook"><div></div><div></div><div></div></div><br>
+              <div>Fetching...</div>
+            </td>
+            <td colspan="12" style="text-align: center;" v-else>No Data Available</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>  
   </div>
 
 </div>
@@ -199,11 +218,15 @@
       errors: [],
       clientList: [],
       sizeTypeList: [],
+      bookingNoList: [],
+      containerNoList: [],
       choosenSize: {},
       choosenClient: {},
       sizeSearch: '',
       clientSearch: '',
-      loading: false
+      loading: false,
+      containerInList: [],
+      tableLoad: false
     },
     methods: {
     	dateFormat(date) {
@@ -283,11 +306,57 @@
         }).catch(error => {
           console.log('error: ', error)
         })
+      },
+      searchBookingNo () {
+      	clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
+          const payload = {
+            keyword: this.form.booking_no
+          }
+          axios.get(`/admin/get/booking_no/all?keyword=${payload.keyword}`, payload)
+          .then(data => {
+            this.bookingNoList = data.data
+          })
+        }, 1000)
+      },
+      async getBookingNo () {
+        let search = {
+          keyword: ''
+        }
+        await axios.get(`/admin/get/booking_no/all?keyword=${search.keyword}`, search).then( data => {
+          this.bookingNoList = data.data
+        }).catch(error => {
+          console.log('error: ', error)
+        })
+      },
+      searchContainerNo () {
+      	clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
+          const payload = {
+            keyword: this.form.container_no
+          }
+          axios.get(`/admin/get/container_no/all?keyword=${payload.keyword}`, payload)
+          .then(data => {
+            this.containerNoList = data.data
+          })
+        }, 1000)
+      },
+      async getContainerNo () {
+        let search = {
+          keyword: ''
+        }
+        await axios.get(`/admin/get/container_no/all?keyword=${search.keyword}`, search).then( data => {
+          this.containerNoList = data.data
+        }).catch(error => {
+          console.log('error: ', error)
+        })
       }
     },
     mounted () {
       this.getSize()
       this.getClient()
+      this.getBookingNo()
+      this.getContainerNo()
     }
   })
 
