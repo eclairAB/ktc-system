@@ -190,14 +190,14 @@
           <tr v-for="(item, index) in containerInList" :key="index">
             <td>@{{ item.id }}</td>
             <td>@{{ item.container_no }}</td>
-            <td>@{{ item.size_type.size }} - @{{ item.size_type.type }}</td>
-            <td>@{{ item.inspected_date }}</td>
+            <td>@{{ item.size_type.code }} - @{{ item.size_type.name }}</td>
+            <td>@{{ moment(item.inspected_date).format('MMMM DD, YYYY') }}</td>
             <td>@{{ item.client.code_name }}</td>
             <td>@{{ item.hauler }}</td>
             <td>@{{ item.plate_no }}</td>
             <td>@{{ item.inspector.name }}</td>
             <td>@{{ item.container_class.class_name }}</td>
-            <td>@{{ item.manufactured_date }}</td>
+            <td>@{{ moment(item.manufactured_date).format('MMMM DD, YYYY') }}</td>
             <td>Received</td>
             <td>@{{ item.remarks }}</td>
           </tr>
@@ -331,13 +331,7 @@
             to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
           }
           await axios.get(`/excel/daily_container_in/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`).then(data => {
-            if (data.data.length === 0) {
-              Swal.fire({
-                title: '',
-                text: 'No record found!',
-                icon: 'error',
-              })
-            }
+            window.open(`${location.origin}/excel/daily_container_in/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`, "_blank");
           }).catch(error => {
             console.log(error)
           })
