@@ -28,4 +28,9 @@ class ViewsController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControlle
     {
         return view('vendor.voyager.container-actions', ['tab_action' => $action]);
     }
+
+    public function containerReceivingsAndReleasings($action)
+    {
+        return view('vendor.voyager.container-receivings-and-releasing', ['tab_action' => $action]);
+    }
 }
