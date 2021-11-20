@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
           <span style="font-weight: bold; font-size: 18px;">Daily Container Out Report</span>
-          <button class="btn btn-success">Export to Excel</button>
+          <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerOut">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
         </div>
         <div class="col-xs-12" style="margin-bottom: 0;">
           <hr style="margin: 5px 0;">
@@ -41,7 +41,7 @@
                     @{{option.code}}
                 </template>
               </v-select>
-              <label for="lastname" class="form-control-placeholder"> Size Type</label>
+              <label for="lastname" class="form-control-placeholder"> Size Type <span style="color: red;"> *</span></label>
             </div>
             
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -54,7 +54,6 @@
                 :filter="fuseClient"
                 @option:selected="clearClient()"
                 :reset-on-options-change='true'
-                :reduce="code_name => code_name.id"
               >
                 <template #search="{attributes, events}">
                   <input
@@ -73,7 +72,7 @@
                     @{{option.code_name}}
                 </template>
               </v-select>
-              <label for="client" class="form-control-placeholder"> Client</label>
+              <label for="client" class="form-control-placeholder"> Client <span style="color: red;"> *</span></label>
             </div>
             
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -82,25 +81,26 @@
                 :class="errors.type ? 'isError form-control' : 'form-control'"
                 :options="bookingNoList"
                 v-model="form.booking_no"
+                @option:selected="selectBooking()"
               >
               	<template #search="{attributes, events}">
                   <input
                     class="vs__search"
                     v-bind="attributes"
                     v-on="events"
-                    v-model="form.booking_no"
                     style="color: black;"
                     @input="searchBookingNo()"
                   />
                 </template>
               </v-select>
-              <label for="client" class="form-control-placeholder"> Booking No.</label>
+              <label for="client" class="form-control-placeholder"> Booking No. <span style="color: red;"> *</span></label>
             </div>
 
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
                 style="height: 37px !important;"
-                :class="errors.type ? 'isError form-control' : 'form-control'"
+                class="form-control"
+                :disabled="isOk"
                 :options="containerNoList"
                 v-model="form.container_no"
               >
@@ -109,45 +109,44 @@
                     class="vs__search"
                     v-bind="attributes"
                     v-on="events"
-                    v-model="form.container_no"
                     style="color: black;"
                     @input="searchContainerNo()"
                   />
                 </template>
               </v-select>
-              <label for="lastname" class="form-control-placeholder"> Container No.</label>
+              <label for="lastname" class="form-control-placeholder"> Container No. <span style="color: red;"> *</span></label>
             </div>
 
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
             	<vuejs-datepicker
-                v-model="form.manufactured_date"
+                v-model="form.from"
                 placeholder="mm/dd/yyyyy"
-                :input-class="errors.manufactured_date ? 'isError form-control' : 'form-control'"
+                :input-class="errors.from ? 'isError form-control' : 'form-control'"
                 :typeable="true"
-                name="manufactured_date"
+                name="from"
                 :format="dateFormat"
                 :required="true">
               </vuejs-datepicker>
-              <label for="manufactured_date" class="form-control-placeholder"> Date From</label>
-              <div class="customErrorText"><small>@{{ errors.manufactured_date ? errors.manufactured_date[0] : '' }}</small></div>
+              <label for="from" class="form-control-placeholder"> Date From</label>
+              <div class="customErrorText"><small>@{{ errors.from ? errors.from[0] : '' }}</small></div>
             </div>
 
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
             	<vuejs-datepicker
-                v-model="form.manufactured_date"
+                v-model="form.to"
                 placeholder="mm/dd/yyyyy"
-                :input-class="errors.manufactured_date ? 'isError form-control' : 'form-control'"
+                :input-class="errors.to ? 'isError form-control' : 'form-control'"
                 :typeable="true"
-                name="manufactured_date"
+                name="to"
                 :format="dateFormat"
                 :required="true">
               </vuejs-datepicker>
-              <label for="manufactured_date" class="form-control-placeholder"> Date To</label>
-              <div class="customErrorText"><small>@{{ errors.manufactured_date ? errors.manufactured_date[0] : '' }}</small></div>
+              <label for="to" class="form-control-placeholder"> Date To</label>
+              <div class="customErrorText"><small>@{{ errors.to ? errors.to[0] : '' }}</small></div>
             </div>
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px; display: flex; justify-content: flex-end;">
-            	<button class="btn btn-primary">Generate</button>
+            	<button class="btn btn-primary" :disabled="generateLoad" @click="getContainerOut">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
             </div>
 
           </div>
@@ -183,20 +182,20 @@
         </thead>
         <tbody v-if="containerOutList.length > 0">
           <tr v-for="(item, index) in containerOutList" :key="index">
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
-            <td>sample</td>
+            <td>@{{ item.id }}</td>
+            <td>@{{ item.container_no }}</td>
+            <td>@{{ item.container.size_type ? `${item.container.size_type.code} - ${item.container.size_type.name}` : '' }}</td>
+            <td>@{{ moment(item.inspected_date).format('MMMM DD, YYYY') }}</td>
+            <td>@{{ item.booking_no }}</td>
+            <td>@{{ item.seal_no }}</td>
+            <td>@{{ item.container.client ? item.container.client.code_name : '' }}</td>
+            <td>@{{ item.hauler }}</td>
+            <td>@{{ item.plate_no }}</td>
+            <td>@{{ item.inspector.name }}</td>
+            <td>@{{ item.container.container_class ? item.container.container_class.class_name : '' }}</td>
+            <td>@{{ moment(item.manufactured_date).format('MMMM DD, YYYY') }}</td>
+            <td>Released</td>
+            <td>@{{ item.remarks }}</td>
           </tr>
         </tbody>
         <tbody v-else>
@@ -244,14 +243,95 @@
       clientSearch: '',
       loading: false,
       containerOutList: [],
-      tableLoad: false
+      tableLoad: false,
+      generateLoad: false,
+      exportLoad: false,
+      isOk: true
+    },
+    watch: {
+      'choosenSize': {
+        handler () {
+          if (this.choosenSize === null) {
+            if (this.form.sizeType){
+              delete this.form.sizeType
+            }
+          }
+        },
+        deep: true
+      },
+      'choosenClient': {
+        handler () {
+          if (this.choosenClient === null) {
+            if (this.form.client){
+              delete this.form.client
+            }
+          }
+        },
+        deep: true
+      }
     },
     methods: {
     	dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
       },
-      inputComponent () {
-
+      async getContainerOut () {
+        if (this.form.sizeType && this.form.client && this.form.container_no && this.form.booking_no) {
+        	this.generateLoad = true
+          let payload = {
+            sizeType: this.form.sizeType,
+            client: this.form.client,
+            container_no: this.form.container_no,
+            booking_no: this.form.booking_no === null || this.form.booking_no === undefined ? 'NA' : this.form.booking_no,
+            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
+            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
+          }
+          await axios.post(`/admin/get/daily_out`, payload).then(data => {
+          	this.generateLoad = false
+            this.containerOutList = data.data
+            if (data.data.length === 0) {
+              Swal.fire({
+                title: '',
+                text: 'No record found!',
+                icon: 'error',
+              })
+            }
+          }).catch(error => {
+          	this.generateLoad = false
+            console.log(error)
+          })
+        } else {
+          Swal.fire({
+            title: '',
+            text: 'Please fill out the required fields!',
+            icon: 'error',
+          })
+        }
+      },
+      async exportContainerOut () {
+        if (this.form.sizeType && this.form.client && this.form.container_no && this.form.booking_no) {
+        	this.exportLoad = true
+          let payload = {
+            sizeType: this.form.sizeType,
+            client: this.form.client,
+            container_no: this.form.container_no,
+            booking_no: this.form.booking_no,
+            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
+            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
+          }
+          await axios.get(`/excel/daily_container_out/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.booking_no}/${payload.from}/${payload.to}`).then(data => {
+          	this.exportLoad = false
+            window.open(`${location.origin}/excel/daily_container_out/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.booking_no}/${payload.from}/${payload.to}`, "_blank");
+          }).catch(error => {
+          	this.exportLoad = false
+            console.log(error)
+          })
+        } else {
+          Swal.fire({
+            title: '',
+            text: 'Please fill out the required fields!',
+            icon: 'error',
+          })
+        }
       },
       fuseSize(options, search) {
         const fuse = new Fuse(options, {
@@ -263,8 +343,7 @@
           : fuse.list
       },
       clearSize () {
-        this.form.size_type = this.choosenSize.id
-        this.form.type = this.choosenSize.type
+        this.form.sizeType = this.choosenSize.id
         this.sizeSearch = ''
       },
       searchSize () {
@@ -299,8 +378,8 @@
           : fuse.list
       },
       clearClient () {
-        this.form.client_id = this.choosenClient.id
-        this.sizeSearch = ''
+        this.form.client = this.choosenClient.id
+        this.clientSearch = ''
       },
       searchClient () {
         clearTimeout(this.timer)
@@ -319,11 +398,14 @@
           keyword: ''
         }
         await axios.get(`/admin/get/clients?keyword=${search.keyword}`, search).then( data => {
-        	console.log('clientList: ', data.data)
           this.clientList = data.data
         }).catch(error => {
           console.log('error: ', error)
         })
+      },
+      selectBooking () {
+      	this.isOk = false
+      	this.getContainerNo()
       },
       searchBookingNo () {
       	clearTimeout(this.timer)
@@ -351,9 +433,9 @@
       	clearTimeout(this.timer)
         this.timer = setTimeout(() => {
           const payload = {
-            keyword: this.form.container_no
+            booking_no: this.form.container_no
           }
-          axios.get(`/admin/get/container_no/all?keyword=${payload.keyword}`, payload)
+          axios.get(`/admin/get/container_no/byBookingNo?booking_no=${this.form.booking_no}`, payload)
           .then(data => {
             this.containerNoList = data.data
           })
@@ -361,9 +443,9 @@
       },
       async getContainerNo () {
         let search = {
-          keyword: ''
+          booking_no: ''
         }
-        await axios.get(`/admin/get/container_no/all?keyword=${search.keyword}`, search).then( data => {
+        await axios.get(`/admin/get/container_no/byBookingNo?booking_no=${this.form.booking_no}`, search).then( data => {
           this.containerNoList = data.data
         }).catch(error => {
           console.log('error: ', error)
@@ -374,7 +456,6 @@
       this.getSize()
       this.getClient()
       this.getBookingNo()
-      this.getContainerNo()
     }
   })
 

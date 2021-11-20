@@ -69,6 +69,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/sizeType/all',[QueriesController::class,"getSizeTypeByAll"]);
     Route::get('/get/container_no/all',[QueriesController::class,"getContainerNos"]);
     Route::get('/get/booking_no/all',[QueriesController::class,"getBookingNos"]);
+    Route::get('/get/container_no/byBookingNo',[QueriesController::class,"getContainerNosByBookingNo"]);
 
     // fetch daily in-out
     Route::post('/get/daily_in',[QueriesController::class,"getDailyIn"]);
