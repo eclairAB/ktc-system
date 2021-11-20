@@ -66,8 +66,10 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/print/releasing/{id}',[QueriesController::class,"prntReleasing"]);
     Route::get('/get/print/receiving/{id}',[QueriesController::class,"prntReceiving"]);
     Route::get('/get/sizeType/all ',[QueriesController::class,"getSizeTypeByAll"]);
-    Route::get('/get/container_no/all',[QueriesController::class,"getContainerNos"]);
-    Route::get('/get/booking_no/all',[QueriesController::class,"getBookingNos"]);
+    Route::get('/get/container_no/all ',[QueriesController::class,"getContainerNos"]);
+    Route::get('/get/booking_no/all ',[QueriesController::class,"getBookingNos"]);
+    Route::get('/get/daily_in ',[QueriesController::class,"getDailyIn"]);
+    Route::get('/get/daily_out ',[QueriesController::class,"getDailyOut"]);
 
     Route::delete('/delete/damage/{id}',[UpdateController::class,"ReceivingDamageDelete"]);
 
