@@ -230,6 +230,11 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         return ContainerReleasing::distinct('booking_no')->pluck('booking_no');
     }
 
+    public function getContainerNosByBookingNo(Request $request)
+    {
+        return ContainerReleasing::where('booking_no',$request->booking_no)->distinct('container_no')->pluck('container_no');
+    }
+
     public function getDailyIn(Request $request)
     {
         $data = ContainerReceiving::when($request->sizeType != 'NA', function ($q) use($request){
