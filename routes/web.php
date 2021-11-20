@@ -27,6 +27,7 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::get('/{url_role}', [ViewsController::class, "roleView"]);
     Route::get('/container-actions/{action}', [ViewsController::class, "containerActions"]);
+    Route::get('/container-receivings-and-releasing/{action}', [ViewsController::class, "containerReceivingsAndReleasings"]);
     Route::get('/get/yards',[QueriesController::class,"getYardLocation"]);
     Route::get('/get/clients',[QueriesController::class,"getClient"]);
     Route::get('/get/receiving/details',[QueriesController::class,"getReceivingDetails"]);
