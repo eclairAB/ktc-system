@@ -297,8 +297,8 @@
             client: this.form.client,
             container_no: this.form.container_no,
             loc: this.form.loc,
-            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format(),
-            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format(),
+            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
+            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
           }
           await axios.post(`/admin/get/daily_in`, payload).then(data => {
             this.containerInList = data.data
@@ -327,8 +327,8 @@
             client: this.form.client,
             container_no: this.form.container_no,
             loc: this.form.loc,
-            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format(),
-            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format(),
+            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
+            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
           }
           await axios.get(`/excel/daily_container_in/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`).then(data => {
             if (data.data.length === 0) {
