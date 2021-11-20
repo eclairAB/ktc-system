@@ -219,4 +219,14 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         return ContainerSizeType::get();
     }
+
+    public function getContainerNos()
+    {
+        return ContainerReceiving::distinct('container_no')->pluck('container_no');
+    }
+
+    public function getBookingNos()
+    {
+        return ContainerReleasing::distinct('booking_no')->pluck('booking_no');
+    }
 }
