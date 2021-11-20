@@ -27,6 +27,7 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::get('/{url_role}', [ViewsController::class, "roleView"]);
     Route::get('/container-actions/{action}', [ViewsController::class, "containerActions"]);
+    Route::get('/container-receivings-and-releasing/{action}', [ViewsController::class, "containerReceivingsAndReleasings"]);
     Route::get('/get/yards',[QueriesController::class,"getYardLocation"]);
     Route::get('/get/clients',[QueriesController::class,"getClient"]);
     Route::get('/get/receiving/details',[QueriesController::class,"getReceivingDetails"]);
@@ -65,7 +66,13 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/damage/{receiving_id}',[QueriesController::class,"getReceivingDamage"]);
     Route::get('/get/print/releasing/{id}',[QueriesController::class,"prntReleasing"]);
     Route::get('/get/print/receiving/{id}',[QueriesController::class,"prntReceiving"]);
-    Route::get('/get/sizeType/all ',[QueriesController::class,"getSizeTypeByAll"]);
+    Route::get('/get/sizeType/all',[QueriesController::class,"getSizeTypeByAll"]);
+    Route::get('/get/container_no/all',[QueriesController::class,"getContainerNos"]);
+    Route::get('/get/booking_no/all',[QueriesController::class,"getBookingNos"]);
+
+    // fetch daily in-out
+    Route::post('/get/daily_in',[QueriesController::class,"getDailyIn"]);
+    Route::post('/get/daily_out',[QueriesController::class,"getDailyOut"]);
 
     Route::delete('/delete/damage/{id}',[UpdateController::class,"ReceivingDamageDelete"]);
 

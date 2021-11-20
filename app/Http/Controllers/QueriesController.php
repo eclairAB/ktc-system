@@ -219,4 +219,55 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         return ContainerSizeType::get();
     }
+
+    public function getContainerNos()
+    {
+        return ContainerReceiving::distinct('container_no')->pluck('container_no');
+    }
+
+    public function getBookingNos()
+    {
+        return ContainerReleasing::distinct('booking_no')->pluck('booking_no');
+    }
+
+    public function getDailyIn(Request $request)
+    {
+        $data = ContainerReceiving::when($request->sizeType != 'NA', function ($q) use($request){
+            return $q->where('size_type',$request->sizeType);
+        })->when($request->client != 'NA', function ($q) use($request){
+            return $q->where('client_id',$request->client);
+        })->when($request->container_no != 'NA', function ($q) use($request){
+            return $q->where('container_no',$request->container_no);
+        })->when($request->loc != 'NA', function ($q) use($request){
+            return $q->where('yard_location',$request->loc);
+        })->when($request->from != 'NA', function ($q) use($request){
+            return $q->whereDate('inspected_date','>=',$request->from);
+        })->when($request->to != 'NA', function ($q) use($request){
+            return $q->whereDate('inspected_date','<=',$request->to);
+        })->whereHas('container',function( $query ) use($request){
+            $query->where('container_no',$request->container_no)->where('client_id',$request->client)->where('size_type',$request->sizeType)->whereNull('date_released');
+        })->with('client','sizeType','yardLocation','inspector','containerClass','container')->get();
+
+        return $data;
+    }
+
+    public function getDailyOut(Request $request)
+    {
+        $data = ContainerReleasing::when($request->container_no != 'NA', function ($q) use($request){
+            return $q->where('container_no',$request->container_no);
+        })->when($request->booking_no != 'NA', function ($q) use($request){
+            return $q->where('booking_no',$request->booking_no);
+        })->when($request->from != 'NA', function ($q) use($request){
+            return $q->whereDate('inspected_date','>=',$request->from);
+        })->when($request->to != 'NA', function ($q) use($request){
+            return $q->whereDate('inspected_date','<=',$request->to);
+        })->whereHas('container',function( $query ) use($request){
+            $query->where('container_no',$request->container_no)->where('client_id',$request->client)
+                ->where('size_type',$request->sizeType)->whereNotNull('date_released')->latest('created_at');
+        })->whereHas('receiving',function( $query ) use($request){
+            $query->where('container_no',$request->container_no);
+        })->with('container.client','container.sizeType','inspector','container.containerClass','receiving')->get();
+
+        return $data;
+    }
 }

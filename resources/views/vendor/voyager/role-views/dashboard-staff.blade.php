@@ -7,13 +7,13 @@
     <div class="col-lg-5 col-md-12">
       <div>
         
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-receivings/create')">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-receivings-and-releasing/receiving')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Receiving</h4>
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-releasings/create')">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-receivings-and-releasing/releasing')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Releasing</h4>
         </button>
