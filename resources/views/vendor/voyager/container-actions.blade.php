@@ -40,9 +40,6 @@
     	reroute(x) {
         location.href = x
       }
-    },
-    created() {
-    	console.log('hello')
     }
   })
 </script>
