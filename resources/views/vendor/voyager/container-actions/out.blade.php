@@ -41,7 +41,7 @@
                     @{{option.code}}
                 </template>
               </v-select>
-              <label for="lastname" class="form-control-placeholder"> Size Type</label>
+              <label for="lastname" class="form-control-placeholder"> Size Type <span style="color: red;"> *</span></label>
             </div>
             
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -72,7 +72,7 @@
                     @{{option.code_name}}
                 </template>
               </v-select>
-              <label for="client" class="form-control-placeholder"> Client</label>
+              <label for="client" class="form-control-placeholder"> Client <span style="color: red;"> *</span></label>
             </div>
             
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -81,6 +81,7 @@
                 :class="errors.type ? 'isError form-control' : 'form-control'"
                 :options="bookingNoList"
                 v-model="form.booking_no"
+                @option:selected="selectBooking()"
               >
               	<template #search="{attributes, events}">
                   <input
@@ -92,13 +93,14 @@
                   />
                 </template>
               </v-select>
-              <label for="client" class="form-control-placeholder"> Booking No.</label>
+              <label for="client" class="form-control-placeholder"> Booking No. <span style="color: red;"> *</span></label>
             </div>
 
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
                 style="height: 37px !important;"
                 class="form-control"
+                :disabled="isOk"
                 :options="containerNoList"
                 v-model="form.container_no"
               >
@@ -112,7 +114,7 @@
                   />
                 </template>
               </v-select>
-              <label for="lastname" class="form-control-placeholder"> Container No.</label>
+              <label for="lastname" class="form-control-placeholder"> Container No. <span style="color: red;"> *</span></label>
             </div>
 
             <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -243,7 +245,8 @@
       containerOutList: [],
       tableLoad: false,
       generateLoad: false,
-      exportLoad: false
+      exportLoad: false,
+      isOk: true
     },
     watch: {
       'choosenSize': {
@@ -272,7 +275,7 @@
         return moment(date).format('MM/DD/yyyy');
       },
       async getContainerOut () {
-        if (this.form.sizeType && this.form.client && this.form.container_no) {
+        if (this.form.sizeType && this.form.client && this.form.container_no && this.form.booking_no) {
         	this.generateLoad = true
           let payload = {
             sizeType: this.form.sizeType,
@@ -305,13 +308,13 @@
         }
       },
       async exportContainerOut () {
-        if (this.form.sizeType && this.form.client && this.form.container_no) {
+        if (this.form.sizeType && this.form.client && this.form.container_no && this.form.booking_no) {
         	this.exportLoad = true
           let payload = {
             sizeType: this.form.sizeType,
             client: this.form.client,
             container_no: this.form.container_no,
-            booking_no: this.form.booking_no === null || this.form.booking_no === undefined ? 'NA' : this.form.booking_no,
+            booking_no: this.form.booking_no,
             from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
             to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
           }
@@ -400,6 +403,10 @@
           console.log('error: ', error)
         })
       },
+      selectBooking () {
+      	this.isOk = false
+      	this.getContainerNo()
+      },
       searchBookingNo () {
       	clearTimeout(this.timer)
         this.timer = setTimeout(() => {
@@ -426,9 +433,9 @@
       	clearTimeout(this.timer)
         this.timer = setTimeout(() => {
           const payload = {
-            keyword: this.form.container_no
+            booking_no: this.form.container_no
           }
-          axios.get(`/admin/get/container_no/all?keyword=${payload.keyword}`, payload)
+          axios.get(`/admin/get/container_no/byBookingNo?booking_no=${this.form.booking_no}`, payload)
           .then(data => {
             this.containerNoList = data.data
           })
@@ -436,9 +443,9 @@
       },
       async getContainerNo () {
         let search = {
-          keyword: ''
+          booking_no: ''
         }
-        await axios.get(`/admin/get/container_no/all?keyword=${search.keyword}`, search).then( data => {
+        await axios.get(`/admin/get/container_no/byBookingNo?booking_no=${this.form.booking_no}`, search).then( data => {
           this.containerNoList = data.data
         }).catch(error => {
           console.log('error: ', error)
@@ -449,7 +456,6 @@
       this.getSize()
       this.getClient()
       this.getBookingNo()
-      this.getContainerNo()
     }
   })
 
