@@ -6,7 +6,7 @@
       <div class="row">
         <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
           <span style="font-weight: bold; font-size: 18px;">Daily Container In Report</span>
-          <button class="btn btn-success" @click="exportContainerIn">Export to Excel</button>
+          <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
         </div>
         <div class="col-xs-12" style="margin-bottom: 0;">
           <hr style="margin: 5px 0;">
@@ -153,7 +153,7 @@
             </div>
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px; display: flex; justify-content: flex-end;">
-            	<button class="btn btn-primary" @click="getContainerIn">Generate</button>
+            	<button class="btn btn-primary" :disabled="generateLoad" @click="getContainerIn">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
             </div>
 
           </div>
@@ -252,7 +252,9 @@
       yardSearch: '',
       loading: false,
       containerInList: [],
-      tableLoad: false
+      tableLoad: false,
+      generateLoad: false,
+      exportLoad: false
     },
     watch: {
       'choosenSize': {
@@ -292,6 +294,7 @@
       },
       async getContainerIn () {
         if (this.form.sizeType && this.form.client && this.form.container_no) {
+          this.generateLoad = true
           let payload = {
             sizeType: this.form.sizeType,
             client: this.form.client,
@@ -301,6 +304,7 @@
             to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
           }
           await axios.post(`/admin/get/daily_in`, payload).then(data => {
+            this.generateLoad = false
             this.containerInList = data.data
             if (data.data.length === 0) {
               Swal.fire({
@@ -310,6 +314,7 @@
               })
             }
           }).catch(error => {
+            this.generateLoad = false
             console.log(error)
           })
         } else {
@@ -322,6 +327,7 @@
       },
       async exportContainerIn () {
         if (this.form.sizeType && this.form.client && this.form.container_no) {
+          this.exportLoad = true
           let payload = {
             sizeType: this.form.sizeType,
             client: this.form.client,
@@ -331,8 +337,10 @@
             to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
           }
           await axios.get(`/excel/daily_container_in/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`).then(data => {
+            this.exportLoad = false
             window.open(`${location.origin}/excel/daily_container_in/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`, "_blank");
           }).catch(error => {
+            this.exportLoad = false
             console.log(error)
           })
         } else {
