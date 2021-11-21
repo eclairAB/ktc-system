@@ -287,4 +287,28 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return 456;
         }
     }
+    
+    public function getContainerAging(Request $request)
+    {
+        $data = ContainerReceiving::
+        when($request->sizeType != 'NA', function ($q) use($request){
+            return $q->where('size_type',$request->sizeType);
+        })->when($request->client != 'NA', function ($q) use($request){
+            return $q->where('client_id',$request->client);
+        })->when($request->class != 'NA', function ($q) use($request){
+            return $q->where('class',$request->class);
+        })->when($request->date_as_of != 'NA', function ($q) use($request){
+            return $q->whereDate('inspected_date','=',$request->date_as_of);
+        })->whereHas('container',function( $query ) use($request){
+            $query->where('container_no',$request->container_no)->where('client_id',$request->client)
+                ->where('class',$request->class)->where('size_type',$request->sizeType)->whereNull('date_released');
+        })->with('client','sizeType','yardLocation','inspector','containerClass','container')->get();
+
+        foreach($data as $res)
+        {
+            $res->total_no_days = count($data);
+        }
+
+        return $data;
+    }
 }
