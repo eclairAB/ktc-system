@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\ContainerClass;
-use App\Models\Containers;
+use App\Models\Container;
 use App\Models\ContainerSizeType;
 use App\Models\ContainerComponent;
 use App\Models\ContainerDamage;
@@ -149,8 +149,8 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getReceivingDetails(Request $request)
     {
-        $contReleasing = Containers::where('container_no',$request->container_no)->whereNotNull('date_released')->whereNull('date_received')->latest('created_at')->first();
-        $contRecieving = Containers::where('container_no',$request->container_no)->whereNull('date_released')->whereNotNull('date_received')->latest('created_at')->first();
+        $contReleasing = Container::where('container_no',$request->container_no)->whereNotNull('date_released')->whereNull('date_received')->latest('created_at')->first();
+        $contRecieving = Container::where('container_no',$request->container_no)->whereNull('date_released')->whereNotNull('date_received')->latest('created_at')->first();
 
         if($request->type == "receiving")
         {
@@ -274,5 +274,17 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         })->with('container.client','container.sizeType','inspector','container.containerClass','receiving')->get();
 
         return $data;
+    }
+
+    public function containerInquiry($container_id=null)
+    {
+        if(is_null($container_id))
+        {
+            return Container::first();
+        }
+        else 
+        {
+            return 456;
+        }
     }
 }

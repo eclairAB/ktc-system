@@ -38,6 +38,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/container/damage',[QueriesController::class,"getContainerDamage"]);
     Route::get('/get/container/component',[QueriesController::class,"getContainerComponent"]);
     Route::get('/get/container/repair',[QueriesController::class,"getContainerRepair"]);
+    Route::get('/container',[QueriesController::class,"containerInquiry"]);
+    Route::get('/container/{container_id}',[QueriesController::class,"containerInquiry"]);
    
 
     Route::post('/create/client', [PostsController::class, "createClient"]);

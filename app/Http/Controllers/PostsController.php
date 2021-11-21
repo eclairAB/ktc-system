@@ -16,7 +16,7 @@ use App\Models\Staff;
 use App\Models\User;
 use App\Models\ContainerReleasing;
 use App\Models\ContainerReceiving;
-use App\Models\Containers;
+use App\Models\Container;
 use App\Models\ContainerRemark;
 use App\Models\ReceivingDamage;
 use Carbon\Carbon;
@@ -166,7 +166,7 @@ class PostsController extends Controller
 
             if($release)
             {
-                $dataCont = Containers::where('container_no',$releasing['container_no'])->whereNotNull('date_received')->latest('created_at')->first();
+                $dataCont = Container::where('container_no',$releasing['container_no'])->whereNotNull('date_received')->latest('created_at')->first();
                 $dataCont->date_released = Carbon::now();
                 $dataCont->save();
 
@@ -219,7 +219,7 @@ class PostsController extends Controller
                 'date_received'=>Carbon::now(),
                 'date_released'=>null,
             ];
-            $cont = Containers::create($dataCont);
+            $cont = Container::create($dataCont);
 
             $dataContRemark = [
                 'status'=>'Received',
