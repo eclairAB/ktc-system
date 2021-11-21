@@ -77,6 +77,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/get/daily_in',[QueriesController::class,"getDailyIn"]);
     Route::post('/get/daily_out',[QueriesController::class,"getDailyOut"]);
 
+    // fet container aging
+    Route::get('/get/container/aging',[QueriesController::class,"getContainerAging"]);
+
     Route::delete('/delete/damage/{id}',[UpdateController::class,"ReceivingDamageDelete"]);
 
 });
