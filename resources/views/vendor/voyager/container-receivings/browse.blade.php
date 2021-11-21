@@ -2,11 +2,29 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
+    <style type="text/css">
+        .page-title {
+            height: 60px !important;
+            line-height: unset !important;
+            padding-top: 10px !important;
+        }
+    </style>
 @stop
 
 @section('page_title', __('voyager::generic.viewing').' '.$dataType->getTranslatedAttribute('display_name_plural'))
 
 @section('page_header')
+<div id="receiving">
+
+    <div row>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin: 0; padding: 0;">
+            <button class="btn btn-primary btn-block" @click="reroute('container-receivings')" style="border: 1px solid white;" :style="action === 'receiving' ? 'border-bottom: 4px solid black;' : '' ">Container Receiving</button> 
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin: 0; padding: 0;">
+            <button class="btn btn-primary btn-block" @click="reroute('container-releasings')" style="border: 1px solid white;" :style="action === 'releasing' ? 'border-bottom: 4px solid black;' : '' ">Container Releasing</button>
+        </div>
+    </div>
+    <div style="color: transparent;">test</div>
     <div class="container-fluid">
         <h1 class="page-title">
             <i class="{{ $dataType->icon }}"></i> {{ $dataType->getTranslatedAttribute('display_name_plural') }}
@@ -45,7 +63,7 @@
         @include('voyager::alerts')
         <div class="row">
             <div class="col-md-12">
-                <div id="receiving">
+                <div>
                     <div class="panel panel-bordered">
                         <div class="panel-body">
                             @if ($isServerSide)
@@ -325,6 +343,7 @@
     <link rel="stylesheet" href="{{ voyager_asset('lib/css/responsive.dataTables.min.css') }}">
 @endif
 @stop
+</div>
 
 @section('javascript')
     <!-- DataTables -->
@@ -411,9 +430,12 @@
     var app = new Vue({
       el: '#receiving',
       data: {
-
+        action: 'receiving'
       },
       methods:{
+        reroute(x) {
+            location.href = `${location.origin}/admin/${x}`
+        },
         signImage (data) {
           let currentUrl = window.location.origin
           let signUrl = data.signature.split('/app/public')[1]

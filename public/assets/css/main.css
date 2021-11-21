@@ -178,9 +178,9 @@ table {
   top: -10px;
   right: 0px;
 }
-.table>tbody>tr>td {
+/*.table>tbody>tr>td {
   border-color: #b1b1b1 !important;
-}
+}*/
 .lds-facebook {
   display: inline-block;
   position: relative;
