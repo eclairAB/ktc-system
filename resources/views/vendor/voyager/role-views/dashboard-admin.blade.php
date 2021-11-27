@@ -21,7 +21,7 @@
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-aging/all')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Aging and Inventory</h4>
         </button>
@@ -39,7 +39,7 @@
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-inquiry/all')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Inquiry</h4>
         </button>

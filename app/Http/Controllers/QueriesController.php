@@ -276,18 +276,21 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         return $data;
     }
 
-    public function containerInquiry($container_id=null)
+    public function containerInquiry($container_id)
     {
-        if(is_null($container_id))
+        if($container_id == 'all')
         {
-            return Container::first();
+            $containers = Container::with('client','sizeType','containerClass')->paginate(30);
+            return $containers;
+            return view('vendor.voyager.container-inquiry', ['containers' => $containers]);
         }
         else 
         {
-            return 456;
+            $container_receiving = ContainerReceiving::where('container_id');
+            return view('vendor.voyager.container-inquiry', ['containers' => $container_receiving]);
         }
     }
-    
+
     public function getContainerAging(Request $request)
     {
         $data = ContainerReceiving::
