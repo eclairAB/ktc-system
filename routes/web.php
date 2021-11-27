@@ -38,9 +38,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/container/damage',[QueriesController::class,"getContainerDamage"]);
     Route::get('/get/container/component',[QueriesController::class,"getContainerComponent"]);
     Route::get('/get/container/repair',[QueriesController::class,"getContainerRepair"]);
-    Route::get('/container',[QueriesController::class,"containerInquiry"]);
-    Route::get('/container/{container_id}',[QueriesController::class,"containerInquiry"]);
-   
 
     Route::post('/create/client', [PostsController::class, "createClient"]);
     Route::post('/create/Staff', [PostsController::class, "createStaff"]);
@@ -77,8 +74,12 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/get/daily_in',[QueriesController::class,"getDailyIn"]);
     Route::post('/get/daily_out',[QueriesController::class,"getDailyOut"]);
 
-    // fet container aging
+    // fetch container aging
+    Route::get('/container-aging/all', [ViewsController::class, "containerAging"]);
     Route::get('/get/container/aging',[QueriesController::class,"getContainerAging"]);
+
+    // fetch container inquiry
+    Route::get('/container-inquiry/{container_id}',[QueriesController::class,"containerInquiry"]);
 
     Route::delete('/delete/damage/{id}',[UpdateController::class,"ReceivingDamageDelete"]);
 
