@@ -9,11 +9,21 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
+    <style type="text/css">
+      .page-title {
+        height: 60px !important;
+        line-height: unset !important;
+        padding-top: 10px !important;
+      }
+    </style>
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
 
 @section('page_header')
+    
+    @include('vendor.voyager.receiving-releasing-btns')
+
     <h1 class="page-title">
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
@@ -56,9 +66,10 @@
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="container_no" id="container_no" maxlength="11" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
+                          <input type="text" name="container_no" id="container_no" maxlength="13" placeholder="####-######-#" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
-                          <div class="customErrorText"><small>@{{ containerError.message }}</small></div>
+                          <div class="customErrorText" v-if="containerError.message"><small>@{{ containerError.message }}</small></div>
+                          <div class="customHintText" v-else><small>Ex. CLLU-123456-7</small></div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <v-select
@@ -307,6 +318,11 @@
                         <hr style="margin: 0">
                         <div class="modal-body">
                           <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
+                            <input type="text" name="repair" id="repair" :class="damageError.repair ? 'isError form-control' : 'form-control'" v-model="input.repair" style="height: 37px !important; margin-top: 10px;" @input="inputRepair">
+                            <label for="repair" class="form-control-placeholder"> Repair</label>
+                            <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
+                          </div>
+                          <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
                             <input type="text" name="component" id="component" :class="damageError.component ? 'isError form-control' : 'form-control'" v-model="input.component" style="height: 37px !important; margin-top: 10px;" @input="inputComponent">
                             <label for="component" class="form-control-placeholder"> Component</label>
                             <div class="customErrorText"><small>@{{ damageError.component }}</small></div>
@@ -315,11 +331,6 @@
                             <input type="text" name="damage" id="damage" :class="damageError.damage ? 'isError form-control' : 'form-control'" v-model="input.damage" style="height: 37px !important; margin-top: 10px;" @input="inputDamage">
                             <label for="damage" class="form-control-placeholder"> Damage</label>
                             <div class="customErrorText"><small>@{{ damageError.damage }}</small></div>
-                          </div>
-                          <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
-                            <input type="text" name="repair" id="repair" :class="damageError.repair ? 'isError form-control' : 'form-control'" v-model="input.repair" style="height: 37px !important; margin-top: 10px;" @input="inputRepair">
-                            <label for="repair" class="form-control-placeholder"> Repair</label>
-                            <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
                           </div>
                           <div class="col-lg-12 form-group mt-3">
                             <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="height: 37px !important; margin-top: 10px;">
@@ -351,6 +362,8 @@
                           </div>
                         </div>
                         <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" style="margin-top: 15px;" @click="clearDamage"> Clear</button>
+                          <button type="button" class="btn btn-danger" style="margin-top: 15px;" @click="cancelDamage"> Cancel</button>
                           <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" @click="checkDamage"> Save</button>
                         </div>
                       </div>
@@ -635,8 +648,16 @@
               })
             })
           },
+          clearDamage () {
+            this.damages = {}
+            this.damageError = {}
+            this.input = {}
+          },
+          cancelDamage () {
+            $('#dialog').modal('hide');
+          },
           pasmo () {
-            this.damages.description = ((this.damages.component ? this.damages.component : '') + ' ' + (this.damages.damage ? this.damages.damage : '') + ' ' + (this.damages.repair ? this.damages.repair : '') + ' ' + (this.damages.location ? this.damages.location : '') + ' ' + (this.damages.width ? this.damages.width : '') + ' ' + (this.damages.length ? this.damages.length : '') + ' ' + (this.damages.quantity ? this.damages.quantity : ''))
+            this.damages.description = (this.damages.repair ? this.damages.repair : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage : '') + ' ' + (this.damages.component ? this.damages.component : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}CM` : '') + '' + (this.damages.width ? `X${this.damages.width}CM` : '')
           },
           inputComponent () {
             clearTimeout(this.timer)

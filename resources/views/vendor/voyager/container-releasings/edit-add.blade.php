@@ -9,11 +9,21 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
+    <style type="text/css">
+      .page-title {
+          height: 60px !important;
+          line-height: unset !important;
+          padding-top: 10px !important;
+      }
+    </style>
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
 
 @section('page_header')
+
+    @include('vendor.voyager.receiving-releasing-btns')
+
     <h1 class="page-title">
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
