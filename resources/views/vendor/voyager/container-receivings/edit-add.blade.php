@@ -169,7 +169,34 @@
                           <div class="customErrorText"><small>@{{ errors.yard_location ? errors.yard_location[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="type" id="type" disabled v-model="form.type" style="height: 37px;" :class="errors.type ? 'isError form-control' : 'form-control'">
+                          <v-select
+                            :class="errors.size_type ? 'isError form-control' : 'form-control'"
+                            :options="typeList"
+                            style="height: 37px !important;"
+                            v-model="choosenType"
+                            :disabled="!isOk"
+                            label="name"
+                            :filter="fuseType"
+                            @option:selected="clearType()"
+                            :reset-on-options-change='true'
+                          >
+                            <template #search="{attributes, events}">
+                              <input
+                                class="vs__search"
+                                v-bind="attributes"
+                                v-on="events"
+                                v-model="typeSearch"
+                                style="color: black;"
+                                @input="searchType()"
+                              />
+                            </template>
+                            <template slot="selected-option" slot-scope="option">
+                              <span>@{{option.code}}</span>
+                            </template>
+                            <template slot="option" slot-scope="option">
+                                @{{option.code}}
+                            </template>
+                          </v-select>
                           <label for="type" class="form-control-placeholder"> Type</label>
                           <div class="customErrorText"><small>@{{ errors.type ? errors.type[0] : '' }}</small></div>
                         </div>
@@ -282,7 +309,7 @@
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding: 0 !important; margin: 0 !important;">
                           <div style="display: flex; justify-content: flex-end; padding-top: 0;">
-                            <button class="btn btn-success" @click="addNew"> Add Damage</button>
+                            <button class="btn btn-success" @click="addNew" :disabled="!isOk"> Add Damage</button>
                           </div>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="margin-top: 0 !important; margin-bottom: 10px;">
@@ -596,15 +623,18 @@
           loginUser: `{!! Auth::user()->name !!}`,
           clientList: [],
           sizeTypeList: [],
+          typeList: [],
           classList: [],
           yardList: [],
           images: [],
           choosenSize: {},
+          choosenType: {},
           choosenClient: {},
           choosenYard: {},
           choosenClass: {},
           classSearch: '',
           sizeSearch: '',
+          typeSearch: '',
           clientSearch: '',
           yardSearch: '',
           emptyloaded: [
@@ -624,6 +654,22 @@
           'damages': {
             handler () {
               this.pasmo()
+            },
+            deep: true
+          },
+          'form.container_no': {
+            handler () {
+              if (this.form.container_no) {
+                if (this.form.container_no.length === 4) {
+                  this.form.container_no = this.form.container_no+'-'
+                }
+                if (this.form.container_no.length === 11) {
+                  this.form.container_no = this.form.container_no+'-'
+                }
+                if (this.form.container_no.length < 13) {
+                  this.isOk = false
+                }
+              }
             },
             deep: true
           }
@@ -753,7 +799,6 @@
           },
           clearSize () {
             this.form.size_type = this.choosenSize.id
-            this.form.type = this.choosenSize.type
             this.sizeSearch = ''
           },
           searchSize () {
@@ -774,6 +819,41 @@
             }
             await axios.get(`/admin/get/container/size_type?keyword=${search.keyword}`, search).then( data => {
               this.sizeTypeList = data.data
+            }).catch(error => {
+              console.log('error: ', error)
+            })
+          },
+          fuseType(options, search) {
+            const fuse = new Fuse(options, {
+              keys: ['code', 'name'],
+              shouldSort: true,
+            })
+            return search.length
+              ? fuse.search(search).map(({ item }) => item)
+              : fuse.list
+          },
+          clearType () {
+            this.form.type = this.choosenType.id
+            this.typeSearch = ''
+          },
+          searchType () {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              const payload = {
+                keyword: this.typeSearch
+              }
+              axios.get(`/admin/get/type?keyword=${payload.keyword}`, payload)
+              .then(data => {
+                this.typeList = data.data
+              })
+            }, 1000)
+          },
+          async getType () {
+            let search = {
+              keyword: ''
+            }
+            await axios.get(`/admin/get/type?keyword=${search.keyword}`, search).then( data => {
+              this.typeList = data.data
             }).catch(error => {
               console.log('error: ', error)
             })
@@ -875,38 +955,40 @@
             })
           },
           searchContainer () {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-              const payload = {
-                type: 'receiving',
-                container_no: this.form.container_no
-              }
-              axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}&type=receiving`)
-              .then(data => {
-                if (!this.form.id) {
-                  document.getElementById("signCard").style.display = 'inherit'; 
-                  document.getElementById("saveBtn").style.display = 'inherit';
-                } else {
-                  document.getElementById("updateBtn").style.display = 'inherit'; 
+            if (this.form.container_no.length === 13) {
+              clearTimeout(this.timer)
+              this.timer = setTimeout(() => {
+                const payload = {
+                  type: 'receiving',
+                  container_no: this.form.container_no
                 }
-                this.isOk = true
-                this.containerError = {}
-                this.containerInfo = data.data
-              }).catch(error => {
-                this.isOk = false
-                document.getElementById("signCard").style.display = 'none';
-                document.getElementById("saveBtn").style.display = 'none';
-                document.getElementById("updateBtn").style.display = 'none'; 
-                this.form = {
-                  inspected_date: moment().format(),
-                  inspected_by: {!! Auth::user()->role->id !!},
-                  container_photo: []
-                }
-                this.form.container_no = payload.container_no
-                this.containerInfo = {}
-                this.containerError = error.response.data
-              })
-            }, 1000)
+                axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}&type=receiving`)
+                .then(data => {
+                  if (!this.form.id) {
+                    document.getElementById("signCard").style.display = 'inherit'; 
+                    document.getElementById("saveBtn").style.display = 'inherit';
+                  } else {
+                    document.getElementById("updateBtn").style.display = 'inherit'; 
+                  }
+                  this.isOk = true
+                  this.containerError = {}
+                  this.containerInfo = data.data
+                }).catch(error => {
+                  this.isOk = false
+                  document.getElementById("signCard").style.display = 'none';
+                  document.getElementById("saveBtn").style.display = 'none';
+                  document.getElementById("updateBtn").style.display = 'none'; 
+                  this.form = {
+                    inspected_date: moment().format(),
+                    inspected_by: {!! Auth::user()->role->id !!},
+                    container_photo: []
+                  }
+                  this.form.container_no = payload.container_no
+                  this.containerInfo = {}
+                  this.containerError = error.response.data
+                })
+              }, 1000)
+            }
           },
           getBase64(file) {
             return new Promise((resolve, reject) => {
@@ -963,7 +1045,7 @@
                 w.print();
                 w.close();
               })
-              window.location = checkedit
+              // window.location = checkedit
             }).catch(error => {
               document.getElementById("save").removeAttribute("disabled");
               this.errors = error.response.data.errors
@@ -1018,6 +1100,7 @@
                 this.yardSearch = data.data.yard_location.name
                 this.clientSearch = data.data.client.code_name
                 this.form.size_type = data.data.size_type.id
+                this.form.type = data.data.type_id
                 this.form.client_id = data.data.client.id
                 this.form.yard_location = data.data.yard_location.id
                 this.form.class = data.data.container_class.id
@@ -1056,6 +1139,7 @@
           document.getElementById("updateBtn").style.display = 'none';
           this.getdata()
           this.getSize()
+          this.getType()
           this.getClient()
           this.getYard()
           this.getClass()
