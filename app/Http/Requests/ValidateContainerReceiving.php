@@ -30,7 +30,7 @@ class ValidateContainerReceiving extends FormRequest
             'client_id'=> 'required',
             'size_type'=> 'required',
             'class'=> 'required',
-            'type'=> 'required',
+            // 'type'=> 'required',
             // 'height'=> 'required',
             'empty_loaded'=> 'required',
             'manufactured_date'=> 'required',
@@ -43,6 +43,7 @@ class ValidateContainerReceiving extends FormRequest
             'container_photo'=> 'required',
             'signature'=> 'required',
             'remarks'=> 'nullable',
+            'type'=> 'required',
         ];
     }
 
@@ -54,7 +55,7 @@ class ValidateContainerReceiving extends FormRequest
             'container_no.required' => 'Container No. field required.',
             'size_type.required' => 'Size Type field required.',
             'class.required' => 'Class field required.',
-            'type.required' => 'Type field required.',
+            // 'type.required' => 'Type field required.',
             // 'height.required' => 'Height field required.',
             'empty_loaded.required' => 'Empty Loaded field required.',
             'manufactured_date.required' => 'Manufactured Date field required.',
@@ -65,6 +66,7 @@ class ValidateContainerReceiving extends FormRequest
             // 'upload_photo.max'  => 'Maximum size to upload is 2MB.',
             'container_photo.required'  => 'Photo is required.',
             'signature.required'  => 'Signature field is required.',
+            'type_id.required' => 'Type field required.',
         ];
     }
 }
