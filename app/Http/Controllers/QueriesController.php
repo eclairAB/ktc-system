@@ -12,6 +12,7 @@ use App\Models\ContainerReleasing;
 use App\Models\Client;
 use App\Models\Staff;
 use App\Models\Checker;
+use App\Models\Type;
 use App\Models\ReceivingDamage;
 use App\Models\YardLocation;
 use Illuminate\Http\Request;
@@ -48,7 +49,6 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
         return $sizetype;
     }
-
     public function getClient(Request $request)
     {
         $client = Client::when(!empty($request->keyword), function ($q) use ($request){
@@ -116,7 +116,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getReceivingById($id)
     {
-        $container_receiving = ContainerReceiving::where('id', $id)->with('client', 'sizeType', 'containerClass', 'yardLocation', 'inspector.staff', 'inspector.checker', 'photos')->first();
+        $container_receiving = ContainerReceiving::where('id', $id)->with('client', 'sizeType', 'containerClass', 'yardLocation', 'inspector.staff', 'inspector.checker', 'photos', 'type')->first();
         $container_receiving->signature = [$this->imageEncode($container_receiving->signature)];
         foreach ($container_receiving->photos as $key => $value) {
             $container_receiving->photos[$key]->encoded = [$this->imageEncode($container_receiving->photos[$key]->storage_path)];
@@ -137,14 +137,15 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function geDetailsForUpdate(Request $request)
     {
         return ContainerReceiving::where('container_no',$request->container_no)
-        ->with('client:id,code_name','sizeType:id,code,name','containerClass:id,class_code,class_name')
+        ->with('client:id,code_name','sizeType:id,code,name','containerClass:id,class_code,class_name','type:id,code,name')
         ->select(
             'id',
             'client_id',
             'size_type',
             'class',
             'empty_loaded',
-            'manufactured_date')->latest('created_at')->first();
+            'manufactured_date',
+            'type_id')->latest('created_at')->first();
     }
 
     public function getReceivingDetails(Request $request)
@@ -313,5 +314,25 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         }
 
         return $data;
+    }
+
+    public function getType(Request $request)
+    {
+        $type = Type::when(!empty($request->keyword), function ($q) use ($request){
+            return $q->where('code', 'ilike', '%'.$request->keyword.'%')
+            ->orwhere('name', 'ilike', '%'.$request->keyword.'%');
+        })->get();
+
+        return $type;
+    }
+
+    public function getTypeById($id)
+    {
+        return Type::where('id', $id)->first();
+    }
+
+    public function getTypeByAll()
+    {
+        return Type::get();
     }
 }

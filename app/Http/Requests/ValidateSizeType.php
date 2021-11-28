@@ -27,7 +27,7 @@ class ValidateSizeType extends FormRequest
             'code' => 'required',
             'name' => 'required',
             'size' => 'required',
-            'type' => 'required',
+            // 'type' => 'required',
         ];
     }
 
@@ -37,7 +37,7 @@ class ValidateSizeType extends FormRequest
             'code.required' => 'Code field is required.',
             'name.required' => 'Name field is required.',
             'size.required' => 'Size field is required.',
-            'type.required' => 'Type field is required.',
+            // 'type.required' => 'Type field is required.',
         ];
     }
 }
