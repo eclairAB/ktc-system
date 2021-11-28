@@ -15,7 +15,7 @@ class ContainerReceiving extends Model
         'client_id',
         'size_type',
         'class',
-        'type',
+        // 'type',
         // 'height'
         'empty_loaded',
         'manufactured_date',
@@ -25,7 +25,8 @@ class ContainerReceiving extends Model
         'hauler',
         'plate_no',
         'signature',
-        'remarks'
+        'remarks',
+        'type_id',
     ];
 
     public function photos()
@@ -61,5 +62,10 @@ class ContainerReceiving extends Model
     public function container()
     {
         return $this->HasOne(Container::class, 'container_no', 'container_no');
+    }
+
+    public function type()
+    {
+        return $this->HasOne(Type::class, 'id', 'type_id');
     }
 }

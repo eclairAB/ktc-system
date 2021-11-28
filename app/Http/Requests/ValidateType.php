@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ValidateSizeType extends FormRequest
+class ValidateType extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +26,6 @@ class ValidateSizeType extends FormRequest
         return [
             'code' => 'required',
             'name' => 'required',
-            'size' => 'required',
-            // 'type' => 'required',
         ];
     }
 
@@ -36,8 +34,6 @@ class ValidateSizeType extends FormRequest
         return [
             'code.required' => 'Code field is required.',
             'name.required' => 'Name field is required.',
-            'size.required' => 'Size field is required.',
-            // 'type.required' => 'Type field is required.',
         ];
     }
 }

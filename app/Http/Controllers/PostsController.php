@@ -9,6 +9,7 @@ use App\Http\Requests\ValidateContainerReceiving;
 use App\Http\Requests\ValidateSizeType;
 use App\Http\Requests\ValidateReceivingDamage;
 use App\Http\Requests\ValidateEmptyReceivingDamage;
+use App\Http\Requests\ValidateType;
 use App\Models\ContainerSizeType;
 use App\Models\Client;
 use App\Models\Checker;
@@ -279,5 +280,15 @@ class PostsController extends Controller
     public function ReceivingDamageChecker(ValidateEmptyReceivingDamage $request)
     {
         return 'success';
+    }
+
+    public function createType(ValidateType $request)
+    {
+        $type = $request->validated();
+        $data = [
+            'code'=>$type['code'],
+            'name'=>$type['name'],
+        ];
+        return Type::create($data);
     }
 }
