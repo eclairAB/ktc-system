@@ -48,6 +48,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/create/damage',[PostsController::class,"ReceivingDamage"]);
     Route::post('/check/damage',[PostsController::class,"ReceivingDamageChecker"]);
 
+    Route::post('/create/type',[PostsController::class,"createType"]);
+
     Route::post('/update/client', [UpdateController::class, "updateClient"]);
     Route::post('/update/Staff', [UpdateController::class, "updateStaff"]);
     Route::post('/update/checker', [UpdateController::class, "updateChecker"]);
@@ -69,6 +71,10 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/container_no/all',[QueriesController::class,"getContainerNos"]);
     Route::get('/get/booking_no/all',[QueriesController::class,"getBookingNos"]);
     Route::get('/get/container_no/byBookingNo',[QueriesController::class,"getContainerNosByBookingNo"]);
+
+    Route::get('/get/type/all',[QueriesController::class,"getTypeByAll"]);
+    Route::get('/get/type/byId/{id}',[QueriesController::class,"getTypeById"]);
+    Route::get('/get/type',[QueriesController::class,"getType"]);
 
     // fetch daily in-out
     Route::post('/get/daily_in',[QueriesController::class,"getDailyIn"]);
