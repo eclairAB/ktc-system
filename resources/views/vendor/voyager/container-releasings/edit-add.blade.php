@@ -69,9 +69,10 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Container Details</div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="container_no" id="container_no" maxlength="11" :disabled="form.id" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
+                          <input type="text" name="container_no" id="container_no" maxlength="13" placeholder="####-######-#" :disabled="form.id" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
-                          <div class="customErrorText"><small>@{{ containerError.message }}</small></div>
+                          <div class="customErrorText" v-if="containerError.message"><small>@{{ containerError.message }}</small></div>
+                          <div class="customHintText" v-else><small>Ex. CLLU-123456-7</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" name="client" disabled id="client" :value="containerInfo.client ? containerInfo.client.code_name : ''" style="height: 37px;" class="form-control">
@@ -380,38 +381,40 @@
             return moment(date).format('MM/DD/yyyy');
           },
           searchContainer () {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-              const payload = {
-                type: 'releasing',
-                container_no: this.form.container_no
-              }
-              axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}&type=releasing`, payload)
-              .then(data => {
-                if (!this.form.id) {
-                  document.getElementById("signCard").style.display = 'inherit'; 
-                  document.getElementById("saveBtn").style.display = 'inherit';
-                } else {
-                  document.getElementById("updateBtn").style.display = 'inherit'; 
+            if (this.form.container_no.length === 13) {
+              clearTimeout(this.timer)
+              this.timer = setTimeout(() => {
+                const payload = {
+                  type: 'releasing',
+                  container_no: this.form.container_no
                 }
-                this.isOk = true
-                this.containerError = {}
-                this.containerInfo = data.data
-              }).catch(error => {
-                this.isOk = false
-                document.getElementById("signCard").style.display = 'none';
-                document.getElementById("saveBtn").style.display = 'none';
-                document.getElementById("updateBtn").style.display = 'none'; 
-                this.form = {
-                  inspected_date: moment().format(),
-                  inspected_by: {!! Auth::user()->role->id !!},
-                  container_photo: []
-                }
-                this.form.container_no = payload.container_no
-                this.containerInfo = {}
-                this.containerError = error.response.data
-              })
-            }, 1000)
+                axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}&type=releasing`, payload)
+                .then(data => {
+                  if (!this.form.id) {
+                    document.getElementById("signCard").style.display = 'inherit'; 
+                    document.getElementById("saveBtn").style.display = 'inherit';
+                  } else {
+                    document.getElementById("updateBtn").style.display = 'inherit'; 
+                  }
+                  this.isOk = true
+                  this.containerError = {}
+                  this.containerInfo = data.data
+                }).catch(error => {
+                  this.isOk = false
+                  document.getElementById("signCard").style.display = 'none';
+                  document.getElementById("saveBtn").style.display = 'none';
+                  document.getElementById("updateBtn").style.display = 'none'; 
+                  this.form = {
+                    inspected_date: moment().format(),
+                    inspected_by: {!! Auth::user()->role->id !!},
+                    container_photo: []
+                  }
+                  this.form.container_no = payload.container_no
+                  this.containerInfo = {}
+                  this.containerError = error.response.data
+                })
+              }, 1000)
+            }
           },
           getBase64(file) {
             return new Promise((resolve, reject) => {
