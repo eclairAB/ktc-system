@@ -150,8 +150,8 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getReceivingDetails(Request $request)
     {
-        $contReleasing = Container::where('container_no',$request->container_no)->whereNotNull('date_released')->whereNull('date_received')->latest('created_at')->first();
-        $contRecieving = Container::where('container_no',$request->container_no)->whereNull('date_released')->whereNotNull('date_received')->latest('created_at')->first();
+        $contReleasing = Container::where('container_no',$request->container_no)->whereNotNull('releasing_id')->whereNull('receiving_id')->latest('created_at')->first();
+        $contRecieving = Container::where('container_no',$request->container_no)->whereNull('releasing_id')->whereNotNull('receiving_id')->latest('created_at')->first();
 
         if($request->type == "receiving")
         {
@@ -281,7 +281,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         if($container_id == 'all')
         {
-            $containers = Container::with('client','sizeType','containerClass')->paginate(15);
+            $containers = ContainerReceiving::with('containerClass','yardLocation','sizeType','type')->paginate(15);            
             return view('vendor.voyager.container-inquiry', ['containers' => $containers]);
         }
         else 

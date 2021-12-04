@@ -13,8 +13,8 @@ class Container extends Model
         'client_id',
         'size_type',
         'class',
-        'date_received',
-        'date_released',
+        'receiving_id',
+        'releasing_id',
     ];
 
     public function client()
