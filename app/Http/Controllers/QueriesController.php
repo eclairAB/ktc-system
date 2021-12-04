@@ -281,13 +281,15 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         if($container_id == 'all')
         {
-            $containers = Container::with('client','sizeType','containerClass')->paginate(30);
-            return $containers;
+            $containers = Container::with('client','sizeType','containerClass')->paginate(15);
             return view('vendor.voyager.container-inquiry', ['containers' => $containers]);
         }
         else 
         {
-            $container_receiving = ContainerReceiving::where('container_id');
+            $container_receiving = ContainerReceiving::where('container_receivings.container_no', $container_id)
+                ->join('container_releasings', 'container_receivings.container_no', 'container_releasings.container_no')
+                ->get();
+            return $container_receiving;
             return view('vendor.voyager.container-inquiry', ['containers' => $container_receiving]);
         }
     }
