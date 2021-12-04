@@ -8,14 +8,14 @@
       <div>
         
         <!-- <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-receivings-and-releasing/receiving')"> -->
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-receivings')">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-receivings/create')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Receiving</h4>
         </button>
       </div>
       <div>
         <!-- <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-receivings-and-releasing/releasing')"> -->
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-releasings')">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-releasings/create')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Releasing</h4>
         </button>

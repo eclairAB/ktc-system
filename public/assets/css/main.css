@@ -116,6 +116,10 @@ table {
     position: absolute;
 }
 
+.customHintText {
+    position: absolute;
+}
+
 .wrapper-custom {
     position: relative;
     width: 400px;
