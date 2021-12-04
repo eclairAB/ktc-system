@@ -560,22 +560,22 @@
             },
             deep: true
           },
-          'form.container_no': {
-            handler () {
-              if (this.form.container_no) {
-                if (this.form.container_no.length === 4) {
-                  this.form.container_no = this.form.container_no+'-'
-                }
-                if (this.form.container_no.length === 11) {
-                  this.form.container_no = this.form.container_no+'-'
-                }
-                if (this.form.container_no.length < 13) {
-                  this.isOk = false
-                }
-              }
-            },
-            deep: true
-          }
+          // 'form.container_no': {
+          //   handler () {
+          //     if (this.form.container_no) {
+          //       if (this.form.container_no.length === 4) {
+          //         this.form.container_no = this.form.container_no+'-'
+          //       }
+          //       if (this.form.container_no.length === 11) {
+          //         this.form.container_no = this.form.container_no+'-'
+          //       }
+          //       if (this.form.container_no.length < 13) {
+          //         this.isOk = false
+          //       }
+          //     }
+          //   },
+          //   deep: true
+          // }
         },
         methods:{
           deleteFromList (payload) {
