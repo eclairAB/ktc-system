@@ -254,9 +254,9 @@
             from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
             to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
           }
-          await axios.get(`/excel/daily_container_in/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`).then(data => {
+          await axios.get(`/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`).then(data => {
             this.exportLoad = false
-            window.open(`${location.origin}/excel/daily_container_in/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`, "_blank");
+            window.open(`${location.origin}/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`, "_blank");
           }).catch(error => {
             this.exportLoad = false
             console.log(error)
