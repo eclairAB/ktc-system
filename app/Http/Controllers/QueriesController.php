@@ -150,8 +150,8 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getReceivingDetails(Request $request)
     {
-        $contReleasing = Container::where('container_no',$request->container_no)->whereNotNull('date_released')->whereNull('date_received')->latest('created_at')->first();
-        $contRecieving = Container::where('container_no',$request->container_no)->whereNull('date_released')->whereNotNull('date_received')->latest('created_at')->first();
+        $contReleasing = Container::where('container_no',$request->container_no)->whereNotNull('releasing_id')->whereNull('receiving_id')->latest('created_at')->first();
+        $contRecieving = Container::where('container_no',$request->container_no)->whereNull('releasing_id')->whereNotNull('receiving_id')->latest('created_at')->first();
 
         if($request->type == "receiving")
         {
@@ -239,7 +239,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function getDailyIn(Request $request)
     {
         $data = ContainerReceiving::when($request->type != 'NA', function ($q){
-            return $q->where('type_id',$this->type);
+            return $q->where('type_id',$request->type);
         })->when($request->sizeType != 'NA', function ($q) use($request){
             return $q->where('size_type',$request->sizeType);
         })->when($request->client != 'NA', function ($q) use($request){
@@ -253,7 +253,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         })->when($request->to != 'NA', function ($q) use($request){
             return $q->whereDate('inspected_date','<=',$request->to);
         })->whereHas('container',function( $query ) use($request){
-            $query->where('container_no',$request->container_no)->where('client_id',$request->client)->where('size_type',$request->sizeType)->whereNull('date_released');
+            $query->where('container_no',$request->container_no)->where('client_id',$request->client)->where('size_type',$request->sizeType)->whereNull('releasing_id');
         })->with('client','sizeType','yardLocation','inspector','containerClass','container','type')->get();
 
         return $data;
@@ -271,7 +271,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return $q->whereDate('inspected_date','<=',$request->to);
         })->whereHas('container',function( $query ) use($request){
             $query->where('container_no',$request->container_no)->where('client_id',$request->client)
-                ->where('size_type',$request->sizeType)->whereNotNull('date_released')->latest('created_at');
+                ->where('size_type',$request->sizeType)->whereNotNull('releasing_id')->latest('created_at');
         })->whereHas('receiving',function( $query ) use($request){
             $query->where('container_no',$request->container_no);
         })->with('container.client','container.sizeType','inspector','container.containerClass','receiving','receiving.type')->get();
@@ -283,13 +283,15 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         if($container_id == 'all')
         {
-            $containers = Container::with('client','sizeType','containerClass')->paginate(30);
-            return $containers;
-            return view('vendor.voyager.container-inquiry', ['containers' => $containers]);
+            $containers = Container::with('containerClass','sizeType')->paginate(15);            
+            return view('vendor.voyager.container-inquiry.browse', ['containers' => $containers]);
         }
         else 
         {
-            $container_receiving = ContainerReceiving::where('container_id');
+            $container_receiving = ContainerReceiving::where('container_receivings.container_no', $container_id)
+                ->join('container_releasings', 'container_receivings.container_no', 'container_releasings.container_no')
+                ->get();
+            return $container_receiving;
             return view('vendor.voyager.container-inquiry', ['containers' => $container_receiving]);
         }
     }
@@ -308,7 +310,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return $q->whereDate('inspected_date','=',$request->date_as_of);
         })->whereHas('container',function( $query ) use($request){
             $query->where('container_no',$request->container_no)->where('client_id',$request->client)
-                ->where('class',$request->class)->where('size_type',$request->sizeType)->whereNull('date_released');
+                ->where('class',$request->class)->where('size_type',$request->sizeType)->whereNull('releasing_id');
         })->with('client','sizeType','yardLocation','inspector','containerClass','container')->get();
 
         foreach($data as $res)

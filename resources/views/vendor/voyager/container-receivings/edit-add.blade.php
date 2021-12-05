@@ -9,11 +9,21 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
+    <style type="text/css">
+      .page-title {
+        height: 60px !important;
+        line-height: unset !important;
+        padding-top: 10px !important;
+      }
+    </style>
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
 
 @section('page_header')
+    
+    @include('vendor.voyager.receiving-releasing-btns')
+
     <h1 class="page-title">
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
@@ -56,39 +66,21 @@
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="container_no" id="container_no" maxlength="11" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
+                          <input type="text" name="container_no" id="container_no" maxlength="13" placeholder="####-######-#" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
-                          <div class="customErrorText"><small>@{{ containerError.message }}</small></div>
+                          <div class="customErrorText" v-if="containerError.message"><small>@{{ containerError.message }}</small></div>
+                          <div class="customHintText" v-else><small>Ex. CLLU-123456-7</small></div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <v-select
                             :class="errors.size_type ? 'isError form-control' : 'form-control'"
                             :options="sizeTypeList"
                             style="height: 37px !important;"
-                            v-model="choosenSize"
+                            v-model="form.size_type"
                             :disabled="!isOk"
                             label="name"
-                            :filter="fuseSize"
-                            @option:selected="clearSize()"
-                            :reset-on-options-change='true'
-                          >
-                            <template #search="{attributes, events}">
-                              <input
-                                class="vs__search"
-                                v-bind="attributes"
-                                v-on="events"
-                                v-model="sizeSearch"
-                                style="color: black;"
-                                @input="searchSize()"
-                              />
-                            </template>
-                            <template slot="selected-option" slot-scope="option">
-                              <span>@{{option.code}}</span>
-                            </template>
-                            <template slot="option" slot-scope="option">
-                                @{{option.code}}
-                            </template>
-                          </v-select>
+                            :reduce="name => name.id"
+                          ></v-select>
                           <label for="lastname" class="form-control-placeholder"> Size Type</label>
                           <div class="customErrorText"><small>@{{ errors.size_type ? errors.size_type[0] : '' }}</small></div>
                         </div>
@@ -97,31 +89,11 @@
                             style="height: 37px !important;"
                             :class="errors.client_id ? 'isError form-control' : 'form-control'"
                             :options="clientList"
-                            v-model="choosenClient"
+                            v-model="form.client_id"
                             :disabled="!isOk"
                             label="code_name"
-                            :filter="fuseClient"
-                            @option:selected="clearClient()"
-                            :reset-on-options-change='true'
                             :reduce="code_name => code_name.id"
-                          >
-                            <template #search="{attributes, events}">
-                              <input
-                                class="vs__search"
-                                v-bind="attributes"
-                                v-on="events"
-                                style="color: black;"
-                                v-model="clientSearch"
-                                @input="searchClient()"
-                              />
-                            </template>
-                            <template slot="selected-option" slot-scope="option">
-                              <span>@{{option.code_name}}</span>
-                            </template>
-                            <template slot="option" slot-scope="option">
-                                @{{option.code_name}}
-                            </template>
-                          </v-select>
+                          ></v-select>
                           <label for="client" class="form-control-placeholder"> Client</label>
                           <div class="customErrorText"><small>@{{ errors.client_id ? errors.client_id[0] : '' }}</small></div>
                         </div>
@@ -131,34 +103,23 @@
                             :class="errors.yard_location ? 'isError form-control' : 'form-control'"
                             :options="yardList"
                             :disabled="!isOk"
-                            v-model="choosenYard"
+                            v-model="form.yard_location"
                             label="name"
-                            @option:selected="clearYard()"
-                            :reset-on-options-change='true'
                             :reduce="name => name.id"
-                          >
-                            <template #search="{attributes, events}">
-                              <input
-                                class="vs__search"
-                                v-bind="attributes"
-                                v-on="events"
-                                style="color: black;"
-                                v-model="yardSearch"
-                                @input="searchYard()"
-                              />
-                            </template>
-                            <template slot="selected-option" slot-scope="option">
-                              <span>@{{option.name}}</span>
-                            </template>
-                            <template slot="option" slot-scope="option">
-                                @{{option.name}}
-                            </template>
-                          </v-select>
+                          ></v-select>
                           <label for="yard_location" class="form-control-placeholder"> Yard Location</label>
                           <div class="customErrorText"><small>@{{ errors.yard_location ? errors.yard_location[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="type" id="type" disabled v-model="form.type" style="height: 37px;" :class="errors.type ? 'isError form-control' : 'form-control'">
+                          <v-select
+                            :class="errors.type_id ? 'isError form-control' : 'form-control'"
+                            :options="typeList"
+                            style="height: 37px !important;"
+                            v-model="form.type_id"
+                            :disabled="!isOk"
+                            label="code"
+                            :reduce="code => code.id"
+                          ></v-select>
                           <label for="type" class="form-control-placeholder"> Type</label>
                           <div class="customErrorText"><small>@{{ errors.type ? errors.type[0] : '' }}</small></div>
                         </div>
@@ -167,31 +128,11 @@
                             style="height: 37px !important;"
                             :class="errors.class ? 'isError form-control' : 'form-control'"
                             :options="classList"
-                            v-model="choosenClass"
+                            v-model="form.class"
                             :disabled="!isOk"
-                            label="class_name"
-                            :filter="fuseClass"
-                            @option:selected="clearClass()"
-                            :reset-on-options-change='true'
-                            :reduce="class_name => class_name.id"
-                          >
-                            <template #search="{attributes, events}">
-                              <input
-                                class="vs__search"
-                                v-bind="attributes"
-                                v-on="events"
-                                style="color: black;"
-                                v-model="classSearch"
-                                @input="searchClass()"
-                              />
-                            </template>
-                            <template slot="selected-option" slot-scope="option">
-                              <span>@{{option.class_code}}</span>
-                            </template>
-                            <template slot="option" slot-scope="option">
-                                @{{option.class_code}}
-                            </template>
-                          </v-select>
+                            label="class_code"
+                            :reduce="class_code => class_code.id"
+                          ></v-select>
                           <label for="contact_number" class="form-control-placeholder"> Class</label>
                           <div class="customErrorText"><small>@{{ errors.class ? errors.class[0] : '' }}</small></div>
                         </div>
@@ -271,7 +212,7 @@
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding: 0 !important; margin: 0 !important;">
                           <div style="display: flex; justify-content: flex-end; padding-top: 0;">
-                            <button class="btn btn-success" @click="addNew"> Add Damage</button>
+                            <button class="btn btn-success" @click="addNew" :disabled="!isOk"> Add Damage</button>
                           </div>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="margin-top: 0 !important; margin-bottom: 10px;">
@@ -307,6 +248,11 @@
                         <hr style="margin: 0">
                         <div class="modal-body">
                           <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
+                            <input type="text" name="repair" id="repair" :class="damageError.repair ? 'isError form-control' : 'form-control'" v-model="input.repair" style="height: 37px !important; margin-top: 10px;" @input="inputRepair">
+                            <label for="repair" class="form-control-placeholder"> Repair</label>
+                            <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
+                          </div>
+                          <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
                             <input type="text" name="component" id="component" :class="damageError.component ? 'isError form-control' : 'form-control'" v-model="input.component" style="height: 37px !important; margin-top: 10px;" @input="inputComponent">
                             <label for="component" class="form-control-placeholder"> Component</label>
                             <div class="customErrorText"><small>@{{ damageError.component }}</small></div>
@@ -315,11 +261,6 @@
                             <input type="text" name="damage" id="damage" :class="damageError.damage ? 'isError form-control' : 'form-control'" v-model="input.damage" style="height: 37px !important; margin-top: 10px;" @input="inputDamage">
                             <label for="damage" class="form-control-placeholder"> Damage</label>
                             <div class="customErrorText"><small>@{{ damageError.damage }}</small></div>
-                          </div>
-                          <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
-                            <input type="text" name="repair" id="repair" :class="damageError.repair ? 'isError form-control' : 'form-control'" v-model="input.repair" style="height: 37px !important; margin-top: 10px;" @input="inputRepair">
-                            <label for="repair" class="form-control-placeholder"> Repair</label>
-                            <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
                           </div>
                           <div class="col-lg-12 form-group mt-3">
                             <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="height: 37px !important; margin-top: 10px;">
@@ -351,6 +292,8 @@
                           </div>
                         </div>
                         <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" style="margin-top: 15px;" @click="clearDamage"> Clear</button>
+                          <button type="button" class="btn btn-danger" style="margin-top: 15px;" @click="cancelDamage"> Cancel</button>
                           <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" @click="checkDamage"> Save</button>
                         </div>
                       </div>
@@ -583,15 +526,18 @@
           loginUser: `{!! Auth::user()->name !!}`,
           clientList: [],
           sizeTypeList: [],
+          typeList: [],
           classList: [],
           yardList: [],
           images: [],
           choosenSize: {},
+          choosenType: {},
           choosenClient: {},
           choosenYard: {},
           choosenClass: {},
           classSearch: '',
           sizeSearch: '',
+          typeSearch: '',
           clientSearch: '',
           yardSearch: '',
           emptyloaded: [
@@ -613,7 +559,23 @@
               this.pasmo()
             },
             deep: true
-          }
+          },
+          // 'form.container_no': {
+          //   handler () {
+          //     if (this.form.container_no) {
+          //       if (this.form.container_no.length === 4) {
+          //         this.form.container_no = this.form.container_no+'-'
+          //       }
+          //       if (this.form.container_no.length === 11) {
+          //         this.form.container_no = this.form.container_no+'-'
+          //       }
+          //       if (this.form.container_no.length < 13) {
+          //         this.isOk = false
+          //       }
+          //     }
+          //   },
+          //   deep: true
+          // }
         },
         methods:{
           deleteFromList (payload) {
@@ -635,8 +597,16 @@
               })
             })
           },
+          clearDamage () {
+            this.damages = {}
+            this.damageError = {}
+            this.input = {}
+          },
+          cancelDamage () {
+            $('#dialog').modal('hide');
+          },
           pasmo () {
-            this.damages.description = ((this.damages.component ? this.damages.component : '') + ' ' + (this.damages.damage ? this.damages.damage : '') + ' ' + (this.damages.repair ? this.damages.repair : '') + ' ' + (this.damages.location ? this.damages.location : '') + ' ' + (this.damages.width ? this.damages.width : '') + ' ' + (this.damages.length ? this.damages.length : '') + ' ' + (this.damages.quantity ? this.damages.quantity : ''))
+            this.damages.description = (this.damages.repair ? this.damages.repair : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage : '') + ' ' + (this.damages.component ? this.damages.component : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}CM` : '') + '' + (this.damages.width ? `X${this.damages.width}CM` : '')
           },
           inputComponent () {
             clearTimeout(this.timer)
@@ -721,32 +691,6 @@
           photolink (payload) {
             return `background: url(${payload.storage_path})`
           },
-          fuseSize(options, search) {
-            const fuse = new Fuse(options, {
-              keys: ['code', 'name'],
-              shouldSort: true,
-            })
-            return search.length
-              ? fuse.search(search).map(({ item }) => item)
-              : fuse.list
-          },
-          clearSize () {
-            this.form.size_type = this.choosenSize.id
-            this.form.type = this.choosenSize.type
-            this.sizeSearch = ''
-          },
-          searchSize () {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-              const payload = {
-                keyword: this.sizeSearch
-              }
-              axios.get(`/admin/get/container/size_type?keyword=${payload.keyword}`, payload)
-              .then(data => {
-                this.sizeTypeList = data.data
-              })
-            }, 1000)
-          },
           async getSize () {
             let search = {
               keyword: ''
@@ -757,30 +701,15 @@
               console.log('error: ', error)
             })
           },
-          fuseClass(options, search) {
-            const fuse = new Fuse(options, {
-              keys: ['class_code', 'class_name'],
-              shouldSort: true,
+          async getType () {
+            let search = {
+              keyword: ''
+            }
+            await axios.get(`/admin/get/type?keyword=${search.keyword}`, search).then( data => {
+              this.typeList = data.data
+            }).catch(error => {
+              console.log('error: ', error)
             })
-            return search.length
-              ? fuse.search(search).map(({ item }) => item)
-              : fuse.list
-          },
-          clearClass () {
-            this.form.class = this.choosenClass.id
-            this.classSearch = ''
-          },
-          searchClass () {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-              const payload = {
-                keyword: this.classSearch
-              }
-              axios.get(`/admin/get/container/classes?keyword=${payload.keyword}`, payload)
-              .then(data => {
-                this.classList = data.data
-              })
-            }, 1000)
           },
           async getClass () {
             let search = {
@@ -792,31 +721,6 @@
               console.log('error: ', error)
             })
           },
-          fuseClient(options, search) {
-            const fuse = new Fuse(options, {
-              keys: ['code_name'],
-              shouldSort: true,
-            })
-            return search.length
-              ? fuse.search(search).map(({ item }) => item)
-              : fuse.list
-          },
-          clearClient () {
-            this.form.client_id = this.choosenClient.id
-            this.sizeSearch = ''
-          },
-          searchClient () {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-              const payload = {
-                keyword: this.clientSearch
-              }
-              axios.get(`/admin/get/clients?keyword=${payload.keyword}`, payload)
-              .then(data => {
-                this.clientList = data.data
-              })
-            }, 1000)
-          },
           async getClient () {
             let search = {
               keyword: ''
@@ -826,22 +730,6 @@
             }).catch(error => {
               console.log('error: ', error)
             })
-          },
-          clearYard () {
-            this.form.yard_location = this.choosenYard.id
-            this.yardSearch = ''
-          },
-          searchYard () {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-              const payload = {
-                keyword: this.yardSearch
-              }
-              axios.get(`/admin/get/yards?keyword=${payload.keyword}`, payload)
-              .then(data => {
-                this.yardList = data.data
-              })
-            }, 1000)
           },
           async getYard () {
             let search = {
@@ -854,38 +742,40 @@
             })
           },
           searchContainer () {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-              const payload = {
-                type: 'receiving',
-                container_no: this.form.container_no
-              }
-              axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}&type=receiving`)
-              .then(data => {
-                if (!this.form.id) {
-                  document.getElementById("signCard").style.display = 'inherit'; 
-                  document.getElementById("saveBtn").style.display = 'inherit';
-                } else {
-                  document.getElementById("updateBtn").style.display = 'inherit'; 
+            if (this.form.container_no.length === 13) {
+              clearTimeout(this.timer)
+              this.timer = setTimeout(() => {
+                const payload = {
+                  type: 'receiving',
+                  container_no: this.form.container_no
                 }
-                this.isOk = true
-                this.containerError = {}
-                this.containerInfo = data.data
-              }).catch(error => {
-                this.isOk = false
-                document.getElementById("signCard").style.display = 'none';
-                document.getElementById("saveBtn").style.display = 'none';
-                document.getElementById("updateBtn").style.display = 'none'; 
-                this.form = {
-                  inspected_date: moment().format(),
-                  inspected_by: {!! Auth::user()->role->id !!},
-                  container_photo: []
-                }
-                this.form.container_no = payload.container_no
-                this.containerInfo = {}
-                this.containerError = error.response.data
-              })
-            }, 1000)
+                axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}&type=receiving`)
+                .then(data => {
+                  if (!this.form.id) {
+                    document.getElementById("signCard").style.display = 'inherit'; 
+                    document.getElementById("saveBtn").style.display = 'inherit';
+                  } else {
+                    document.getElementById("updateBtn").style.display = 'inherit'; 
+                  }
+                  this.isOk = true
+                  this.containerError = {}
+                  this.containerInfo = data.data
+                }).catch(error => {
+                  this.isOk = false
+                  document.getElementById("signCard").style.display = 'none';
+                  document.getElementById("saveBtn").style.display = 'none';
+                  document.getElementById("updateBtn").style.display = 'none'; 
+                  this.form = {
+                    inspected_date: moment().format(),
+                    inspected_by: {!! Auth::user()->role->id !!},
+                    container_photo: []
+                  }
+                  this.form.container_no = payload.container_no
+                  this.containerInfo = {}
+                  this.containerError = error.response.data
+                })
+              }, 1000)
+            }
           },
           getBase64(file) {
             return new Promise((resolve, reject) => {
@@ -922,9 +812,6 @@
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.form.signature = data
-            this.form.class = this.choosenClass
-            this.form.client_id = this.choosenClient
-            this.form.yard_location = this.choosenYard
             await axios.post('/admin/create/receiving', this.form).then(async data => {
               document.getElementById("save").removeAttribute("disabled");
               this.errors = {}
@@ -942,7 +829,7 @@
                 w.print();
                 w.close();
               })
-              window.location = checkedit
+              window.location = `${checkedit}/${customId}/edit`
             }).catch(error => {
               document.getElementById("save").removeAttribute("disabled");
               this.errors = error.response.data.errors
@@ -963,7 +850,7 @@
                 w.print();
                 w.close();
               })
-              window.location = checkedit
+              window.location = `${checkedit}/${customId}/edit`
             }).catch(error => {
               document.getElementById("update").removeAttribute("disabled");
               this.errors = error.response.data.errors
@@ -997,6 +884,7 @@
                 this.yardSearch = data.data.yard_location.name
                 this.clientSearch = data.data.client.code_name
                 this.form.size_type = data.data.size_type.id
+                this.form.type_id = data.data.type_id
                 this.form.client_id = data.data.client.id
                 this.form.yard_location = data.data.yard_location.id
                 this.form.class = data.data.container_class.id
@@ -1035,6 +923,7 @@
           document.getElementById("updateBtn").style.display = 'none';
           this.getdata()
           this.getSize()
+          this.getType()
           this.getClient()
           this.getYard()
           this.getClass()
