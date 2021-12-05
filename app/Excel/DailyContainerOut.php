@@ -37,7 +37,7 @@ class DailyContainerOut implements  FromView, ShouldAutoSize
             return $q->whereDate('inspected_date','<=',$this->to);
         })->whereHas('container',function( $query ) {
             $query->where('container_no',$this->container_no)->where('client_id',$this->client)
-                ->where('size_type',$this->sizeType)->whereNotNull('date_released')->latest('created_at');
+                ->where('size_type',$this->sizeType)->whereNotNull('releasing_id')->latest('created_at');
         })->whereHas('receiving',function( $query ) {
             $query->where('container_no',$this->container_no)->where('type_id',$this->type);
         })->with('container.client','container.sizeType','inspector','container.containerClass','receiving','receiving.type')->get();
