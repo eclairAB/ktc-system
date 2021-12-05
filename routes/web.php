@@ -75,6 +75,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/type/all',[QueriesController::class,"getTypeByAll"]);
     Route::get('/get/type/byId/{id}',[QueriesController::class,"getTypeById"]);
     Route::get('/get/type',[QueriesController::class,"getType"]);
+    Route::post('/update/type',[UpdateController::class,"updateType"]);
 
     // fetch daily in-out
     Route::post('/get/daily_in',[QueriesController::class,"getDailyIn"]);

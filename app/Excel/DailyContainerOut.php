@@ -12,10 +12,11 @@ Use \Maatwebsite\Excel\Sheet;
 
 class DailyContainerOut implements  FromView, ShouldAutoSize
 {
-    protected $sizeType,$client,$container_no,$booking_no,$from,$to;
+    protected $type,$sizeType,$client,$container_no,$booking_no,$from,$to;
 
-    public function __construct($sizeType,$client,$container_no,$booking_no,$from,$to)
+    public function __construct($type,$sizeType,$client,$container_no,$booking_no,$from,$to)
     {
+        $this->type = $type;
         $this->sizeType = $sizeType;
         $this->client = $client;
         $this->container_no = $container_no;
@@ -38,8 +39,8 @@ class DailyContainerOut implements  FromView, ShouldAutoSize
             $query->where('container_no',$this->container_no)->where('client_id',$this->client)
                 ->where('size_type',$this->sizeType)->whereNotNull('date_released')->latest('created_at');
         })->whereHas('receiving',function( $query ) {
-            $query->where('container_no',$this->container_no);
-        })->with('container.client','container.sizeType','inspector','container.containerClass','receiving')->get();
+            $query->where('container_no',$this->container_no)->where('type_id',$this->type);
+        })->with('container.client','container.sizeType','inspector','container.containerClass','receiving','receiving.type')->get();
 
         return view('excel.daily_container_out',compact('data'));
     }

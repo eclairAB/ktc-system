@@ -171,14 +171,14 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             if($request->type == "releasing" && $contRecieving)
             {
                 return ContainerReceiving::where('container_no',$request->container_no)
-                ->with('client:id,code_name','sizeType:id,code,name','containerClass:id,class_code,class_name')
+                ->with('client:id,code_name','sizeType:id,code,name','type:id,code,name','containerClass:id,class_code,class_name')
                 ->select(
                     'id',
                     'client_id',
                     'size_type',
                     'class',
                     'empty_loaded',
-                    'manufactured_date')->latest('created_at')->first();
+                    'manufactured_date','type_id')->latest('created_at')->first();
             }
             else
             {
@@ -238,7 +238,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getDailyIn(Request $request)
     {
-        $data = ContainerReceiving::when($request->sizeType != 'NA', function ($q) use($request){
+        $data = ContainerReceiving::when($request->type != 'NA', function ($q){
+            return $q->where('type_id',$this->type);
+        })->when($request->sizeType != 'NA', function ($q) use($request){
             return $q->where('size_type',$request->sizeType);
         })->when($request->client != 'NA', function ($q) use($request){
             return $q->where('client_id',$request->client);
@@ -252,7 +254,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return $q->whereDate('inspected_date','<=',$request->to);
         })->whereHas('container',function( $query ) use($request){
             $query->where('container_no',$request->container_no)->where('client_id',$request->client)->where('size_type',$request->sizeType)->whereNull('date_released');
-        })->with('client','sizeType','yardLocation','inspector','containerClass','container')->get();
+        })->with('client','sizeType','yardLocation','inspector','containerClass','container','type')->get();
 
         return $data;
     }
@@ -272,7 +274,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 ->where('size_type',$request->sizeType)->whereNotNull('date_released')->latest('created_at');
         })->whereHas('receiving',function( $query ) use($request){
             $query->where('container_no',$request->container_no);
-        })->with('container.client','container.sizeType','inspector','container.containerClass','receiving')->get();
+        })->with('container.client','container.sizeType','inspector','container.containerClass','receiving','receiving.type')->get();
 
         return $data;
     }
@@ -296,8 +298,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getContainerAging(Request $request)
     {
-        $data = ContainerReceiving::
-        when($request->sizeType != 'NA', function ($q) use($request){
+        $data = ContainerReceiving::when($request->type != 'NA', function ($q)  use($request){
+            return $q->where('type_id',$request->type);
+        })->when($request->sizeType != 'NA', function ($q) use($request){
             return $q->where('size_type',$request->sizeType);
         })->when($request->client != 'NA', function ($q) use($request){
             return $q->where('client_id',$request->client);
