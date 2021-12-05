@@ -253,7 +253,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         })->when($request->to != 'NA', function ($q) use($request){
             return $q->whereDate('inspected_date','<=',$request->to);
         })->whereHas('container',function( $query ) use($request){
-            $query->where('container_no',$request->container_no)->where('client_id',$request->client)->where('size_type',$request->sizeType)->whereNull('date_released');
+            $query->where('container_no',$request->container_no)->where('client_id',$request->client)->where('size_type',$request->sizeType)->whereNull('releasing_id');
         })->with('client','sizeType','yardLocation','inspector','containerClass','container','type')->get();
 
         return $data;
@@ -271,7 +271,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return $q->whereDate('inspected_date','<=',$request->to);
         })->whereHas('container',function( $query ) use($request){
             $query->where('container_no',$request->container_no)->where('client_id',$request->client)
-                ->where('size_type',$request->sizeType)->whereNotNull('date_released')->latest('created_at');
+                ->where('size_type',$request->sizeType)->whereNotNull('releasing_id')->latest('created_at');
         })->whereHas('receiving',function( $query ) use($request){
             $query->where('container_no',$request->container_no);
         })->with('container.client','container.sizeType','inspector','container.containerClass','receiving','receiving.type')->get();
@@ -310,7 +310,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return $q->whereDate('inspected_date','=',$request->date_as_of);
         })->whereHas('container',function( $query ) use($request){
             $query->where('container_no',$request->container_no)->where('client_id',$request->client)
-                ->where('class',$request->class)->where('size_type',$request->sizeType)->whereNull('date_released');
+                ->where('class',$request->class)->where('size_type',$request->sizeType)->whereNull('releasing_id');
         })->with('client','sizeType','yardLocation','inspector','containerClass','container')->get();
 
         foreach($data as $res)
