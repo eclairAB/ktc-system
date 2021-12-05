@@ -168,7 +168,7 @@ class PostsController extends Controller
             if($release)
             {
                 $dataCont = Container::where('container_no',$releasing['container_no'])->whereNotNull('receiving_id')->latest('created_at')->first();
-                $dataCont->releasing_id = $release['id'];
+                $dataCont->releasing_id = $release[0]->container_id;
                 $dataCont->save();
 
                 $dataContRemark = [
@@ -217,7 +217,7 @@ class PostsController extends Controller
                 'client_id'=>$receiving['client_id'],
                 'size_type'=>$receiving['size_type'],
                 'class'=>$receiving['class'],
-                'receiving_id'=>$receive['id'],
+                'receiving_id'=>$receive[0]->container_id,
             ];
             $cont = Container::create($dataCont);
 
