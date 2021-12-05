@@ -8,11 +8,21 @@ use App\Models\ContainerReleasing;
 use App\Models\ContainerSizeType;
 use App\Models\ReceivingDamage;
 use App\Models\Staff;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class UpdateController extends Controller
 {
     //
+
+    public function updateType(Request $request)
+    {
+        $validate_type = $request->all();
+        $type = Type::where('id',$request->id)->first();
+        $type->update($validate_type);
+
+        return $sizeType;
+    }
 
     public function updateSizeType(Request $request)
     {

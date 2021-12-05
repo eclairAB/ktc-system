@@ -12,10 +12,11 @@ Use \Maatwebsite\Excel\Sheet;
 
 class DailyContainerIn implements  FromView, ShouldAutoSize
 {
-    protected $sizeType,$client,$container_no,$loc,$from,$to;
+    protected $type,$sizeType,$client,$container_no,$loc,$from,$to;
 
-    public function __construct($sizeType,$client,$container_no,$loc,$from,$to)
+    public function __construct($type,$sizeType,$client,$container_no,$loc,$from,$to)
     {
+        $this->type = $type;
         $this->sizeType = $sizeType;
         $this->client = $client;
         $this->container_no = $container_no;
@@ -26,7 +27,9 @@ class DailyContainerIn implements  FromView, ShouldAutoSize
 
     public function view(): View
     {
-        $data = ContainerReceiving::when($this->sizeType != 'NA', function ($q){
+        $data = ContainerReceiving::when($this->type != 'NA', function ($q){
+            return $q->where('type_id',$this->type);
+        })->when($this->sizeType != 'NA', function ($q){
             return $q->where('size_type',$this->sizeType);
         })->when($this->client != 'NA', function ($q){
             return $q->where('client_id',$this->client);
@@ -40,7 +43,7 @@ class DailyContainerIn implements  FromView, ShouldAutoSize
             return $q->whereDate('inspected_date','<=',$this->to);
         })->whereHas('container',function( $query ) {
             $query->where('container_no',$this->container_no)->where('client_id',$this->client)->where('size_type',$this->sizeType)->whereNull('date_released');
-        })->with('client','sizeType','yardLocation','inspector','containerClass','container')->get();
+        })->with('client','sizeType','yardLocation','inspector','containerClass','container','type')->get();
 
         return view('excel.daily_container_in',compact('data'));
     }
