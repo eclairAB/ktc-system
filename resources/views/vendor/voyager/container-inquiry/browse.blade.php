@@ -56,6 +56,7 @@
                     <tbody>
                         @foreach ($containers as $item)
                             <tr style="border-top: solid #5c5c5c29 1px">
+                            {{ $item }}
                                 <td style="padding: 0 10px">
                                     {{ $item->containerClass->class_name }}&nbsp
                                 </td>
