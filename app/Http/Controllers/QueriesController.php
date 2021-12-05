@@ -273,7 +273,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $query->where('container_no',$request->container_no)->where('client_id',$request->client)
                 ->where('size_type',$request->sizeType)->whereNotNull('releasing_id')->latest('created_at');
         })->whereHas('receiving',function( $query ) use($request){
-            $query->where('container_no',$request->container_no);
+            $query->where('container_no',$request->container_no)->where('type_id',$request->type);
         })->with('container.client','container.sizeType','inspector','container.containerClass','receiving','receiving.type')->get();
 
         return $data;
