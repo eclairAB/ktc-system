@@ -238,7 +238,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getDailyIn(Request $request)
     {
-        $data = ContainerReceiving::when($request->type != 'NA', function ($q){
+        $data = ContainerReceiving::when($request->type != 'NA', function ($q) use($request){
             return $q->where('type_id',$request->type);
         })->when($request->sizeType != 'NA', function ($q) use($request){
             return $q->where('size_type',$request->sizeType);
