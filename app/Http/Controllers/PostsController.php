@@ -238,7 +238,7 @@ class PostsController extends Controller
             'code'=>$sizeType['code'],
             'name'=>$sizeType['name'],
             'size'=>$sizeType['size'],
-            'type'=>$sizeType['type']
+            // 'type'=>$sizeType['type']
         ];
         return ContainerSizeType::create($dataSizeT);
     }
