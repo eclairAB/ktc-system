@@ -13,100 +13,55 @@
         </div>
         <div class="col-xs-12" style="margin: 0;">
           <div class="row" style="padding: 0 15px;">
-          	
-          	<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+          	<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
                 :options="sizeTypeList"
                 style="height: 37px !important;"
-                v-model="choosenSize"
+                v-model="form.sizeType"
                 class="form-control"
-                label="name"
-                :filter="fuseSize"
-                @option:selected="clearSize()"
-                :reset-on-options-change='true'
-              >
-                <template #search="{attributes, events}">
-                  <input
-                    class="vs__search"
-                    v-bind="attributes"
-                    v-on="events"
-                    v-model="sizeSearch"
-                    style="color: black;"
-                    @input="searchSize()"
-                  />
-                </template>
-                <template slot="selected-option" slot-scope="option">
-                  <span>@{{option.code}}</span>
-                </template>
-                <template slot="option" slot-scope="option">
-                    @{{option.code}}
-                </template>
-              </v-select>
-              <label for="lastname" class="form-control-placeholder"> Size Type <span style="color: red;"> *</span></label>
+                label="code"
+                :reduce="code => code.id"
+              ></v-select>
+              <label for="code" class="form-control-placeholder"> Size<span style="color: red;"> *</span></label>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+              <v-select
+                class="form-control"
+                :options="typeList"
+                style="height: 37px !important;"
+                v-model="form.type"
+                label="code"
+                :reduce="code => code.id"
+              ></v-select>
+              <label for="type" class="form-control-placeholder"> Type</label>
             </div>
             
-            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
                 style="height: 37px !important;"
                 :options="clientList"
-                v-model="choosenClient"
+                v-model="form.client"
                 label="code_name"
                 class="form-control"
-                :filter="fuseClient"
-                @option:selected="clearClient()"
-                :reset-on-options-change='true'
-              >
-                <template #search="{attributes, events}">
-                  <input
-                    class="vs__search"
-                    v-bind="attributes"
-                    v-on="events"
-                    style="color: black;"
-                    v-model="clientSearch"
-                    @input="searchClient()"
-                  />
-                </template>
-                <template slot="selected-option" slot-scope="option">
-                  <span>@{{option.code_name}}</span>
-                </template>
-                <template slot="option" slot-scope="option">
-                    @{{option.code_name}}
-                </template>
-              </v-select>
+                :reduce="code_name => code_name.id"
+              ></v-select>
               <label for="client" class="form-control-placeholder"> Client <span style="color: red;"> *</span></label>
             </div>
             
-            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
                 style="height: 37px !important;"
                 class="form-control"
                 :options="yardList"
-                v-model="choosenYard"
+                v-model="form.loc"
                 label="name"
-                @option:selected="clearYard()"
-                :reset-on-options-change='true'
-              >
-                <template #search="{attributes, events}">
-                  <input
-                    class="vs__search"
-                    v-bind="attributes"
-                    v-on="events"
-                    style="color: black;"
-                    v-model="yardSearch"
-                    @input="searchYard()"
-                  />
-                </template>
-                <template slot="selected-option" slot-scope="option">
-                  <span>@{{option.name}}</span>
-                </template>
-                <template slot="option" slot-scope="option">
-                    @{{option.name}}
-                </template>
-              </v-select>
+                :reduce="name => name.id"
+              ></v-select>
               <label for="loc" class="form-control-placeholder"> Yard Location</label>
             </div>
 
-            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
                 style="height: 37px !important;"
                 :class="errors.type ? 'isError form-control' : 'form-control'"
@@ -126,7 +81,7 @@
               <label for="lastname" class="form-control-placeholder"> Container No. <span style="color: red;"> *</span></label>
             </div>
 
-            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
             	<vuejs-datepicker
                 v-model="form.from"
                 placeholder="mm/dd/yyyyy"
@@ -139,7 +94,7 @@
               <label for="from" class="form-control-placeholder"> Date From</label>
             </div>
 
-            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
             	<vuejs-datepicker
                 v-model="form.to"
                 placeholder="mm/dd/yyyyy"
@@ -235,58 +190,19 @@
       vuejsDatepicker,
     },
     data: {
-      form: {
-        loc: 'NA',
-      },
+      form: {},
       errors: [],
       clientList: [],
       sizeTypeList: [],
+      typeList: [],
       bookingNoList: [],
       containerNoList: [],
       yardList: [],
-      choosenSize: {},
-      choosenClient: {},
-      choosenYard: {},
-      sizeSearch: '',
-      clientSearch: '',
-      yardSearch: '',
       loading: false,
       containerInList: [],
       tableLoad: false,
       generateLoad: false,
       exportLoad: false
-    },
-    watch: {
-      'choosenSize': {
-        handler () {
-          if (this.choosenSize === null) {
-            if (this.form.sizeType){
-              delete this.form.sizeType
-            }
-          }
-        },
-        deep: true
-      },
-      'choosenClient': {
-        handler () {
-          if (this.choosenClient === null) {
-            if (this.form.client){
-              delete this.form.client
-            }
-          }
-        },
-        deep: true
-      },
-      'choosenYard': {
-        handler () {
-          if (this.choosenYard === null) {
-            if (this.form.loc){
-              this.form.loc = 'NA'
-            }
-          }
-        },
-        deep: true
-      }
     },
     methods: {
     	dateFormat(date) {
@@ -296,10 +212,11 @@
         if (this.form.sizeType && this.form.client && this.form.container_no) {
           this.generateLoad = true
           let payload = {
+            type: this.form.type,
             sizeType: this.form.sizeType,
             client: this.form.client,
             container_no: this.form.container_no,
-            loc: this.form.loc,
+            loc: this.form.from === undefined || null ? 'NA' : this.form.loc,
             from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
             to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
           }
@@ -329,16 +246,17 @@
         if (this.form.sizeType && this.form.client && this.form.container_no) {
           this.exportLoad = true
           let payload = {
+            type: this.form.type,
             sizeType: this.form.sizeType,
             client: this.form.client,
             container_no: this.form.container_no,
-            loc: this.form.loc,
+            loc: this.form.from === undefined || null ? 'NA' : this.form.loc,
             from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
             to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
           }
-          await axios.get(`/excel/daily_container_in/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`).then(data => {
+          await axios.get(`/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`).then(data => {
             this.exportLoad = false
-            window.open(`${location.origin}/excel/daily_container_in/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`, "_blank");
+            window.open(`${location.origin}/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`, "_blank");
           }).catch(error => {
             this.exportLoad = false
             console.log(error)
@@ -351,31 +269,6 @@
           })
         }
       },
-      fuseSize(options, search) {
-        const fuse = new Fuse(options, {
-          keys: ['code', 'name'],
-          shouldSort: true,
-        })
-        return search.length
-          ? fuse.search(search).map(({ item }) => item)
-          : fuse.list
-      },
-      clearSize () {
-        this.form.sizeType = this.choosenSize.id
-        this.sizeSearch = ''
-      },
-      searchSize () {
-        clearTimeout(this.timer)
-        this.timer = setTimeout(() => {
-          const payload = {
-            keyword: this.sizeSearch
-          }
-          axios.get(`/admin/get/container/size_type?keyword=${payload.keyword}`, payload)
-          .then(data => {
-            this.sizeTypeList = data.data
-          })
-        }, 1000)
-      },
       async getSize () {
         let search = {
           keyword: ''
@@ -386,30 +279,15 @@
           console.log('error: ', error)
         })
       },
-      fuseClient(options, search) {
-        const fuse = new Fuse(options, {
-          keys: ['code_name'],
-          shouldSort: true,
+      async getType () {
+        let search = {
+          keyword: ''
+        }
+        await axios.get(`/admin/get/type?keyword=${search.keyword}`, search).then( data => {
+          this.typeList = data.data
+        }).catch(error => {
+          console.log('error: ', error)
         })
-        return search.length
-          ? fuse.search(search).map(({ item }) => item)
-          : fuse.list
-      },
-      clearClient () {
-        this.form.client = this.choosenClient.id
-        this.clientSearch = ''
-      },
-      searchClient () {
-        clearTimeout(this.timer)
-        this.timer = setTimeout(() => {
-          const payload = {
-            keyword: this.clientSearch
-          }
-          axios.get(`/admin/get/clients?keyword=${payload.keyword}`, payload)
-          .then(data => {
-            this.clientList = data.data
-          })
-        }, 1000)
       },
       async getClient () {
         let search = {
@@ -420,22 +298,6 @@
         }).catch(error => {
           console.log('error: ', error)
         })
-      },
-      clearYard () {
-        this.form.loc = this.choosenYard.id
-        this.yardSearch = ''
-      },
-      searchYard () {
-        clearTimeout(this.timer)
-        this.timer = setTimeout(() => {
-          const payload = {
-            keyword: this.yardSearch
-          }
-          axios.get(`/admin/get/yards?keyword=${payload.keyword}`, payload)
-          .then(data => {
-            this.yardList = data.data
-          })
-        }, 1000)
       },
       async getYard () {
         let search = {
@@ -472,6 +334,7 @@
     },
     mounted () {
       this.getSize()
+      this.getType()
       this.getClient()
       this.getContainerNo()
       this.getYard()
