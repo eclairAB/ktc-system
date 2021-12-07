@@ -281,7 +281,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function containerInquiry($container_id)
     {
-        if($container_id == 'all')
+        if($container_id == 'browse')
         {
             $containers = Container::with('containerClass','sizeType')->paginate(15);            
             return view('vendor.voyager.container-inquiry.browse', ['containers' => $containers]);
@@ -291,8 +291,8 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $container_receiving = ContainerReceiving::where('container_receivings.container_no', $container_id)
                 ->join('container_releasings', 'container_receivings.container_no', 'container_releasings.container_no')
                 ->get();
-            return $container_receiving;
-            return view('vendor.voyager.container-inquiry', ['containers' => $container_receiving]);
+            // return $container_receiving;
+            return view('vendor.voyager.container-inquiry.read', ['containers' => $container_receiving]);
         }
     }
 
