@@ -86,7 +86,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/get/container/aging',[QueriesController::class,"getContainerAging"]);
 
     // fetch container inquiry
-    Route::get('/container-inquiry/{container_id}',[QueriesController::class,"containerInquiry"]);
+    Route::get('/container-inquiry/{container_no}',[QueriesController::class,"containerInquiry"]);
 
     Route::delete('/delete/damage/{id}',[UpdateController::class,"ReceivingDamageDelete"]);
 
