@@ -308,10 +308,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return $q->where('class',$request->class);
         })->when($request->date_as_of != 'NA', function ($q) use($request){
             return $q->whereDate('inspected_date','=',$request->date_as_of);
-        })->whereHas('container',function( $query ) use($request){
-            $query->where('container_no',$request->container_no)->where('client_id',$request->client)
-                ->where('class',$request->class)->where('size_type',$request->sizeType)->whereNull('releasing_id');
-        })->with('client','sizeType','yardLocation','inspector','containerClass','container')->get();
+        })->with('client','sizeType','yardLocation','containerClass','type')->get();
 
         foreach($data as $res)
         {
