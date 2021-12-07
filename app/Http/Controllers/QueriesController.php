@@ -315,7 +315,8 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
         foreach($data as $res)
         {
-            $res->total_no_days = count($data);
+            $diff_days = Carbon::parse($res->inspected_date)->diffInDays('now');
+            $res->total_no_days = $diff_days;
         }
 
         return $data;

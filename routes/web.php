@@ -83,7 +83,7 @@ Route::group(['prefix' => 'admin'], function () {
 
     // fetch container aging
     Route::get('/container-aging/all', [ViewsController::class, "containerAging"]);
-    Route::get('/get/container/aging',[QueriesController::class,"getContainerAging"]);
+    Route::post('/get/container/aging',[QueriesController::class,"getContainerAging"]);
 
     // fetch container inquiry
     Route::get('/container-inquiry/{container_id}',[QueriesController::class,"containerInquiry"]);
@@ -95,7 +95,7 @@ Route::group(['prefix' => 'admin'], function () {
   // EXCEL
     Route::get('excel/daily_container_in/{type}/{sizeType}/{client}/{container_no}/{loc}/{from}/{to}',[ExcelController::class,"dailyContainerIn"])->name('excel.daily_container_in');
     Route::get('excel/daily_container_out/{type}/{sizeType}/{client}/{container_no}/{booking_no}/{from}/{to}',[ExcelController::class,"dailyContainerOut"])->name('excel.daily_container_out');
-    
+    Route::get('excel/container_aging/{type}/{sizeType}/{client}/{class}/{container_no}/{date_as_of}',[ExcelController::class,"containerAging"])->name('excel.container_aging');
     /*Route::group(['prefix' => 'admin'], function () {
         Voyager::routes();
     });*/
