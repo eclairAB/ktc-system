@@ -35,7 +35,7 @@ class ContainerAging implements  FromView, ShouldAutoSize
             return $q->where('class',$this->class);
         })->when($this->date_as_of != 'NA', function ($q) {
             return $q->whereDate('inspected_date','=',$this->date_as_of);
-        })->with('client','sizeType','yardLocation','inspector','containerClass','container')->get();
+        })->with('client','sizeType','yardLocation','containerClass','type')->get();
         // ->whereHas('container',function( $query ) {
         //     $query->where('container_no',$this->container_no)->where('client_id',$this->client)
         //         ->where('class',$this->class)->where('size_type',$this->sizeType)->whereNull('releasing_id');
