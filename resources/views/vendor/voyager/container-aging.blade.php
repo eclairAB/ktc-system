@@ -33,7 +33,7 @@
 	              <v-select
 	                style="height: 37px !important;"
 	                :options="clientList"
-	                v-model="form.client_id"
+	                v-model="form.client"
 	                label="code_name"
 	                class="form-control"
 	                :reduce="code_name => code_name.id"
@@ -57,20 +57,20 @@
 	              <v-select
 	                :options="sizeTypeList"
 	                style="height: 37px !important;"
-	                v-model="form.size_type"
+	                v-model="form.sizeType"
 	                class="form-control"
 	                label="code"
 	                :reduce="code => code.id"
 	              ></v-select>
-	              <label for="size_type" class="form-control-placeholder"> Size<span style="color: red;"> *</span></label>
+	              <label for="sizeType" class="form-control-placeholder"> Size<span style="color: red;"> *</span></label>
 	            </div>
 
 	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
                 <v-select
-                  :class="errors.type_id ? 'isError form-control' : 'form-control'"
+                  :class="errors.type ? 'isError form-control' : 'form-control'"
                   :options="typeList"
                   style="height: 37px !important;"
-                  v-model="form.type_id"
+                  v-model="form.type"
                   label="code"
                   :reduce="code => code.id"
                 ></v-select>
@@ -85,19 +85,19 @@
 
 	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
 	            	<vuejs-datepicker
-	                v-model="form.from"
+	                v-model="form.date_as_of"
 	                placeholder="mm/dd/yyyyy"
 	                input-class="form-control"
 	                :typeable="true"
-	                name="from"
+	                name="date_as_of"
 	                :format="dateFormat"
 	                :required="true">
 	              </vuejs-datepicker>
-	              <label for="from" class="form-control-placeholder"> Date as of</label>
+	              <label for="date_as_of" class="form-control-placeholder"> Date as of</label>
 	            </div>
 
 	            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px; display: flex; justify-content: flex-end;">
-	            	<button class="btn btn-primary" :disabled="generateLoad" @click="getContainerIn">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
+	            	<button class="btn btn-primary" :disabled="generateLoad" @click="getContainerAging">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
 	            </div>
 
 	          </div>
@@ -132,8 +132,8 @@
 	            <th scope="col">Remarks</th>
 	          </tr>
 	        </thead>
-	        <tbody v-if="containerInList.length > 0">
-	          <tr v-for="(item, index) in containerInList" :key="index">
+	        <tbody v-if="containerAgingList.length > 0">
+	          <tr v-for="(item, index) in containerAgingList" :key="index">
 	            <td>@{{ item.id }}</td>
 	            <td>@{{ item.container_no }}</td>
 	            <td>@{{ item.size_type.code }} - @{{ item.size_type.name }}</td>
@@ -189,7 +189,7 @@
       clientList: [],
       sizeTypeList: [],
       typeList: [],
-      containerInList: [],
+      containerAgingList: [],
       loading: false,
       tableLoad: false,
       generateLoad: false,
@@ -199,20 +199,19 @@
     	dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
       },
-      async getContainerIn () {
-        if (this.form.sizeType && this.form.client && this.form.container_no) {
+      async getContainerAging () {
+        // if (this.form.sizeType && this.form.client && this.form.container_no) {
           this.generateLoad = true
           let payload = {
+            type: this.form.type,
+            class: this.form.class,
             sizeType: this.form.sizeType,
-            client: this.form.client,
-            container_no: this.form.container_no,
-            loc: this.form.loc,
-            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
-            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
+            remarks: this.form.remarks,
+            date_as_of: this.form.date_as_of === undefined || null ? 'NA' : moment(this.form.date_as_of).format('YYYY-MM-DD')
           }
-          await axios.post(`/admin/get/daily_in`, payload).then(data => {
+          await axios.get(`/admin/get/container/aging`, payload).then(data => {
             this.generateLoad = false
-            this.containerInList = data.data
+            this.containerAgingList = data.data
             if (data.data.length === 0) {
               Swal.fire({
                 title: '',
@@ -224,13 +223,13 @@
             this.generateLoad = false
             console.log(error)
           })
-        } else {
-          Swal.fire({
-            title: '',
-            text: 'Please fill out the required fields!',
-            icon: 'error',
-          })
-        }
+        // } else {
+        //   Swal.fire({
+        //     title: '',
+        //     text: 'Please fill out the required fields!',
+        //     icon: 'error',
+        //   })
+        // }
       },
       async exportContainerIn () {
         if (this.form.sizeType && this.form.client && this.form.container_no) {
