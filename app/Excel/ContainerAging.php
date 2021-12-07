@@ -12,15 +12,14 @@ Use \Maatwebsite\Excel\Sheet;
 
 class ContainerAging implements  FromView, ShouldAutoSize
 {
-    protected $type,$sizeType,$client,$class,$container_no,$date_as_of;
+    protected $type,$sizeType,$client,$class,$date_as_of;
 
-    public function __construct($type,$sizeType,$client,$class,$container_no,$date_as_of)
+    public function __construct($type,$sizeType,$client,$class,$date_as_of)
     {
         $this->type = $type;
         $this->sizeType = $sizeType;
         $this->client = $client;
         $this->class = $class;
-        $this->container_no = $container_no;
         $this->date_as_of = $date_as_of;
     }
 
@@ -36,10 +35,11 @@ class ContainerAging implements  FromView, ShouldAutoSize
             return $q->where('class',$this->class);
         })->when($this->date_as_of != 'NA', function ($q) {
             return $q->whereDate('inspected_date','=',$this->date_as_of);
-        })->whereHas('container',function( $query ) {
-            $query->where('container_no',$this->container_no)->where('client_id',$this->client)
-                ->where('class',$this->class)->where('size_type',$this->sizeType)->whereNull('releasing_id');
         })->with('client','sizeType','yardLocation','inspector','containerClass','container')->get();
+        // ->whereHas('container',function( $query ) {
+        //     $query->where('container_no',$this->container_no)->where('client_id',$this->client)
+        //         ->where('class',$this->class)->where('size_type',$this->sizeType)->whereNull('releasing_id');
+        // })->with('client','sizeType','yardLocation','inspector','containerClass','container')->get();
 
         foreach($data as $res)
         {
