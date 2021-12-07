@@ -15,6 +15,7 @@ use App\Models\Checker;
 use App\Models\Type;
 use App\Models\ReceivingDamage;
 use App\Models\YardLocation;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
