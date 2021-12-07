@@ -67,7 +67,7 @@
                                
                                 </td>
                                 <td style="padding: 0 10px">
-                                    <button class="btn btn-sm btn-warning pull-right edit">
+                                    <button class="btn btn-sm btn-warning pull-right edit" v-on:click="reroute('{{ $item->receiving_id }}')">
                                         <i class="voyager-eye"></i><span class="hidden-xs hidden-sm" style="margin-left:5px;">View</span>
                                     </button>
                                 </td>
@@ -93,7 +93,9 @@
     data:{
     },
     methods: {
-
+        reroute(x) {
+            location.href = x
+        },
     }
   })
 </script>
