@@ -43,7 +43,7 @@
                               Container class
                           </th>
                           <th style="padding: 0 10px;">
-                              {{-- Doses --}}
+                              Container
                           </th>
                           <th style="padding: 0 10px;">
                               {{-- Status --}}
@@ -54,30 +54,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($containers as $item)
+                        @forelse ($containers as $item)
                             <tr style="border-top: solid #5c5c5c29 1px">
                             {{ $item }}
                                 <td style="padding: 0 10px">
                                     {{ $item->containerClass->class_name }}&nbsp
                                 </td>
                                 <td style="padding: 0 10px">
-                                    {{-- {{ count($item->doses) }} --}}
+                                    {{ $item->container_no }}
                                 </td>
                                 <td style="padding: 0 10px">
                                
                                 </td>
                                 <td style="padding: 0 10px">
-                                    <button class="btn btn-sm btn-warning pull-right edit" v-on:click="reroute('{{ $item->receiving_id }}')">
+                                    <button class="btn btn-sm btn-warning pull-right edit" v-on:click="reroute('{{ $item->container_no }}')">
                                         <i class="voyager-eye"></i><span class="hidden-xs hidden-sm" style="margin-left:5px;">View</span>
                                     </button>
                                 </td>
                             </tr>
-                        @endforeach
-                        @if (count($containers) < 1)
+                        @empty
                             <tr style="border-top: solid #5c5c5c29 1px; font-weight: bold; color: #979797;">
-                                <td style="padding: 0 10px;">No pending records at this moment</td>
+                                <td style="padding: 0 10px;">No record at this moment</td>
                             </tr>
-                        @endif
+                        @endforelse
                     </tbody>
                 </table>
                 <br>
