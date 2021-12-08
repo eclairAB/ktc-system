@@ -29,7 +29,7 @@
 	        <div class="col-xs-12" style="margin: 0;">
 	          <div class="row" style="padding: 0 15px;">
 	            
-	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+	            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
 	              <v-select
 	                style="height: 37px !important;"
 	                :options="clientList"
@@ -79,11 +79,6 @@
               </div>
 
 	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-                <input type="text" name="remarks" id="remarks" v-model="form.remarks" style="height: 37px;" class="form-control">
-                <label for="remarks" class="form-control-placeholder"> Remarks<span style="color: red"> *</span></label>
-              </div>
-
-	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
 	            	<vuejs-datepicker
 	                v-model="form.date_as_of"
 	                placeholder="mm/dd/yyyyy"
@@ -124,7 +119,6 @@
 	            <th scope="col">Class</th>
 	            <th scope="col">Date In</th>
 	            <th scope="col">Total No. of Days</th>
-	            <th scope="col">Condition</th>
 	            <th scope="col">Empty/Loaded</th>
 	            <th scope="col">Yard</th>
 	            <th scope="col">Status</th>
@@ -135,17 +129,17 @@
 	        <tbody v-if="containerAgingList.length > 0">
 	          <tr v-for="(item, index) in containerAgingList" :key="index">
 	            <td>@{{ item.id }}</td>
+	            <td>@{{ item.client ? item.client.code_name : '' }}</td>
 	            <td>@{{ item.container_no }}</td>
-	            <td>@{{ item.size_type.code }} - @{{ item.size_type.name }}</td>
-	            <td>@{{ moment(item.inspected_date).format('MMMM DD, YYYY') }}</td>
-	            <td>@{{ item.client.code_name }}</td>
-	            <td>@{{ item.hauler }}</td>
-	            <td>@{{ item.plate_no }}</td>
-	            <td>@{{ item.inspector.name }}</td>
-	            <td>@{{ item.container_class.class_name }}</td>
+	            <td>@{{ item.type ? item.type.code : '' }}</td>
 	            <td>@{{ moment(item.manufactured_date).format('MMMM DD, YYYY') }}</td>
+	            <td>@{{ item.container_class ? item.container_class.class_code : '' }}</td>
+	            <td>@{{ moment(item.created_at).format('MMMM DD, YYYY') }}</td>
+	            <td>@{{ item.total_no_days }}</td>
+	            <td>@{{ item.empty_loaded }}</td>
+	            <td>@{{ item.yard_location ? item.yard_location.name : '' }}</td>
 	            <td>Received</td>
-	            <td>@{{ item.remarks }}</td>
+	            <td>@{{ item.consignee }}</td>
 	            <td>@{{ item.remarks }}</td>
 	          </tr>
 	        </tbody>
@@ -200,16 +194,16 @@
         return moment(date).format('MM/DD/yyyy');
       },
       async getContainerAging () {
-        // if (this.form.sizeType && this.form.client && this.form.container_no) {
+        if (this.form.sizeType && this.form.client) {
           this.generateLoad = true
           let payload = {
-            type: this.form.type,
-            class: this.form.class,
+            client: this.form.client,
+            type: this.form.type === undefined || null ? 'NA' : this.form.type,
+            class: this.form.class === undefined || null ? 'NA' : this.form.class,
             sizeType: this.form.sizeType,
-            remarks: this.form.remarks,
             date_as_of: this.form.date_as_of === undefined || null ? 'NA' : moment(this.form.date_as_of).format('YYYY-MM-DD')
           }
-          await axios.get(`/admin/get/container/aging`, payload).then(data => {
+          await axios.post(`/admin/get/container/aging`, payload).then(data => {
             this.generateLoad = false
             this.containerAgingList = data.data
             if (data.data.length === 0) {
@@ -223,28 +217,27 @@
             this.generateLoad = false
             console.log(error)
           })
-        // } else {
-        //   Swal.fire({
-        //     title: '',
-        //     text: 'Please fill out the required fields!',
-        //     icon: 'error',
-        //   })
-        // }
+        } else {
+          Swal.fire({
+            title: '',
+            text: 'Please fill out the required fields!',
+            icon: 'error',
+          })
+        }
       },
       async exportContainerIn () {
-        if (this.form.sizeType && this.form.client && this.form.container_no) {
+        if (this.form.sizeType && this.form.client) {
           this.exportLoad = true
           let payload = {
-            sizeType: this.form.sizeType,
             client: this.form.client,
-            container_no: this.form.container_no,
-            loc: this.form.loc,
-            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
-            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
+            type: this.form.type === undefined || null ? 'NA' : this.form.type,
+            class: this.form.class === undefined || null ? 'NA' : this.form.class,
+            sizeType: this.form.sizeType,
+            date_as_of: this.form.date_as_of === undefined || null ? 'NA' : moment(this.form.date_as_of).format('YYYY-MM-DD')
           }
-          await axios.get(`/excel/daily_container_in/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`).then(data => {
+          await axios.get(`/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_as_of}`).then(data => {
             this.exportLoad = false
-            window.open(`${location.origin}/excel/daily_container_in/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`, "_blank");
+            window.open(`${location.origin}/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_as_of}`, "_blank");
           }).catch(error => {
             this.exportLoad = false
             console.log(error)

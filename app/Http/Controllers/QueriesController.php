@@ -280,20 +280,29 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         return $data;
     }
 
-    public function containerInquiry($container_id)
+    public function containerInquiry($container_no)
     {
-        if($container_id == 'browse')
+        if($container_no == 'browse')
         {
             $containers = Container::with('containerClass','sizeType')->paginate(15);            
             return view('vendor.voyager.container-inquiry.browse', ['containers' => $containers]);
         }
         else 
         {
-            $container_receiving = ContainerReceiving::where('container_receivings.container_no', $container_id)
-                ->join('container_releasings', 'container_receivings.container_no', 'container_releasings.container_no')
+            /*$container_receiving = ContainerReceiving::where(function ($query) use ($container_id) {
+                    $query->select('container_receivings.container_no')->where('container_receivings.id', $container_id);
+                })
+                ->leftJoin('container_releasings', 'container_receivings.container_no', 'container_releasings.container_no')
+                ->get();*/
+            $container_receiving = ContainerReceiving::where('container_no', $container_no)
+                ->select('container_no', 'consignee');
+
+            $containers = ContainerReleasing::where('container_no', $container_no)
+                ->unionAll($container_receiving)
+                ->select('container_no', 'consignee')
                 ->get();
-            // return $container_receiving;
-            return view('vendor.voyager.container-inquiry.read', ['containers' => $container_receiving]);
+
+            return view('vendor.voyager.container-inquiry.read', ['containers' => $containers]);
         }
     }
 
