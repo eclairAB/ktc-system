@@ -551,7 +551,8 @@
           damages: {},
           damageError: {},
           input: {},
-          damageList: []
+          damageList: [],
+          isInvalid: false
         },
         watch: {
           'damages': {
@@ -560,22 +561,21 @@
             },
             deep: true
           },
-          // 'form.container_no': {
-          //   handler () {
-          //     if (this.form.container_no) {
-          //       if (this.form.container_no.length === 4) {
-          //         this.form.container_no = this.form.container_no+'-'
-          //       }
-          //       if (this.form.container_no.length === 11) {
-          //         this.form.container_no = this.form.container_no+'-'
-          //       }
-          //       if (this.form.container_no.length < 13) {
-          //         this.isOk = false
-          //       }
-          //     }
-          //   },
-          //   deep: true
-          // }
+          'form.container_no': {
+            handler () {
+              if (this.form.container_no) {
+                if (this.form.container_no.charAt(4)  !== '-' || this.form.container_no.charAt(11)  !== '-') {
+                  this.containerError.message = 'Invalid Format (Ex. CLLU-123456-7)'
+                  this.isOk = false
+                  this.isInvalid = true
+                } else {
+                  this.isInvalid = false
+                  this.containerError = {}
+                }
+              }
+            },
+            deep: true
+          }
         },
         methods:{
           deleteFromList (payload) {
@@ -623,7 +623,7 @@
                   this.pasmo()
                 } else {
                   delete this.damages.component
-                  this.damageError.component = 'This component code is undefined.'
+                  this.dASFAFAFSAFASFamageError.component = 'This component code is undefined.'
                 }
               })
             }, 1000)
@@ -758,7 +758,9 @@
                     document.getElementById("updateBtn").style.display = 'inherit'; 
                   }
                   this.isOk = true
-                  this.containerError = {}
+                  if (this.isInvalid !== true) {
+                    this.containerError = {} 
+                  }
                   this.containerInfo = data.data
                 }).catch(error => {
                   this.isOk = false
