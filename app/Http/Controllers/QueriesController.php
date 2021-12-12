@@ -10,6 +10,7 @@ use App\Models\ContainerRepair;
 use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
 use App\Models\Client;
+use DB;
 use App\Models\Staff;
 use App\Models\Checker;
 use App\Models\Type;
@@ -162,7 +163,12 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 $status = 'error';
                 return response()->json(compact('message','status'),404);
             }
-            
+            else if($request->type == "receiving" && $contRecieving)
+            {
+                $message = 'Container '.$request->container_no.' is already in the yard';
+                $status = 'error';
+                return response()->json(compact('message','status'),404);
+            }
             else
             {
                 return null;
@@ -284,7 +290,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         if($container_no == 'browse')
         {
-            $containers = Container::with('containerClass','sizeType')->paginate(15);            
+            $containers = Container::whereNotNull('receiving_id')
+                ->with('containerClass','sizeType')
+                ->paginate(15);            
             return view('vendor.voyager.container-inquiry.browse', ['containers' => $containers]);
         }
         else 
@@ -294,13 +302,53 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 })
                 ->leftJoin('container_releasings', 'container_receivings.container_no', 'container_releasings.container_no')
                 ->get();*/
-            $container_receiving = ContainerReceiving::where('container_no', $container_no)
+            
+            /*$container_receiving = ContainerReceiving::where('container_no', $container_no)
                 ->select('container_no', 'consignee');
 
             $containers = ContainerReleasing::where('container_no', $container_no)
                 ->unionAll($container_receiving)
                 ->select('container_no', 'consignee')
-                ->get();
+                ->get();*/
+
+            $containers = DB::table('containers')
+                ->leftJoin('container_receivings', 'containers.container_no', 'container_receivings.container_no')
+                ->leftJoin('container_releasings', 'containers.container_no', 'container_releasings.container_no')
+                ->select(
+                    'containers.id',
+                    'container_receivings.id AS receiving_id',
+                    'container_receivings.inspected_by AS receiving_inspected_by',
+                    'container_receivings.inspected_date AS receiving_inspected_date',
+                    'container_receivings.container_no AS receiving_container_no',
+                    'container_receivings.client_id AS receiving_client_id',
+                    'container_receivings.size_type AS receiving_size_type',
+                    'container_receivings.class AS receiving_class',
+                    'container_receivings.empty_loaded AS receiving_empty_loaded',
+                    'container_receivings.manufactured_date AS receiving_manufactured_date',
+                    'container_receivings.yard_location AS receiving_yard_location',
+                    'container_receivings.consignee AS receiving_consignee',
+                    'container_receivings.hauler AS receiving_hauler',
+                    'container_receivings.plate_no AS receiving_plate_no',
+                    'container_receivings.signature AS receiving_signature',
+                    'container_receivings.remarks AS receiving_remarks',
+                    'container_receivings.type_id AS receiving_type_id',
+                    'container_releasings.id AS releasing_id',
+                    'container_releasings.inspected_by AS releasing_inspected_by',
+                    'container_releasings.inspected_date AS releasing_inspected_date',
+                    'container_releasings.container_no AS releasing_container_no',
+                    'container_releasings.booking_no AS releasing_booking_no',
+                    'container_releasings.consignee AS releasing_consignee',
+                    'container_releasings.hauler AS releasing_hauler',
+                    'container_releasings.plate_no AS releasing_plate_no',
+                    'container_releasings.seal_no AS releasing_seal_no',
+                    'container_releasings.signature AS releasing_signature',
+                    'container_releasings.remarks AS releasing_remarks',
+                )
+                ->where('containers.container_no', $container_no)
+                ->whereNotNull('receiving_id')
+                ->paginate(10);
+
+                // dd($containers);
 
             return view('vendor.voyager.container-inquiry.read', ['containers' => $containers]);
         }
@@ -318,6 +366,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return $q->where('class',$request->class);
         })->when($request->date_as_of != 'NA', function ($q) use($request){
             return $q->whereDate('inspected_date','=',$request->date_as_of);
+        })->whereHas('container',function( $query ) use($request){
+            $query->where('client_id',$request->client)
+                ->where('size_type',$request->sizeType)->whereNull('releasing_id')->latest('created_at');
         })->with('client','sizeType','yardLocation','containerClass','type')->get();
 
         foreach($data as $res)

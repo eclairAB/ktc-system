@@ -69,7 +69,7 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Container Details</div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="container_no" id="container_no" maxlength="13" placeholder="####-######-#" :disabled="form.id" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
+                          <input type="text" name="container_no" id="container_no" maxlength="13" placeholder="####-######-#" :disabled="form.id" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px; text-transform:uppercase">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
                           <div class="customErrorText" v-if="containerError.message"><small>@{{ containerError.message }}</small></div>
                           <div class="customHintText" v-else><small>Ex. CLLU-123456-7</small></div>

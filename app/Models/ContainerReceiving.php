@@ -15,12 +15,9 @@ class ContainerReceiving extends Model
         'client_id',
         'size_type',
         'class',
-        // 'type',
-        // 'height'
         'empty_loaded',
         'manufactured_date',
         'yard_location',
-        // 'acceptance_no',
         'consignee',
         'hauler',
         'plate_no',
