@@ -66,10 +66,10 @@
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="container_no" id="container_no" maxlength="13" placeholder="####-######-#" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px;">
+                          <input type="text" name="container_no" id="container_no" maxlength="13" placeholder="####-######-#" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px; text-transform:uppercase">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
                           <div class="customErrorText" v-if="containerError.message"><small>@{{ containerError.message }}</small></div>
-                          <div class="customHintText" v-else><small>Ex. CLLU-123456-7</small></div>
+                          <div class="customHintText" v-else></div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <v-select
@@ -551,7 +551,8 @@
           damages: {},
           damageError: {},
           input: {},
-          damageList: []
+          damageList: [],
+          isInvalid: false
         },
         watch: {
           'damages': {
@@ -560,22 +561,21 @@
             },
             deep: true
           },
-          // 'form.container_no': {
-          //   handler () {
-          //     if (this.form.container_no) {
-          //       if (this.form.container_no.length === 4) {
-          //         this.form.container_no = this.form.container_no+'-'
-          //       }
-          //       if (this.form.container_no.length === 11) {
-          //         this.form.container_no = this.form.container_no+'-'
-          //       }
-          //       if (this.form.container_no.length < 13) {
-          //         this.isOk = false
-          //       }
-          //     }
-          //   },
-          //   deep: true
-          // }
+          'form.container_no': {
+            handler () {
+              if (this.form.container_no) {
+                if (this.form.container_no.charAt(4)  !== '-' || this.form.container_no.charAt(11)  !== '-') {
+                  this.containerError.message = 'Invalid Format (Ex. CLLU-123456-7)'
+                  this.isOk = false
+                  this.isInvalid = true
+                } else {
+                  this.isInvalid = false
+                  this.containerError = {}
+                }
+              }
+            },
+            deep: true
+          }
         },
         methods:{
           deleteFromList (payload) {
@@ -623,7 +623,7 @@
                   this.pasmo()
                 } else {
                   delete this.damages.component
-                  this.damageError.component = 'This component code is undefined.'
+                  this.dASFAFAFSAFASFamageError.component = 'This component code is undefined.'
                 }
               })
             }, 1000)
@@ -757,8 +757,10 @@
                   } else {
                     document.getElementById("updateBtn").style.display = 'inherit'; 
                   }
-                  this.isOk = true
-                  this.containerError = {}
+                  if (this.isInvalid !== true) {
+                    this.containerError = {} 
+                    this.isOk = true
+                  }
                   this.containerInfo = data.data
                 }).catch(error => {
                   this.isOk = false
