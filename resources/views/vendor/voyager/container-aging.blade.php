@@ -74,7 +74,7 @@
                   label="code"
                   :reduce="code => code.id"
                 ></v-select>
-                <label for="type" class="form-control-placeholder"> Type</label>
+                <label for="type" class="form-control-placeholder"> Type <span style="color: red;"> *</span></label>
                 <div class="customErrorText"><small>@{{ errors.size_type ? errors.size_type[0] : '' }}</small></div>
               </div>
 
@@ -194,7 +194,7 @@
         return moment(date).format('MM/DD/yyyy');
       },
       async getContainerAging () {
-        if (this.form.sizeType && this.form.client) {
+        if (this.form.sizeType && this.form.client && this.form.type) {
           this.generateLoad = true
           let payload = {
             client: this.form.client,
@@ -226,7 +226,7 @@
         }
       },
       async exportContainerIn () {
-        if (this.form.sizeType && this.form.client) {
+        if (this.form.sizeType && this.form.client && this.form.type) {
           this.exportLoad = true
           let payload = {
             client: this.form.client,
