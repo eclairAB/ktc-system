@@ -163,7 +163,12 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 $status = 'error';
                 return response()->json(compact('message','status'),404);
             }
-            
+            else if($request->type == "receiving" && $contRecieving)
+            {
+                $message = 'Container '.$request->container_no.' is already in the yard';
+                $status = 'error';
+                return response()->json(compact('message','status'),404);
+            }
             else
             {
                 return null;
@@ -361,6 +366,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return $q->where('class',$request->class);
         })->when($request->date_as_of != 'NA', function ($q) use($request){
             return $q->whereDate('inspected_date','=',$request->date_as_of);
+        })->whereHas('container',function( $query ) use($request){
+            $query->where('client_id',$request->client)
+                ->where('size_type',$request->sizeType)->whereNull('releasing_id')->latest('created_at');
         })->with('client','sizeType','yardLocation','containerClass','type')->get();
 
         foreach($data as $res)
