@@ -181,7 +181,7 @@
         </div>
         <div style="width: 70%; text-align: center;">
           <div>
-            <img style="width: 100px; height: 50px;" src="{{ $image }}">
+            <!-- <img style="width: 100px; height: 50px;" src="{{ $image }}"> -->
           </div>
           <div style="border-top: 1px solid;">
             SIGNATURE OVER PRINTED NAME
@@ -194,6 +194,7 @@
         </div>
         <div style="width: 70%; text-align: center;">
           <img style="width: 100px; height: 50px;" src="{{ $image }}">
+          {{ $receiving->inspector->name }}
           <div style="border-top: 1px solid;">
             SIGNATURE OVER PRINTED NAME
           </div>

@@ -202,10 +202,8 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->with('sizeType:id,code')->latest('created_at')->first();
         $size_types = ContainerSizeType::get();
 
-        $signUrl = explode("/app/public",$releasing->signature);
-        $imagePath = $signUrl[count($signUrl) - 1];
-        $path = 'http://' . $_SERVER['HTTP_HOST'] .'/storage'. $imagePath;
-        $image = $this->imageEncode($path);
+        $path = storage_path($releasing->signature);
+        $image = $this->imageEncodePrint($path);
         
         return view('print_releasing')->with(compact('releasing', 'receiving_details', 'size_types', 'image'));
     }
@@ -216,10 +214,8 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $damages = ReceivingDamage::where('receiving_id',$id)->get();
         $size_types = ContainerSizeType::get();
 
-        $signUrl = explode("/app/public",$receiving->signature);
-        $imagePath = $signUrl[count($signUrl) - 1];
-        $path = 'http://' . $_SERVER['HTTP_HOST'] .'/storage'. $imagePath;
-        $image = $this->imageEncode($path);
+        $path = storage_path($receiving->signature);
+        $image = $this->imageEncodePrint($path);
 
         return view('print_receiving')->with(compact('receiving', 'damages', 'size_types', 'image'));
     }
@@ -227,6 +223,12 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function getReceivingDamage($receiving_id)
     {
         return ReceivingDamage::where('receiving_id',$receiving_id)->with('damage','component','repair')->get();
+    }
+
+    function imageEncodePrint($path) {
+        $imageUrl = file_get_contents($path);
+        $image = base64_encode($imageUrl);
+        return 'data:image/png;base64,'.$image;
     }
 
     function imageEncode($path) {
