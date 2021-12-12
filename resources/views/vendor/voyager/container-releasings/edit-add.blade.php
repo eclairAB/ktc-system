@@ -482,8 +482,10 @@
                 let pasmo = data.data
                 let w = window.open();
                 w.document.write(pasmo);
-                w.print();
-                w.close();
+                setTimeout(() => { 
+                    w.print();
+                    w.close();
+                }, 100);
               })
               window.location = checkedit
             }).catch(error => {
