@@ -58,10 +58,10 @@
                         @forelse ($containers as $item)
                             <tr style="border-top: solid #5c5c5c29 1px">
                                 <td style="padding: 0 10px">
-                                    {{ $item->container_no }}&nbsp
+                                    {{ $item->receiving_container_no }}&nbsp
                                 </td>
                                 <td style="padding: 0 10px">
-                                    {{ $item->consignee }}&nbsp
+                                    {{ $item->receiving_consignee }}&nbsp
                                 </td>
                                 <td style="padding: 0 10px">
                                
