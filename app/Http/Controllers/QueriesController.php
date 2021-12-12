@@ -201,7 +201,13 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $releasing = ContainerReleasing::where('id',$id)->first();
         $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->with('sizeType:id,code')->latest('created_at')->first();
         $size_types = ContainerSizeType::get();
-        return view('print_releasing')->with(compact('releasing', 'receiving_details', 'size_types'));
+
+        $signUrl = explode("/app/public",$releasing->signature);
+        $imagePath = $signUrl[count($signUrl) - 1];
+        $path = 'http://' . $_SERVER['HTTP_HOST'] .'/storage'. $imagePath;
+        $image = $this->imageEncode($path);
+        
+        return view('print_releasing')->with(compact('releasing', 'receiving_details', 'size_types', 'image'));
     }
 
     public function prntReceiving($id)
@@ -209,7 +215,13 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $receiving = ContainerReceiving::where('id',$id)->with('sizeType:id,code')->first();
         $damages = ReceivingDamage::where('receiving_id',$id)->get();
         $size_types = ContainerSizeType::get();
-        return view('print_receiving')->with(compact('receiving', 'damages', 'size_types'));
+
+        $signUrl = explode("/app/public",$receiving->signature);
+        $imagePath = $signUrl[count($signUrl) - 1];
+        $path = 'http://' . $_SERVER['HTTP_HOST'] .'/storage'. $imagePath;
+        $image = $this->imageEncode($path);
+
+        return view('print_receiving')->with(compact('receiving', 'damages', 'size_types', 'image'));
     }
 
     public function getReceivingDamage($receiving_id)
@@ -218,8 +230,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     }
 
     function imageEncode($path) {
-        $imageUrl = file_get_contents( storage_path() . $path );
-        $image = base64_encode($imageUrl);
+        $image = base64_encode($path);
         return 'data:image/png;base64,'.$image;
     }
 

@@ -181,7 +181,7 @@
         </div>
         <div style="width: 70%; text-align: center;">
           <div>
-            <h1>(SIGNATURE HERE)</h1>
+            <img style="width: 100px; height: 50px;" src="{{ $image }}">
           </div>
           <div style="border-top: 1px solid;">
             SIGNATURE OVER PRINTED NAME
@@ -194,7 +194,7 @@
         </div>
         <div style="width: 70%; text-align: center;">
           <div>
-            <h1>(SIGNATURE HERE)</h1>
+            <img style="width: 100px; height: 50px;" src="{{ $image }}">
           </div>
           <div style="border-top: 1px solid;">
             SIGNATURE OVER PRINTED NAME
