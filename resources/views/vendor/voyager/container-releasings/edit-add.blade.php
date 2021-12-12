@@ -72,7 +72,7 @@
                           <input type="text" name="container_no" id="container_no" maxlength="13" placeholder="####-######-#" :disabled="form.id" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px; text-transform:uppercase">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
                           <div class="customErrorText" v-if="containerError.message"><small>@{{ containerError.message }}</small></div>
-                          <div class="customHintText" v-else><small>Ex. CLLU-123456-7</small></div>
+                          <div class="customHintText" v-else></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" name="client" disabled id="client" :value="containerInfo.client ? containerInfo.client.code_name : ''" style="height: 37px;" class="form-control">
@@ -374,7 +374,25 @@
           containerError: {},
           containerInfo: {},
           isOk: false,
-          errors: {}
+          errors: {},
+          isInvalid: false
+        },
+        watch: {
+          'form.container_no': {
+            handler () {
+              if (this.form.container_no) {
+                if (this.form.container_no.charAt(4)  !== '-' || this.form.container_no.charAt(11)  !== '-') {
+                  this.containerError.message = 'Invalid Format (Ex. CLLU-123456-7)'  
+                  this.isOk = false
+                  this.isInvalid = true
+                } else {
+                  this.isInvalid = false
+                  this.containerError = {}
+                }
+              }
+            },
+            deep: true
+          }
         },
         methods:{
           dateFormat(date) {
@@ -396,8 +414,10 @@
                   } else {
                     document.getElementById("updateBtn").style.display = 'inherit'; 
                   }
-                  this.isOk = true
-                  this.containerError = {}
+                  if (this.isInvalid !== true) {
+                    this.containerError = {} 
+                    this.isOk = true
+                  }
                   this.containerInfo = data.data
                 }).catch(error => {
                   this.isOk = false
