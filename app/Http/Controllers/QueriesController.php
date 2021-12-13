@@ -324,7 +324,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 ->select('container_no', 'consignee')
                 ->get();*/
 
-            $containers = DB::table('containers')
+            /*$containers = DB::table('containers')
                 ->leftJoin('container_receivings', 'containers.container_no', 'container_receivings.container_no')
                 ->leftJoin('container_releasings', 'containers.container_no', 'container_releasings.container_no')
                 ->select(
@@ -359,11 +359,23 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 )
                 ->where('containers.container_no', $container_no)
                 ->whereNotNull('receiving_id')
-                ->paginate(10);
+                ->paginate(10);*/
+
+            $receiving = ContainerReceiving::where('container_no', $container_no)
+                ->with('inspector', 'photos')
+                ->paginate(
+                    $perPage = 15, $columns = ['*'], $pageName = 'receiving_page'
+                );
+
+            $releasing = ContainerReleasing::where('container_no', $container_no)
+                ->with('inspector', 'photos')
+                ->paginate(
+                    $perPage = 15, $columns = ['*'], $pageName = 'releasing_page'
+                );
 
                 // dd($containers);
 
-            return view('vendor.voyager.container-inquiry.read', ['containers' => $containers]);
+            return view('vendor.voyager.container-inquiry.read', ['receiving' => $receiving, 'releasing' => $releasing]);
         }
     }
 
