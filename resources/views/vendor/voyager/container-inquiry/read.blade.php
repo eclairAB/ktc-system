@@ -47,10 +47,10 @@
                               Inspector
                           </th>
                           <th style="padding: 0 10px;">
-                              Signature
+                              Client
                           </th>
                           <th style="text-align-last: end; padding: 0 10px;">
-                              Photos
+                              Action
                           </th>
                         </tr>
                     </thead>
@@ -64,12 +64,11 @@
                                     {{ $item->inspector->name }}&nbsp
                                 </td>
                                 <td style="padding: 0 10px;">
-                                    <img src="{{ base_path( 'storage' . $item->signature ) }}"/>
+                                    {{ $item->client->code_name }}
                                 </td>
                                 <td style="padding: 0 10px">
                                     <button class="btn btn-sm btn-warning pull-right edit" v-on:click="alert('Mwah ;*')">
-                                        View &nbsp
-                                        {{ $item->photos->count() }}
+                                        <i class="voyager-eye"></i>&nbsp View
                                     </button>
                                 </td>
                             </tr>
@@ -93,10 +92,10 @@
                               Inspector
                           </th>
                           <th style="padding: 0 10px;">
-                              Signature
+                              Client
                           </th>
                           <th style="text-align-last: end; padding: 0 10px;">
-                              Photos
+                              Action
                           </th>
                         </tr>
                     </thead>
@@ -110,12 +109,11 @@
                                     {{ $item->inspector->name }}&nbsp
                                 </td>
                                 <td style="padding: 0 10px">
-                                    <img src="{{ base_path( 'storage' . $item->signature ) }}"/>
+                                    {{ $item->container->receiving->client->code_name }}
                                 </td>
                                 <td style="padding: 0 10px">
                                     <button class="btn btn-sm btn-warning pull-right edit" v-on:click="alert('Mwah ;*')">
-                                        View &nbsp
-                                        {{ $item->photos->count() }}
+                                        <i class="voyager-eye"></i>&nbsp View
                                     </button>
                                 </td>
                             </tr>
