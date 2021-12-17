@@ -202,7 +202,7 @@
     computed: {
         getDownloadPath() {
             if (this.containerInfo.id) {
-                return `container-inquiry/download/${this.containerInfo.photos[0].container_type}/${this.containerInfo.id}`
+                return `download/${this.containerInfo.photos[0].container_type}/${this.containerInfo.id}`
             }
             else return null
         }
