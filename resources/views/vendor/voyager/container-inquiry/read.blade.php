@@ -159,7 +159,7 @@
 
                 <!-- modal -->
                 <div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
-                  <div class="modal-success-dialog modal-dialog" role="document" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                  <div class="modal-dialog" role="document" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
                     <div class="modal-content">
                       <div class="modal-header" style="display: flex; align-items: center;">
                         <h5 class="modal-title" id="dialogLabel">Container Info</h5>
