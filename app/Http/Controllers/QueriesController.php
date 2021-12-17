@@ -306,6 +306,14 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         if($container_no == 'browse')
         {
             $containers = Container::whereNotNull('receiving_id')
+                ->select(
+                    DB::raw('container_no'),
+                    'client_id',
+                    'size_type',
+                    'class',
+                    'receiving_id',
+                    'releasing_id',
+                )
                 ->with('containerClass','sizeType')
                 ->paginate(15);            
             return view('vendor.voyager.container-inquiry.browse', ['containers' => $containers]);
@@ -330,18 +338,18 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function saveImages($record_type, $container_no)
     {
-        $path = storage_path() . '/app/public/uploads/receiving/container/';
+        $path = storage_path() . '/app/public/uploads/receiving/container/' . $container_no . '/';
+
+        array_map('unlink', glob($path."*.zip"));
+
         $zip = new ZipArchive;
-            $fileName = 'attachment.zip';
+            $fileName = 'container_photos.zip';
             if ($zip->open($path . $fileName, ZipArchive::CREATE) === TRUE) {
                 $files = File::files($path);
-                // return $files;
                 foreach ($files as $key => $value) {
-                    $zxc[] = basename($value);
-                    /*$relativeName = basename($value);
-                    $zip->addFile($value, $relativeName);*/
+                    $relativeName = basename($value);
+                    $zip->addFile($value, $relativeName);
                 }
-                return $zxc;
                 $zip->close();
             }
             return response()->download($path . $fileName);
