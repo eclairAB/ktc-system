@@ -828,7 +828,8 @@
                 let pasmo = data.data
                 let w = window.open();
                 w.document.write(pasmo);
-                setTimeout(() => { 
+                w.print();
+                setTimeout(() => {
                     w.print();
                     w.close();
                 }, 100);

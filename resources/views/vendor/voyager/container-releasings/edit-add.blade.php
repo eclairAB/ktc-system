@@ -480,6 +480,7 @@
                 let pasmo = data.data
                 let w = window.open();
                 w.document.write(pasmo);
+                w.print();
                 setTimeout(() => { 
                     w.print();
                     w.close();
