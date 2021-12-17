@@ -358,6 +358,20 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 
+    <script type="text/javascript">
+      $(function () {
+          $('[id*=container_no]').on('keypress', function () {
+              var number = $(this).val();
+              if (number.length == 4) {
+                  $(this).val($(this).val() + '-');
+              }
+              else if (number.length == 11) {
+                  $(this).val($(this).val() + '-');
+              }
+          });
+      });
+    </script>
+
     <!-- VUE -->
     <script type="text/javascript">
       var app = new Vue({
@@ -374,24 +388,7 @@
           containerError: {},
           containerInfo: {},
           isOk: false,
-          errors: {},
-          isInvalid: false
-        },
-        watch: {
-          'form.container_no': {
-            handler () {
-              if (this.form.container_no) {
-                if (this.form.container_no.charAt(4)  !== '-' || this.form.container_no.charAt(11)  !== '-') {
-                  this.containerError.message = 'Invalid Format (Ex. CLLU-123456-7)'  
-                  this.isOk = false
-                  this.isInvalid = true
-                } else {
-                  this.isInvalid = false
-                }
-              }
-            },
-            deep: true
-          }
+          errors: {}
         },
         methods:{
           dateFormat(date) {
@@ -413,10 +410,8 @@
                   } else {
                     document.getElementById("updateBtn").style.display = 'inherit'; 
                   }
-                  if (this.isInvalid !== true) {
-                    this.containerError = {} 
-                    this.isOk = true
-                  }
+                  this.containerError = {} 
+                  this.isOk = true
                   this.containerInfo = data.data
                 }).catch(error => {
                   this.isOk = false
