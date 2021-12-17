@@ -11,6 +11,6 @@ class ContainerPhoto extends Model
     protected $fillable = [
         'container_id',
         'container_type',
-        'storage_path',
+        'photo',
     ];
 }
