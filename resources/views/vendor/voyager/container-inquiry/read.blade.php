@@ -174,8 +174,16 @@
                             @{{containerInfo}}
                           </div>
                         </form>
+                        {{-- <a href="{{ route('admin.container-inquiry.download', ['receiving', 1]) }}" class="btn buttons-zip">Download as Zip<i class="fas fa-file-download"></i></a> --}}
+                        <a
+                            v-if="containerInfo"
+                            :href="getDownloadPath"
+                            class="btn buttons-zip"
+                        >
+                            Download as Zip
+                            <i class="fas fa-file-download"></i>
+                        </a>
                       </div>
-                    </div>
                   </div>
                 </div>
                 <!-- end of modal -->
@@ -190,6 +198,14 @@
     el: '#container-inquiry-read',
     data:{
         containerInfo: {}
+    },
+    computed: {
+        getDownloadPath() {
+            if (this.containerInfo.id) {
+                return `container-inquiry/download/${this.containerInfo.photos[0].container_type}/${this.containerInfo.id}`
+            }
+            else return null
+        }
     },
     methods: {
         viewContainerInfo(payload) {

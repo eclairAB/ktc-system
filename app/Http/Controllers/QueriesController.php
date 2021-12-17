@@ -17,6 +17,8 @@ use App\Models\Type;
 use App\Models\ReceivingDamage;
 use App\Models\YardLocation;
 use Carbon\Carbon;
+use File;
+use ZipArchive;
 use Illuminate\Http\Request;
 
 class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
@@ -310,57 +312,6 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         }
         else 
         {
-            /*$container_receiving = ContainerReceiving::where(function ($query) use ($container_id) {
-                    $query->select('container_receivings.container_no')->where('container_receivings.id', $container_id);
-                })
-                ->leftJoin('container_releasings', 'container_receivings.container_no', 'container_releasings.container_no')
-                ->get();*/
-            
-            /*$container_receiving = ContainerReceiving::where('container_no', $container_no)
-                ->select('container_no', 'consignee');
-
-            $containers = ContainerReleasing::where('container_no', $container_no)
-                ->unionAll($container_receiving)
-                ->select('container_no', 'consignee')
-                ->get();*/
-
-            /*$containers = DB::table('containers')
-                ->leftJoin('container_receivings', 'containers.container_no', 'container_receivings.container_no')
-                ->leftJoin('container_releasings', 'containers.container_no', 'container_releasings.container_no')
-                ->select(
-                    'containers.id',
-                    'container_receivings.id AS receiving_id',
-                    'container_receivings.inspected_by AS receiving_inspected_by',
-                    'container_receivings.inspected_date AS receiving_inspected_date',
-                    'container_receivings.container_no AS receiving_container_no',
-                    'container_receivings.client_id AS receiving_client_id',
-                    'container_receivings.size_type AS receiving_size_type',
-                    'container_receivings.class AS receiving_class',
-                    'container_receivings.empty_loaded AS receiving_empty_loaded',
-                    'container_receivings.manufactured_date AS receiving_manufactured_date',
-                    'container_receivings.yard_location AS receiving_yard_location',
-                    'container_receivings.consignee AS receiving_consignee',
-                    'container_receivings.hauler AS receiving_hauler',
-                    'container_receivings.plate_no AS receiving_plate_no',
-                    'container_receivings.signature AS receiving_signature',
-                    'container_receivings.remarks AS receiving_remarks',
-                    'container_receivings.type_id AS receiving_type_id',
-                    'container_releasings.id AS releasing_id',
-                    'container_releasings.inspected_by AS releasing_inspected_by',
-                    'container_releasings.inspected_date AS releasing_inspected_date',
-                    'container_releasings.container_no AS releasing_container_no',
-                    'container_releasings.booking_no AS releasing_booking_no',
-                    'container_releasings.consignee AS releasing_consignee',
-                    'container_releasings.hauler AS releasing_hauler',
-                    'container_releasings.plate_no AS releasing_plate_no',
-                    'container_releasings.seal_no AS releasing_seal_no',
-                    'container_releasings.signature AS releasing_signature',
-                    'container_releasings.remarks AS releasing_remarks',
-                )
-                ->where('containers.container_no', $container_no)
-                ->whereNotNull('receiving_id')
-                ->paginate(10);*/
-
             $receiving = ContainerReceiving::where('container_no', $container_no)
                 ->with('client', 'inspector', 'photos', 'sizeType', 'type')
                 ->paginate(
@@ -373,10 +324,27 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                     $perPage = 15, $columns = ['*'], $pageName = 'releasing_page'
                 );
 
-                // dd($containers);
-
             return view('vendor.voyager.container-inquiry.read', ['receiving' => $receiving, 'releasing' => $releasing]);
         }
+    }
+
+    public function saveImages($record_type, $container_no)
+    {
+        $path = storage_path() . '/app/public/uploads/receiving/container/';
+        $zip = new ZipArchive;
+            $fileName = 'attachment.zip';
+            if ($zip->open($path . $fileName, ZipArchive::CREATE) === TRUE) {
+                $files = File::files($path);
+                // return $files;
+                foreach ($files as $key => $value) {
+                    $zxc[] = basename($value);
+                    /*$relativeName = basename($value);
+                    $zip->addFile($value, $relativeName);*/
+                }
+                return $zxc;
+                $zip->close();
+            }
+            return response()->download($path . $fileName);
     }
 
     public function getContainerAging(Request $request)
