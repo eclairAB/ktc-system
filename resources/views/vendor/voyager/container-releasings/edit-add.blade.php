@@ -22,8 +22,10 @@
 
 @section('page_header')
 
-    @include('vendor.voyager.receiving-releasing-btns')
-
+    @if(Auth::user()->role->name != 'checker')
+      @include('vendor.voyager.receiving-releasing-btns')
+    @endif
+  
     <h1 class="page-title">
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}

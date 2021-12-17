@@ -321,7 +321,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         else 
         {
             $receiving = ContainerReceiving::where('container_no', $container_no)
-                ->with('client', 'inspector', 'photos', 'sizeType', 'type')
+                ->with('client', 'inspector', 'photos', 'sizeType', 'type', 'yardLocation', 'containerClass')
                 ->paginate(
                     $perPage = 15, $columns = ['*'], $pageName = 'receiving_page'
                 );
@@ -343,16 +343,16 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         array_map('unlink', glob($path."*.zip"));
 
         $zip = new ZipArchive;
-            $fileName = 'container_photos.zip';
-            if ($zip->open($path . $fileName, ZipArchive::CREATE) === TRUE) {
-                $files = File::files($path);
-                foreach ($files as $key => $value) {
-                    $relativeName = basename($value);
-                    $zip->addFile($value, $relativeName);
-                }
-                $zip->close();
+        $fileName = 'container_photos.zip';
+        if ($zip->open($path . $fileName, ZipArchive::CREATE) === TRUE) {
+            $files = File::files($path);
+            foreach ($files as $key => $value) {
+                $relativeName = basename($value);
+                $zip->addFile($value, $relativeName);
             }
-            return response()->download($path . $fileName);
+            $zip->close();
+        }
+        return response()->download($path . $fileName);
     }
 
     public function getContainerAging(Request $request)
