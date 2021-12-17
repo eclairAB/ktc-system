@@ -291,7 +291,7 @@
                             <label for="description" class="form-control-placeholder"> Description</label>
                           </div>
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer" style="text-align: left !important;">
                           <button type="button" class="btn btn-primary" style="margin-top: 15px;" @click="clearDamage"> Clear</button>
                           <button type="button" class="btn btn-danger" style="margin-top: 15px;" @click="cancelDamage"> Cancel</button>
                           <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" @click="checkDamage"> Save</button>
