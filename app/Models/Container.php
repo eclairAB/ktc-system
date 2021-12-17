@@ -31,4 +31,14 @@ class Container extends Model
     {
         return $this->HasOne(ContainerClass::class, 'id','class');
     }
+
+    public function receiving()
+    {
+        return $this->belongsTo(ContainerReceiving::class);
+    }
+
+    public function releasing()
+    {
+        return $this->belongsTo(ContainerReleasing::class);
+    }
 }
