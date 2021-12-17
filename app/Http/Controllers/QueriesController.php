@@ -313,7 +313,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         else 
         {
             $receiving = ContainerReceiving::where('container_no', $container_no)
-                ->with('client', 'inspector', 'photos')
+                ->with('client', 'inspector', 'photos', 'sizeType', 'type')
                 ->paginate(
                     $perPage = 15, $columns = ['*'], $pageName = 'receiving_page'
                 );
