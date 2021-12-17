@@ -67,7 +67,7 @@
                                     {{ $item->client->code_name }}
                                 </td>
                                 <td style="padding: 0 10px">
-                                    <button class="btn btn-sm btn-warning pull-right edit" v-on:click="alert('Mwah ;*')">
+                                    <button class="btn btn-sm btn-warning pull-right edit" v-on:click="viewContainerInfo( {{ $item }} )">
                                         <i class="voyager-eye"></i>&nbsp View
                                     </button>
                                 </td>
@@ -112,7 +112,7 @@
                                     {{ $item->container->receiving->client->code_name }}
                                 </td>
                                 <td style="padding: 0 10px">
-                                    <button class="btn btn-sm btn-warning pull-right edit" v-on:click="alert('Mwah ;*')">
+                                    <button class="btn btn-sm btn-warning pull-right edit" v-on:click="viewContainerInfo( {{ $item }} )">
                                         <i class="voyager-eye"></i>&nbsp View
                                     </button>
                                 </td>
@@ -126,6 +126,30 @@
                 </table>
                 {{ $receiving->links() }}
             </div>
+
+            <!-- modal -->
+            <div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
+              <div class="modal-success-dialog modal-dialog" role="document" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                <div class="modal-content">
+                  <div class="modal-header" style="display: flex; align-items: center;">
+                    <h5 class="modal-title" id="dialogLabel">Container Info</h5>
+                    <button type="button" @click="close" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: auto;">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <hr style="margin: 0">
+                  <div class="modal-body" style="margin-top: 15px">
+                    <form>
+                      <div class="col-lg-12 form-group mt-3" style="padding-right: 13px; padding-left: 13px;">
+                        @{{containerInfo}}
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end of modal -->
+
         </div>
     </div>
 </body>
@@ -135,9 +159,16 @@
     var vm = new Vue({
     el: '#container-inquiry-read',
     data:{
+        containerInfo: {}
     },
     methods: {
-
+        viewContainerInfo(payload) {
+            this.containerInfo = payload
+            $('#dialog').modal({backdrop: 'static', keyboard: true});
+        },
+        close () {
+            this.containerInfo = {}
+        }
     }
   })
 </script>
