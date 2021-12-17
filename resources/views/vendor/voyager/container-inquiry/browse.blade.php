@@ -1,5 +1,6 @@
 @extends('voyager::master')
 @section('content')
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
 <style>
     .containers_ {
       display: grid;
@@ -27,28 +28,21 @@
       background: #f8fafc;
       color: #337ab7;
     }
-
-    td {
-      line-height: 65px;
-    }
 </style>
 <body>
+    <div style="font-size: 15px; color: #555; font-weight: bold; display: flex; margin: 20px 10px 10px; align-items: center;">
+        <i style="font-size: 25px; margin-right: 10px; height: 35px;" class="voyager-list"></i> <span>Containers</span>
+    </div>
     <div id="container-inquiry">
         <div row>
             <div class="col-md-12 paginator_ containers_">
                 <table style="width: 100%;">
                     <thead>
                         <tr>
-                          <th style="padding: 0 10px;">
-                              Container class
-                          </th>
-                          <th style="padding: 0 10px;">
+                          <th style="padding: 10px 10px;">
                               Container
                           </th>
-                          <th style="padding: 0 10px;">
-                              {{-- Status --}}
-                          </th>
-                          <th style="text-align-last: end; padding: 0 10px;">
+                          <th style="text-align-last: end; padding: 10px 10px;">
                               {{-- Action --}}
                           </th>
                         </tr>
@@ -56,18 +50,11 @@
                     <tbody>
                         @forelse ($containers as $item)
                             <tr style="border-top: solid #5c5c5c29 1px">
-                            {{ $item }}
-                                <td style="padding: 0 10px">
-                                    {{ $item->containerClass->class_name }}&nbsp
-                                </td>
                                 <td style="padding: 0 10px">
                                     {{ $item->container_no }}
                                 </td>
                                 <td style="padding: 0 10px">
-                               
-                                </td>
-                                <td style="padding: 0 10px">
-                                    <button class="btn btn-sm btn-warning pull-right edit" v-on:click="reroute('{{ $item->container_no }}')">
+                                    <button style="padding: 3px 10px;" class="btn btn-sm btn-warning pull-right edit" v-on:click="reroute('{{ $item->container_no }}')">
                                         <i class="voyager-eye"></i><span class="hidden-xs hidden-sm" style="margin-left:5px;">View</span>
                                     </button>
                                 </td>
