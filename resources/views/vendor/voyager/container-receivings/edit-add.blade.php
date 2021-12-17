@@ -66,7 +66,7 @@
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="container_no" id="container_no" maxlength="13" placeholder="####-######-#" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px; text-transform:uppercase">
+                          <input type="text" name="container_no" id="container_no" ng-maxlength="13" maxlength="13" placeholder="####-######-#" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px; text-transform:uppercase">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
                           <div class="customErrorText" v-if="containerError.message"><small>@{{ containerError.message }}</small></div>
                           <div class="customHintText" v-else></div>
@@ -237,7 +237,7 @@
                   </div>
 
                   <div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document" style="display: flex; flex-direction: column; justify-content: center;">
+                    <div class="modal-dialog" role="document" style="">
                       <div class="modal-content">
                         <div class="modal-header" style="display: flex; align-items: center;">
                           <h5 class="modal-title" id="dialogLabel">Add Damage</h5>
@@ -512,8 +512,12 @@
 
     <script type="text/javascript">
       $(function () {
-          $('[id*=container_no]').on('keypress', function () {
+          $('[id*=container_no]').keyup(function () {
               var number = $(this).val();
+              var max = 13;
+              if (number.length > max) {
+                  $(this).val($(this).val().substr(0, max));
+              }
               if (number.length == 4) {
                   $(this).val($(this).val() + '-');
               }
