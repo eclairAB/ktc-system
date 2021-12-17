@@ -34,6 +34,14 @@
       background: #f8fafc;
       color: #337ab7;
     }
+
+    .container-info > div {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .container-info > div:nth-child(even) {background: #f0f0f0}
+    .container-info > div:nth-child(odd) {background: #FFF}
 </style>
 <body>
     <div id="container-inquiry-read">
@@ -163,7 +171,7 @@
                     <div class="modal-content">
                       <div class="modal-header" style="display: flex; align-items: center;">
                         <h5 class="modal-title" id="dialogLabel">Container Info</h5>
-                        <button type="button" @click="close" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: auto;">
+                        <button type="button" v-on:click="close" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: auto;">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
@@ -171,7 +179,100 @@
                       <div class="modal-body" style="margin-top: 15px">
                         <form>
                           <div class="col-lg-12 form-group mt-3" style="padding-right: 13px; padding-left: 13px;">
-                            @{{containerInfo}}
+                            {{-- @{{containerInfo}} --}}
+                            <div class="container-info">
+                                <div>
+                                    {{-- Inspector:&nbsp@{{containerInfo.inspectors}} --}}
+                                    <span>Inspector:</span>
+                                    <span>
+                                        @{{containerInfo.inspector && containerInfo.inspector.name}}&nbsp
+                                        ( @{{containerInfo.inspector && containerInfo.inspector.email}} )
+                                    </span>
+                                </div>
+                                <div v-if="containerInfo.inspected_date">
+                                    <span>
+                                        Inspected date:
+                                    </span>
+                                    <span>
+                                        @{{ moment(containerInfo.inspected_date).format('MMMM DD, YYYY') }} 
+                                    </span>
+                                </div>
+                                <div v-if="containerInfo.yard_location">
+                                    <span>
+                                        Yard Location:
+                                    </span>
+                                    <span>
+                                        @{{containerInfo.yard_location && containerInfo.yard_location.name}}
+                                    </span>
+                                </div>
+                                <div v-if="containerInfo.manufactured_date">
+                                    <span>
+                                        Manufactured date:
+                                    </span>
+                                    <span>
+                                        @{{ moment(containerInfo.manufactured_date).format('MMMM DD, YYYY') }}
+                                    </span>
+                                </div>
+                                <div v-if="containerInfo.container_class">
+                                    <span>
+                                        Class:
+                                    </span>
+                                    <span>
+                                        @{{containerInfo.container_class && containerInfo.container_class.class_name}}
+                                    </span>
+                                </div>
+                                <div v-if="containerInfo.consignee">
+                                    <span>
+                                        Consignee:
+                                    </span>
+                                    <span>
+                                        @{{containerInfo.consignee}}
+                                    </span>
+                                </div>
+                                <div v-if="containerInfo.hauler">
+                                    <span>
+                                        Hauler:
+                                    </span>
+                                    <span>
+                                        @{{containerInfo.hauler}}
+                                    </span>
+                                </div>
+                                <div v-if="containerInfo.plate_no">
+                                    <span>
+                                        Plate no:
+                                    </span>
+                                    <span>
+                                        @{{containerInfo.plate_no}}
+                                    </span>
+                                </div>
+                                <div v-if="containerInfo.remarks">
+                                    <span>
+                                        Remarks:
+                                    </span>
+                                    <span>
+                                        @{{containerInfo.remarks}}
+                                    </span>
+                                </div>
+
+
+                                <br>
+                                <div v-if="containerInfo.client">
+                                    <span>
+                                        Client:
+                                    </span>
+                                    <span>
+                                        @{{containerInfo.client && containerInfo.client.code_name}}
+                                    </span>
+                                </div>
+                                {{-- <div v-if="containerInfo">
+                                    <span>
+                                        Photos:
+                                    </span>
+                                    <span>
+                                        @{{containerInfo.photos}}
+                                    </span>
+                                </div> --}}
+                            </div>
                           </div>
                         </form>
                         {{-- <a href="{{ route('admin.container-inquiry.download', ['receiving', 1]) }}" class="btn buttons-zip">Download as Zip<i class="fas fa-file-download"></i></a> --}}
@@ -180,7 +281,7 @@
                             :href="getDownloadPath"
                             class="btn buttons-zip"
                         >
-                            Download as Zip
+                            Download container photos
                             <i class="fas fa-file-download"></i>
                         </a>
                       </div>
