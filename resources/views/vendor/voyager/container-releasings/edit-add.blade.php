@@ -360,8 +360,12 @@
 
     <script type="text/javascript">
       $(function () {
-          $('[id*=container_no]').on('keypress', function () {
+          $('[id*=container_no]').keyup(function () {
               var number = $(this).val();
+              var max = 13;
+              if (number.length > max) {
+                  $(this).val($(this).val().substr(0, max));
+              }
               if (number.length == 4) {
                   $(this).val($(this).val() + '-');
               }
@@ -476,6 +480,7 @@
                 let pasmo = data.data
                 let w = window.open();
                 w.document.write(pasmo);
+                w.print();
                 setTimeout(() => { 
                     w.print();
                     w.close();
