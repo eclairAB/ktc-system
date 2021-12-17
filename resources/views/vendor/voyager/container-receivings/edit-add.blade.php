@@ -570,7 +570,6 @@
                   this.isInvalid = true
                 } else {
                   this.isInvalid = false
-                  this.containerError = {}
                 }
               }
             },
