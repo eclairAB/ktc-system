@@ -7,39 +7,39 @@
     <div class="col-lg-5 col-md-12">
       <div>
         
-        <!-- <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-receivings-and-releasing/receiving')"> -->
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-receivings')">
+        <!-- <button class="btn btn-info btn-lg dashboard-buttons" type="submit" v-on:click="reroute('container-receivings-and-releasing/receiving')"> -->
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" v-on:click="reroute('container-receivings/create')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Receiving</h4>
         </button>
       </div>
       <div>
-        <!-- <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-receivings-and-releasing/releasing')"> -->
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-releasings')">
+        <!-- <button class="btn btn-info btn-lg dashboard-buttons" type="submit" v-on:click="reroute('container-receivings-and-releasing/releasing')"> -->
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" v-on:click="reroute('container-releasings/create')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Releasing</h4>
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-aging/all')">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" v-on:click="reroute('container-aging/all')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Aging and Inventory</h4>
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-actions/in')">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" v-on:click="reroute('container-actions/in')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Daily In Container</h4>
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-actions/out')">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" v-on:click="reroute('container-actions/out')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Daily Out Container</h4>
         </button>
       </div>
       <div>
-        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" @click="reroute('container-inquiry/all')">
+        <button class="btn btn-info btn-lg dashboard-buttons" type="submit" v-on:click="reroute('container-inquiry/browse')">
           {{-- <i class="voyager-search"></i> --}}
           <h4>Container Inquiry</h4>
         </button>
