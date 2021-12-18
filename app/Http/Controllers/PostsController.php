@@ -160,14 +160,14 @@ class PostsController extends Controller
                     'container_type' => $params['type'],
                     'photo' => $params['file_name'] . '.png',
                     'params' => $params,
-                    'base64_file' => $receiving['container_photo'][$key]['storage_path'],
+                    'base64_file' => $releasing['container_photo'][$key]['storage_path'],
                 );
             }
             $releasing['signature'] = '/app/public/uploads/releasing/signature/' . $signature_params['file_name'] . '.png';
             $release = ContainerReleasing::create($releasing)->photos()->createMany($container_photo);
 
             foreach($container_photo as $key => $value) {
-                $this->imageUpload($value['params'], $value['base64_file'], false, $receive[0]->container_id);
+                $this->imageUpload($value['params'], $value['base64_file'], false, $release[0]->container_id);
             }
 
             if($release)
@@ -272,7 +272,7 @@ class PostsController extends Controller
         {
             if($isSignature) file_put_contents( $the_path . 'releasing/signature/' . $payload['file_name'] . $extension, $decode);
             else {
-                !is_dir( storage_path() . '/app/public/uploads/receiving/container/' . $id) && mkdir(storage_path() . '/app/public/uploads/receiving/container/' . $id);
+                !is_dir( storage_path() . '/app/public/uploads/releasing/container/' . $id) && mkdir(storage_path() . '/app/public/uploads/releasing/container/' . $id);
                 file_put_contents( $the_path . 'releasing/container/' . $id . '/' . $payload['file_name'] . $extension, $decode);
             }
         }
