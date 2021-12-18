@@ -31,17 +31,17 @@
                     <div id="sizetypeForm">
                         <div class="panel-body">
                             <div class="row" style="padding: 0px 10px;">
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
+                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
                                 <input type="text" name="code" id="code" v-model="form.code" class="form-control" :class="errors.code ? 'isError' : ''">
                                 <label for="code" class="form-control-placeholder"> Code</label>
                                 <div class="customErrorText"><small>@{{ errors.code ? errors.code[0] : ''  }}</small></div>
                               </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
+                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
                                 <input type="text" name="name" id="name" v-model="form.name" class="form-control" :class="errors.name ? 'isError' : ''">
                                 <label for="name" class="form-control-placeholder"> Name</label>
                                 <div class="customErrorText"><small>@{{ errors.name ? errors.name[0] : '' }}</small></div>
                               </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
+                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
                                 <v-select
                                   style="height: 37px !important;"
                                   :class="errors.size ? 'isError form-control' : 'form-control'"
@@ -50,16 +50,6 @@
                                 ></v-select>
                                 <label for="size" class="form-control-placeholder"> Size</label>
                                 <div class="customErrorText"><small>@{{ errors.size ? errors.size[0] : '' }}</small></div>
-                              </div>
-                              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
-                                <v-select
-                                  style="height: 37px !important;"
-                                  :class="errors.type ? 'isError form-control' : 'form-control'"
-                                  :options="typelist"
-                                  v-model="form.type"
-                                ></v-select>
-                                <label for="type" class="form-control-placeholder"> Type</label>
-                                <div class="customErrorText"><small>@{{ errors.type ? errors.type[0] : '' }}</small></div>
                               </div>
                             </div>
                         </div>
