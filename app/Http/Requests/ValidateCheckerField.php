@@ -30,7 +30,7 @@ class ValidateCheckerField extends FormRequest
             'firstname' => 'required',
             'lastname' => 'required',
             'user_id' => 'required',
-            'contact_no' => 'required',
+            'contact_no' => 'nullable',
         ];
     }
 
@@ -43,7 +43,7 @@ class ValidateCheckerField extends FormRequest
             'firstname.required' => 'First name is required.',
             'lastname.required' => 'Last name is required.',
             'user_id.required' => 'User ID is required.',
-            'contact_no.required' => 'Contact number is required.',
+            // 'contact_no.required' => 'Contact number is required.',
         ];
     }
 }

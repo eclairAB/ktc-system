@@ -28,9 +28,9 @@ class ValidateEmptyReceivingDamage extends FormRequest
             'component_id'=> 'required',
             'repair_id'=> 'required',
             'location'=> 'required',
-            'length'=> 'required',
-            'width'=> 'required',
-            'quantity'=> 'required',
+            'length'=> 'nullable',
+            'width'=> 'nullable',
+            'quantity'=> 'nullable',
             'description'=> 'required'
         ];
     }
@@ -42,9 +42,9 @@ class ValidateEmptyReceivingDamage extends FormRequest
             'component_id.required'=> 'Container Component required',
             'repair_id.required'=> 'Container Repair required',
             'location.required'=> 'Location required',
-            'length.required'=> 'Length required',
-            'width.required'=> 'Width required',
-            'quantity.required'=> 'Quantity required',
+            // 'length.required'=> 'Length required',
+            // 'width.required'=> 'Width required',
+            // 'quantity.required'=> 'Quantity required',
             'description.required'=> 'Description required'
         ];
     }
