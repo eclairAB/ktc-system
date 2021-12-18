@@ -97,7 +97,7 @@ class UpdateController extends Controller
         }
     }
 
-    function imageUpload($payload, $photo, $isSignature)
+    function imageUpload($payload, $photo)
     {
         $exploded = explode(',', $photo);
         $decode = base64_decode($exploded[1]);
@@ -107,19 +107,15 @@ class UpdateController extends Controller
         !is_dir( storage_path() . '/app/public/uploads/' ) && mkdir(storage_path() . '/app/public/uploads/');
         !is_dir( storage_path() . '/app/public/uploads/releasing/') && mkdir(storage_path() . '/app/public/uploads/releasing/');
         !is_dir( storage_path() . '/app/public/uploads/receiving/') && mkdir(storage_path() . '/app/public/uploads/receiving/');
-        !is_dir( storage_path() . '/app/public/uploads/releasing/signature/') && mkdir(storage_path() . '/app/public/uploads/releasing/signature/');
         !is_dir( storage_path() . '/app/public/uploads/releasing/container/') && mkdir(storage_path() . '/app/public/uploads/releasing/container/');
-        !is_dir( storage_path() . '/app/public/uploads/receiving/signature/') && mkdir(storage_path() . '/app/public/uploads/receiving/signature/');
         !is_dir( storage_path() . '/app/public/uploads/receiving/container/') && mkdir(storage_path() . '/app/public/uploads/receiving/container/');
 
         if($payload['type'] == 'releasing')
         {
-            if($isSignature) file_put_contents( $the_path . 'releasing/signature/' . $payload['file_name'] . $extension, $decode);
             else file_put_contents( $the_path . 'releasing/container/' . $payload['file_name'] . $extension, $decode);
         }
         elseif($payload['type'] == 'receiving')
         {
-            if($isSignature) file_put_contents( $the_path . 'receiving/signature/' . $payload['file_name'] . $extension, $decode);
             else file_put_contents( $the_path . 'receiving/container/' . $payload['file_name'] . $extension, $decode);
         }
     }

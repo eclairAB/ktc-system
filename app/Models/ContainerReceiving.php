@@ -21,7 +21,6 @@ class ContainerReceiving extends Model
         'consignee',
         'hauler',
         'plate_no',
-        'signature',
         'remarks',
         'type_id',
     ];

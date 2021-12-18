@@ -17,7 +17,6 @@ class ContainerReleasing extends Model
         'hauler',
         'plate_no',
         'seal_no',
-        'signature',
         'remarks',
     ];
 
