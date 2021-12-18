@@ -816,6 +816,7 @@
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.form.signature = data
+            this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
             await axios.post('/admin/create/receiving', this.form).then(async data => {
               document.getElementById("save").removeAttribute("disabled");
               this.errors = {}
@@ -831,6 +832,7 @@
                 let w = window.open();
                 w.document.write(pasmo);
                 w.print();
+                w.close();
                 setTimeout(() => {
                     w.print();
                     w.close();
