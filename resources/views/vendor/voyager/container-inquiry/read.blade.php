@@ -205,14 +205,14 @@
                                         @{{containerInfo.yard_location && containerInfo.yard_location.name}}
                                     </span>
                                 </div>
-                                <div v-if="containerInfo.manufactured_date">
+                                <!-- <div v-if="containerInfo.manufactured_date">
                                     <span>
                                         Manufactured date:
                                     </span>
                                     <span>
                                         @{{ moment(containerInfo.manufactured_date).format('MMMM DD, YYYY') }}
                                     </span>
-                                </div>
+                                </div> -->
                                 <div v-if="containerInfo.container_class">
                                     <span>
                                         Class:
