@@ -26,16 +26,15 @@ class ValidateContainerReleasing extends FormRequest
         return [
             'inspected_by'=> 'required',
             'inspected_date'=> 'required',
-            'booking_no'=> 'required',
+            'booking_no'=> 'nullable',
             'consignee'=> 'required',
             'container_no'=> 'required',
             'hauler'=> 'required',
             'plate_no'=> 'required',
-            'seal_no'=> 'required',
-            // 'upload_photo'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'seal_no'=> 'nullable',
             'container_photo'=> 'required',
-            'signature'=> 'required',
-            'remarks'=> 'required',
+            // 'signature'=> 'required',
+            'remarks'=> 'nullable',
         ];
     }
 
@@ -45,14 +44,13 @@ class ValidateContainerReleasing extends FormRequest
             'inspected_by.required' => 'Inspected By field required.',
             'inspected_date.required' => 'Inspected Date field required.',
             'container_no.required' => 'Container No. field not match.',
-            'booking_no.required' => 'Booking No. field not match.',
+            // 'booking_no.required' => 'Booking No. field not match.',
             'consignee.required' => 'Consignee field required.',
             'hauler.required' => 'Hauler  fieldrequired.',
             'plate_no.required' => 'Plate No. field required.',
-            'seal_no.required' => 'Seal No. field required.',
-            // 'upload_photo.max'  => 'Maximum size to upload is 2MB.',
+            // 'seal_no.required' => 'Seal No. field required.',
             'container_photo.required'  => 'Photo is required.',
-            'signature.required'  => 'Signature field is required.',
+            // 'signature.required'  => 'Signature field is required.',
         ];
     }
 }
