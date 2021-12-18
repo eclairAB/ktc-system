@@ -83,7 +83,7 @@
                             label="name"
                             :reduce="name => name.id"
                           ></v-select>
-                          <label for="lastname" class="form-control-placeholder"> Size Type</label>
+                          <label for="lastname" class="form-control-placeholder"> Size</label>
                           <div class="customErrorText"><small>@{{ errors.size_type ? errors.size_type[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
