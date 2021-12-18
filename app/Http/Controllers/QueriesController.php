@@ -123,7 +123,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $container_receiving = ContainerReceiving::where('id', $id)->with('client', 'sizeType', 'containerClass', 'yardLocation', 'inspector.staff', 'inspector.checker', 'photos', 'type')->first();
         $container_receiving->signature = [$this->imageEncode($container_receiving->signature)];
         foreach ($container_receiving->photos as $key => $value) {
-            $container_receiving->photos[$key]->encoded = [$this->imageEncode($container_receiving->photos[$key]->storage_path)];
+            $container_receiving->photos[$key]->encoded = [$this->imageEncode('/app/public/uploads/receiving/container/' . $container_receiving->id . '/' . $value['photo'])];
         }
         return $container_receiving;
     }
@@ -133,7 +133,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $container_releasing = ContainerReleasing::where('id', $id)->with('inspector.staff', 'inspector.checker', 'photos')->first();
         $container_releasing->signature = [$this->imageEncode($container_releasing->signature)];
         foreach ($container_releasing->photos as $key => $value) {
-            $container_releasing->photos[$key]->encoded = [$this->imageEncode($container_releasing->photos[$key]->storage_path)];
+            $container_releasing->photos[$key]->encoded = [$this->imageEncode('/app/public/uploads/releasing/container/' . $container_releasing->id . '/' . $value['photo'])];
         }
         return $container_releasing;
     }
@@ -234,7 +234,8 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     }
 
     function imageEncode($path) {
-        $image = base64_encode($path);
+        $imageUrl = file_get_contents( storage_path($path) );
+        $image = base64_encode($imageUrl);
         return 'data:image/png;base64,'.$image;
     }
 
