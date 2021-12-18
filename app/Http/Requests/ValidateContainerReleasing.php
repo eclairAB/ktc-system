@@ -33,8 +33,7 @@ class ValidateContainerReleasing extends FormRequest
             'plate_no'=> 'required',
             'seal_no'=> 'nullable',
             'container_photo'=> 'required',
-            // 'signature'=> 'required',
-            'remarks'=> 'nullable',
+            'remarks'=> 'required',
         ];
     }
 
@@ -50,7 +49,6 @@ class ValidateContainerReleasing extends FormRequest
             'plate_no.required' => 'Plate No. field required.',
             // 'seal_no.required' => 'Seal No. field required.',
             'container_photo.required'  => 'Photo is required.',
-            // 'signature.required'  => 'Signature field is required.',
         ];
     }
 }
