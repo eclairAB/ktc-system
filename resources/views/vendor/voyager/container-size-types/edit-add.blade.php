@@ -42,12 +42,7 @@
                                 <div class="customErrorText"><small>@{{ errors.name ? errors.name[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
-                                <v-select
-                                  style="height: 37px !important;"
-                                  :class="errors.size ? 'isError form-control' : 'form-control'"
-                                  :options="sizelist"
-                                  v-model="form.size"
-                                ></v-select>
+                                <input type="text" name="size" id="size" v-model="form.size" class="form-control" :class="errors.size ? 'isError' : ''">
                                 <label for="size" class="form-control-placeholder"> Size</label>
                                 <div class="customErrorText"><small>@{{ errors.size ? errors.size[0] : '' }}</small></div>
                               </div>
