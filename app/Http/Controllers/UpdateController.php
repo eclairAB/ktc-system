@@ -9,6 +9,8 @@ use App\Models\ContainerSizeType;
 use App\Models\ReceivingDamage;
 use App\Models\Staff;
 use App\Models\Type;
+use App\Models\ContainerPhoto;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class UpdateController extends Controller
@@ -62,40 +64,73 @@ class UpdateController extends Controller
 
     public function updateReceiving(Request $request)
     {
-        $validate_receiving = $request->all();
-        $receiving = ContainerReceiving::where('id',$request->id)->first();
-        $receiving->update($validate_receiving);
+        $receiving = $request->all();
+        $rec = ContainerReceiving::where('id',$request->id)->first();
+        $rec->update($receiving);
         
+        foreach ($receiving['container_photo'] as $key => $value) {
+            $params = [];
+            $params['file_name'] = Str::random(32);
+            $params['type'] = 'receiving';
+            $container_photo[] = array(
+                'container_type' => $params['type'],
+                'photo' => $params['file_name'] . '.png',
+                'params' => $params,
+                'base64_file' => $receiving['container_photo'][$key]['storage_path'],
+            );
+        }
+        // $receive = ContainerReceiving::create($receiving)->photos()->createMany($container_photo);
+
+        foreach($container_photo as $key => $value) {
+            $path = storage_path() . '/app/public/uploads/receiving/container/' . $receive[0]->container_id . '/';
+            array_map('unlink', glob($path."*.png"));
+            $this->imageUpload($value['params'], $value['base64_file'], $receive[0]->container_id);
+        }
+
         return $receiving;
     }
 
     public function updateReleasing(Request $request)
     {
-        $releasing = ContainerReleasing::where('id',$request->id)->update($request);
+        $releasing = $request->all();
+        $rel = ContainerReleasing::where('id',$request->id)->first();
+        $rel->update($releasing);
+        
+        foreach ($releasing['container_photo'] as $key => $value) {
+            $params = [];
+            $params['file_name'] = Str::random(32);
+            $params['type'] = 'releasing';
+            $container_photo[] = array(
+                'container_type' => $params['type'],
+                'photo' => $params['file_name'] . '.png',
+                'params' => $params,
+                'base64_file' => $releasing['container_photo'][$key]['storage_path'],
+            );
+        }
+        // $release = ContainerReleasing::create($releasing)->photos()->createMany($container_photo);
+
+        foreach($container_photo as $key => $value) {
+            $path = storage_path() . '/app/public/uploads/releasing/container/' . $release[0]->container_id . '/';
+            array_map('unlink', glob($path."*.png"));
+            $this->imageUpload($value['params'], $value['base64_file'],  $release[0]->container_id);
+        }
+
         return $releasing;
-
-        // testing
-        foreach ($request->containers as $key => $value) {
-            $zxc[] = [
-                $this->selectAction($value)
-            ];
-        }
-        return $zxc;
     }
 
-    function selectAction($payload)
-    {
-        if($payload['deleted']) {
+    // function selectAction($payload)
+    // {
+    //     if($payload['deleted']) {
 
-            return "delete";
-        }
-        elseif(isset($payload['base64'])) {
-            return "update";
-        }
-        else {
-            return "retain";
-        }
-    }
+    //         return "delete";
+    //     }
+    //     elseif(isset($payload['base64'])) {
+    //         return "update";
+    //     }
+    //     else {
+    //         return "retain";
+    //     }
+    // }
 
     function imageUpload($payload, $photo)
     {
@@ -112,11 +147,11 @@ class UpdateController extends Controller
 
         if($payload['type'] == 'releasing')
         {
-            else file_put_contents( $the_path . 'releasing/container/' . $payload['file_name'] . $extension, $decode);
+            file_put_contents( $the_path . 'releasing/container/' . $payload['file_name'] . $extension, $decode);
         }
         elseif($payload['type'] == 'receiving')
         {
-            else file_put_contents( $the_path . 'receiving/container/' . $payload['file_name'] . $extension, $decode);
+            file_put_contents( $the_path . 'receiving/container/' . $payload['file_name'] . $extension, $decode);
         }
     }
 

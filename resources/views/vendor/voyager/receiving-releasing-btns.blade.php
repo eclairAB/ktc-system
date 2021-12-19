@@ -1,5 +1,5 @@
 <div id="customBtns">
-  <div row>
+  <div row v-if="isEdit === false">
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin: 0; padding: 0;">
       <button class="btn btn-primary btn-block" @click="reroute('container-receivings')" style="border: 1px solid white;" :style="action === 'container-receivings' ? 'border-bottom: 4px solid black;' : '' ">Container Receiving</button> 
     </div>
@@ -18,6 +18,17 @@
     el: '#customBtns',
     data: {
       action: ''
+    },
+    computed: {
+      isEdit () {
+        let currentUrl = window.location.href
+        let checkedit = currentUrl.split('/')[currentUrl.split('/').length - 1]
+        if (checkedit === 'edit') {
+          return true
+        } else {
+          return false
+        }
+      }
     },
     methods:{
       currentRoute () {

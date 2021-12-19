@@ -28,15 +28,20 @@
       background: #f8fafc;
       color: #337ab7;
     }
+
+    #search-input{
+        position:relative;
+        left:8px;
+    }
 </style>
 <body>
     <div style="font-size: 15px; color: #555; font-weight: bold; display: flex; margin: 20px 10px 10px; align-items: center;">
         <i style="font-size: 25px; margin-right: 10px; height: 35px;" class="voyager-list"></i> <span>Containers</span>
     </div>
     <div id="container-inquiry">
-        <div row>
+        <div row style="display: flex;">
             <form method="get" class="form-search" v-on:submit.prevent="submitForm" style="width: 100%;">
-                <div id="search-input" style="margin: 0;">
+                <div id="search-input" style="margin: 0; position: unset !important;">
                     <div class="input-group col-md-12">
                         <input type="hidden" name="page">
                         <input type="text" class="form-control" placeholder="Search container" name="search_input" v-on:keyup.13="submitForm" v-model="searchinput">
@@ -44,10 +49,14 @@
                             <button class="btn btn-info btn-lg" type="submit">
                                 <i class="voyager-search"></i>
                             </button>
-                        </span>
+                        </span> 
                     </div>
                 </div>
+               
             </form>
+            <button class="btn btn-sm btn-primary pull-right edit" @click="clearFilters()">
+                Clear
+            </button>
         </div>
         <div row>
             <div class="col-md-12 paginator_ containers_">
@@ -135,6 +144,12 @@
                 }
             }
         },
+        clearFilters() {
+            document.querySelector("input[name='page']").value = 1
+            document.querySelector("input[name='search_input']").value = ""
+            localStorage.removeItem('inquiry_request_filters')
+            document.querySelector("form.form-search").submit()
+        }
     },
     created() {
         this.getFilters()
