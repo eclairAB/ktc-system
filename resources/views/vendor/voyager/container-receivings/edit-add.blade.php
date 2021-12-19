@@ -787,15 +787,8 @@
             await axios.post('/admin/update/receiving', this.form).then(async data => {
               this.loading = false
               this.errors = {}
-              let customId = data.data.id
-              await axios.get(`/admin/get/print/receiving/${customId}`).then(data => {
-                let pasmo = data.data
-                let w = window.open();
-                w.document.write(pasmo);
-                w.print();
-                w.close();
-              })
-              window.location = `${checkedit}/${customId}/edit`
+              let customUrl = `${window.location.origin}/admin/container-inquiry/${this.form.container_no}`
+              window.location = customUrl
             }).catch(error => {
               this.loading = false
               this.errors = error.response.data.errors
