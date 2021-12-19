@@ -33,7 +33,7 @@ class ValidateContainerReceiving extends FormRequest
             // 'type'=> 'required',
             // 'height'=> 'required',
             'empty_loaded'=> 'required',
-            'manufactured_date'=> 'required',
+            'manufactured_date'=> 'nullable',
             'yard_location'=> 'required',
             // 'acceptance_no'=> 'required',
             'consignee'=> 'required',
@@ -41,7 +41,6 @@ class ValidateContainerReceiving extends FormRequest
             'plate_no'=> 'required',
             // 'upload_photo'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'container_photo'=> 'required',
-            'signature'=> 'required',
             'remarks'=> 'nullable',
             'type_id'=> 'required',
         ];
@@ -58,14 +57,13 @@ class ValidateContainerReceiving extends FormRequest
             // 'type.required' => 'Type field required.',
             // 'height.required' => 'Height field required.',
             'empty_loaded.required' => 'Empty Loaded field required.',
-            'manufactured_date.required' => 'Manufactured Date field required.',
+            // 'manufactured_date.required' => 'Manufactured Date field required.',
             'yard_location.required' => 'Yard Location field required.',
             'hauler.required' => 'Hauler  fieldrequired.',
             'plate_no.required' => 'Plate No. field required.',
             // 'acceptance_no.required' => 'Acceptance No. field required.',
             // 'upload_photo.max'  => 'Maximum size to upload is 2MB.',
             'container_photo.required'  => 'Photo is required.',
-            'signature.required'  => 'Signature field is required.',
             'type_id.required' => 'Type field required.',
         ];
     }

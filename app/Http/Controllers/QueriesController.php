@@ -121,7 +121,6 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function getReceivingById($id)
     {
         $container_receiving = ContainerReceiving::where('id', $id)->with('client', 'sizeType', 'containerClass', 'yardLocation', 'inspector.staff', 'inspector.checker', 'photos', 'type')->first();
-        $container_receiving->signature = [$this->imageEncode($container_receiving->signature)];
         foreach ($container_receiving->photos as $key => $value) {
             $container_receiving->photos[$key]->encoded = [$this->imageEncode('/app/public/uploads/receiving/container/' . $container_receiving->id . '/' . $value['photo'])];
         }
@@ -131,7 +130,6 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function getReleasingById($id)
     {
         $container_releasing = ContainerReleasing::where('id', $id)->with('inspector.staff', 'inspector.checker', 'photos')->first();
-        $container_releasing->signature = [$this->imageEncode($container_releasing->signature)];
         foreach ($container_releasing->photos as $key => $value) {
             $container_releasing->photos[$key]->encoded = [$this->imageEncode('/app/public/uploads/releasing/container/' . $container_releasing->id . '/' . $value['photo'])];
         }
@@ -204,7 +202,6 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->with('sizeType:id,code')->latest('created_at')->first();
         $size_types = ContainerSizeType::get();
 
-        $path = storage_path($releasing->signature);
         $image = $this->imageEncodePrint($path);
         
         return view('print_releasing')->with(compact('releasing', 'receiving_details', 'size_types', 'image'));
@@ -216,7 +213,6 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $damages = ReceivingDamage::where('receiving_id',$id)->get();
         $size_types = ContainerSizeType::get();
 
-        $path = storage_path($receiving->signature);
         $image = $this->imageEncodePrint($path);
 
         return view('print_receiving')->with(compact('receiving', 'damages', 'size_types', 'image'));
