@@ -15,6 +15,9 @@
         line-height: unset !important;
         padding-top: 10px !important;
       }
+      .isDate::placeholder {
+        color: black !important;
+      }
     </style>
 @stop
 
@@ -152,12 +155,12 @@
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <vuejs-datepicker
                             v-model="form.manufactured_date"
-                            placeholder="mm/dd/yyyyy"
-                            :disabled="!isOk"
-                            :input-class="errors.manufactured_date ? 'isError form-control' : 'form-control'"
+                            :placeholder="pasmoDate === undefined ? 'mm/yyyy' : moment(pasmoDate).format('MM/yyyy')"
+                            :input-class="errors.manufactured_date ? 'isError form-control isDate' : 'form-control isDate'"
                             :typeable="true"
                             name="manufactured_date"
                             :format="dateFormat"
+                            minimum-view="month"
                             :required="true">
                           </vuejs-datepicker>
                           <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
@@ -326,48 +329,10 @@
                     </div>
                   </div>
 
-                  <div class="panel panel-bordered" v-if="form.id">
-                    <div class="panel-body" style="padding: 15px;">
-                      <div class="row" style="padding: 0px 10px;">
-                        <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
-                          <div style="font-weight: 700; font-size: 15px; color: black;">Signature</div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                          <div style="font-weight: 700;">Signature</div>
-                          <div class="image-container" :style="photolink(signature)" style="margin-top: 10px;border: 4px solid #e5e7eb; border-radius: 10px;"></div>
-                        </div>
-                      </div>
-                    </div>
+                  <div style="display: flex; justify-content: flex-end; padding-top: 0;" v-if="isOk === true">
+                    <button style="width: 100px;" class="btn btn-primary save" :disabled="loading === true" @click="form.id ? upadteReceiving() : saveReceiving() ">@{{loading === false ? (form.id ? 'Update' : 'Save') : 'Loading...'}}</button>
                   </div>
 
-                </div>
-
-                <div class="panel panel-bordered" id="signCard">
-                  <div class="panel-body" style="padding: 15px;">
-                    <div class="row" style="padding: 0px 10px;">
-                      <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
-                        <div style="font-weight: 700; font-size: 15px; color: black;">Signature</div>
-                      </div>
-                      <div class="col-xs-12">
-                        <div style="font-weight: 700;">Draw Signature Here</div>
-                        <div class="wrapper-custom">
-                          <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
-                        </div>
-                        <div>
-                          <button id="clear" class="btn btn-danger">Clear</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div style="display: flex; justify-content: flex-end; padding-top: 0;">
-                  <div id="saveBtn">
-                    <button style="width: 100px;" id="save" class="btn btn-primary save">Save</button>
-                  </div>
-                  <div id="updateBtn">
-                    <button style="width: 100px;" id="update" class="btn btn-primary save">Update</button>
-                  </div>
                 </div>
 
             </div>
@@ -399,35 +364,6 @@
 @stop
 
 @section('javascript')
-    
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@3.0.0-beta.4/dist/signature_pad.umd.min.js"></script>
-
-    <script>
-        var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
-          backgroundColor: 'rgba(255, 255, 255, 0)',
-          penColor: 'rgb(0, 0, 0)'
-        });
-        var saveButton = document.getElementById('save');
-        var updateButton = document.getElementById('update');
-        var cancelButton = document.getElementById('clear');
-
-        saveButton.addEventListener('click', function (event) {
-          if(!event.detail || event.detail == 1){ 
-            document.getElementById('containerReceiving').__vue__.saveReceiving(signaturePad.toDataURL('image/png'))
-          }
-        });
-
-        updateButton.addEventListener('click', function (event) {
-          if(!event.detail || event.detail == 1){ 
-            document.getElementById('containerReceiving').__vue__.upadteReceiving()
-          }
-        });
-
-        cancelButton.addEventListener('click', function (event) {
-          signaturePad.clear();
-        });
-
-    </script>
     
     <script>
         var params = {};
@@ -540,7 +476,6 @@
           vuejsDatepicker,
         },
         data: {
-          signature: {},
           form: {},
           container_photo: [],
           loginUser: `{!! Auth::user()->name !!}`,
@@ -571,12 +506,23 @@
           damages: {},
           damageError: {},
           input: {},
-          damageList: []
+          damageList: [],
+          loading: false,
+          pasmoDate: null
         },
         watch: {
           'damages': {
             handler () {
               this.pasmo()
+            },
+            deep: true
+          },
+          'form.manufactured_date': {
+            handler () {
+              if (this.form.manufactured_date !== null) {
+                this.pasmoDate = this.form.manufactured_date
+                this.$set(this.form, 'manufactured_date', this.pasmoDate)
+              }
             },
             deep: true
           }
@@ -690,7 +636,7 @@
             $('#dialog').modal('hide');
           },
           dateFormat(date) {
-            return moment(date).format('MM/DD/yyyy');
+            return moment(date).format('MM/yyyy');
           },
           photolink (payload) {
             return `background: url(${payload.storage_path})`
@@ -755,20 +701,11 @@
                 }
                 axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}&type=receiving`)
                 .then(data => {
-                  if (!this.form.id) {
-                    document.getElementById("signCard").style.display = 'inherit'; 
-                    document.getElementById("saveBtn").style.display = 'inherit';
-                  } else {
-                    document.getElementById("updateBtn").style.display = 'inherit'; 
-                  }
                   this.containerError = {} 
                   this.isOk = true
                   this.containerInfo = data.data
                 }).catch(error => {
                   this.isOk = false
-                  document.getElementById("signCard").style.display = 'none';
-                  document.getElementById("saveBtn").style.display = 'none';
-                  document.getElementById("updateBtn").style.display = 'none'; 
                   this.form = {
                     inspected_date: moment().format(),
                     inspected_by: {!! Auth::user()->role->id !!},
@@ -811,14 +748,14 @@
             }
             this.form.container_photo = this.container_photo
           },
-          async saveReceiving (data) {
-            $('#save').attr('disabled', 'disabled');
+          async saveReceiving () {
+            this.loading = true
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
-            this.form.signature = data
             this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.$set(this.form, 'manufactured_date', this.pasmoDate)
             await axios.post('/admin/create/receiving', this.form).then(async data => {
-              document.getElementById("save").removeAttribute("disabled");
+              this.loading = false
               this.errors = {}
               for (let i = 0; i < this.damageList.length; i++) {
                 this.$set(this.damageList[i], 'receiving_id', (+data.data[0].container_id))
@@ -840,16 +777,15 @@
               })
               window.location = `${checkedit}/${customId}/edit`
             }).catch(error => {
-              document.getElementById("save").removeAttribute("disabled");
+              this.loading = false
               this.errors = error.response.data.errors
             })
           },
           async upadteReceiving () {
-            $('#supdate').attr('disabled', 'disabled');
+            this.loading = true
             this.form.inspected_by = this.form.inspected_by.id
-            delete this.form.signature
             await axios.post('/admin/update/receiving', this.form).then(async data => {
-              document.getElementById("update").removeAttribute("disabled");
+              this.loading = false
               this.errors = {}
               let customId = data.data.id
               await axios.get(`/admin/get/print/receiving/${customId}`).then(data => {
@@ -861,20 +797,7 @@
               })
               window.location = `${checkedit}/${customId}/edit`
             }).catch(error => {
-              document.getElementById("update").removeAttribute("disabled");
-              this.errors = error.response.data.errors
-            })
-          },
-          async updateStaff () {
-            this.customload = true
-            let currentUrl = window.location.origin
-            let browseUrl = `${currentUrl}/admin/staff`
-            await axios.post('/admin/update/Staff', this.form).then(data => {
-              this.customload = false
-              this.errors = {}
-              window.location = browseUrl
-            }).catch(error => {
-              this.customload = false
+              this.loading = false
               this.errors = error.response.data.errors
             })
           },
@@ -897,7 +820,6 @@
                 this.form.client_id = data.data.client.id
                 this.form.yard_location = data.data.yard_location.id
                 this.form.class = data.data.container_class.id
-                this.signature.storage_path = data.data.signature[0]
                 this.form.inspected_by = data.data.inspector
                 for (let index of Object.keys(data.data.photos)) {
                   let wawex = {
@@ -907,7 +829,6 @@
                 }
                 this.form.container_photo = this.container_photo
                 this.isOk = true
-                document.getElementById("updateBtn").style.display = 'inherit';
                 this.getDamages()
               }).catch(error => {
                 console.log('error: ', error)
@@ -927,9 +848,6 @@
           }
         },
         mounted () {
-          document.getElementById("signCard").style.display = 'none';
-          document.getElementById("saveBtn").style.display = 'none';
-          document.getElementById("updateBtn").style.display = 'none';
           this.getdata()
           this.getSize()
           this.getType()

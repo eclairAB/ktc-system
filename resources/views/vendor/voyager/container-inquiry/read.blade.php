@@ -111,9 +111,9 @@
                                             <button class="btn btn-sm btn-warning pull-right edit" v-on:click="printDatareceiving( {{ $item->id }} )">
                                                 <i class="voyager-file-text"></i>&nbsp Print
                                             </button>
-                                            <!-- <button class="btn btn-sm btn-warning pull-right edit" v-on:click="viewContainerInfo( {{ $item }} )">
+                                            <button class="btn btn-sm btn-warning pull-right edit" v-on:click="editContainerReceiving( {{ $item }} )">
                                                 <i class="voyager-edit"></i>&nbsp Edit
-                                            </button> -->
+                                            </button>
                                         </td>
                                     </tr>
                                 @empty
@@ -164,9 +164,9 @@
                                             <button class="btn btn-sm btn-warning pull-right edit" v-on:click="printDatareleasing( {{ $item->id }} )">
                                                 <i class="voyager-file-text"></i>&nbsp Print
                                             </button>
-                                            <!-- <button class="btn btn-sm btn-warning pull-right edit" v-on:click="viewContainerInfo( {{ $item }} )">
+                                            <button class="btn btn-sm btn-warning pull-right edit" v-on:click="editContainerReleasing( {{ $item }} )">
                                                 <i class="voyager-edit"></i>&nbsp Edit
-                                            </button> -->
+                                            </button>
                                         </td>
                                     </tr>
                                 @empty
@@ -329,6 +329,14 @@
         viewContainerInfo(payload) {
             this.containerInfo = payload
             $('#dialog').modal({backdrop: 'static', keyboard: true});
+        },
+        editContainerReceiving (payload) {
+            let customUrl = `${window.location.origin}/admin/container-receivings/${payload.id}/edit`
+            window.location = customUrl
+        },
+        editContainerReleasing (payload) {
+            let customUrl = `${window.location.origin}/admin/container-releasings/${payload.id}/edit`
+            window.location = customUrl
         },
         async printDatareceiving (payload) {
           await axios.get(`/admin/get/print/receiving/${payload}`).then(data => {

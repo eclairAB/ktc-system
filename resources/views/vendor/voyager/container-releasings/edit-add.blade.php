@@ -89,7 +89,7 @@
                           <label for="class" class="form-control-placeholder"> Class</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="manufactured_date" disabled id="manufactured_date" :value="moment(containerInfo.manufactured_date).format('MMMM DD, YYYY')" style="height: 37px;" class="form-control">
+                          <input type="text" name="manufactured_date" disabled id="manufactured_date" :value="moment(containerInfo.manufactured_date).format('MMMM YYYY')" style="height: 37px;" class="form-control">
                           <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
@@ -144,7 +144,7 @@
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <textarea v-model="form.remarks" :disabled="!isOk" rows="3" :class="errors.remarks ? 'isError form-control' : 'form-control'" style="width: 100%; height: auto !important;" placeholder="Write Something..."></textarea>  
-                          <label for="consignee" class="form-control-placeholder"> Remarks <span style="color: red"> *</span> </label>
+                          <label for="consignee" class="form-control-placeholder"> Remarks </label>
                           <div class="customErrorText"><small>@{{ errors.remarks ? errors.remarks[0] : '' }}</small></div>
                         </div>
                       </div>
@@ -178,49 +178,11 @@
                   </div>
                   <!--  -->
 
-                  <div class="panel panel-bordered" v-if="form.id">
-                    <div class="panel-body" style="padding: 15px;">
-                      <div class="row" style="padding: 0px 10px;">
-                        <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
-                          <div style="font-weight: 700; font-size: 15px; color: black;">Signature</div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                          <div style="font-weight: 700;">Signature</div>
-                          <div class="image-container" :style="photolink(signature)" style="margin-top: 10px;border: 4px solid #e5e7eb; border-radius: 10px;"></div>
-                        </div>
-                      </div>
-                    </div>
+                  <div style="display: flex; justify-content: flex-end; padding-top: 0;" v-if="isOk === true">
+                    <button style="width: 100px;" class="btn btn-primary save" :disabled="loading === true" @click="form.id ? upadteReleasing() : saveReleasing() ">@{{loading === false ? (form.id ? 'Update' : 'Save') : 'Loading...'}}</button>
                   </div>
 
                 </div> <!-- End of Vue Container -->
-
-                <div class="panel panel-bordered" id="signCard">
-                  <div class="panel-body" style="padding: 15px;">
-                    <div class="row" style="padding: 0px 10px;">
-                      <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
-                        <div style="font-weight: 700; font-size: 15px; color: black;">Signature</div>
-                      </div>
-                      <div class="col-xs-12">
-                        <div style="font-weight: 700;">Draw Signature Here</div>
-                        <div class="wrapper-custom">
-                          <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
-                        </div>
-                        <div>
-                          <button id="clear" class="btn btn-danger">Clear</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div style="display: flex; justify-content: flex-end; padding-top: 0;">
-                  <div id="saveBtn">
-                    <button style="width: 100px;" id="save" class="btn btn-primary save">Save</button>
-                  </div>
-                  <div id="updateBtn">
-                    <button style="width: 100px;" id="update" class="btn btn-primary save">Update</button>
-                  </div>
-                </div>
 
             </div>
         </div>
@@ -251,35 +213,6 @@
 @stop
 
 @section('javascript')
-    
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@3.0.0-beta.4/dist/signature_pad.umd.min.js"></script>
-
-    <script>
-        var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
-          backgroundColor: 'rgba(255, 255, 255, 0)',
-          penColor: 'rgb(0, 0, 0)'
-        });
-        var saveButton = document.getElementById('save');
-        var updateButton = document.getElementById('update');
-        var cancelButton = document.getElementById('clear');
-
-        saveButton.addEventListener('click', function (event) {
-          if(!event.detail || event.detail == 1){ 
-            document.getElementById('containerReleasing').__vue__.saveReleasing(signaturePad.toDataURL('image/png'))
-          }
-        });
-
-        updateButton.addEventListener('click', function (event) {
-          if(!event.detail || event.detail == 1){ 
-            document.getElementById('containerReleasing').__vue__.upadteReleasing()
-          }
-        });
-
-        cancelButton.addEventListener('click', function (event) {
-          signaturePad.clear();
-        });
-
-    </script>
     
     <script>
         var params = {};
@@ -383,7 +316,6 @@
       var app = new Vue({
         el: '#containerReleasing',
         data: {
-          signature: {},
           form: {
             container_photo: []
           },
@@ -394,7 +326,8 @@
           containerError: {},
           containerInfo: {},
           isOk: false,
-          errors: {}
+          errors: {},
+          loading: false
         },
         methods:{
           dateFormat(date) {
@@ -410,20 +343,11 @@
                 }
                 axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}&type=releasing`, payload)
                 .then(data => {
-                  if (!this.form.id) {
-                    document.getElementById("signCard").style.display = 'inherit'; 
-                    document.getElementById("saveBtn").style.display = 'inherit';
-                  } else {
-                    document.getElementById("updateBtn").style.display = 'inherit'; 
-                  }
                   this.containerError = {} 
                   this.isOk = true
                   this.containerInfo = data.data
                 }).catch(error => {
                   this.isOk = false
-                  document.getElementById("signCard").style.display = 'none';
-                  document.getElementById("saveBtn").style.display = 'none';
-                  document.getElementById("updateBtn").style.display = 'none'; 
                   this.form = {
                     inspected_date: moment().format(),
                     inspected_by: {!! Auth::user()->role->id !!},
@@ -470,13 +394,12 @@
             this.form.container_photo = this.container_photo
           },
           async saveReleasing (data) {
-            $('#save').attr('disabled', 'disabled');
+            this.loading = true
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
-            this.form.signature = data
             this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
             await axios.post('/admin/create/releasing', this.form).then(async data => {
-              document.getElementById("save").removeAttribute("disabled");
+              this.loading = false
               this.errors = {}
               let customId = data.data[0].container_id
               await axios.get(`/admin/get/print/releasing/${customId}`).then(data => {
@@ -492,16 +415,15 @@
               })
               window.location = checkedit
             }).catch(error => {
-              document.getElementById("save").removeAttribute("disabled");
+              this.loading = false
               this.errors = error.response.data.errors
             })
           },
           async upadteReleasing () {
-            $('#supdate').attr('disabled', 'disabled');
+            this.loading = true
             this.form.inspected_by = this.form.inspected_by.id
-            delete this.form.signature
             await axios.post('/admin/update/releasing', this.form).then(async data => {
-              document.getElementById("update").removeAttribute("disabled");
+              this.loading = false
               this.errors = {}
               let customId = data.data.id
               await axios.get(`/admin/get/print/releasing/${customId}`).then(data => {
@@ -513,7 +435,7 @@
               })
               window.location = checkedit
             }).catch(error => {
-              document.getElementById("update").removeAttribute("disabled");
+              this.loading = false
               this.errors = error.response.data.errors
             })
           },
@@ -543,7 +465,6 @@
                 axios.get(`/admin/get/details/forUpdate?container_no=${data.data.container_no}`, data.data).then(data => {
                   this.containerInfo = data.data
                 })
-                this.signature.storage_path = data.data.signature[0]
                 this.form.inspected_by = data.data.inspector
                 for (let index of Object.keys(data.data.photos)) {
                   let wawex = {
@@ -567,9 +488,6 @@
           }
         },
         mounted () {
-          document.getElementById("signCard").style.display = 'none';
-          document.getElementById("saveBtn").style.display = 'none';
-          document.getElementById("updateBtn").style.display = 'none';
           this.getdata()
         }
       })

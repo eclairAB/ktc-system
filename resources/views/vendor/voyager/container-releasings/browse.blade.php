@@ -123,7 +123,6 @@
                                                 @endif
                                             </th>
                                             @endforeach
-                                            <th>Signature</th>
                                             <th class="actions text-right dt-not-orderable">{{ __('voyager::generic.actions') }}</th>
                                         </tr>
                                     </thead>
@@ -273,9 +272,6 @@
                                                     @endif
                                                 </td>
                                             @endforeach
-                                            <td>
-                                              <img style="width: 100px; border: 1px solid #c7c7c7;" :src="signImage( {{ $data }} )">
-                                            </td>
                                             <td class="no-sort no-click bread-actions" style="display: flex; justify-content: flex-end;">
                                                 <button class="btn btn-success" @click="printData({{ $data->{$data->getKeyName()} }})"><i class="voyager-file-text"></i> Print</button>
                                                 @foreach($actions as $action)
