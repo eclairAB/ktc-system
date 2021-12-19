@@ -167,7 +167,7 @@
             <td>@{{ item.plate_no }}</td>
             <td>@{{ item.inspector.name }}</td>
             <td>@{{ item.container.container_class ? item.container.container_class.class_name : '' }}</td>
-            <td>@{{ moment(item.manufactured_date).format('MMMM DD, YYYY') }}</td>
+            <td>@{{ moment(item.manufactured_date).format('MMMM YYYY') }}</td>
             <td>Released</td>
             <td>@{{ item.remarks }}</td>
           </tr>

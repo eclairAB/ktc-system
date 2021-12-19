@@ -132,7 +132,7 @@
 	            <td>@{{ item.client ? item.client.code_name : '' }}</td>
 	            <td>@{{ item.container_no }}</td>
 	            <td>@{{ item.type ? item.type.code : '' }}</td>
-	            <td>@{{ moment(item.manufactured_date).format('MMMM DD, YYYY') }}</td>
+	            <td>@{{ moment(item.manufactured_date).format('MMMM YYYY') }}</td>
 	            <td>@{{ item.container_class ? item.container_class.class_code : '' }}</td>
 	            <td>@{{ moment(item.created_at).format('MMMM DD, YYYY') }}</td>
 	            <td>@{{ item.total_no_days }}</td>
