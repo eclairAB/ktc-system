@@ -16,7 +16,8 @@ class CreateEirNumbersTable extends Migration
         Schema::create('eir_numbers', function (Blueprint $table) {
             $table->id();
             $table->string('eir_no')->nullable();
-            $table->bigInteger('container_id')->nullable();
+            $table->unsignedBigInteger('container_id')->nullable();
+            $table->foreign('container_id')->references('id')->on('containers');
             $table->timestamps();
         });
     }
