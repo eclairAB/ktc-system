@@ -15,8 +15,7 @@ class UpdateContReceivingFields extends Migration
     {
         Schema::table('container_receivings', function (Blueprint $table) {
             //
-            $table->text('remarks')->nullable()->change();
-            $table->timestampTz('manufactured_date')->nullable()->change();
+            $table->date('manufactured_date')->nullable()->change();
             $table->dropColumn('signature');
         });
     }
@@ -30,8 +29,7 @@ class UpdateContReceivingFields extends Migration
     {
         Schema::table('container_receivings', function (Blueprint $table) {
             //
-            $table->dropColumn('remarks');
-            $table->dropColumn('manufactured_date');
+            $table->timestampTz('manufactured_date');
             $table->text('signature');
         });
     }
