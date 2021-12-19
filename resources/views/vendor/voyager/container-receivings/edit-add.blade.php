@@ -153,7 +153,6 @@
                           <vuejs-datepicker
                             v-model="form.manufactured_date"
                             placeholder="mm/yyyyy"
-                            :disabled="!isOk"
                             :input-class="errors.manufactured_date ? 'isError form-control' : 'form-control'"
                             :typeable="true"
                             name="manufactured_date"
@@ -505,12 +504,22 @@
           damageError: {},
           input: {},
           damageList: [],
-          loading: false
+          loading: false,
+          pasmoDate: null
         },
         watch: {
           'damages': {
             handler () {
               this.pasmo()
+            },
+            deep: true
+          },
+          'form.manufactured_date': {
+            handler () {
+              if (this.form.manufactured_date !== null) {
+                this.pasmoDate = this.form.manufactured_date
+                this.$set(this.form, 'manufactured_date', this.pasmoDate)
+              }
             },
             deep: true
           }
@@ -741,6 +750,7 @@
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.$set(this.form, 'manufactured_date', this.pasmoDate)
             await axios.post('/admin/create/receiving', this.form).then(async data => {
               this.loading = false
               this.errors = {}
