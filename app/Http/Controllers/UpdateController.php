@@ -65,22 +65,23 @@ class UpdateController extends Controller
         $validate_receiving = $request->all();
         $receiving = ContainerReceiving::where('id',$request->id)->first();
         $receiving->update($validate_receiving);
-        
         return $receiving;
     }
 
     public function updateReleasing(Request $request)
     {
-        $releasing = ContainerReleasing::where('id',$request->id)->update($request);
+        $validate_releasing = $request->all();
+        $releasing = ContainerReleasing::where('id',$request->id)->first();
+        $releasing->update($validate_releasing);
         return $releasing;
 
-        // testing
-        foreach ($request->containers as $key => $value) {
-            $zxc[] = [
-                $this->selectAction($value)
-            ];
-        }
-        return $zxc;
+        // // testing
+        // foreach ($request->containers as $key => $value) {
+        //     $zxc[] = [
+        //         $this->selectAction($value)
+        //     ];
+        // }
+        // return $zxc;
     }
 
     function selectAction($payload)
