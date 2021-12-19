@@ -50,20 +50,24 @@
                 <div class="col-md-12" style="padding: 8px !important; margin-bottom: 5px; margin-top: 10px;">
                     <div class="card_">
                         <div class="row" style="padding: 0px 10px;">
-                          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
+                          <div class="col-lg-4 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
                             <input type="text" disabled name="container_no" id="container_no" value="{{ $receiving[0]->container_no }}" class="form-control">
                             <label for="container_no" class="form-control-placeholder"> Container No.</label>
                           </div>
-                          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
                             <input type="text" disabled name="sizeType" id="sizeType" value="{{ $receiving[0]->sizeType->code }}" class="form-control">
                             <label for="sizeType" class="form-control-placeholder"> Size</label>
                           </div>
-                          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
                             <input type="text" disabled name="type" id="type" value="{{ $receiving[0]->type->code }}" class="form-control">
                             <label for="type" class="form-control-placeholder"> Type</label>
                           </div>
-                          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
-                            <input type="text" disabled name="manufactured_date" id="manufactured_date" value="{{ Carbon\Carbon::parse($receiving[0]->manufactured_date)->format('F d, Y') }}" class="form-control">
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
+                            <input type="text" disabled name="type" id="type" value="{{ $receiving[0]->containerClass->class_code }}" class="form-control">
+                            <label for="type" class="form-control-placeholder"> Class</label>
+                          </div>
+                          <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 form-group mt-3">
+                            <input type="text" disabled name="manufactured_date" id="manufactured_date" value="{{ Carbon\Carbon::parse($receiving[0]->manufactured_date)->format('F, Y') }}" class="form-control">
                             <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
                           </div>
                         </div>
@@ -131,7 +135,7 @@
                                       Date released
                                   </th>
                                   <th style="padding: 10px 10px;">
-                                    Inspected By
+                                      Inspected By
                                   </th>
                                   <th style="padding: 10px 10px;">
                                       Client
@@ -203,7 +207,7 @@
                                 </div>
                                 <div v-if="containerInfo.inspected_date">
                                     <span>
-                                        Inspected date:
+                                        Inspected Date:
                                     </span>
                                     <span>
                                         @{{ moment(containerInfo.inspected_date).format('MMMM DD, YYYY') }} 
@@ -225,14 +229,14 @@
                                         @{{ moment(containerInfo.manufactured_date).format('MMMM DD, YYYY') }}
                                     </span>
                                 </div> -->
-                                <div v-if="containerInfo.container_class">
+                                <!-- <div v-if="containerInfo.container_class">
                                     <span>
                                         Class:
                                     </span>
                                     <span>
                                         @{{containerInfo.container_class && containerInfo.container_class.class_name}}
                                     </span>
-                                </div>
+                                </div> -->
                                 <div v-if="containerInfo.consignee">
                                     <span>
                                         Consignee:
