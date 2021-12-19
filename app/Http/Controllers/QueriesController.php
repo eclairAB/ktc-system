@@ -199,34 +199,22 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function prntReleasing($id)
     {
         $releasing = ContainerReleasing::where('id',$id)->first();
-        $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->with('sizeType:id,code')->latest('created_at')->first();
-        $size_types = ContainerSizeType::get();
-
-        $image = $this->imageEncodePrint($path);
+        $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->with('sizeType:id,code','type:id,code')->latest('created_at')->first();
         
-        return view('print_releasing')->with(compact('releasing', 'receiving_details', 'size_types', 'image'));
+        return view('print_releasing')->with(compact('releasing', 'receiving_details'));
     }
 
     public function prntReceiving($id)
     {
-        $receiving = ContainerReceiving::where('id',$id)->with('sizeType:id,code')->first();
+        $receiving = ContainerReceiving::where('id',$id)->with('sizeType:id,code','type:id,code')->first();
         $damages = ReceivingDamage::where('receiving_id',$id)->get();
-        $size_types = ContainerSizeType::get();
 
-        $image = $this->imageEncodePrint($path);
-
-        return view('print_receiving')->with(compact('receiving', 'damages', 'size_types', 'image'));
+        return view('print_receiving')->with(compact('receiving', 'damages'));
     }
 
     public function getReceivingDamage($receiving_id)
     {
         return ReceivingDamage::where('receiving_id',$receiving_id)->with('damage','component','repair')->get();
-    }
-
-    function imageEncodePrint($path) {
-        $imageUrl = file_get_contents($path);
-        $image = base64_encode($imageUrl);
-        return 'data:image/png;base64,'.$image;
     }
 
     function imageEncode($path) {
