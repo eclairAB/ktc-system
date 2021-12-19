@@ -78,7 +78,7 @@
                                       Date received
                                   </th>
                                   <th style="padding: 10px 10px;">
-                                      Inspector
+                                      Inspected By
                                   </th>
                                   <th style="padding: 10px 10px;">
                                       Client
@@ -131,7 +131,7 @@
                                       Date released
                                   </th>
                                   <th style="padding: 10px 10px;">
-                                      Inspector
+                                    Inspected By
                                   </th>
                                   <th style="padding: 10px 10px;">
                                       Client
@@ -195,7 +195,7 @@
                             <div class="container-info">
                                 <div>
                                     {{-- Inspector:&nbsp@{{containerInfo.inspectors}} --}}
-                                    <span>Inspector:</span>
+                                    <span>Inspected By:</span>
                                     <span>
                                         @{{containerInfo.inspector && containerInfo.inspector.name}}&nbsp
                                         ( @{{containerInfo.inspector && containerInfo.inspector.email}} )
