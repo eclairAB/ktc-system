@@ -286,21 +286,24 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         return $data;
     }
 
-    public function containerInquiry($container_no)
+    public function containerInquiry(Request $request, $container_no)
     {
         if($container_no == 'browse')
         {
-            $containers = Container::whereNotNull('receiving_id')
-                ->select(
-                    DB::raw('container_no'),
-                    'client_id',
-                    'size_type',
-                    'class',
-                    'receiving_id',
-                    'releasing_id',
-                )
-                ->with('containerClass','sizeType')
-                ->paginate(15);            
+            $q = Container::whereNotNull('receiving_id');
+            $q->select(
+                DB::raw('container_no'),
+                'client_id',
+                'size_type',
+                'class',
+                'receiving_id',
+                'releasing_id',
+            );
+            if ( isset($request->search_input)) {
+                $q->where('container_no', 'ilike', '%' . $request->search_input . '%');
+            }
+            $q->with('containerClass','sizeType');
+            $containers = $q->paginate(15);
             return view('vendor.voyager.container-inquiry.browse', ['containers' => $containers]);
         }
         else 
