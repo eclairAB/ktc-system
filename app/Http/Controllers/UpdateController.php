@@ -112,11 +112,11 @@ class UpdateController extends Controller
 
         if($payload['type'] == 'releasing')
         {
-            else file_put_contents( $the_path . 'releasing/container/' . $payload['file_name'] . $extension, $decode);
+            file_put_contents( $the_path . 'releasing/container/' . $payload['file_name'] . $extension, $decode);
         }
         elseif($payload['type'] == 'receiving')
         {
-            else file_put_contents( $the_path . 'receiving/container/' . $payload['file_name'] . $extension, $decode);
+            file_put_contents( $the_path . 'receiving/container/' . $payload['file_name'] . $extension, $decode);
         }
     }
 
