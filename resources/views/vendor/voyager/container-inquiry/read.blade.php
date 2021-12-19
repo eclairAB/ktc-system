@@ -100,10 +100,16 @@
                                         <td style="padding: 0 10px;">
                                             {{ $item->client->code_name }}
                                         </td>
-                                        <td style="padding: 0 10px">
-                                            <button style="padding: 3px 10px;" class="btn btn-sm btn-warning pull-right edit" v-on:click="viewContainerInfo( {{ $item }} )">
+                                        <td>
+                                            <button  style="margin-right:5px;"  class="btn btn-sm btn-warning pull-right edit" v-on:click="viewContainerInfo( {{ $item }} )">
                                                 <i class="voyager-eye"></i>&nbsp View
                                             </button>
+                                            <button class="btn btn-sm btn-warning pull-right edit" v-on:click="printDatareceiving( {{ $item->id }} )">
+                                                <i class="voyager-file-text"></i>&nbsp Print
+                                            </button>
+                                            <!-- <button class="btn btn-sm btn-warning pull-right edit" v-on:click="viewContainerInfo( {{ $item }} )">
+                                                <i class="voyager-edit"></i>&nbsp Edit
+                                            </button> -->
                                         </td>
                                     </tr>
                                 @empty
@@ -147,10 +153,16 @@
                                         <td style="padding: 0 10px">
                                             {{ $item->container->receiving->client->code_name }}
                                         </td>
-                                        <td style="padding: 0 10px">
-                                            <button style="padding: 3px 10px;" class="btn btn-sm btn-warning pull-right edit" v-on:click="viewContainerInfo( {{ $item }} )">
+                                        <td>
+                                            <button  style="margin-right:5px;"  class="btn btn-sm btn-warning pull-right edit" v-on:click="viewContainerInfo( {{ $item }} )">
                                                 <i class="voyager-eye"></i>&nbsp View
                                             </button>
+                                            <button class="btn btn-sm btn-warning pull-right edit" v-on:click="printDatareleasing( {{ $item->id }} )">
+                                                <i class="voyager-file-text"></i>&nbsp Print
+                                            </button>
+                                            <!-- <button class="btn btn-sm btn-warning pull-right edit" v-on:click="viewContainerInfo( {{ $item }} )">
+                                                <i class="voyager-edit"></i>&nbsp Edit
+                                            </button> -->
                                         </td>
                                     </tr>
                                 @empty
@@ -293,6 +305,7 @@
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
 <script>
     var vm = new Vue({
@@ -312,6 +325,28 @@
         viewContainerInfo(payload) {
             this.containerInfo = payload
             $('#dialog').modal({backdrop: 'static', keyboard: true});
+        },
+        async printDatareceiving (payload) {
+          await axios.get(`/admin/get/print/receiving/${payload}`).then(data => {
+            let pasmo = data.data
+            let w = window.open();
+            w.document.write(pasmo);
+            setTimeout(() => { 
+                w.print();
+                w.close();
+            }, 100);
+          })
+        },
+        async printDatareleasing (payload) {
+          await axios.get(`/admin/get/print/releasing/${payload}`).then(data => {
+            let pasmo = data.data
+            let w = window.open();
+            w.document.write(pasmo);
+            setTimeout(() => { 
+                w.print();
+                w.close();
+            }, 100);
+          })
         },
         close () {
             this.containerInfo = {}
