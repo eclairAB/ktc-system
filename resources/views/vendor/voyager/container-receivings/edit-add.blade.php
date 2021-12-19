@@ -15,6 +15,9 @@
         line-height: unset !important;
         padding-top: 10px !important;
       }
+      .isDate::placeholder {
+        color: black !important;
+      }
     </style>
 @stop
 
@@ -152,8 +155,8 @@
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <vuejs-datepicker
                             v-model="form.manufactured_date"
-                            placeholder="mm/yyyyy"
-                            :input-class="errors.manufactured_date ? 'isError form-control' : 'form-control'"
+                            :placeholder="pasmoDate === undefined ? 'mm/yyyy' : moment(pasmoDate).format('MM/yyyy')"
+                            :input-class="errors.manufactured_date ? 'isError form-control isDate' : 'form-control isDate'"
                             :typeable="true"
                             name="manufactured_date"
                             :format="dateFormat"
