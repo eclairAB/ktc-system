@@ -177,7 +177,7 @@ class PostsController extends Controller
                     'remarks'=>$request->remarks,
                 ];
                 ContainerRemark::create($dataContRemark);
-                $this->createEir(true, $dataCont->id);
+                $this->createEir(false, $dataCont->id);
             }
 
             return $release;
