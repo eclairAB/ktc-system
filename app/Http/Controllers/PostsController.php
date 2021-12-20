@@ -301,7 +301,7 @@ class PostsController extends Controller
             ->first('eir_no');
 
         if( is_null($eir) ) {
-            return EirNumber::insertGetId(['eir_no' => $type . '000001', 'container_id' => $container_id]);
+            return EirNumber::insertGetId(['eir_no' => $type . '000001', 'container_id' => $container_id,'created_at'=>Carbon::now(),'updated_at'=>Carbon::now()]);
         }
 
         $array = explode('-', $eir->eir_no);
