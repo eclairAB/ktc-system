@@ -773,7 +773,8 @@
                     w.close();
                 }, 100);
               })
-              window.location = `${checkedit}/${customId}/edit`
+              let customUrl = `${window.location.origin}/admin/container-inquiry/${this.form.container_no}`
+              window.location = customUrl
             }).catch(error => {
               this.loading = false
               this.errors = error.response.data.errors

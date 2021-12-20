@@ -201,7 +201,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         $releasing = ContainerReleasing::where('id',$id)->first();
         $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->with('sizeType:id,code','type:id,code','container')->latest('created_at')->first();
-        $eirNumber = EirNumber::where('container_id',$receiving_details->container->id)->first();
+        $eirNumber = EirNumber::where('eir_no','ilike','%O-%')->where('container_id',$receiving_details->container->id)->first();
         return view('print_releasing')->with(compact('releasing', 'receiving_details','eirNumber'));
     }
 
@@ -209,7 +209,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         $receiving = ContainerReceiving::where('id',$id)->with('sizeType:id,code','type:id,code','container')->first();
         $damages = ReceivingDamage::where('receiving_id',$id)->get();
-        $eirNumber = EirNumber::where('container_id',$receiving->container->id)->first();
+        $eirNumber = EirNumber::where('eir_no','ilike','%I-%')->where('container_id',$receiving->container->id)->first();
         return view('print_receiving')->with(compact('receiving', 'damages','eirNumber'));
     }
 
@@ -304,6 +304,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 $q->where('container_no', 'ilike', '%' . $request->search_input . '%');
             }
             $q->with('containerClass','sizeType');
+            $q->orderBy('id','DESC');
             $containers = $q->paginate(15);
             return view('vendor.voyager.container-inquiry.browse', ['containers' => $containers]);
         }
