@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 use App\Models\Checker;
 use App\Models\Client;
+use App\Models\ContainerPhoto;
 use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
 use App\Models\ContainerSizeType;
 use App\Models\ReceivingDamage;
 use App\Models\Staff;
 use App\Models\Type;
-use App\Models\ContainerPhoto;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
@@ -64,16 +65,15 @@ class UpdateController extends Controller
 
     public function updateReceiving(Request $request)
     {
-        $container_photo = [];
         $receiving = $request->all();
         $rec = ContainerReceiving::where('id',$request->id)->first();
         $rec->update($receiving);
-        
+
         foreach ($receiving['container_photo'] as $key => $value) {
             $params = [];
             $params['file_name'] = Str::random(32);
             $params['type'] = 'receiving';
-            $container_photo = [
+            $container_photo[] = [
                 'container_id' => $request->id,
                 'container_type' => $params['type'],
                 'photo' => $params['file_name'] . '.png',
@@ -81,11 +81,22 @@ class UpdateController extends Controller
                 'base64_file' => $receiving['container_photo'][$key]['storage_path'],
             ];
         }
+
         $path = storage_path() . '/app/public/uploads/receiving/container/' . $request->id . '/';
         array_map('unlink', glob($path."*.png"));
-        ContainerPhoto::where('container_id',$request->id)->where('container_type','receiving')->delete();
-        ContainerPhoto::create($container_photo);
 
+        foreach($container_photo as $item) {
+            $new_photo_array_for_creation[] = [
+                'container_id' => $item['container_id'],
+                'container_type' => $item['container_type'],
+                'photo' => $item['photo'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+        }
+
+        ContainerPhoto::where('container_id',$request->id)->where('container_type','receiving')->delete();
+        ContainerPhoto::insert($new_photo_array_for_creation);
         foreach($container_photo as $key => $value) {
             $this->imageUpload($value['params'], $value['base64_file'],$request->id);
         }
@@ -95,7 +106,6 @@ class UpdateController extends Controller
 
     public function updateReleasing(Request $request)
     {
-        $container_photo = [];
         $releasing = $request->all();
         $rel = ContainerReleasing::where('id',$request->id)->first();
         $rel->update($releasing);
@@ -104,7 +114,7 @@ class UpdateController extends Controller
             $params = [];
             $params['file_name'] = Str::random(32);
             $params['type'] = 'releasing';
-            $container_photo = [
+            $container_photo[] = [
                 'container_id' => $request->id,
                 'container_type' => $params['type'],
                 'photo' => $params['file_name'] . '.png',
@@ -115,8 +125,19 @@ class UpdateController extends Controller
         }
         $path = storage_path() . '/app/public/uploads/releasing/container/' . $request->id . '/';
         array_map('unlink', glob($path."*.png"));
+
+        foreach($container_photo as $item) {
+            $new_photo_array_for_creation[] = [
+                'container_id' => $item['container_id'],
+                'container_type' => $item['container_type'],
+                'photo' => $item['photo'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+        }
+
         ContainerPhoto::where('container_id',$request->id)->where('container_type','releasing')->delete();
-        ContainerPhoto::create($container_photo);
+        ContainerPhoto::insert($new_photo_array_for_creation);
 
         foreach($container_photo as $key => $value) {
             $this->imageUpload($value['params'], $value['base64_file'], $request->id);
