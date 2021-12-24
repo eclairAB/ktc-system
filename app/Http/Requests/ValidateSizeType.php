@@ -24,8 +24,8 @@ class ValidateSizeType extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required',
-            'name' => 'required',
+            // 'code' => 'required',
+            // 'name' => 'required',
             'size' => 'required',
             // 'type' => 'required',
         ];
@@ -34,8 +34,8 @@ class ValidateSizeType extends FormRequest
     public function messages()
     {
         return [
-            'code.required' => 'Code field is required.',
-            'name.required' => 'Name field is required.',
+            // 'code.required' => 'Code field is required.',
+            // 'name.required' => 'Name field is required.',
             'size.required' => 'Size field is required.',
             // 'type.required' => 'Type field is required.',
         ];
