@@ -20,6 +20,7 @@ use App\Models\ContainerReceiving;
 use App\Models\Container;
 use App\Models\ContainerRemark;
 use App\Models\ReceivingDamage;
+use App\Models\EirNumber;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Auth;
@@ -176,7 +177,9 @@ class PostsController extends Controller
                     'remarks'=>$request->remarks,
                 ];
                 ContainerRemark::create($dataContRemark);
+                $this->createEir(false, $dataCont->id);
             }
+
             return $release;
         }
         else{
@@ -224,7 +227,9 @@ class PostsController extends Controller
                 'remarks'=>$request->remarks,
             ];
             ContainerRemark::create($dataContRemark);
+            $this->createEir(true, $cont->id);
         }
+
         return $receive;
     }
 
@@ -284,5 +289,28 @@ class PostsController extends Controller
             'name'=>$type['name'],
         ];
         return Type::create($data);
+    }
+
+    public function createEir($is_container_in, $container_id)
+    {
+        # accepts: eir_no IF already created eir_no, container_id, type (in or out)
+
+        $type = $is_container_in ? 'I-' : 'O-';
+        $eir = EirNumber::where('eir_no', 'ilike', '%' . $type . '%')
+            ->latest('id')
+            ->first('eir_no');
+
+        if( is_null($eir) ) {
+            return EirNumber::insertGetId(['eir_no' => $type . '000001', 'container_id' => $container_id,'created_at'=>Carbon::now(),'updated_at'=>Carbon::now()]);
+        }
+
+        $array = explode('-', $eir->eir_no);
+        
+        $x = intval($array[1]) + 1;
+        while ( strlen(strval($x)) < 6 ) {
+            $x = '0' . strval($x);
+        }
+
+        return EirNumber::insertGetId(['eir_no' => $type . $x, 'container_id' => $container_id,'created_at'=>Carbon::now(),'updated_at'=>Carbon::now()]);
     }
 }

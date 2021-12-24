@@ -24,7 +24,7 @@
       </div>
       <div style="width: 20%; padding: 10px;display: flex; align-items:center; font-size: 22px; color: red;">
         <div style="margin-right: 10px;">NO.</div>
-        <div>{{ $receiving->id }}</div>
+        <div>{{ $eirNumber->eir_no }}</div>
       </div>
     </div>
     <!-- END OF HEADER -->
@@ -223,7 +223,7 @@
       </div>
       <div style="width: 20%; padding: 10px;display: flex; align-items:center; font-size: 22px; color: red;">
         <div style="margin-right: 10px;">NO.</div>
-        <div>{{ $receiving->id }}</div>
+        <div>{{ $eirNumber->eir_no }}</div>
       </div>
     </div>
     <!-- END OF HEADER -->
