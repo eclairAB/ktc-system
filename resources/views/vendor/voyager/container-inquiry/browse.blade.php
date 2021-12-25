@@ -39,10 +39,10 @@
         <i style="font-size: 25px; margin-right: 10px; height: 35px;" class="voyager-list"></i> <span>Containers</span>
     </div>
     <div id="container-inquiry">
-        <div row style="display: flex;">
+        <div class="row" style="margin: 0; display: flex; padding: 0 7px;">
             <form method="get" class="form-search" v-on:submit.prevent="submitForm" style="width: 100%;">
                 <div id="search-input" style="margin: 0; position: unset !important;">
-                    <div class="input-group col-md-12">
+                    <div class="input-group col-xs-12">
                         <input type="hidden" name="page">
                         <input type="text" class="form-control" placeholder="Search container" name="search_input" v-on:keyup.13="submitForm" v-model="searchinput">
                         <span class="input-group-btn" style="width: 15px;">

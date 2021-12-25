@@ -237,8 +237,8 @@ class PostsController extends Controller
     {
         $sizeType = $request->validated();
         $dataSizeT = [
-            'code'=>$sizeType['code'],
-            'name'=>$sizeType['name'],
+            // 'code'=>$sizeType['code'],
+            // 'name'=>$sizeType['name'],
             'size'=>$sizeType['size'],
             // 'type'=>$sizeType['type']
         ];
