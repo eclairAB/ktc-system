@@ -225,3 +225,49 @@ table {
     height: 15px;
   }
 }
+
+.containers_ {
+    /*inline-size: fit-content;*/
+  display: grid;
+  justify-items: end;
+  box-shadow: 0px 2px 10px 0px #00000017;
+  border-radius: 5px;
+  padding: 1%;
+  background-color: white;
+}
+
+.card_ {
+  box-shadow: 0px 2px 10px 0px #00000017;
+  border-radius: 5px;
+  padding: 1%;
+  background-color: white;
+}
+
+.paginator_ {
+  height: fit-content;
+}
+
+section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+th {
+  border-color: #eaeaea;
+  background: #f8fafc;
+  color: #337ab7;
+}
+
+.container-info > div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.container-info > div:nth-child(even) {background: #f0f0f0}
+.container-info > div:nth-child(odd) {background: red}
+
+.viewItemOnClick {
+  cursor: pointer;
+}
