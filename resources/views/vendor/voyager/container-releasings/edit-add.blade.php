@@ -26,10 +26,10 @@
       @include('vendor.voyager.receiving-releasing-btns')
     @endif
   
-    <h1 class="page-title">
+    <!-- <h1 class="page-title">
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
-    </h1>
+    </h1> -->
     @include('voyager::multilingual.language-selector')
 @stop
 
@@ -39,72 +39,56 @@
             <div class="col-md-12">
                 <div id="containerReleasing">
                   <!--  -->
-                  <div class="panel panel-bordered">
+                  <div class="panel panel-bordered" style="margin-bottom: 5px;">
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
                           <input type="text" name="id_no" id="id_no" placeholder="AUTO GENERATED" disabled v-model="form.id_no" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> EIR No.</label>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
                           <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('MMMM DD, YYYY')" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inspection Date</label>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
                           <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('hh:mm A')" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
                           <input type="text" name="id_no" id="id_no" disabled :value="form.id ? form.inspected_by.name : loginUser" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inpection By</label>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--  -->
 
-                  <!--  -->
-                  <div class="panel panel-bordered">
-                    <div class="panel-body" style="padding: 0px 15px 0 15px;">
-                      <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="margin: 0; margin-bottom: 10px;">
                           <div style="font-weight: 700; font-size: 15px; color: black;">Container Details</div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <input type="text" name="container_no" id="container_no" maxlength="13" placeholder="####-######-#" :disabled="form.id" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px; text-transform:uppercase">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
                           <div class="customErrorText" v-if="containerError.message"><small>@{{ containerError.message }}</small></div>
                           <div class="customHintText" v-else></div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <input type="text" name="client" disabled id="client" :value="containerInfo.client ? containerInfo.client.code_name : ''" style="height: 37px;" class="form-control">
                           <label for="client" class="form-control-placeholder"> Client</label>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <input type="text" name="size" disabled id="size" :value="containerInfo.size_type ? containerInfo.size_type.name : ''" style="height: 37px;" class="form-control">
                           <label for="size" class="form-control-placeholder"> Size</label>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <input type="text" name="class" disabled id="class" :value="containerInfo.class ? containerInfo.container_class.class_name : ''" style="height: 37px;" class="form-control">
                           <label for="class" class="form-control-placeholder"> Class</label>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <input type="text" name="manufactured_date" disabled id="manufactured_date" :value="moment(containerInfo.manufactured_date).format('MMMM YYYY')" style="height: 37px;" class="form-control">
                           <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <input type="text" name="empty_loaded" disabled id="empty_loaded" :value="containerInfo.empty_loaded" style="height: 37px;" class="form-control">
                           <label for="empty_loaded" class="form-control-placeholder"> Empty/Loaded</label>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--  -->
 
-                  <!--  -->
-                  <div class="panel panel-bordered">
-                    <div class="panel-body" style="padding: 15px 15px 0 15px;">
-                      <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="margin: 0; margin-bottom: 10px;">
                           <div style="font-weight: 700; font-size: 15px; color: black;">Shipment Details</div>
                         </div>
@@ -133,35 +117,18 @@
                           <label for="seal_no" class="form-control-placeholder"> Seal No. <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.seal_no ? errors.seal_no[0] : '' }}</small></div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--  -->
 
-                  <!--  -->
-                  <div class="panel panel-bordered">
-                    <div class="panel-body" style="padding: 15px 15px 0 15px;">
-                      <div class="row" style="padding: 0px 10px;">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <textarea v-model="form.remarks" :disabled="!isOk" rows="3" :class="errors.remarks ? 'isError form-control' : 'form-control'" style="width: 100%; height: auto !important;" placeholder="Write Something..."></textarea>  
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                          <input type="text" placeholder="Write Something..." name="remarks" id="remarks" v-model="form.remarks" :disabled="!isOk" :class="errors.remarks ? 'isError form-control' : 'form-control'">
                           <label for="consignee" class="form-control-placeholder"> Remarks </label>
                           <div class="customErrorText"><small>@{{ errors.remarks ? errors.remarks[0] : '' }}</small></div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--  -->
 
-
-                  <!--  -->
-                  <div style="display: none;">@{{container_photo.length}}</div>
-                  <div class="panel panel-bordered">
-                    <div class="panel-body" style="padding: 15px;">
-                      <div class="row" style="padding: 0px 10px;">
-                        <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
+                        <div style="display: none;">@{{container_photo.length}}</div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="margin: 0;">
                           <div style="font-weight: 700; font-size: 15px; color: black;">Pictures</div>
                         </div>
-                        <div class="col-xs-12">
+                        <div class="col-xs-12" style="margin: 0;">
                           <input style="padding: 8px;" :disabled="!isOk" accept="image/*" type="file" class="form-control" id="images" name="images" @change="preview_images" multiple/>
                         </div>
                         <div class="col-xs-12">
