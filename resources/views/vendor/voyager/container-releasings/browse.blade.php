@@ -140,7 +140,7 @@
                                                     $data->{$row->field} = $data->{$row->field.'_browse'};
                                                 }
                                                 @endphp
-                                                <td>
+                                                <td v-on:click="reroute('container-releasings/{{ $data->id }}')" class="viewItemOnClick">
                                                     @if (isset($row->details->view))
                                                         @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $data->{$row->field}, 'action' => 'browse', 'view' => 'browse', 'options' => $row->details])
                                                     @elseif($row->type == 'image')
