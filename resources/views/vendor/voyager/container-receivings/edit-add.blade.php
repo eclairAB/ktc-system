@@ -29,10 +29,10 @@
       @include('vendor.voyager.receiving-releasing-btns')
     @endif
 
-    <h1 class="page-title">
+    <!-- <h1 class="page-title">
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
-    </h1>
+    </h1> -->
     @include('voyager::multilingual.language-selector')
 @stop
 
@@ -42,34 +42,30 @@
             <div class="col-md-12">
                 <div id="containerReceiving">
                   <!--  -->
-                  <div class="panel panel-bordered">
+                  <div class="panel panel-bordered" style="margin-bottom: 5px;">
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" placeholder="AUTO GENERATED" disabled v-model="form.id_no" class="form-control" style="height: 37px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
+                          <input type="text" name="id_no" id="id_no" placeholder="AUTO GENERATED" disabled v-model="form.id_no" class="form-control">
                           <label for="id_no" class="form-control-placeholder"> EIR No.</label>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('MMMM DD, YYYY')" class="form-control" style="height: 37px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('MMMM DD, YYYY')" class="form-control">
                           <label for="id_no" class="form-control-placeholder"> Inspection Date</label>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('hh:mm A')" class="form-control" style="height: 37px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('hh:mm A')" class="form-control">
                           <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="form.id ? form.inspected_by.name : loginUser" class="form-control" style="height: 37px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
+                          <input type="text" name="id_no" id="id_no" disabled :value="form.id ? form.inspected_by.name : loginUser" class="form-control">
                           <label for="id_no" class="form-control-placeholder"> Inpection By</label>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--  -->
 
-                  <!--  -->
-                  <div class="panel panel-bordered">
-                    <div class="panel-body" style="padding: 15px 15px 0 15px;">
-                      <div class="row" style="padding: 0px 10px;">
+                        <div class="col-xs-12" style="padding: 0; margin: 0;">
+                          <hr style="margin: 15px 0;">
+                        </div>
+
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" name="container_no" id="container_no" ng-maxlength="13" maxlength="13" placeholder="####-######-#" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px; text-transform:uppercase">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
@@ -80,7 +76,7 @@
                           <v-select
                             :class="errors.size_type ? 'isError form-control' : 'form-control'"
                             :options="sizeTypeList"
-                            style="height: 37px !important;"
+                            style="height: 30px !important;"
                             v-model="form.size_type"
                             :disabled="!isOk"
                             label="name"
@@ -91,7 +87,7 @@
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <v-select
-                            style="height: 37px !important;"
+                            style="height: 30px !important;"
                             :class="errors.client_id ? 'isError form-control' : 'form-control'"
                             :options="clientList"
                             v-model="form.client_id"
@@ -104,7 +100,7 @@
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <v-select
-                            style="height: 37px !important;"
+                            style="height: 30px !important;"
                             :class="errors.yard_location ? 'isError form-control' : 'form-control'"
                             :options="yardList"
                             :disabled="!isOk"
@@ -115,11 +111,11 @@
                           <label for="yard_location" class="form-control-placeholder"> Yard Location</label>
                           <div class="customErrorText"><small>@{{ errors.yard_location ? errors.yard_location[0] : '' }}</small></div>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <v-select
                             :class="errors.type_id ? 'isError form-control' : 'form-control'"
                             :options="typeList"
-                            style="height: 37px !important;"
+                            style="height: 30px !important;"
                             v-model="form.type_id"
                             :disabled="!isOk"
                             label="code"
@@ -128,9 +124,9 @@
                           <label for="type" class="form-control-placeholder"> Type</label>
                           <div class="customErrorText"><small>@{{ errors.type ? errors.type[0] : '' }}</small></div>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <v-select
-                            style="height: 37px !important;"
+                            style="height: 30px !important;"
                             :class="errors.class ? 'isError form-control' : 'form-control'"
                             :options="classList"
                             v-model="form.class"
@@ -141,9 +137,9 @@
                           <label for="contact_number" class="form-control-placeholder"> Class</label>
                           <div class="customErrorText"><small>@{{ errors.class ? errors.class[0] : '' }}</small></div>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <v-select
-                            style="height: 37px !important;"
+                            style="height: 30px !important;"
                             :class="errors.empty_loaded ? 'isError form-control' : 'form-control'"
                             :disabled="!isOk"
                             :options="emptyloaded"
@@ -152,7 +148,7 @@
                           <label for="empty_loaded" class="form-control-placeholder"> Empty/Loaded</label>
                           <div class="customErrorText"><small>@{{ errors.empty_loaded ? errors.empty_loaded[0] : '' }}</small></div>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <vuejs-datepicker
                             v-model="form.manufactured_date"
                             :placeholder="pasmoDate === undefined ? 'mm/yyyy' : moment(pasmoDate).format('MM/yyyy')"
@@ -166,157 +162,127 @@
                           <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
                           <div class="customErrorText"><small>@{{ errors.manufactured_date ? errors.manufactured_date[0] : '' }}</small></div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--  -->
-
-                  <!--  -->
-                  <div class="panel panel-bordered">
-                    <div class="panel-body" style="padding: 15px 15px 0 15px;">
-                      <div class="row" style="padding: 0px 10px;">
+                      
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="margin: 0; margin-bottom: 10px;">
                           <div style="font-weight: 700; font-size: 15px; color: black;">Shipment Details</div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="consignee" id="consignee" v-model="form.consignee" :disabled="!isOk" style="height: 37px;" :class="errors.consignee ? 'isError form-control' : 'form-control'">
+                          <input type="text" name="consignee" id="consignee" v-model="form.consignee" :disabled="!isOk" :class="errors.consignee ? 'isError form-control' : 'form-control'">
                           <label for="consignee" class="form-control-placeholder"> Consignee</label>
                           <div class="customErrorText"><small>@{{ errors.consignee ? errors.consignee[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="hauler" id="hauler" v-model="form.hauler" :disabled="!isOk" style="height: 37px;" :class="errors.hauler ? 'isError form-control' : 'form-control'">
+                          <input type="text" name="hauler" id="hauler" v-model="form.hauler" :disabled="!isOk" :class="errors.hauler ? 'isError form-control' : 'form-control'">
                           <label for="hauler" class="form-control-placeholder"> Hauler</label>
                           <div class="customErrorText"><small>@{{ errors.hauler ? errors.hauler[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" name="plate_no" id="plate_no" v-model="form.plate_no" :disabled="!isOk" style="height: 37px;" :class="errors.plate_no ? 'isError form-control' : 'form-control'">
+                          <input type="text" name="plate_no" id="plate_no" v-model="form.plate_no" :disabled="!isOk" :class="errors.plate_no ? 'isError form-control' : 'form-control'">
                           <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
                           <div class="customErrorText"><small>@{{ errors.plate_no ? errors.plate_no[0] : '' }}</small></div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--  -->
 
-                  <!--  -->
-                  <div class="panel panel-bordered">
-                    <div class="panel-body" style="padding: 15px 15px 0 15px;">
-                      <div class="row" style="padding: 0px 10px;">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <textarea v-model="form.remarks" rows="3" style="width: 100%; height: auto !important;" :disabled="!isOk" placeholder="Write Something..." :class="errors.remarks ? 'isError form-control' : 'form-control'"></textarea>  
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 5px;">
+                          <input type="text" placeholder="Write Something..." name="remarks" id="remarks" v-model="form.remarks" :disabled="!isOk" :class="errors.remarks ? 'isError form-control' : 'form-control'">
                           <label for="consignee" class="form-control-placeholder"> Remarks</label>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--  -->
-
-                  <!--  -->
-                  <div class="panel panel-bordered">
-                    <div class="panel-body" style="padding: 0 15px;">
-                      <div class="row" style="padding: 0px 10px;">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding: 0 !important; margin: 0 !important;">
-                          <div style="display: flex; justify-content: flex-end; padding-top: 0;">
-                            <button class="btn btn-success" @click="addNew" :disabled="!isOk"> Add Damage</button>
-                          </div>
-                        </div>
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="margin-top: 0 !important; margin-bottom: 10px;">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0 !important; margin: 0 !important; display: flex; justify-content: space-between; align-items: center;">
                           <div style="font-weight: 700; font-size: 15px; color: black;">Damages</div>
+                          <button class="btn btn-success" @click="addNew" :disabled="!isOk" style="height: 25px; font-size: 10px;"> Add Damage</button>
                         </div>
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="color: black !important; margin-top: 0 !important; margin-bottom: 10px;">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="color: black !important; margin-top: 0 !important; margin-bottom: 10px;" v-if="damageList.length > 0">
                           <table border="1" cellspacing="0" cellpadding="" width="100%">
                             <tbody align="left">
                               <tr  v-for="(item, key) in damageList" :key="key">
-                                <td class="border-b" style="padding: 10px">@{{key + 1}}.) @{{item.description}}</td>
+                                <td class="border-b" style="padding: 5px; font-size: 10px;">@{{key + 1}}.) @{{item.description}}</td>
                                 <td>
                                   <div style="display: flex; justify-content: center; width: 100%">
-                                    <button class="btn btn-danger" style="margin: 5px;" @click="item.id ? deleteActual(item) : deleteFromList(key)">Delete</button>  
+                                    <button class="btn btn-danger" style="margin: 5px; height: 25px; font-size: 10px;" @click="item.id ? deleteActual(item) : deleteFromList(key)">Delete</button>  
                                   </div>                                
                                 </td>
                               </tr>
                             </tbody>
                           </table>
                         </div>
-                      </div>
-                    </div>
-                  </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="color: black !important; margin-top: 0 !important; margin-bottom: 10px;" v-else>
+                          <div style="border: 1px solid #c8c8c8; padding: 5px; font-size: 11px; text-align: center;">
+                            No Damage Declared
+                          </div>
+                        </div>
 
-                  <div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document" style="">
-                      <div class="modal-content">
-                        <div class="modal-header" style="display: flex; align-items: center;">
-                          <h5 class="modal-title" id="dialogLabel">Add Damage</h5>
-                          <button type="button" @click="closeDialog" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: auto;">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
+                        <div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document" style="">
+                            <div class="modal-content">
+                              <div class="modal-header" style="display: flex; align-items: center;">
+                                <h5 class="modal-title" id="dialogLabel">Add Damage</h5>
+                                <button type="button" @click="closeDialog" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: auto;">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <hr style="margin: 0">
+                              <div class="modal-body">
+                                <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
+                                  <input type="text" name="repair" id="repair" :class="damageError.repair ? 'isError form-control' : 'form-control'" v-model="input.repair" style="height: 37px !important; margin-top: 10px;" @input="inputRepair">
+                                  <label for="repair" class="form-control-placeholder"> Repair</label>
+                                  <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
+                                </div>
+                                <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
+                                  <input type="text" name="component" id="component" :class="damageError.component ? 'isError form-control' : 'form-control'" v-model="input.component" style="height: 37px !important; margin-top: 10px;" @input="inputComponent">
+                                  <label for="component" class="form-control-placeholder"> Component</label>
+                                  <div class="customErrorText"><small>@{{ damageError.component }}</small></div>
+                                </div>
+                                <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
+                                  <input type="text" name="damage" id="damage" :class="damageError.damage ? 'isError form-control' : 'form-control'" v-model="input.damage" style="height: 37px !important; margin-top: 10px;" @input="inputDamage">
+                                  <label for="damage" class="form-control-placeholder"> Damage</label>
+                                  <div class="customErrorText"><small>@{{ damageError.damage }}</small></div>
+                                </div>
+                                <div class="col-lg-12 form-group mt-3">
+                                  <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="height: 37px !important; margin-top: 10px;">
+                                  <label for="location" class="form-control-placeholder"> Location</label>
+                                </div>
+                                <div class="col-lg-12 form-group mt-3">
+                                  <input type="number" name="length" id="length" class="form-control" v-model="damages.length" style="height: 37px !important; margin-top: 10px;">
+                                  <label for="length" class="form-control-placeholder"> Length</label>
+                                </div>
+                                <div class="col-lg-12 form-group mt-3">
+                                  <input type="number" name="width" id="width" class="form-control" v-model="damages.width" style="height: 37px !important; margin-top: 10px;">
+                                  <label for="width" class="form-control-placeholder"> Width</label>
+                                </div>
+                                <div class="col-lg-12 form-group mt-3">
+                                  <input type="number" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="height: 37px !important; margin-top: 10px;">
+                                  <label for="quantity" class="form-control-placeholder"> Quantity</label>
+                                </div>
+                                <div class="col-lg-12 form-group mt-3">
+                                  <input 
+                                    type="text" 
+                                    disabled 
+                                    name="description" 
+                                    id="description" 
+                                    class="form-control" 
+                                    style="height: 37px !important; margin-top: 10px;" 
+                                    v-model="damages.description"
+                                  >
+                                  <label for="description" class="form-control-placeholder"> Description</label>
+                                </div>
+                              </div>
+                              <div class="modal-footer" style="text-align: left !important;">
+                                <button type="button" class="btn btn-primary" style="margin-top: 15px;" @click="clearDamage"> Clear</button>
+                                <button type="button" class="btn btn-danger" style="margin-top: 15px;" @click="cancelDamage"> Cancel</button>
+                                <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" @click="checkDamage"> Save</button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <hr style="margin: 0">
-                        <div class="modal-body">
-                          <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
-                            <input type="text" name="repair" id="repair" :class="damageError.repair ? 'isError form-control' : 'form-control'" v-model="input.repair" style="height: 37px !important; margin-top: 10px;" @input="inputRepair">
-                            <label for="repair" class="form-control-placeholder"> Repair</label>
-                            <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
-                          </div>
-                          <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
-                            <input type="text" name="component" id="component" :class="damageError.component ? 'isError form-control' : 'form-control'" v-model="input.component" style="height: 37px !important; margin-top: 10px;" @input="inputComponent">
-                            <label for="component" class="form-control-placeholder"> Component</label>
-                            <div class="customErrorText"><small>@{{ damageError.component }}</small></div>
-                          </div>
-                          <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
-                            <input type="text" name="damage" id="damage" :class="damageError.damage ? 'isError form-control' : 'form-control'" v-model="input.damage" style="height: 37px !important; margin-top: 10px;" @input="inputDamage">
-                            <label for="damage" class="form-control-placeholder"> Damage</label>
-                            <div class="customErrorText"><small>@{{ damageError.damage }}</small></div>
-                          </div>
-                          <div class="col-lg-12 form-group mt-3">
-                            <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="height: 37px !important; margin-top: 10px;">
-                            <label for="location" class="form-control-placeholder"> Location</label>
-                          </div>
-                          <div class="col-lg-12 form-group mt-3">
-                            <input type="number" name="length" id="length" class="form-control" v-model="damages.length" style="height: 37px !important; margin-top: 10px;">
-                            <label for="length" class="form-control-placeholder"> Length</label>
-                          </div>
-                          <div class="col-lg-12 form-group mt-3">
-                            <input type="number" name="width" id="width" class="form-control" v-model="damages.width" style="height: 37px !important; margin-top: 10px;">
-                            <label for="width" class="form-control-placeholder"> Width</label>
-                          </div>
-                          <div class="col-lg-12 form-group mt-3">
-                            <input type="number" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="height: 37px !important; margin-top: 10px;">
-                            <label for="quantity" class="form-control-placeholder"> Quantity</label>
-                          </div>
-                          <div class="col-lg-12 form-group mt-3">
-                            <input 
-                              type="text" 
-                              disabled 
-                              name="description" 
-                              id="description" 
-                              class="form-control" 
-                              style="height: 37px !important; margin-top: 10px;" 
-                              v-model="damages.description"
-                            >
-                            <label for="description" class="form-control-placeholder"> Description</label>
-                          </div>
-                        </div>
-                        <div class="modal-footer" style="text-align: left !important;">
-                          <button type="button" class="btn btn-primary" style="margin-top: 15px;" @click="clearDamage"> Clear</button>
-                          <button type="button" class="btn btn-danger" style="margin-top: 15px;" @click="cancelDamage"> Cancel</button>
-                          <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" @click="checkDamage"> Save</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                   <!--  -->
 
-                  <div style="display: none;">@{{container_photo.length}}</div>
-                  <div class="panel panel-bordered">
-                    <div class="panel-body" style="padding: 15px;">
-                      <div class="row" style="padding: 0px 10px;">
-                        <div class="col-xs-12" style="border-bottom: 1px solid #e4eaec; padding-bottom: 10px; margin-bottom: 10px;">
+                        <div style="display: none;">@{{container_photo.length}}</div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="margin: 0;">
                           <div style="font-weight: 700; font-size: 15px; color: black;">Pictures</div>
                         </div>
                         <div class="col-xs-12">
                           <input style="padding: 8px;" type="file" accept="image/*" class="form-control" :disabled="!isOk" id="images" name="images" @change="preview_images" multiple/>
                         </div>
-                        <div class="col-xs-12">
+                        <div class="col-xs-12" style="margin-bottom: 0;">
                           <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" v-for="(item, index) in form.container_photo" :key="index">
                               <div class="image-container" :style="photolink(item)">

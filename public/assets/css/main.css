@@ -1,5 +1,5 @@
 .form-group {
-    margin-top: 10px !important;
+    margin-top: 2px !important;
     position: relative !important;
     padding-right: 5px !important;
     padding-left: 5px !important;
@@ -27,8 +27,9 @@
 }
 
 input.form-control {
-    height: 37px !important;
+    height: 30px !important;
     color: black;
+    font-size: 10px;
 }
 
 span.select2.select2-container.select2-container--default.select2-container--below, span.select2.select2-container.select2-container--default {
@@ -52,7 +53,8 @@ span.select2-selection.select2-selection--single {
 }
 
 .vs--searchable .vs__dropdown-toggle {
-    height: 37px !important;
+    height: 30px !important;
+    font-size: 10px;
     padding: 0 !important;
 }
 
@@ -114,6 +116,8 @@ table {
 .customErrorText {
     color: red;
     position: absolute;
+    font-size: 11px;
+    z-index: 1;
 }
 
 .customHintText {
