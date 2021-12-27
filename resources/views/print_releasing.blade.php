@@ -90,7 +90,7 @@
           <span style="font-size: 25px">
             &#9745;
           </span>
-          <span>{{ $receiving_details->sizeType->code }}</span>
+          <span>{{ $receiving_details->sizeType->size }}</span>
         </div>
 
         <div style="margin-right: 10px; display: flex; align-items:center;">
@@ -288,7 +288,7 @@
           <span style="font-size: 25px">
             &#9745;
           </span>
-          <span>{{ $receiving_details->sizeType->code }}</span>
+          <span>{{ $receiving_details->sizeType->size }}</span>
         </div>
 
         <div style="margin-right: 10px; display: flex; align-items:center;">

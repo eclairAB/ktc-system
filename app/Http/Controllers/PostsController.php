@@ -92,7 +92,7 @@ class PostsController extends Controller
         $params = [
             'account_id' => $account->id,
             'code_name' => $request->code_name,
-            'contact_no' => $request->contact_no,
+            // 'contact_no' => $request->contact_no,
             'user_id' => $request->user_id,
         ];
 
@@ -113,7 +113,7 @@ class PostsController extends Controller
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'user_id' => $request->user_id,
-            'contact_no' => $request->contact_no,
+            // 'contact_no' => $request->contact_no,
         ];
 
         $staff = Staff::create($params);
@@ -133,7 +133,7 @@ class PostsController extends Controller
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'user_id' => $request->user_id,
-            'contact_no' => $request->contact_no,
+            // 'contact_no' => $request->contact_no,
         ];
 
         $checker = Checker::create($params);

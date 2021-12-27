@@ -48,8 +48,8 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function getContainterSizeType(Request $request)
     {
         $sizetype = ContainerSizeType::when(!empty($request->keyword), function ($q) use ($request){
-            return $q->where('code', 'ilike', '%'.$request->keyword.'%')
-            ->orwhere('name', 'ilike', '%'.$request->keyword.'%');
+            return $q->where('size', 'ilike', '%'.$request->keyword.'%');
+            // ->orwhere('name', 'ilike', '%'.$request->keyword.'%');
         })->get();
 
         return $sizetype;
@@ -140,7 +140,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function geDetailsForUpdate(Request $request)
     {
         return ContainerReceiving::where('container_no',$request->container_no)
-        ->with('client:id,code_name','sizeType:id,code,name','containerClass:id,class_code,class_name','type:id,code,name')
+        ->with('client:id,code_name','sizeType:id,size','containerClass:id,class_code,class_name','type:id,code,name')
         ->select(
             'id',
             'client_id',
@@ -179,7 +179,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             if($request->type == "releasing" && $contRecieving)
             {
                 return ContainerReceiving::where('container_no',$request->container_no)
-                ->with('client:id,code_name','sizeType:id,code,name','type:id,code,name','containerClass:id,class_code,class_name')
+                ->with('client:id,code_name','sizeType:id,size','type:id,code,name','containerClass:id,class_code,class_name')
                 ->select(
                     'id',
                     'client_id',
@@ -200,14 +200,14 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function prntReleasing($id)
     {
         $releasing = ContainerReleasing::where('id',$id)->first();
-        $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->with('sizeType:id,code','type:id,code','container')->latest('created_at')->first();
+        $receiving_details = ContainerReceiving::where('container_no',$releasing->container_no)->with('sizeType:id,size','type:id,code','container')->latest('created_at')->first();
         $eirNumber = EirNumber::where('eir_no','ilike','%O-%')->where('container_id',$receiving_details->container->id)->first();
         return view('print_releasing')->with(compact('releasing', 'receiving_details','eirNumber'));
     }
 
     public function prntReceiving($id)
     {
-        $receiving = ContainerReceiving::where('id',$id)->with('sizeType:id,code','type:id,code','container')->first();
+        $receiving = ContainerReceiving::where('id',$id)->with('sizeType:id,size','type:id,code','container')->first();
         $damages = ReceivingDamage::where('receiving_id',$id)->get();
         $eirNumber = EirNumber::where('eir_no','ilike','%I-%')->where('container_id',$receiving->container->id)->first();
         return view('print_receiving')->with(compact('receiving', 'damages','eirNumber'));

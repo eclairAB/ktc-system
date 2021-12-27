@@ -9,8 +9,8 @@ class ContainerSizeType extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'code',
-        'name',
+        // 'code',
+        // 'name',
         'size',
         // 'type',
     ];
