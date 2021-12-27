@@ -45,11 +45,11 @@
                                 <label for="lastname" class="form-control-placeholder"> Last Name</label>
                                 <div class="customErrorText"><small>@{{ errors.lastname ? errors.lastname[0] : '' }}</small></div>
                               </div>
-                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
+                              <!-- <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
                                 <input type="text" name="contact_no" id="contact_no" v-model="form.contact_no" class="form-control" :class="errors.contact_no ? 'isError' : ''">
                                 <label for="contact_no" class="form-control-placeholder"> Contact Number</label>
                                 <div class="customErrorText"><small>@{{ errors.contact_no ? errors.contact_no[0] : '' }}</small></div>
-                              </div>
+                              </div> -->
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
                                 <input type="text" name="user_id" id="user_id" v-model="form.user_id" class="form-control" :class="errors.user_id ? 'isError' : ''">
                                 <label for="user_id" class="form-control-placeholder"> User Name</label>

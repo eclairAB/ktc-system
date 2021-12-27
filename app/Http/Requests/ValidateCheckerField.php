@@ -30,7 +30,7 @@ class ValidateCheckerField extends FormRequest
             'firstname' => 'required',
             'lastname' => 'required',
             'user_id' => 'required',
-            'contact_no' => 'nullable',
+            // 'contact_no' => 'nullable',
         ];
     }
 
