@@ -14,6 +14,6 @@ class Staff extends Model
         'firstname',
         'lastname',
         'user_id',
-        'contact_no',
+        // 'contact_no',
     ];
 }
