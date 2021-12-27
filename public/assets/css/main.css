@@ -226,8 +226,13 @@ table {
   }
 }
 
+#search-input{
+  position:relative;
+  left:8px;
+}
+
 .containers_ {
-    /*inline-size: fit-content;*/
+  /*inline-size: fit-content;*/
   display: grid;
   justify-items: end;
   box-shadow: 0px 2px 10px 0px #00000017;
@@ -265,8 +270,8 @@ th {
   justify-content: space-between;
 }
 
-.container-info > div:nth-child(even) {background: #f0f0f0}
-.container-info > div:nth-child(odd) {background: red}
+.container-info > div:nth-child(even) {background: #e5e5e5}
+.container-info > div:nth-child(odd) {background: #FFF}
 
 .viewItemOnClick {
   cursor: pointer;
