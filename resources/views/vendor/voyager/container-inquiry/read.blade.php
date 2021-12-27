@@ -51,21 +51,18 @@
                             </thead>
                             <tbody>
                                 @forelse ($receiving as $item)
-                                    <tr style="border-top: solid #5c5c5c29 1px">
-                                        <td style="padding: 0 10px">
+                                    <tr style="border-top: solid #5c5c5c29 1px;">
+                                        <td style="padding: 0 10px" v-on:click="viewContainerInfo( {{ $item }} )" class="viewItemOnClick">
                                             @{{ moment(`{!! $item->created_at !!}`).format('MMMM DD, YYYY') }}&nbsp
                                         </td>
-                                        <td style="padding: 0 10px">
+                                        <td style="padding: 0 10px" v-on:click="viewContainerInfo( {{ $item }} )" class="viewItemOnClick">
                                             {{ $item->inspector->name }}&nbsp
                                         </td>
-                                        <td style="padding: 0 10px;">
+                                        <td style="padding: 0 10px;" v-on:click="viewContainerInfo( {{ $item }} )" class="viewItemOnClick">
                                             {{ $item->client->code_name }}
                                         </td>
                                         <td>
-                                            <button  style="margin-right:5px;"  class="btn btn-sm btn-warning pull-right edit" v-on:click="viewContainerInfo( {{ $item }} )">
-                                                <i class="voyager-eye"></i>&nbsp View
-                                            </button>
-                                            <button class="btn btn-sm btn-warning pull-right edit" v-on:click="printDatareceiving( {{ $item->id }} )">
+                                            <button class="btn btn-sm btn-warning pull-right edit" style="margin-right: 5px;" v-on:click="printDatareceiving( {{ $item->id }} )">
                                                 <i class="voyager-file-text"></i>&nbsp Print
                                             </button>
                                             <button class="btn btn-sm btn-warning pull-right edit" v-on:click="editContainerReceiving( {{ $item }} )">
@@ -105,20 +102,17 @@
                             <tbody>
                                 @forelse ($releasing as $item)
                                     <tr style="border-top: solid #5c5c5c29 1px">
-                                        <td style="padding: 0 10px">
+                                        <td style="padding: 0 10px" v-on:click="viewContainerInfo( {{ $item }} )" class="viewItemOnClick">
                                             @{{ moment(`{!! $item->created_at !!}`).format('MMMM DD, YYYY') }}&nbsp
                                         </td>
-                                        <td style="padding: 0 10px">
+                                        <td style="padding: 0 10px" v-on:click="viewContainerInfo( {{ $item }} )" class="viewItemOnClick">
                                             {{ $item->inspector->name }}&nbsp
                                         </td>
-                                        <td style="padding: 0 10px">
+                                        <td style="padding: 0 10px" v-on:click="viewContainerInfo( {{ $item }} )" class="viewItemOnClick">
                                             {{ $item->container->receiving->client->code_name }}
                                         </td>
                                         <td>
-                                            <button  style="margin-right:5px;"  class="btn btn-sm btn-warning pull-right edit" v-on:click="viewContainerInfo( {{ $item }} )">
-                                                <i class="voyager-eye"></i>&nbsp View
-                                            </button>
-                                            <button class="btn btn-sm btn-warning pull-right edit" v-on:click="printDatareleasing( {{ $item->id }} )">
+                                            <button class="btn btn-sm btn-warning pull-right edit" style="margin-right:5px;" v-on:click="printDatareleasing( {{ $item->id }} )">
                                                 <i class="voyager-file-text"></i>&nbsp Print
                                             </button>
                                             <button class="btn btn-sm btn-warning pull-right edit" v-on:click="editContainerReleasing( {{ $item }} )">

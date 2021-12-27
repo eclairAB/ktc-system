@@ -3,35 +3,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
 <style>
     .containers_ {
-      display: grid;
-      justify-items: end;
-      box-shadow: 0px 2px 10px 0px #00000017;
-      border-radius: 5px;
-      padding: 1%;
       margin: .5%;
-      background-color: white;
-    }
-
-    .paginator_ {
-      height: fit-content;
-    }
-
-    section {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    th {
-      border-color: #eaeaea;
-      background: #f8fafc;
-      color: #337ab7;
-    }
-
-    #search-input{
-        position:relative;
-        left:8px;
     }
 </style>
 <body>
@@ -66,21 +38,19 @@
                           <th style="padding: 10px 10px;">
                               Container
                           </th>
-                          <th style="text-align-last: end; padding: 10px 10px;">
-                                {{-- Action --}}
-                          </th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($containers as $item)
-                            <tr style="border-top: solid #5c5c5c29 1px">
+                            <tr style="
+                                    border-top: solid #5c5c5c29 1px;
+                                    line-height: 30px;
+                                "
+                                class="viewItemOnClick"
+                                v-on:click="reroute('{{ $item->container_no }}')"
+                            >
                                 <td style="padding: 0 10px">
                                     {{ $item->container_no }}
-                                </td>
-                                <td style="padding: 0 10px">
-                                    <button style="padding: 3px 10px;" class="btn btn-sm btn-warning pull-right edit" v-on:click="reroute('{{ $item->container_no }}')">
-                                        <i class="voyager-eye"></i><span class="hidden-xs hidden-sm" style="margin-left:5px;">View</span>
-                                    </button>
                                 </td>
                             </tr>
                         @empty
