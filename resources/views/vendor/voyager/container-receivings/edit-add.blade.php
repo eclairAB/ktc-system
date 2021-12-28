@@ -837,6 +837,9 @@
             await axios.get(`/admin/get/damage/${this.form.id}`).then(data => {
               this.damageList = data.data
             })
+          },
+          testing(x) {
+            console.log(x)
           }
         },
         mounted () {
@@ -848,6 +851,37 @@
           this.getClass()
         }
       })
+    </script>
+    <script>
+      {{-- vanilla js because i am a god hah --}}
+      
+      function setDropdownListeners() {
+        const dropdowns = document.querySelectorAll("input.vs__search")
+        for(let item of dropdowns) {
+          const aria_control = item.attributes['aria-controls'].nodeValue
+          // console.log(aria_control)
+
+          // observes attribute change on dropdown
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.type == "attributes") {
+                console.log('attr change')
+                console.log(document.getElementById(aria_control)) // displays dropdown selection 
+              }
+            })
+          })
+
+          observer.observe(item, {attributes: true})
+
+        }
+        // console.log(asd)
+        /*setInterval(() => {
+          // console.log('hi :)')
+          console.log(document.activeElement)
+        }, 1000)*/
+      }
+
+      setDropdownListeners()
     </script>
     <!--  -->
 @stop
