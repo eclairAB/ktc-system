@@ -157,7 +157,8 @@
                             name="manufactured_date"
                             :format="dateFormat"
                             minimum-view="month"
-                            :required="true">
+                            :required="true"
+                            :disabled="!isOk">
                           </vuejs-datepicker>
                           <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
                           <div class="customErrorText"><small>@{{ errors.manufactured_date ? errors.manufactured_date[0] : '' }}</small></div>
@@ -188,7 +189,7 @@
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0 !important; margin: 0 !important; display: flex; justify-content: space-between; align-items: center;">
                           <div style="font-weight: 700; font-size: 15px; color: black;">Damages</div>
-                          <button class="btn btn-success" @click="addNew" :disabled="!isOk" style="height: 25px; font-size: 10px;"> Add Damage</button>
+                          <button class="btn btn-success" @click="addNew" style="height: 25px; font-size: 10px;"> Add Damage</button>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="color: black !important; margin-top: 0 !important; margin-bottom: 10px;" v-if="damageList.length > 0">
                           <table border="1" cellspacing="0" cellpadding="" width="100%">
@@ -197,8 +198,8 @@
                                 <td class="border-b" style="padding: 5px; font-size: 10px;">@{{key + 1}}.) @{{item.description}}</td>
                                 <td>
                                   <div style="display: flex; justify-content: center; width: 100%">
-                                    <button class="btn btn-danger" style="margin: 5px; height: 25px; font-size: 10px;" @click="item.id ? deleteActual(item) : deleteFromList(key)">Delete</button>  
-                                  </div>                                
+                                    <button class="btn btn-danger" style="margin: 5px; height: 25px; font-size: 10px;" @click="item.id ? deleteActual(item) : deleteFromList(key)">Delete</button>
+                                  </div>
                                 </td>
                               </tr>
                             </tbody>
@@ -220,36 +221,33 @@
                                 </button>
                               </div>
                               <hr style="margin: 0">
-                              <div class="modal-body">
-                                <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
-                                  <input type="text" name="repair" id="repair" :class="damageError.repair ? 'isError form-control' : 'form-control'" v-model="input.repair" style="height: 37px !important; margin-top: 10px;" @input="inputRepair">
+                              <div class="modal-body" style="padding-bottom: 0;">
+                                <div class="col-lg-12 form-group mt-3">
+                                  <input type="text" name="repair" id="repair" :class="damageError.repair ? 'isError form-control' : 'form-control'" v-model="input.repair" style="margin-top: 10px;" @input="inputRepair">
                                   <label for="repair" class="form-control-placeholder"> Repair</label>
-                                  <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
-                                </div>
-                                <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
-                                  <input type="text" name="component" id="component" :class="damageError.component ? 'isError form-control' : 'form-control'" v-model="input.component" style="height: 37px !important; margin-top: 10px;" @input="inputComponent">
-                                  <label for="component" class="form-control-placeholder"> Component</label>
-                                  <div class="customErrorText"><small>@{{ damageError.component }}</small></div>
-                                </div>
-                                <div class="col-lg-12 form-group mt-3" style="padding-bottom: 15px;">
-                                  <input type="text" name="damage" id="damage" :class="damageError.damage ? 'isError form-control' : 'form-control'" v-model="input.damage" style="height: 37px !important; margin-top: 10px;" @input="inputDamage">
-                                  <label for="damage" class="form-control-placeholder"> Damage</label>
-                                  <div class="customErrorText"><small>@{{ damageError.damage }}</small></div>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="height: 37px !important; margin-top: 10px;">
+                                  <input type="text" name="component" id="component" :class="damageError.component ? 'isError form-control' : 'form-control'" v-model="input.component" style="margin-top: 10px;" @input="inputComponent">
+                                  <label for="component" class="form-control-placeholder"> Component</label>
+                                </div>
+                                <div class="col-lg-12 form-group mt-3">
+                                  <input type="text" name="damage" id="damage" :class="damageError.damage ? 'isError form-control' : 'form-control'" v-model="input.damage" style="margin-top: 10px;" @input="inputDamage">
+                                  <label for="damage" class="form-control-placeholder"> Damage</label>
+                                </div>
+                                <div class="col-lg-12 form-group mt-3">
+                                  <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="margin-top: 10px;">
                                   <label for="location" class="form-control-placeholder"> Location</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="number" name="length" id="length" class="form-control" v-model="damages.length" style="height: 37px !important; margin-top: 10px;">
+                                  <input type="number" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px;">
                                   <label for="length" class="form-control-placeholder"> Length</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="number" name="width" id="width" class="form-control" v-model="damages.width" style="height: 37px !important; margin-top: 10px;">
+                                  <input type="number" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px;">
                                   <label for="width" class="form-control-placeholder"> Width</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="number" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="height: 37px !important; margin-top: 10px;">
+                                  <input type="number" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px;">
                                   <label for="quantity" class="form-control-placeholder"> Quantity</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
@@ -259,13 +257,13 @@
                                     name="description" 
                                     id="description" 
                                     class="form-control" 
-                                    style="height: 37px !important; margin-top: 10px;" 
+                                    style="margin-top: 10px;" 
                                     v-model="damages.description"
                                   >
                                   <label for="description" class="form-control-placeholder"> Description</label>
                                 </div>
                               </div>
-                              <div class="modal-footer" style="text-align: left !important;">
+                              <div class="modal-footer" style="text-align: left !important; padding-top: 0;">
                                 <button type="button" class="btn btn-primary" style="margin-top: 15px;" @click="clearDamage"> Clear</button>
                                 <button type="button" class="btn btn-danger" style="margin-top: 15px;" @click="cancelDamage"> Cancel</button>
                                 <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" @click="checkDamage"> Save</button>
@@ -572,6 +570,7 @@
               }
               axios.get(`/admin/get/container/repair?keyword=${payload.keyword}`, payload)
               .then(data => {
+                console.log(data.data)
                 this.damageError = {}
                 if (data.data[0] !== undefined) {
                   this.damages.repair = data.data[0].name
@@ -682,6 +681,8 @@
                   this.containerError = error.response.data
                 })
               }, 1000)
+            } else {
+              this.isOk = false
             }
           },
           getBase64(file) {

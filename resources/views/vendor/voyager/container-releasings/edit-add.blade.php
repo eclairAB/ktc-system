@@ -325,6 +325,8 @@
                   this.containerError = error.response.data
                 })
               }, 1000)
+            } else {
+              this.isOk = false
             }
           },
           getBase64(file) {
