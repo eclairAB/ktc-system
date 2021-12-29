@@ -859,14 +859,52 @@
         const dropdowns = document.querySelectorAll("input.vs__search")
         for(let item of dropdowns) {
           const aria_control = item.attributes['aria-controls'].nodeValue
-          // console.log(aria_control)
 
           // observes attribute change on dropdown
           const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
               if (mutation.type == "attributes") {
-                console.log('attr change')
-                console.log(document.getElementById(aria_control)) // displays dropdown selection 
+                const classList = document.getElementById(aria_control).classList
+
+                if (classList.value) {
+                  const focusedDropdownItem = document.querySelector(`input.vs__search[aria-controls="${aria_control}"]`).attributes['aria-activedescendant']
+
+                  if (focusedDropdownItem) {
+                    const focusedDropdownItemIndex = focusedDropdownItem.nodeValue.split('__option-')[1]
+                    const displayElement = document.querySelector(`div[aria-owns='${aria_control}'] > div.vs__selected-options`)
+                    const selectedDisplayElement = document.querySelector(`div[aria-owns='${aria_control}'] > div.vs__selected-options > span.vs__selected`)
+
+                    const a = document.getElementById(aria_control).children[focusedDropdownItemIndex]
+                    if (a) {
+                      // console.log(123, a.innerHTML)
+                    }
+
+                    if (selectedDisplayElement) {
+                      console.log('has active selection')
+                      const a = document.getElementById(aria_control).children[focusedDropdownItemIndex]
+                      if (a) {
+                        // console.log(123, a.innerHTML)
+                        selectedDisplayElement.value = a.innerHTML
+                      }
+
+                    }
+                    else {
+                      for(let item of displayElement.children) {
+
+                        const a = document.getElementById(aria_control).children[focusedDropdownItemIndex]
+                        if (a) {
+                          // console.log(123, a.innerHTML)
+                          console.log(111)
+                          var spanElement = document.createElement('span.vs__selected')
+                          spanElement.innerHTML = a.innerHTML
+                          // displayElement.appendChild( spanElement )
+                        }
+                      }
+                    }
+                      // console.log(selectedDisplayElement)
+                    // console.log(1, document.getElementById(aria_control)) // displays dropdown selection 
+                  }
+                }
               }
             })
           })
