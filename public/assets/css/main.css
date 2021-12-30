@@ -285,3 +285,20 @@ th {
     padding: 5px;
     width: 100%;
 }
+
+.autocomplete-input {
+    border: 1px solid #e4eaec !important; 
+    border-radius: 0 !important;
+    padding: 6px 12px !important;
+    font-size: 11px !important; 
+    line-height: unset !important;
+    background-color: #fff !important; 
+    background-image: none !important;
+}
+
+.autocomplete-result {
+    padding: 6px 12px !important;
+    background-image: none !important;
+    font-size: 11px !important;
+    color: black !important;
+}

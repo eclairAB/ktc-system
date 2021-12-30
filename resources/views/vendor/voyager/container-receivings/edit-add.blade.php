@@ -224,35 +224,34 @@
                               <hr style="margin: 0">
                               <div class="modal-body" style="padding-bottom: 0;">
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="repair" id="repair" :class="damageError.repair ? 'isError form-control' : 'form-control'" v-model="input.repair" style="margin-top: 10px;" @input="inputRepair" autocomplete="off">
+                                  <autocomplete
+                                    :search="searchRepair"
+                                    :get-result-value="getResultRepair"
+                                    @update="handleUpdateRepair"
+                                    auto-select
+                                    @submit="handleAutocompleteSubmitRepair"
+                                  ></autocomplete>
                                   <label for="repair" class="form-control-placeholder"> Repair</label>
                                   <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
-                                  <div class="customHint" v-if="repairList.length > 0">
-                                    <ul style="list-style-type: none; padding-left: 5px; margin-bottom: 0; font-size: 11px;">
-                                      <li style="cursor: pointer;" class="selected" v-for="(item, key) in repairList" :key="key">
-                                        <span @click="">@{{item.code}}</span>
-                                      </li>
-                                    </ul>
-                                  </div>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-
                                   <autocomplete
-                                    ref="autocomplete"
-                                    :search="search"
-                                    placeholder="Search for a country"
-                                    aria-label="Search for a country"
-                                    :get-result-value="getResultValue"
-                                    @update="handleUpdate"
+                                    :search="searchComponent"
+                                    :get-result-value="getResultComponent"
+                                    @update="handleUpdateComponent"
                                     auto-select
-                                    @submit="handleAutocompleteSubmit"
+                                    @submit="handleAutocompleteSubmitComponent"
                                   ></autocomplete>
-
-                                  <input type="text" name="component" id="component" :class="damageError.component ? 'isError form-control' : 'form-control'" v-model="input.component" style="margin-top: 10px;" @input="inputComponent">
                                   <label for="component" class="form-control-placeholder"> Component</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="damage" id="damage" :class="damageError.damage ? 'isError form-control' : 'form-control'" v-model="input.damage" style="margin-top: 10px;" @input="inputDamage">
+                                  <autocomplete
+                                    :search="searchDamage"
+                                    :get-result-value="getResultDamage"
+                                    @update="handleUpdateDamage"
+                                    auto-select
+                                    @submit="handleAutocompleteSubmitDamage"
+                                  ></autocomplete>
                                   <label for="damage" class="form-control-placeholder"> Damage</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
@@ -497,11 +496,15 @@
           loading: false,
           pasmoDate: null,
           repairList: [],
-          input: '',
-          results: [],
-          selectedIndex: -1,
-          submitted: false,
-          submittedResult: '',
+          componentresults: [],
+          selectedIndexComponent: -1,
+          submittedComponent: false,
+          repairresults: [],
+          selectedIndexRepair: -1,
+          submittedRepair: false,
+          damageresults: [],
+          selectedIndexDamage: -1,
+          submittedDamage: false,
         },
         watch: {
           'damages': {
@@ -520,17 +523,39 @@
             deep: true
           }
         },
-        computed: {
-          resultsFormatted() {     
-            return JSON.stringify(
-              this.results, null, 2
-            )
-          }
-        },
         methods:{
-          search(input) {
-            this.input = input
-            this.submitted = false
+          searchRepair(input) {
+            this.submittedRepair = false
+            return new Promise((resolve) => {
+              if (input.length < 1) {
+                return resolve([])
+              }
+              axios.get(`/admin/get/container/repair?keyword=${input}`)
+                .then((data) => {
+                  resolve(data.data)
+                })
+            })
+          },
+          getResultRepair(result) {
+            return result.code
+          },
+          handleUpdateRepair(results, selectedIndex) {
+            this.repairresults = results
+            selectedIndexRepair = selectedIndex
+          },
+          handleAutocompleteSubmitRepair(result) {
+            if (result !== undefined) {
+              this.submittedRepair = true
+            }
+            this.handleSubmitRepair(result)
+          },
+          handleSubmitRepair(result) {
+            this.$set(this.damages, 'repair', result.name)
+            this.$set(this.damages, 'repair_id', result.id)
+            this.pasmo()
+          },
+          searchComponent(input) {
+            this.submittedComponent = false
             return new Promise((resolve) => {
               if (input.length < 1) {
                 return resolve([])
@@ -541,33 +566,54 @@
                 })
             })
           },
-          getResultValue(result) {
+          getResultComponent(result) {
             return result.code
           },
-          handleUpdate(results, selectedIndex) {
-            this.results = results
-            this.selectedIndex = selectedIndex
+          handleUpdateComponent(results, selectedIndex) {
+            this.componentresults = results
+            selectedIndexComponent = selectedIndex
           },
-          handleFormSubmit(event) {
-            event.preventDefault()
-            if (!this.submitted) {
-              console.log('handleFormSubmit', this.submitted)
-              const result = this.results[this.selectedIndex]
-              this.handleSubmit(result)
-            }
-          },
-          handleAutocompleteSubmit(result) {
-            console.log('handleAutocompleteSubmit')
+          handleAutocompleteSubmitComponent(result) {
             if (result !== undefined) {
-              this.submitted = true
+              this.submittedComponent = true
             }
-            this.handleSubmit(result)
+            this.handleSubmitComponent(result)
           },
-          handleSubmit(result) {
-            console.log('handleSubmit', result)
-            this.submittedResult = result
+          handleSubmitComponent(result) {
+            this.$set(this.damages, 'component', result.name)
+            this.$set(this.damages, 'component_id', result.id)
+            this.pasmo()
           },
-
+          searchDamage(input) {
+            this.submittedDamage = false
+            return new Promise((resolve) => {
+              if (input.length < 1) {
+                return resolve([])
+              }
+              axios.get(`/admin/get/container/damage?keyword=${input}`)
+                .then((data) => {
+                  resolve(data.data)
+                })
+            })
+          },
+          getResultDamage(result) {
+            return result.code
+          },
+          handleUpdateDamage(results, selectedIndex) {
+            this.damageresults = results
+            selectedIndexDamage = selectedIndex
+          },
+          handleAutocompleteSubmitDamage(result) {
+            if (result !== undefined) {
+              this.submittedDamage = true
+            }
+            this.handleSubmitDamage(result)
+          },
+          handleSubmitDamage(result) {
+            this.$set(this.damages, 'damage', result.name)
+            this.$set(this.damages, 'damage_id', result.id)
+            this.pasmo()
+          },
           deleteFromList (payload) {
             Vue.delete(this.damageList, parseInt(payload))
             Swal.fire({
@@ -597,71 +643,6 @@
           },
           pasmo () {
             this.damages.description = (this.damages.repair ? this.damages.repair : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage : '') + ' ' + (this.damages.component ? this.damages.component : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}CM` : '') + '' + (this.damages.width ? `X${this.damages.width}CM` : '')
-          },
-          inputComponent () {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-              const payload = {
-                keyword: this.input.component
-              }
-              axios.get(`/admin/get/container/component?keyword=${payload.keyword}`, payload)
-              .then(data => {
-                this.damageError = {}
-                if (data.data[0] !== undefined) {
-                  this.damages.component = data.data[0].name
-                  this.damages.component_id = data.data[0].id
-                  this.pasmo()
-                } else {
-                  delete this.damages.component
-                  this.dASFAFAFSAFASFamageError.component = 'This component code is undefined.'
-                }
-              })
-            }, 1000)
-          },
-          inputDamage () {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-              const payload = {
-                keyword: this.input.damage
-              }
-              axios.get(`/admin/get/container/damage?keyword=${payload.keyword}`, payload)
-              .then(data => {
-                this.damageError = {}
-                if (data.data[0] !== undefined) {
-                  this.damages.damage = data.data[0].name
-                  this.damages.damage_id = data.data[0].id
-                  this.pasmo()
-                } else {
-                  this.damages = {}
-                  this.damageError.damage = 'This damage code is undefined.'
-                }
-              })
-            }, 1000)
-          },
-          inputRepair () {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-              const payload = {
-                keyword: this.input.repair
-              }
-              if (payload.keyword === '') {
-                this.repairList = []
-              } else {
-                axios.get(`/admin/get/container/repair?keyword=${payload.keyword}`, payload)
-                .then(data => {
-                  this.repairList = data.data
-                  this.damageError = {}
-                  if (data.data[0] !== undefined) {
-                    this.damages.repair = data.data[0].name
-                    this.damages.repair_id = data.data[0].id
-                    this.pasmo()
-                  } else {
-                    this.damages = {}
-                    this.damageError.repair = 'This repair code is undefined.'
-                  }
-                })
-              }
-            }, 1000)
           },
           async checkDamage () {
             await axios.post('/admin/check/damage', this.damages).then(data => {
