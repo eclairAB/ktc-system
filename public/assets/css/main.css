@@ -276,3 +276,12 @@ th {
 .viewItemOnClick {
   cursor: pointer;
 }
+
+.customHint {
+    position: absolute;
+    z-index: 2;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+    background: white;
+    padding: 5px;
+    width: 100%;
+}

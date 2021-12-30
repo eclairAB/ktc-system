@@ -9,7 +9,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
-    <link rel="stylesheet" href="https://unpkg.com/@trevoreyre/autocomplete-vue/dist/style.css"/>
     <style type="text/css">
       .page-title {
         height: 60px !important;
@@ -223,31 +222,35 @@
                               </div>
                               <hr style="margin: 0">
                               <div class="modal-body" style="padding-bottom: 0;">
+                                @{{repairList}}
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="repair" id="repair" :class="damageError.repair ? 'isError form-control' : 'form-control'" v-model="input.repair" style="margin-top: 10px;" @input="inputRepair" autocomplete="off">
+                                  <v-select
+                                    :class="errors.repair ? 'isError form-control' : 'form-control'"
+                                    :options="repairList"
+                                    v-model="input.repair"
+                                    @option:selected="selectedRepair()"
+                                  >
+                                    <template #search="{attributes, events}">
+                                      <input
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                        style="color: black;"
+                                        v-model="repairSearch"
+                                        @input="searchRepair()"
+                                      />
+                                    </template>
+                                    <template slot="selected-option" slot-scope="option">
+                                      <span>@{{option.code}}</span>
+                                    </template>
+                                    <template slot="option" slot-scope="option">
+                                        @{{option.code}}
+                                    </template>
+                                  </v-select>
+
                                   <label for="repair" class="form-control-placeholder"> Repair</label>
-                                  <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
-                                  <div class="customHint" v-if="repairList.length > 0">
-                                    <ul style="list-style-type: none; padding-left: 5px; margin-bottom: 0; font-size: 11px;">
-                                      <li style="cursor: pointer;" class="selected" v-for="(item, key) in repairList" :key="key">
-                                        <span @click="">@{{item.code}}</span>
-                                      </li>
-                                    </ul>
-                                  </div>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-
-                                  <autocomplete
-                                    ref="autocomplete"
-                                    :search="search"
-                                    placeholder="Search for a country"
-                                    aria-label="Search for a country"
-                                    :get-result-value="getResultValue"
-                                    @update="handleUpdate"
-                                    auto-select
-                                    @submit="handleAutocompleteSubmit"
-                                  ></autocomplete>
-
                                   <input type="text" name="component" id="component" :class="damageError.component ? 'isError form-control' : 'form-control'" v-model="input.component" style="margin-top: 10px;" @input="inputComponent">
                                   <label for="component" class="form-control-placeholder"> Component</label>
                                 </div>
@@ -432,7 +435,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://unpkg.com/@trevoreyre/autocomplete-vue"></script>
 
     <script type="text/javascript">
       $(function () {
@@ -460,7 +462,6 @@
         el: '#containerReceiving',
         components: {
           vuejsDatepicker,
-          Autocomplete
         },
         data: {
           form: {},
@@ -497,11 +498,7 @@
           loading: false,
           pasmoDate: null,
           repairList: [],
-          input: '',
-          results: [],
-          selectedIndex: -1,
-          submitted: false,
-          submittedResult: '',
+          repairSearch: ''
         },
         watch: {
           'damages': {
@@ -520,54 +517,7 @@
             deep: true
           }
         },
-        computed: {
-          resultsFormatted() {     
-            return JSON.stringify(
-              this.results, null, 2
-            )
-          }
-        },
         methods:{
-          search(input) {
-            this.input = input
-            this.submitted = false
-            return new Promise((resolve) => {
-              if (input.length < 1) {
-                return resolve([])
-              }
-              axios.get(`/admin/get/container/component?keyword=${input}`)
-                .then((data) => {
-                  resolve(data.data)
-                })
-            })
-          },
-          getResultValue(result) {
-            return result.code
-          },
-          handleUpdate(results, selectedIndex) {
-            this.results = results
-            this.selectedIndex = selectedIndex
-          },
-          handleFormSubmit(event) {
-            event.preventDefault()
-            if (!this.submitted) {
-              console.log('handleFormSubmit', this.submitted)
-              const result = this.results[this.selectedIndex]
-              this.handleSubmit(result)
-            }
-          },
-          handleAutocompleteSubmit(result) {
-            console.log('handleAutocompleteSubmit')
-            if (result !== undefined) {
-              this.submitted = true
-            }
-            this.handleSubmit(result)
-          },
-          handleSubmit(result) {
-            console.log('handleSubmit', result)
-            this.submittedResult = result
-          },
-
           deleteFromList (payload) {
             Vue.delete(this.damageList, parseInt(payload))
             Swal.fire({
@@ -638,29 +588,22 @@
               })
             }, 1000)
           },
-          inputRepair () {
+          selectedRepair () {
+            this.repairSearch = ''
+            this.damages.repair = this.input.repair.name
+            this.damages.repair_id = this.input.repair.id
+            this.pasmo()
+          },
+          searchRepair () {
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
               const payload = {
-                keyword: this.input.repair
+                keyword: this.repairSearch
               }
-              if (payload.keyword === '') {
-                this.repairList = []
-              } else {
-                axios.get(`/admin/get/container/repair?keyword=${payload.keyword}`, payload)
-                .then(data => {
-                  this.repairList = data.data
-                  this.damageError = {}
-                  if (data.data[0] !== undefined) {
-                    this.damages.repair = data.data[0].name
-                    this.damages.repair_id = data.data[0].id
-                    this.pasmo()
-                  } else {
-                    this.damages = {}
-                    this.damageError.repair = 'This repair code is undefined.'
-                  }
-                })
-              }
+              axios.get(`/admin/get/container/repair?keyword=${payload.keyword}`, payload)
+              .then(data => {
+                this.repairList = data.data
+              })
             }, 1000)
           },
           async checkDamage () {
