@@ -56,7 +56,7 @@
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" name="id_no" id="id_no" disabled :value="form.id ? form.inspected_by.name : loginUser" class="form-control" style="height: 37px;">
-                          <label for="id_no" class="form-control-placeholder"> Inpection By</label>
+                          <label for="id_no" class="form-control-placeholder"> Inspected By</label>
                         </div>
                       </div>
                     </div>
@@ -485,6 +485,55 @@
           this.getdata()
         }
       })
+    </script>
+    <script>
+      {{-- vanilla js because i am a god hah --}}
+
+      function setDropdownListeners() {
+        const dropdowns = document.querySelectorAll("input.vs__search")
+        for(let item of dropdowns) {
+          const aria_control = item.attributes['aria-controls'].nodeValue
+
+          // observes attribute change on dropdown
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.type == "attributes") {
+                const classList = document.getElementById(aria_control).classList
+
+                if (classList.value) {
+                  const focusedDropdownItem = document.querySelector(`input.vs__search[aria-controls="${aria_control}"]`).attributes['aria-activedescendant']
+                  console.log(focusedDropdownItem)
+                  if (focusedDropdownItem) {
+                    const focusedDropdownItemIndex = focusedDropdownItem.nodeValue.split('__option-')[1]
+                    const displayElement = document.querySelector(`div[aria-owns='${aria_control}'] > div.vs__selected-options`)
+                    const selectedDisplayElement = document.querySelector(`div[aria-owns='${aria_control}'] > div.vs__selected-options > span.vs__selected`)
+                    const a = document.getElementById(aria_control).children[focusedDropdownItemIndex]
+
+                    if (selectedDisplayElement) { // if has active selection
+                      if (a) {
+                        displayElement.children[1].innerHTML = a.innerHTML
+                      }
+                    }
+                    else {
+                      for(let item of displayElement.children) {
+                        if (a && !displayElement.children[1]) {
+                            var spanElement = document.createElement('span')
+                            spanElement.innerHTML = a.innerHTML
+                            spanElement.classList = ['vs__selected']
+                            displayElement.appendChild( spanElement )
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            })
+          })
+          observer.observe(item, {attributes: true})
+        }
+      }
+
+      setDropdownListeners()
     </script>
     <!--  -->
 @stop
