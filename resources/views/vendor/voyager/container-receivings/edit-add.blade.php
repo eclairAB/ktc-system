@@ -68,6 +68,8 @@
 
                   <!--  -->
                   <div class="panel panel-bordered">
+                    {{-- <button class="btn btn-success" onclick="test()"> Add element</button> --}}
+                    {{-- <button class="btn btn-success" onclick="test2()"> remove element</button> --}}
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
@@ -855,8 +857,8 @@
     <script>
       {{-- vanilla js because i am a god hah --}}
       
-      /*
-      function used for testing to add new components
+      
+      // function used for testing to add new components
 
       function test() {
         const dropdowns = document.querySelector("div#vs1__combobox > div.vs__selected-options")
@@ -865,9 +867,16 @@
           var spanElement = document.createElement('span')
           spanElement.innerHTML = 'AAAAAAAAAA'
           spanElement.classList = ['vs__selected']
-          dropdowns.appendChild( spanElement )
+          dropdowns.prepend( spanElement )
         }
-      }*/
+      }
+
+      function test2() {
+        const a = document.querySelectorAll(`div#vs1__combobox > div.vs__selected-options > span.vs__selected`)
+        for (item of a) {
+          item.remove()
+        }
+      }
 
       function setDropdownListeners() {
         const dropdowns = document.querySelectorAll("input.vs__search")
@@ -882,25 +891,41 @@
 
                 if (classList.value) {
                   const focusedDropdownItem = document.querySelector(`input.vs__search[aria-controls="${aria_control}"]`).attributes['aria-activedescendant']
-                  console.log(focusedDropdownItem)
+
                   if (focusedDropdownItem) {
                     const focusedDropdownItemIndex = focusedDropdownItem.nodeValue.split('__option-')[1]
                     const displayElement = document.querySelector(`div[aria-owns='${aria_control}'] > div.vs__selected-options`)
                     const selectedDisplayElement = document.querySelector(`div[aria-owns='${aria_control}'] > div.vs__selected-options > span.vs__selected`)
                     const a = document.getElementById(aria_control).children[focusedDropdownItemIndex]
 
+                    // if (document.getElementById(aria_control)) {
+                    // }
                     if (selectedDisplayElement) { // if has active selection
                       if (a) {
-                        displayElement.children[1].innerHTML = a.innerHTML
+                        displayElement.children[0].innerHTML = a.innerHTML
                       }
                     }
                     else {
                       for(let item of displayElement.children) {
-                        if (a && !displayElement.children[1]) {
+                        if (!displayElement.children[1]) {
+
+                          setTimeout(() => {
                             var spanElement = document.createElement('span')
-                            spanElement.innerHTML = a.innerHTML
+                            spanElement.innerHTML = document.getElementById(aria_control).children[0].innerHTML
                             spanElement.classList = ['vs__selected']
-                            displayElement.appendChild( spanElement )
+                            displayElement.prepend( spanElement )
+                          }, 200)
+                        }
+                      }
+                    }
+                    const duplicates = document.querySelectorAll(`div[aria-owns='${aria_control}'] > div.vs__selected-options > span.vs__selected`)
+                    if(duplicates.length > 1) {
+                      for (index in duplicates) {
+                        const i = Number(index)
+                        // console.log('index at '+i+': ', i != duplicates.length - 1)
+                        if (i < duplicates.length - 1) {
+                          // console.log('removal', duplicates[i])
+                          duplicates[i].remove()
                         }
                       }
                     }
@@ -911,6 +936,10 @@
           })
           observer.observe(item, {attributes: true})
         }
+      }
+
+      function onFocusOut() {
+        
       }
 
       setDropdownListeners()
