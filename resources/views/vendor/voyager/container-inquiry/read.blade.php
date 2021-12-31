@@ -292,7 +292,7 @@
         async printDatareceiving (payload) {
           await axios.get(`/admin/get/print/receiving/${payload}`).then(data => {
             let pasmo = data.data
-            let w = window.open();
+            let w = window.open('', '_blank');
             w.document.write(pasmo);
             setTimeout(() => { 
                 w.print();
@@ -303,7 +303,7 @@
         async printDatareleasing (payload) {
           await axios.get(`/admin/get/print/releasing/${payload}`).then(data => {
             let pasmo = data.data
-            let w = window.open();
+            let w = window.open('', '_blank');
             w.document.write(pasmo);
             setTimeout(() => { 
                 w.print();
