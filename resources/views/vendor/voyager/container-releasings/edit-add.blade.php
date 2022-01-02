@@ -373,7 +373,7 @@
               let customId = data.data[0].container_id
               await axios.get(`/admin/get/print/releasing/${customId}`).then(data => {
                 let pasmo = data.data
-                let w = window.open();
+                let w = window.open('', '_blank');
                 w.document.write(pasmo);
                 w.print();
                 w.close();
