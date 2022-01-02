@@ -596,6 +596,7 @@
         methods:{
           setContainerNumber (item) {
             this.$set(this.form, 'container_no', item)
+            this.searchContainer()
           },
           searchRepair(input) {
             this.submittedRepair = false
