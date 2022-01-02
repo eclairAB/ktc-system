@@ -916,49 +916,8 @@
               this.damageLoad = false
             })
           },
-          bindTabs () {
-            const size_type_ = document.querySelector(`div[aria-owns='vs1__listbox'] > div.vs__selected-options > span.vs__selected`)
-            if(size_type_) {
-              this.form.size_type = size_type_.innerHTML
-            }
-
-            const client_id_ = document.querySelector(`div[aria-owns='vs2__listbox'] > div.vs__selected-options > span.vs__selected`)
-            if(client_id_) {
-              this.form.client_id = client_id_.innerHTML
-            }
-
-            const yard_location_ = document.querySelector(`div[aria-owns='vs3__listbox'] > div.vs__selected-options > span.vs__selected`)
-            if(yard_location_) {
-              this.form.yard_location = yard_location_.innerHTML
-            }
-
-            const type_id_ = document.querySelector(`div[aria-owns='vs4__listbox'] > div.vs__selected-options > span.vs__selected`)
-            if(type_id_) {
-              this.form.type_id = type_id_.innerHTML
-            }
-
-            const class_ = document.querySelector(`div[aria-owns='vs5__listbox'] > div.vs__selected-options > span.vs__selected`)
-            if(class_) {
-              this.form.class = class_.innerHTML
-            }
-
-            const empty_loaded_ = document.querySelector(`div[aria-owns='vs6__listbox'] > div.vs__selected-options > span.vs__selected`)
-            if(empty_loaded_) {
-              this.form.empty_loaded = empty_loaded_.innerHTML
-            }
-          },
-          clearTabs() {
-            this.form.size_type = ""
-            this.form.client_id = ""
-            this.form.yard_location = ""
-            this.form.type_id = ""
-            this.form.class = ""
-            this.form.empty_loaded = ""
-          },
           async saveReceiving () {
             this.loading = true
-
-            this.bindTabs()
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
@@ -986,7 +945,6 @@
               })
               
             }).catch(error => {
-              this.clearTabs()
               this.loading = false
               this.errors = error.response.data.errors
             })
