@@ -919,15 +919,16 @@
               let customId = data.data[0].container_id
               await axios.get(`/admin/get/print/receiving/${customId}`).then(data => {
                 let pasmo = data.data
-                let w = window.open();
+                let w = window.open('', '_blank');
                 w.document.write(pasmo);
-                setTimeout(() => {
-                    w.print();
-                    w.close();
+                setTimeout(() => { 
+                  w.print();
+                  w.close();
+                  let customUrl = `${window.location.origin}/admin/container-inquiry/${this.form.container_no}`
+                  window.location = customUrl
                 }, 100);
               })
-              let customUrl = `${window.location.origin}/admin/container-inquiry/${this.form.container_no}`
-              window.location = customUrl
+              
             }).catch(error => {
               this.loading = false
               this.errors = error.response.data.errors
