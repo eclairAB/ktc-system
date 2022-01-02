@@ -253,7 +253,7 @@
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0 !important; margin: 0 !important; display: flex; justify-content: space-between; align-items: center;">
                           <div style="font-weight: 700; font-size: 15px; color: black;">Damages</div>
-                          <button class="btn btn-success" @click="addNew" style="height: 25px; font-size: 10px;"> Add Damage</button>
+                          <button v-if="isOk" class="btn btn-success" @click="addNew" style="height: 25px; font-size: 10px;"> Add Damage</button>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="color: black !important; margin-top: 0 !important; margin-bottom: 10px;" v-if="damageList.length > 0">
                           <table border="1" cellspacing="0" cellpadding="" width="100%">
@@ -329,15 +329,15 @@
                                   <label for="location" class="form-control-placeholder"> Location</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="number" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px;">
+                                  <input type="text" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px;">
                                   <label for="length" class="form-control-placeholder"> Length</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="number" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px;">
+                                  <input type="text" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px;">
                                   <label for="width" class="form-control-placeholder"> Width</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="number" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px;">
+                                  <input type="text" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px;">
                                   <label for="quantity" class="form-control-placeholder"> Quantity</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
@@ -759,7 +759,7 @@
             $('#dialog').modal('hide');
           },
           pasmo () {
-            this.damages.description = (this.damages.repair ? this.damages.repair.name : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name : '') + ' ' + (this.damages.component ? this.damages.component.name : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}CM` : '') + '' + (this.damages.width ? `X${this.damages.width}CM` : '')
+            this.damages.description = (this.damages.repair ? this.damages.repair.name : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name : '') + ' ' + (this.damages.component ? this.damages.component.name : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}` : '') + '' + (this.damages.width ? `X${this.damages.width}` : '')
           },
           async checkDamage () {
             this.damageLoad = true
