@@ -380,10 +380,10 @@
                 setTimeout(() => { 
                     w.print();
                     w.close();
+                    let customUrl = `${window.location.origin}/admin/container-inquiry/${this.form.container_no}`
+                    window.location = customUrl
                 }, 100);
               })
-              let customUrl = `${window.location.origin}/admin/container-inquiry/${this.form.container_no}`
-              window.location = customUrl
             }).catch(error => {
               this.loading = false
               this.errors = error.response.data.errors
