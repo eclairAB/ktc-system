@@ -51,11 +51,19 @@
                           <label for="id_no" class="form-control-placeholder"> EIR No.</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('MMMM DD, YYYY')" class="form-control">
+                          <vuejs-datepicker
+                            v-model="form.inspected_date"
+                            :input-class="errors.inspected_date ? 'isError form-control isDate' : 'form-control isDate'"
+                            :typeable="true"
+                            name="inspected_date"
+                            :format="dateFormatFull"
+                            :required="true"
+                          >
+                          </vuejs-datepicker>
                           <label for="id_no" class="form-control-placeholder"> Inspection Date</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('hh:mm A')" class="form-control">
+                          <input type="time" name="id_no" id="id_no" v-model="form.inspected_time" class="form-control">
                           <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
@@ -594,6 +602,9 @@
           }
         },
         methods:{
+          dateFormatFull (date) {
+            return moment(date).format('MMMM DD, YYYY');
+          },
           setContainerNumber (item) {
             this.$set(this.form, 'container_no', item)
             this.searchContainer()
@@ -911,6 +922,7 @@
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
             this.$set(this.form, 'manufactured_date', this.pasmoDate)
+            this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
             await axios.post('/admin/create/receiving', this.form).then(async data => {
               this.loading = false
               this.errors = {}
@@ -976,6 +988,7 @@
                   }
                   this.container_photo.push(wawex)
                 }
+                this.form.inspected_time = moment(this.form.inspected_date).format('HH:mm')
                 this.form.container_photo = this.container_photo
                 this.isOk = true
                 this.getDamages()
@@ -985,6 +998,7 @@
             } else {
               this.form = {
                 inspected_date: moment().format(),
+                inspected_time: moment().format('HH:mm'),
                 inspected_by: {!! Auth::user()->role->id !!},
                 container_photo: []
               }
