@@ -273,7 +273,7 @@
                           <div class="modal-dialog" role="document" style="">
                             <div class="modal-content">
                               <div class="modal-header" style="display: flex; align-items: center;">
-                                <h5 class="modal-title" id="dialogLabel">Add Damage</h5>
+                                <h5 class="modal-title" id="dialogLabel">@{{ isEdit === true ? 'Edit Damage' : 'Add Damage' }}</h5>
                                 <button type="button" @click="closeDialog" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: auto;">
                                   <span aria-hidden="true">&times;</span>
                                 </button>
@@ -349,7 +349,7 @@
                               <div class="modal-footer" style="text-align: left !important; padding-top: 0;">
                                 <button type="button" class="btn btn-primary" style="margin-top: 15px;" @click="clearDamage"> Clear</button>
                                 <button type="button" class="btn btn-danger" style="margin-top: 15px;" @click="cancelDamage"> Cancel</button>
-                                <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" @click="isEdit === true ? updateDamage() : checkDamage()">@{{ isEdit === true ? 'Update' : 'Save' }}</button>
+                                <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" @click="isEdit === true ? updateDamage() : form.id ? addNewDamage() : checkDamage()">@{{ isEdit === true ? 'Update' : 'Save' }}</button>
                               </div>
                             </div>
                           </div>
@@ -738,6 +738,7 @@
             this.damageresults = []
             this.selectedIndexDamage = -1
             this.submittedDamage = false
+            this.isEdit = false
           },
           cancelDamage () {
             $('#dialog').modal('hide');
@@ -885,6 +886,13 @@
               Vue.set(this.damageList, this.damages.key, this.damages)
               this.closeDialog()
             }
+          },
+          addNewDamage () {
+            this.$set(this.damages, 'receiving_id', this.form.id)
+            axios.post(`/admin/create/damage`, this.damages).then(data => {
+              this.getDamages()
+              this.closeDialog()
+            })
           },
           async saveReceiving () {
             this.loading = true
