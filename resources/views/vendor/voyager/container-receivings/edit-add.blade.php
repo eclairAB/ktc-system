@@ -349,7 +349,7 @@
                               <div class="modal-footer" style="text-align: left !important; padding-top: 0;">
                                 <button type="button" class="btn btn-primary" style="margin-top: 15px;" @click="clearDamage"> Clear</button>
                                 <button type="button" class="btn btn-danger" style="margin-top: 15px;" @click="cancelDamage"> Cancel</button>
-                                <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" @click="isEdit === true ? updateDamage() : form.id ? addNewDamage() : checkDamage()">@{{ isEdit === true ? 'Update' : 'Save' }}</button>
+                                <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" :disabled="damageLoad === true" @click="isEdit === true ? updateDamage() : form.id ? addNewDamage() : checkDamage()">@{{ damageLoad === false ? isEdit === true ? 'Update' : 'Save' : 'Loading...' }}</button>
                               </div>
                             </div>
                           </div>
@@ -574,7 +574,8 @@
           damageresults: [],
           selectedIndexDamage: -1,
           submittedDamage: false,
-          isEdit: false
+          isEdit: false,
+          damageLoad: false
         },
         watch: {
           'damages': {
@@ -744,11 +745,13 @@
             $('#dialog').modal('hide');
           },
           pasmo () {
-            this.damages.description = (this.damages.repair ? this.damages.repair.code : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage.code : '') + ' ' + (this.damages.component ? this.damages.component.code : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}CM` : '') + '' + (this.damages.width ? `X${this.damages.width}CM` : '')
+            this.damages.description = (this.damages.repair ? this.damages.repair.name : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name : '') + ' ' + (this.damages.component ? this.damages.component.name : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}CM` : '') + '' + (this.damages.width ? `X${this.damages.width}CM` : '')
           },
           async checkDamage () {
+            this.damageLoad = true
             await axios.post('/admin/check/damage', this.damages).then(data => {
               this.damageList.push(this.damages)
+              this.damageLoad = false
               this.closeDialog()
             }).catch(error => {
               alert('Error')
@@ -877,21 +880,26 @@
             this.form.container_photo = this.container_photo
           },
           updateDamage () {
+            this.damageLoad = true
             if (this.damages.id) {
               axios.post(`/admin/update/damage`, this.damages).then(data => { 
                 this.getDamages()
                 this.closeDialog()
+                this.damageLoad = false
               })
             } else {
               Vue.set(this.damageList, this.damages.key, this.damages)
               this.closeDialog()
+              this.damageLoad = false
             }
           },
           addNewDamage () {
+            this.damageLoad = true
             this.$set(this.damages, 'receiving_id', this.form.id)
             axios.post(`/admin/create/damage`, this.damages).then(data => {
               this.getDamages()
               this.closeDialog()
+              this.damageLoad = false
             })
           },
           async saveReceiving () {
