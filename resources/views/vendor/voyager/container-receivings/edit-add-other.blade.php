@@ -9,7 +9,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
-    <link rel="stylesheet" href="https://unpkg.com/@trevoreyre/autocomplete-vue/dist/style.css"/>
     <style type="text/css">
       .page-title {
         height: 60px !important;
@@ -67,30 +66,14 @@
                           <hr style="margin: 15px 0;">
                         </div>
 
-                        {{-- <button class="btn btn-success" onclick="test()"> Add element</button> --}}
-                        {{-- <button class="btn btn-success" onclick="test2()"> remove element</button> --}}
-
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input
-                            id="container_no"
-                            tabindex="1"
-                            type="text"
-                            name="container_no"
-                            ng-maxlength="13"
-                            maxlength="13"
-                            placeholder="####-######-#"
-                            v-model="form.container_no"
-                            @input="searchContainer()":class="containerError.message ? 'isError form-control' : 'form-control'"
-                            style="height: 37px; text-transform:uppercase"
-                          >
-
+                          <input type="text" name="container_no" id="container_no" ng-maxlength="13" maxlength="13" placeholder="####-######-#" v-model="form.container_no" @input="searchContainer()" :class="containerError.message ? 'isError form-control' : 'form-control'" style="height: 37px; text-transform:uppercase">
                           <label for="container_no" class="form-control-placeholder"> Container No. <span style="color: red"> *</span></label>
                           <div class="customErrorText" v-if="containerError.message"><small>@{{ containerError.message }}</small></div>
                           <div class="customHintText" v-else></div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <v-select
-                            tabindex="2"
                             :class="errors.size_type ? 'isError form-control' : 'form-control'"
                             :options="sizeTypeList"
                             style="height: 30px !important;"
@@ -105,7 +88,6 @@
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <v-select
                             style="height: 30px !important;"
-                            tabindex="3"
                             :class="errors.client_id ? 'isError form-control' : 'form-control'"
                             :options="clientList"
                             v-model="form.client_id"
@@ -119,7 +101,6 @@
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <v-select
                             style="height: 30px !important;"
-                            tabindex="4"
                             :class="errors.yard_location ? 'isError form-control' : 'form-control'"
                             :options="yardList"
                             :disabled="!isOk"
@@ -132,7 +113,6 @@
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <v-select
-                            tabindex="5"
                             :class="errors.type_id ? 'isError form-control' : 'form-control'"
                             :options="typeList"
                             style="height: 30px !important;"
@@ -147,7 +127,6 @@
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <v-select
                             style="height: 30px !important;"
-                            tabindex="6"
                             :class="errors.class ? 'isError form-control' : 'form-control'"
                             :options="classList"
                             v-model="form.class"
@@ -161,7 +140,6 @@
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <v-select
                             style="height: 30px !important;"
-                            tabindex="7"
                             :class="errors.empty_loaded ? 'isError form-control' : 'form-control'"
                             :disabled="!isOk"
                             :options="emptyloaded"
@@ -172,7 +150,6 @@
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
                           <vuejs-datepicker
-                            tabindex="8"
                             v-model="form.manufactured_date"
                             :placeholder="pasmoDate === undefined ? 'mm/yyyy' : moment(pasmoDate).format('MM/yyyy')"
                             :input-class="errors.manufactured_date ? 'isError form-control isDate' : 'form-control isDate'"
@@ -180,9 +157,8 @@
                             name="manufactured_date"
                             :format="dateFormat"
                             minimum-view="month"
-                            :disabled="!isOk"
                             :required="true"
-                          >
+                            :disabled="!isOk">
                           </vuejs-datepicker>
                           <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
                           <div class="customErrorText"><small>@{{ errors.manufactured_date ? errors.manufactured_date[0] : '' }}</small></div>
@@ -192,56 +168,23 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Shipment Details</div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input
-                            id="consignee"
-                            tabindex="9"
-                            type="text"
-                            name="consignee"
-                            v-model="form.consignee"
-                            :disabled="!isOk"
-                            :class="errors.consignee ? 'isError form-control' : 'form-control'"
-                          >
+                          <input type="text" name="consignee" id="consignee" v-model="form.consignee" :disabled="!isOk" :class="errors.consignee ? 'isError form-control' : 'form-control'">
                           <label for="consignee" class="form-control-placeholder"> Consignee</label>
                           <div class="customErrorText"><small>@{{ errors.consignee ? errors.consignee[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input
-                            id="hauler"
-                            tabindex="10"
-                            type="text"
-                            name="hauler"
-                            v-model="form.hauler"
-                            :disabled="!isOk"
-                            :class="errors.hauler ? 'isError form-control' : 'form-control'"
-                          >
+                          <input type="text" name="hauler" id="hauler" v-model="form.hauler" :disabled="!isOk" :class="errors.hauler ? 'isError form-control' : 'form-control'">
                           <label for="hauler" class="form-control-placeholder"> Hauler</label>
                           <div class="customErrorText"><small>@{{ errors.hauler ? errors.hauler[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input
-                            id="plate_no"
-                            tabindex="11"
-                            type="text"
-                            name="plate_no"
-                            v-model="form.plate_no"
-                            :disabled="!isOk"
-                            :class="errors.plate_no ? 'isError form-control' : 'form-control'"
-                          >
+                          <input type="text" name="plate_no" id="plate_no" v-model="form.plate_no" :disabled="!isOk" :class="errors.plate_no ? 'isError form-control' : 'form-control'">
                           <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
                           <div class="customErrorText"><small>@{{ errors.plate_no ? errors.plate_no[0] : '' }}</small></div>
                         </div>
 
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 5px;">
-                          <input
-                            tabindex="12"
-                            type="text" 
-                            placeholder="Write Something..." 
-                            name="remarks" 
-                            id="remarks" 
-                            v-model="form.remarks" 
-                            :disabled="!isOk" 
-                            :class="errors.remarks ? 'isError form-control' : 'form-control'"
-                          >
+                          <input type="text" placeholder="Write Something..." name="remarks" id="remarks" v-model="form.remarks" :disabled="!isOk" :class="errors.remarks ? 'isError form-control' : 'form-control'">
                           <label for="consignee" class="form-control-placeholder"> Remarks</label>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0 !important; margin: 0 !important; display: flex; justify-content: space-between; align-items: center;">
@@ -255,7 +198,6 @@
                                 <td class="border-b" style="padding: 5px; font-size: 10px;">@{{key + 1}}.) @{{item.description}}</td>
                                 <td>
                                   <div style="display: flex; justify-content: center; width: 100%">
-                                    <button class="btn btn-primary" style="margin: 5px; height: 25px; font-size: 10px;" @click="item.id ? editActual(item) : editFromList(key)">Edit</button>
                                     <button class="btn btn-danger" style="margin: 5px; height: 25px; font-size: 10px;" @click="item.id ? deleteActual(item) : deleteFromList(key)">Delete</button>
                                   </div>
                                 </td>
@@ -280,35 +222,40 @@
                               </div>
                               <hr style="margin: 0">
                               <div class="modal-body" style="padding-bottom: 0;">
+                                @{{repairList}}
                                 <div class="col-lg-12 form-group mt-3">
-                                  <autocomplete
-                                    :search="searchRepair"
-                                    :get-result-value="getResultRepair"
-                                    @update="handleUpdateRepair"
-                                    auto-select
-                                    @submit="handleAutocompleteSubmitRepair"
-                                  ></autocomplete>
+                                  <v-select
+                                    :class="errors.repair ? 'isError form-control' : 'form-control'"
+                                    :options="repairList"
+                                    v-model="input.repair"
+                                    @option:selected="selectedRepair()"
+                                  >
+                                    <template #search="{attributes, events}">
+                                      <input
+                                        class="vs__search"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                        style="color: black;"
+                                        v-model="repairSearch"
+                                        @input="searchRepair()"
+                                      />
+                                    </template>
+                                    <template slot="selected-option" slot-scope="option">
+                                      <span>@{{option.code}}</span>
+                                    </template>
+                                    <template slot="option" slot-scope="option">
+                                        @{{option.code}}
+                                    </template>
+                                  </v-select>
+
                                   <label for="repair" class="form-control-placeholder"> Repair</label>
-                                  <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <autocomplete
-                                    :search="searchComponent"
-                                    :get-result-value="getResultComponent"
-                                    @update="handleUpdateComponent"
-                                    auto-select
-                                    @submit="handleAutocompleteSubmitComponent"
-                                  ></autocomplete>
+                                  <input type="text" name="component" id="component" :class="damageError.component ? 'isError form-control' : 'form-control'" v-model="input.component" style="margin-top: 10px;" @input="inputComponent">
                                   <label for="component" class="form-control-placeholder"> Component</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <autocomplete
-                                    :search="searchDamage"
-                                    :get-result-value="getResultDamage"
-                                    @update="handleUpdateDamage"
-                                    auto-select
-                                    @submit="handleAutocompleteSubmitDamage"
-                                  ></autocomplete>
+                                  <input type="text" name="damage" id="damage" :class="damageError.damage ? 'isError form-control' : 'form-control'" v-model="input.damage" style="margin-top: 10px;" @input="inputDamage">
                                   <label for="damage" class="form-control-placeholder"> Damage</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
@@ -488,7 +435,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://unpkg.com/@trevoreyre/autocomplete-vue"></script>
 
     <script type="text/javascript">
       $(function () {
@@ -516,7 +462,6 @@
         el: '#containerReceiving',
         components: {
           vuejsDatepicker,
-          Autocomplete
         },
         data: {
           form: {},
@@ -553,15 +498,7 @@
           loading: false,
           pasmoDate: null,
           repairList: [],
-          componentresults: [],
-          selectedIndexComponent: -1,
-          submittedComponent: false,
-          repairresults: [],
-          selectedIndexRepair: -1,
-          submittedRepair: false,
-          damageresults: [],
-          selectedIndexDamage: -1,
-          submittedDamage: false,
+          repairSearch: ''
         },
         watch: {
           'damages': {
@@ -581,102 +518,6 @@
           }
         },
         methods:{
-          searchRepair(input) {
-            this.submittedRepair = false
-            return new Promise((resolve) => {
-              if (input.length < 1) {
-                return resolve([])
-              }
-              axios.get(`/admin/get/container/repair?keyword=${input}`)
-                .then((data) => {
-                  resolve(data.data)
-                })
-            })
-          },
-          getResultRepair(result) {
-            return result.code
-          },
-          handleUpdateRepair(results, selectedIndex) {
-            this.repairresults = results
-            selectedIndexRepair = selectedIndex
-          },
-          handleAutocompleteSubmitRepair(result) {
-            if (result !== undefined) {
-              this.submittedRepair = true
-            }
-            this.handleSubmitRepair(result)
-          },
-          handleSubmitRepair(result) {
-            this.$set(this.damages, 'repair', result.name)
-            this.$set(this.damages, 'repair_id', result.id)
-            this.pasmo()
-          },
-          searchComponent(input) {
-            this.submittedComponent = false
-            return new Promise((resolve) => {
-              if (input.length < 1) {
-                return resolve([])
-              }
-              axios.get(`/admin/get/container/component?keyword=${input}`)
-                .then((data) => {
-                  resolve(data.data)
-                })
-            })
-          },
-          getResultComponent(result) {
-            return result.code
-          },
-          handleUpdateComponent(results, selectedIndex) {
-            this.componentresults = results
-            selectedIndexComponent = selectedIndex
-          },
-          handleAutocompleteSubmitComponent(result) {
-            if (result !== undefined) {
-              this.submittedComponent = true
-            }
-            this.handleSubmitComponent(result)
-          },
-          handleSubmitComponent(result) {
-            this.$set(this.damages, 'component', result.name)
-            this.$set(this.damages, 'component_id', result.id)
-            this.pasmo()
-          },
-          searchDamage(input) {
-            this.submittedDamage = false
-            return new Promise((resolve) => {
-              if (input.length < 1) {
-                return resolve([])
-              }
-              axios.get(`/admin/get/container/damage?keyword=${input}`)
-                .then((data) => {
-                  resolve(data.data)
-                })
-            })
-          },
-          getResultDamage(result) {
-            return result.code
-          },
-          handleUpdateDamage(results, selectedIndex) {
-            this.damageresults = results
-            selectedIndexDamage = selectedIndex
-          },
-          handleAutocompleteSubmitDamage(result) {
-            if (result !== undefined) {
-              this.submittedDamage = true
-            }
-            this.handleSubmitDamage(result)
-          },
-          handleSubmitDamage(result) {
-            this.$set(this.damages, 'damage', result.name)
-            this.$set(this.damages, 'damage_id', result.id)
-            this.pasmo()
-          },
-          editActual () {
-            $('#dialog').modal({backdrop: 'static', keyboard: false});
-          },
-          editFromList () {
-            $('#dialog').modal({backdrop: 'static', keyboard: false});
-          },
           deleteFromList (payload) {
             Vue.delete(this.damageList, parseInt(payload))
             Swal.fire({
@@ -706,6 +547,64 @@
           },
           pasmo () {
             this.damages.description = (this.damages.repair ? this.damages.repair : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage : '') + ' ' + (this.damages.component ? this.damages.component : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}CM` : '') + '' + (this.damages.width ? `X${this.damages.width}CM` : '')
+          },
+          inputComponent () {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              const payload = {
+                keyword: this.input.component
+              }
+              axios.get(`/admin/get/container/component?keyword=${payload.keyword}`, payload)
+              .then(data => {
+                this.damageError = {}
+                if (data.data[0] !== undefined) {
+                  this.damages.component = data.data[0].name
+                  this.damages.component_id = data.data[0].id
+                  this.pasmo()
+                } else {
+                  delete this.damages.component
+                  this.dASFAFAFSAFASFamageError.component = 'This component code is undefined.'
+                }
+              })
+            }, 1000)
+          },
+          inputDamage () {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              const payload = {
+                keyword: this.input.damage
+              }
+              axios.get(`/admin/get/container/damage?keyword=${payload.keyword}`, payload)
+              .then(data => {
+                this.damageError = {}
+                if (data.data[0] !== undefined) {
+                  this.damages.damage = data.data[0].name
+                  this.damages.damage_id = data.data[0].id
+                  this.pasmo()
+                } else {
+                  this.damages = {}
+                  this.damageError.damage = 'This damage code is undefined.'
+                }
+              })
+            }, 1000)
+          },
+          selectedRepair () {
+            this.repairSearch = ''
+            this.damages.repair = this.input.repair.name
+            this.damages.repair_id = this.input.repair.id
+            this.pasmo()
+          },
+          searchRepair () {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+              const payload = {
+                keyword: this.repairSearch
+              }
+              axios.get(`/admin/get/container/repair?keyword=${payload.keyword}`, payload)
+              .then(data => {
+                this.repairList = data.data
+              })
+            }, 1000)
           },
           async checkDamage () {
             await axios.post('/admin/check/damage', this.damages).then(data => {
@@ -946,103 +845,30 @@
     <script>
       {{-- vanilla js because i am a god hah --}}
       
-      
-      // function used for testing to add new components
-
-      /*function test() {
-        const dropdowns = document.querySelector("div#vs1__combobox > div.vs__selected-options")
-
-        if (!dropdowns.children[1]) {
-          var spanElement = document.createElement('span')
-          spanElement.innerHTML = 'AAAAAAAAAA'
-          spanElement.classList = ['vs__selected']
-          dropdowns.prepend( spanElement )
-        }
-      }
-
-      function test2() {
-        const a = document.querySelectorAll(`div#vs1__combobox > div.vs__selected-options > span.vs__selected`)
-        for (item of a) {
-          item.remove()
-        }
-      }*/
-
       function setDropdownListeners() {
         const dropdowns = document.querySelectorAll("input.vs__search")
         for(let item of dropdowns) {
           const aria_control = item.attributes['aria-controls'].nodeValue
+          // console.log(aria_control)
 
           // observes attribute change on dropdown
           const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
               if (mutation.type == "attributes") {
-                const classList = document.getElementById(aria_control).classList
-
-                const duplicates = document.querySelectorAll(`div[aria-owns='${aria_control}'] > div.vs__selected-options > span.vs__selected`)
-                if(duplicates.length > 1) {
-                  for (index in duplicates) {
-                    const i = Number(index)
-                    if (i < duplicates.length - 1) {
-                      duplicates[i].remove()
-                    }
-                  }
-                }
-
-                if (classList.value && !classList.value.includes("vs__dropdown-menu")) {
-                  const focusedDropdownItem = document.querySelector(`input.vs__search[aria-controls="${aria_control}"]`).attributes['aria-activedescendant']
-
-                  if (focusedDropdownItem) {
-                    const focusedDropdownItemIndex = focusedDropdownItem.nodeValue.split('__option-')[1]
-                    const displayElement = document.querySelector(`div[aria-owns='${aria_control}'] > div.vs__selected-options`)
-                    const selectedDisplayElement = document.querySelector(`div[aria-owns='${aria_control}'] > div.vs__selected-options > span.vs__selected`)
-                    const a = document.getElementById(aria_control).children[focusedDropdownItemIndex]
-
-                    if (selectedDisplayElement) { // if has active selection
-                      if (a) {
-                        displayElement.children[0].innerHTML = a.innerHTML
-                      }
-                    }
-                    else {
-                      for(let item of displayElement.children) {
-                        if (!displayElement.children[1]) {
-
-                          setTimeout(() => {
-                            var spanElement = document.createElement('span')
-                            spanElement.innerHTML = document.getElementById(aria_control).children[0].innerHTML
-                            spanElement.classList = ['vs__selected']
-                            displayElement.prepend( spanElement )
-                          }, 200)
-                        }
-                      }
-                    }
-                    // show clear button
-                    const removeButton = document.querySelector(`div[aria-owns='${aria_control}'] > div.vs__actions > button.vs__clear`)
-                    removeButton.style.removeProperty('display')
-                    removeButton.addEventListener('click', onRemoveClick)
-                  }
-                }
+                console.log('attr change')
+                console.log(document.getElementById(aria_control)) // displays dropdown selection 
               }
             })
           })
+
           observer.observe(item, {attributes: true})
-        }
-      }
 
-      function onRemoveClick(x) {
-        const selection = x.path[4].children[0].children
-        for (item of selection) {
-          if (item.classList.contains("vs__selected")) {
-            item.remove()
-          }
         }
-
-        // hide close button
-        const actions = x.path[4].children[1].children
-        for (item of actions) {
-          if (item.classList.contains("vs__clear")) {
-            item.style.display = "none"
-          }
-        }
+        // console.log(asd)
+        /*setInterval(() => {
+          // console.log('hi :)')
+          console.log(document.activeElement)
+        }, 1000)*/
       }
 
       setDropdownListeners()
