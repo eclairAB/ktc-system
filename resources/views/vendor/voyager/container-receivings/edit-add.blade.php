@@ -255,6 +255,7 @@
                                 <td class="border-b" style="padding: 5px; font-size: 10px;">@{{key + 1}}.) @{{item.description}}</td>
                                 <td>
                                   <div style="display: flex; justify-content: center; width: 100%">
+                                    <button class="btn btn-primary" style="margin: 5px; height: 25px; font-size: 10px;" @click="item.id ? editActual(item) : editFromList(key)">Edit</button>
                                     <button class="btn btn-danger" style="margin: 5px; height: 25px; font-size: 10px;" @click="item.id ? deleteActual(item) : deleteFromList(key)">Delete</button>
                                   </div>
                                 </td>
@@ -669,6 +670,12 @@
             this.$set(this.damages, 'damage', result.name)
             this.$set(this.damages, 'damage_id', result.id)
             this.pasmo()
+          },
+          editActual () {
+            $('#dialog').modal({backdrop: 'static', keyboard: false});
+          },
+          editFromList () {
+            $('#dialog').modal({backdrop: 'static', keyboard: false});
           },
           deleteFromList (payload) {
             Vue.delete(this.damageList, parseInt(payload))
