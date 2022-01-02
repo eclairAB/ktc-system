@@ -69,7 +69,6 @@
 
                         {{-- <button class="btn btn-success" onclick="test()"> Add element</button> --}}
                         {{-- <button class="btn btn-success" onclick="test2()"> remove element</button> --}}
-
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input
                             id="container_no"
@@ -498,18 +497,18 @@
 
     <script type="text/javascript">
       $(function () {
-          $('[id*=container_no]').keyup(function () {
-              var number = $(this).val();
-              var max = 13;
-              if (number.length > max) {
-                  $(this).val($(this).val().substr(0, max));
-              }
-              if (number.length == 4) {
-                  $(this).val($(this).val() + '-');
-              }
-              else if (number.length == 11) {
-                  $(this).val($(this).val() + '-');
-              }
+          $('#container_no').keyup(function() {
+            var number = $(this).val();
+            var max = 13;
+            if (number.length > max) {
+              $(this).val($(this).val().substr(0, max));
+            }
+            var foo = $(this).val().split("-").join("");
+            if (foo.length > 0) {
+              foo = foo.replace(/(.{4})(.{6})(.{1})/g, "$1-$2-$3");
+            }
+            document.getElementById('containerReceiving').__vue__.setContainerNumber(foo)
+            $(this).val(foo);
           });
           // $('.repair').find(':input').on( 'keydown', function( e ) {
           //   var enterkey = $.Event( "keyup", { keyCode: 13 } );
@@ -595,6 +594,9 @@
           }
         },
         methods:{
+          setContainerNumber (item) {
+            this.$set(this.form, 'container_no', item)
+          },
           searchRepair(input) {
             this.submittedRepair = false
             return new Promise((resolve) => {
