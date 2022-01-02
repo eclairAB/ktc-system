@@ -56,7 +56,7 @@
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
                           <input type="text" name="id_no" id="id_no" disabled :value="form.id ? form.inspected_by.name : loginUser" class="form-control" style="height: 37px;">
-                          <label for="id_no" class="form-control-placeholder"> Inpection By</label>
+                          <label for="id_no" class="form-control-placeholder"> Inspected By</label>
                         </div>
 
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="margin: 0; margin-bottom: 10px;">
