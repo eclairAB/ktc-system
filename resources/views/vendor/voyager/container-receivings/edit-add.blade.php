@@ -51,11 +51,19 @@
                           <label for="id_no" class="form-control-placeholder"> EIR No.</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('MMMM DD, YYYY')" class="form-control">
+                          <vuejs-datepicker
+                            v-model="form.inspected_date"
+                            :input-class="errors.inspected_date ? 'isError form-control isDate' : 'form-control isDate'"
+                            :typeable="true"
+                            name="inspected_date"
+                            :format="dateFormatFull"
+                            :required="true"
+                          >
+                          </vuejs-datepicker>
                           <label for="id_no" class="form-control-placeholder"> Inspection Date</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('hh:mm A')" class="form-control">
+                          <input type="time" name="id_no" id="id_no" v-model="form.inspected_time" class="form-control">
                           <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
@@ -245,7 +253,7 @@
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0 !important; margin: 0 !important; display: flex; justify-content: space-between; align-items: center;">
                           <div style="font-weight: 700; font-size: 15px; color: black;">Damages</div>
-                          <button class="btn btn-success" @click="addNew" style="height: 25px; font-size: 10px;"> Add Damage</button>
+                          <button v-if="isOk" class="btn btn-success" @click="addNew" style="height: 25px; font-size: 10px;"> Add Damage</button>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="color: black !important; margin-top: 0 !important; margin-bottom: 10px;" v-if="damageList.length > 0">
                           <table border="1" cellspacing="0" cellpadding="" width="100%">
@@ -321,15 +329,15 @@
                                   <label for="location" class="form-control-placeholder"> Location</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="number" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px;">
+                                  <input type="text" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px;">
                                   <label for="length" class="form-control-placeholder"> Length</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="number" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px;">
+                                  <input type="text" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px;">
                                   <label for="width" class="form-control-placeholder"> Width</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="number" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px;">
+                                  <input type="text" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px;">
                                   <label for="quantity" class="form-control-placeholder"> Quantity</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
@@ -594,6 +602,9 @@
           }
         },
         methods:{
+          dateFormatFull (date) {
+            return moment(date).format('MMMM DD, YYYY');
+          },
           setContainerNumber (item) {
             this.$set(this.form, 'container_no', item)
             this.searchContainer()
@@ -748,7 +759,7 @@
             $('#dialog').modal('hide');
           },
           pasmo () {
-            this.damages.description = (this.damages.repair ? this.damages.repair.name : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name : '') + ' ' + (this.damages.component ? this.damages.component.name : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}CM` : '') + '' + (this.damages.width ? `X${this.damages.width}CM` : '')
+            this.damages.description = (this.damages.repair ? this.damages.repair.name : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name : '') + ' ' + (this.damages.component ? this.damages.component.name : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}` : '') + '' + (this.damages.width ? `X${this.damages.width}` : '')
           },
           async checkDamage () {
             this.damageLoad = true
@@ -911,6 +922,7 @@
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
             this.$set(this.form, 'manufactured_date', this.pasmoDate)
+            this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
             await axios.post('/admin/create/receiving', this.form).then(async data => {
               this.loading = false
               this.errors = {}
@@ -976,6 +988,7 @@
                   }
                   this.container_photo.push(wawex)
                 }
+                this.form.inspected_time = moment(this.form.inspected_date).format('HH:mm')
                 this.form.container_photo = this.container_photo
                 this.isOk = true
                 this.getDamages()
@@ -985,6 +998,7 @@
             } else {
               this.form = {
                 inspected_date: moment().format(),
+                inspected_time: moment().format('HH:mm'),
                 inspected_by: {!! Auth::user()->role->id !!},
                 container_photo: []
               }

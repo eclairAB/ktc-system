@@ -47,11 +47,19 @@
                           <label for="id_no" class="form-control-placeholder"> EIR No.</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('MMMM DD, YYYY')" class="form-control" style="height: 37px;">
+                          <vuejs-datepicker
+                            v-model="form.inspected_date"
+                            :input-class="errors.inspected_date ? 'isError form-control isDate' : 'form-control isDate'"
+                            :typeable="true"
+                            name="inspected_date"
+                            :format="dateFormatFull"
+                            :required="true"
+                          >
+                          </vuejs-datepicker>
                           <label for="id_no" class="form-control-placeholder"> Inspection Date</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
-                          <input type="text" name="id_no" id="id_no" disabled :value="moment(form.inspected_date).format('hh:mm A')" class="form-control" style="height: 37px;">
+                          <input type="time" name="id_no" id="id_no" v-model="form.inspected_time" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
@@ -256,24 +264,26 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-date-dropdown@1.0.5/dist/vue-date-dropdown.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuejs-datepicker@1.6.2/dist/vuejs-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 
     <script type="text/javascript">
       $(function () {
-          $('[id*=container_no]').keyup(function () {
-              var number = $(this).val();
-              var max = 13;
-              if (number.length > max) {
-                  $(this).val($(this).val().substr(0, max));
-              }
-              if (number.length == 4) {
-                  $(this).val($(this).val() + '-');
-              }
-              else if (number.length == 11) {
-                  $(this).val($(this).val() + '-');
-              }
+          $('#container_no').keyup(function() {
+            var number = $(this).val();
+            var max = 13;
+            if (number.length > max) {
+              $(this).val($(this).val().substr(0, max));
+            }
+            var foo = $(this).val().split("-").join("");
+            if (foo.length > 0) {
+              foo = foo.replace(/(.{4})(.{6})(.{1})/g, "$1-$2-$3");
+            }
+            document.getElementById('containerReleasing').__vue__.setContainerNumber(foo)
+            $(this).val(foo);
           });
       });
     </script>
@@ -282,6 +292,9 @@
     <script type="text/javascript">
       var app = new Vue({
         el: '#containerReleasing',
+        components: {
+          vuejsDatepicker
+        },
         data: {
           form: {
             container_photo: []
@@ -297,8 +310,15 @@
           loading: false
         },
         methods:{
+          setContainerNumber (item) {
+            this.$set(this.form, 'container_no', item)
+            this.searchContainer()
+          },
           dateFormat(date) {
             return moment(date).format('MM/DD/yyyy');
+          },
+          dateFormatFull (date) {
+            return moment(date).format('MMMM DD, YYYY');
           },
           searchContainer () {
             if (this.form.container_no.length === 13) {
@@ -367,6 +387,7 @@
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
             await axios.post('/admin/create/releasing', this.form).then(async data => {
               this.loading = false
               this.errors = {}
@@ -436,6 +457,7 @@
                   this.container_photo.push(wawex)
                 }
                 this.form.container_photo = this.container_photo
+                this.form.inspected_time = moment(this.form.inspected_date).format('HH:mm')
                 this.isOk = true
                 document.getElementById("updateBtn").style.display = 'inherit';
               }).catch(error => {
@@ -444,6 +466,7 @@
             } else {
               this.form = {
                 inspected_date: moment().format(),
+                inspected_time: moment().format('HH:mm'),
                 inspected_by: {!! Auth::user()->role->id !!},
                 container_photo: []
               }
