@@ -255,7 +255,7 @@
                                 <td class="border-b" style="padding: 5px; font-size: 10px;">@{{key + 1}}.) @{{item.description}}</td>
                                 <td>
                                   <div style="display: flex; justify-content: center; width: 100%">
-                                    <button class="btn btn-primary" style="margin: 5px; height: 25px; font-size: 10px;" @click="item.id ? editActual(item) : editFromList(key)">Edit</button>
+                                    <button class="btn btn-primary" style="margin: 5px; height: 25px; font-size: 10px;" @click="item.id ? editActual(item, key) : editFromList(item, key)">Edit</button>
                                     <button class="btn btn-danger" style="margin: 5px; height: 25px; font-size: 10px;" @click="item.id ? deleteActual(item) : deleteFromList(key)">Delete</button>
                                   </div>
                                 </td>
@@ -273,7 +273,7 @@
                           <div class="modal-dialog" role="document" style="">
                             <div class="modal-content">
                               <div class="modal-header" style="display: flex; align-items: center;">
-                                <h5 class="modal-title" id="dialogLabel">Add Damage</h5>
+                                <h5 class="modal-title" id="dialogLabel">@{{ isEdit === true ? 'Edit Damage' : 'Add Damage' }}</h5>
                                 <button type="button" @click="closeDialog" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: auto;">
                                   <span aria-hidden="true">&times;</span>
                                 </button>
@@ -282,6 +282,8 @@
                               <div class="modal-body" style="padding-bottom: 0;">
                                 <div class="col-lg-12 form-group mt-3">
                                   <autocomplete
+                                    ref="autocompleteRepair"
+                                    base-class="repair autocomplete"
                                     :search="searchRepair"
                                     :get-result-value="getResultRepair"
                                     @update="handleUpdateRepair"
@@ -293,6 +295,8 @@
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
                                   <autocomplete
+                                    ref="autocompleteComponent"
+                                    base-class="component autocomplete"
                                     :search="searchComponent"
                                     :get-result-value="getResultComponent"
                                     @update="handleUpdateComponent"
@@ -303,6 +307,8 @@
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
                                   <autocomplete
+                                    ref="autocompleteDamage"
+                                    base-class="damage autocomplete"
                                     :search="searchDamage"
                                     :get-result-value="getResultDamage"
                                     @update="handleUpdateDamage"
@@ -343,7 +349,7 @@
                               <div class="modal-footer" style="text-align: left !important; padding-top: 0;">
                                 <button type="button" class="btn btn-primary" style="margin-top: 15px;" @click="clearDamage"> Clear</button>
                                 <button type="button" class="btn btn-danger" style="margin-top: 15px;" @click="cancelDamage"> Cancel</button>
-                                <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" @click="checkDamage"> Save</button>
+                                <button type="button" class="btn btn-primary" style="background-color: #2ecc71; margin-top: 15px;" @click="isEdit === true ? updateDamage() : form.id ? addNewDamage() : checkDamage()">@{{ isEdit === true ? 'Update' : 'Save' }}</button>
                               </div>
                             </div>
                           </div>
@@ -505,6 +511,12 @@
                   $(this).val($(this).val() + '-');
               }
           });
+          // $('.repair').find(':input').on( 'keydown', function( e ) {
+          //   var enterkey = $.Event( "keyup", { keyCode: 13 } );
+          //   if( e.which == 9 ) {
+          //     $('.repair').find(':input').trigger(enterkey);
+          //   }
+          // });
       });
     </script>
 
@@ -562,6 +574,7 @@
           damageresults: [],
           selectedIndexDamage: -1,
           submittedDamage: false,
+          isEdit: false
         },
         watch: {
           'damages': {
@@ -607,7 +620,7 @@
             this.handleSubmitRepair(result)
           },
           handleSubmitRepair(result) {
-            this.$set(this.damages, 'repair', result.name)
+            this.$set(this.damages, 'repair', result)
             this.$set(this.damages, 'repair_id', result.id)
             this.pasmo()
           },
@@ -637,7 +650,7 @@
             this.handleSubmitComponent(result)
           },
           handleSubmitComponent(result) {
-            this.$set(this.damages, 'component', result.name)
+            this.$set(this.damages, 'component', result)
             this.$set(this.damages, 'component_id', result.id)
             this.pasmo()
           },
@@ -667,14 +680,26 @@
             this.handleSubmitDamage(result)
           },
           handleSubmitDamage(result) {
-            this.$set(this.damages, 'damage', result.name)
+            this.$set(this.damages, 'damage', result)
             this.$set(this.damages, 'damage_id', result.id)
             this.pasmo()
           },
-          editActual () {
+          editActual (payload, key) {
+            this.isEdit = true
+            this.damages = payload
+            this.$set(this.damages, 'key', key)
+            this.$refs.autocompleteRepair.value = payload.repair.code
+            this.$refs.autocompleteComponent.value = payload.component.code
+            this.$refs.autocompleteDamage.value = payload.damage.code
             $('#dialog').modal({backdrop: 'static', keyboard: false});
           },
-          editFromList () {
+          editFromList (payload, key) {
+            this.isEdit = true
+            this.damages = payload
+            this.$set(this.damages, 'key', key)
+            this.$refs.autocompleteRepair.value = payload.repair.code
+            this.$refs.autocompleteComponent.value = payload.component.code
+            this.$refs.autocompleteDamage.value = payload.damage.code
             $('#dialog').modal({backdrop: 'static', keyboard: false});
           },
           deleteFromList (payload) {
@@ -700,12 +725,26 @@
             this.damages = {}
             this.damageError = {}
             this.input = {}
+            this.$refs.autocompleteRepair.value = ''
+            this.$refs.autocompleteComponent.value = ''
+            this.$refs.autocompleteDamage.value = ''
+            this.repairList = []
+            this.componentresults = []
+            this.selectedIndexComponent = -1
+            this.submittedComponent = false
+            this.repairresults = []
+            this.selectedIndexRepair = -1
+            this.submittedRepair = false
+            this.damageresults = []
+            this.selectedIndexDamage = -1
+            this.submittedDamage = false
+            this.isEdit = false
           },
           cancelDamage () {
             $('#dialog').modal('hide');
           },
           pasmo () {
-            this.damages.description = (this.damages.repair ? this.damages.repair : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage : '') + ' ' + (this.damages.component ? this.damages.component : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}CM` : '') + '' + (this.damages.width ? `X${this.damages.width}CM` : '')
+            this.damages.description = (this.damages.repair ? this.damages.repair.code : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage.code : '') + ' ' + (this.damages.component ? this.damages.component.code : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}CM` : '') + '' + (this.damages.width ? `X${this.damages.width}CM` : '')
           },
           async checkDamage () {
             await axios.post('/admin/check/damage', this.damages).then(data => {
@@ -719,9 +758,7 @@
             $('#dialog').modal({backdrop: 'static', keyboard: false});
           },
           closeDialog () {
-            this.damages = {}
-            this.damageError = {}
-            this.input = {}
+            this.clearDamage()
             $('#dialog').modal('hide');
           },
           dateFormat(date) {
@@ -839,6 +876,24 @@
             }
             this.form.container_photo = this.container_photo
           },
+          updateDamage () {
+            if (this.damages.id) {
+              axios.post(`/admin/update/damage`, this.damages).then(data => { 
+                this.getDamages()
+                this.closeDialog()
+              })
+            } else {
+              Vue.set(this.damageList, this.damages.key, this.damages)
+              this.closeDialog()
+            }
+          },
+          addNewDamage () {
+            this.$set(this.damages, 'receiving_id', this.form.id)
+            axios.post(`/admin/create/damage`, this.damages).then(data => {
+              this.getDamages()
+              this.closeDialog()
+            })
+          },
           async saveReceiving () {
             this.loading = true
             let currentUrl = window.location.href
@@ -851,7 +906,6 @@
               for (let i = 0; i < this.damageList.length; i++) {
                 this.$set(this.damageList[i], 'receiving_id', (+data.data[0].container_id))
                 axios.post(`/admin/create/damage`, this.damageList[i]).then(data2 => {
-                  // console.log(i)
                 })
               }
               let customId = data.data[0].container_id
