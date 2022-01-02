@@ -1034,7 +1034,7 @@
                   }
                 }
 
-                if (classList.value && !classList.value.includes("vs__dropdown-menu")) {
+                if (classList.value) {
                   const focusedDropdownItem = document.querySelector(`input.vs__search[aria-controls="${aria_control}"]`).attributes['aria-activedescendant']
 
                   if (focusedDropdownItem) {
