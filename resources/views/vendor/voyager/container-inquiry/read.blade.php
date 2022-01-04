@@ -231,6 +231,14 @@
                                         @{{containerInfo.client && containerInfo.client.code_name}}
                                     </span>
                                 </div>
+                                <div v-if="containerInfo.damages">
+                                    <span>
+                                        Damages:
+                                    </span>
+                                    <li>
+                                        @{{containerInfo.damages && containerInfo.damages.description}}
+                                    </li>
+                                </div>
                                 {{-- <div v-if="containerInfo">
                                     <span>
                                         Photos:
