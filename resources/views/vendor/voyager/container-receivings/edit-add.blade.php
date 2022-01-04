@@ -387,6 +387,16 @@
                     <button style="width: 100px;" class="btn btn-primary save" :disabled="loading === true" @click="form.id ? upadteReceiving() : saveReceiving() ">@{{loading === false ? (form.id ? 'Update' : 'Save') : 'Loading...'}}</button>
                   </div>
 
+                  <div class="modal fade" id="savingDialog" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
+                    <div class="modal-success-dialog modal-dialog" role="document" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                      <div class="modal-content">
+                        <div class="modal-body savingDiv" style="margin-top: 15px">
+                          <p class="saving">Saving<span>.</span><span>.</span><span>.</span></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
 
             </div>
@@ -965,9 +975,8 @@
             return y
           },
           async saveReceiving () {
+            $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.loading = true
-
-            this.bindTabs()
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
@@ -975,6 +984,7 @@
             this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
             await axios.post('/admin/create/receiving', this.form).then(async data => {
               this.loading = false
+              $('#savingDialog').modal('hide');
               this.errors = {}
               for (let i = 0; i < this.damageList.length; i++) {
                 this.$set(this.damageList[i], 'receiving_id', (+data.data[0].container_id))
@@ -993,23 +1003,25 @@
                   window.location = customUrl
                 }, 100);
               })
-              
             }).catch(error => {
-              this.clearTabs()
               this.loading = false
+              $('#savingDialog').modal('hide');
               this.errors = error.response.data.errors
             })
           },
           async upadteReceiving () {
+            $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.loading = true
             this.form.inspected_by = this.form.inspected_by.id
             await axios.post('/admin/update/receiving', this.form).then(async data => {
               this.loading = false
+              $('#savingDialog').modal('hide');
               this.errors = {}
               let customUrl = `${window.location.origin}/admin/container-inquiry/${this.form.container_no}`
               window.location = customUrl
             }).catch(error => {
               this.loading = false
+              $('#savingDialog').modal('hide');
               this.errors = error.response.data.errors
             })
           },

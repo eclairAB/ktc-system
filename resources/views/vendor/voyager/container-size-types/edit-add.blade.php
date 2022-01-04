@@ -55,6 +55,17 @@
                                 <div style="margin-left: 5px;">@{{ customload === false ? (form.id ? 'Update' : 'Save') : 'Loading' }}</div>
                             </button>
                         </div>
+
+                        <div class="modal fade" id="savingDialog" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
+                            <div class="modal-success-dialog modal-dialog" role="document" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                              <div class="modal-content">
+                                <div class="modal-body savingDiv" style="margin-top: 15px;">
+                                  <p class="saving">Saving<span>.</span><span>.</span><span>.</span></p>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+
                     </div>
 
                     <iframe id="form_target" name="form_target" style="display:none"></iframe>
@@ -202,28 +213,34 @@
         },
         methods:{
           async saveSizeType () {
+            $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.customload = true
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             await axios.post('/admin/create/sizeType', this.form).then(data => {
               this.customload = false
+              $('#savingDialog').modal('hide');
               this.errors = {}
               window.location = checkedit
             }).catch(error => {
               this.customload = false
+              $('#savingDialog').modal('hide');
               this.errors = error.response.data.errors
             })
           },
           async updateSizeType () {
+            $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.customload = true
             let currentUrl = window.location.origin
             let browseUrl = `${currentUrl}/admin/container-size-types`
             await axios.post('/admin/update/sizeType', this.form).then(data => {
               this.customload = false
+              $('#savingDialog').modal('hide');
               this.errors = {}
               window.location = browseUrl
             }).catch(error => {
               this.customload = false
+              $('#savingDialog').modal('hide');
               this.errors = error.response.data.errors
             })
           },
