@@ -312,12 +312,14 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         {
             $receiving = ContainerReceiving::where('container_no', $container_no)
                 ->with('client', 'inspector', 'photos', 'sizeType', 'type', 'yardLocation', 'containerClass')
+                ->orderBy('id','DESC')
                 ->paginate(
                     $perPage = 15, $columns = ['*'], $pageName = 'receiving_page'
                 );
 
             $releasing = ContainerReleasing::where('container_no', $container_no)
                 ->with('inspector', 'photos', 'container.receiving.client')
+                ->orderBy('id','DESC')
                 ->paginate(
                     $perPage = 15, $columns = ['*'], $pageName = 'releasing_page'
                 );
