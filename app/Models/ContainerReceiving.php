@@ -64,4 +64,9 @@ class ContainerReceiving extends Model
     {
         return $this->HasOne(Type::class, 'id', 'type_id');
     }
+
+    public function damages()
+    {
+        return $this->HasMany(ReceivingDamage::class, 'receiving_id','id');
+    }
 }
