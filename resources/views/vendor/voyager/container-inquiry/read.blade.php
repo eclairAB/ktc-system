@@ -220,9 +220,6 @@
                                         @{{containerInfo.remarks}}
                                     </span>
                                 </div>
-
-
-                                <br>
                                 <div v-if="containerInfo.client">
                                     <span>
                                         Client:
@@ -235,9 +232,13 @@
                                     <span>
                                         Damages:
                                     </span>
-                                    <li>
-                                        @{{containerInfo.damages && containerInfo.damages.description}}
-                                    </li>
+                                </div>
+                                <div>
+                                    <ul>
+                                        <li v-for="(item, key) in containerInfo.damages" :key="key">
+                                            @{{item.description}}
+                                        </li>
+                                    </ul>
                                 </div>
                                 {{-- <div v-if="containerInfo">
                                     <span>
