@@ -207,6 +207,7 @@
                             v-model="form.consignee"
                             :disabled="!isOk"
                             :class="errors.consignee ? 'isError form-control' : 'form-control'"
+                            style="height: 37px; text-transform:uppercase"
                           >
                           <label for="consignee" class="form-control-placeholder"> Consignee</label>
                           <div class="customErrorText"><small>@{{ errors.consignee ? errors.consignee[0] : '' }}</small></div>
@@ -220,6 +221,7 @@
                             v-model="form.hauler"
                             :disabled="!isOk"
                             :class="errors.hauler ? 'isError form-control' : 'form-control'"
+                            style="height: 37px; text-transform:uppercase"
                           >
                           <label for="hauler" class="form-control-placeholder"> Hauler</label>
                           <div class="customErrorText"><small>@{{ errors.hauler ? errors.hauler[0] : '' }}</small></div>
@@ -233,6 +235,7 @@
                             v-model="form.plate_no"
                             :disabled="!isOk"
                             :class="errors.plate_no ? 'isError form-control' : 'form-control'"
+                            style="height: 37px; text-transform:uppercase"
                           >
                           <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
                           <div class="customErrorText"><small>@{{ errors.plate_no ? errors.plate_no[0] : '' }}</small></div>
@@ -248,6 +251,7 @@
                             v-model="form.remarks" 
                             :disabled="!isOk" 
                             :class="errors.remarks ? 'isError form-control' : 'form-control'"
+                            style="height: 37px; text-transform:uppercase"
                           >
                           <label for="consignee" class="form-control-placeholder"> Remarks</label>
                         </div>
@@ -290,7 +294,7 @@
                                 <div class="col-lg-12 form-group mt-3">
                                   <autocomplete
                                     ref="autocompleteRepair"
-                                    base-class="repair autocomplete"
+                                    base-class="uppercaseText repair autocomplete"
                                     :search="searchRepair"
                                     :get-result-value="getResultRepair"
                                     @update="handleUpdateRepair"
@@ -303,7 +307,7 @@
                                 <div class="col-lg-12 form-group mt-3">
                                   <autocomplete
                                     ref="autocompleteComponent"
-                                    base-class="component autocomplete"
+                                    base-class="comuppercaseText ponent autocomplete"
                                     :search="searchComponent"
                                     :get-result-value="getResultComponent"
                                     @update="handleUpdateComponent"
@@ -315,7 +319,7 @@
                                 <div class="col-lg-12 form-group mt-3">
                                   <autocomplete
                                     ref="autocompleteDamage"
-                                    base-class="damage autocomplete"
+                                    base-class="uppercaseText damage autocomplete"
                                     :search="searchDamage"
                                     :get-result-value="getResultDamage"
                                     @update="handleUpdateDamage"
@@ -325,19 +329,19 @@
                                   <label for="damage" class="form-control-placeholder"> Damage</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="margin-top: 10px;">
+                                  <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="location" class="form-control-placeholder"> Location</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px;">
+                                  <input type="text" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="length" class="form-control-placeholder"> Length</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px;">
+                                  <input type="text" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="width" class="form-control-placeholder"> Width</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px;">
+                                  <input type="text" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="quantity" class="form-control-placeholder"> Quantity</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
@@ -769,7 +773,11 @@
             $('#dialog').modal('hide');
           },
           pasmo () {
-            this.damages.description = (this.damages.repair ? this.damages.repair.name : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name : '') + ' ' + (this.damages.component ? this.damages.component.name : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}` : '') + '' + (this.damages.width ? `X${this.damages.width}` : '')
+            this.damages.description = (this.damages.repair ? this.damages.repair.name.toUpperCase() : '') + ' ' + (this.damages.location ? `(${this.damages.location.toUpperCase()})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name.toUpperCase() : '') + ' ' + (this.damages.component ? this.damages.component.name.toUpperCase() : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity.toUpperCase()})` : '') + ' ' + (this.damages.length ? `${this.damages.length.toUpperCase()}` : '') + '' + (this.damages.width ? `X${this.damages.width.toUpperCase()}` : '')
+            this.$set(this.damages, 'location', this.damages.location.toUpperCase())
+            this.$set(this.damages, 'length', this.damages.length.toUpperCase())
+            this.$set(this.damages, 'width', this.damages.width.toUpperCase())
+            this.$set(this.damages, 'quantity', this.damages.quantity.toUpperCase())
           },
           async checkDamage () {
             this.damageLoad = true
@@ -980,6 +988,10 @@
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
+            this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
+            this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
+            this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             this.$set(this.form, 'manufactured_date', this.pasmoDate)
             this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
             await axios.post('/admin/create/receiving', this.form).then(async data => {
@@ -1013,6 +1025,11 @@
             $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.loading = true
             this.form.inspected_by = this.form.inspected_by.id
+            this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
+            this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
+            this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
+            this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             await axios.post('/admin/update/receiving', this.form).then(async data => {
               this.loading = false
               $('#savingDialog').modal('hide');
