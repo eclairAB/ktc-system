@@ -561,16 +561,18 @@
           classList: [],
           yardList: [],
           images: [],
-          choosenSize: {},
-          choosenType: {},
-          choosenClient: {},
-          choosenYard: {},
-          choosenClass: {},
           classSearch: '',
           sizeSearch: '',
-          typeSearch: '',
           clientSearch: '',
           yardSearch: '',
+          dropDownForms: {
+            size_type: '',
+            client_id: '',
+            yard_location: '',
+            type_id: '',
+            class: '',
+            empty_loaded: '',
+          },
           emptyloaded: [
             'Empty',
             'Loaded'
@@ -578,7 +580,6 @@
           errors: {},
           containerError: {},
           isOk: false,
-          customload: false,
           damages: {},
           damageError: {},
           input: {},
@@ -934,18 +935,35 @@
               this.damageLoad = false
             })
           },
+          bindTabs () {
+            this.form.size_type = this.dropDownForms.size_type
+            this.form.client_id = this.dropDownForms.client_id
+            this.form.yard_location = this.dropDownForms.yard_location
+            this.form.type_id = this.dropDownForms.type_id
+            this.form.class = this.dropDownForms.class
+            this.form.empty_loaded = this.dropDownForms.empty_loaded
+          },
+          clearTabs() {
+            this.form.size_type = ""
+            this.form.client_id = ""
+            this.form.yard_location = ""
+            this.form.type_id = ""
+            this.form.class = ""
+            this.form.empty_loaded = ""
+          },
           async saveReceiving () {
             $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.loading = true
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
-            this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
-            this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
-            this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
-            this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
-            this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
+            this.form.container_no && this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.form.consignee && this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
+            this.form.hauler && this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
+            this.form.plate_no && this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
+            this.form.remarks && this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             this.$set(this.form, 'manufactured_date', this.pasmoDate)
             this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
+            this.bindTabs()
             await axios.post('/admin/create/receiving', this.form).then(async data => {
               this.loading = false
               $('#savingDialog').modal('hide');
@@ -968,6 +986,7 @@
                 }, 100);
               })
             }).catch(error => {
+              this.clearTabs()
               this.loading = false
               $('#savingDialog').modal('hide');
               this.errors = error.response.data.errors
@@ -977,11 +996,11 @@
             $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.loading = true
             this.form.inspected_by = this.form.inspected_by.id
-            this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
-            this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
-            this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
-            this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
-            this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
+            this.form.container_no && this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.form.consignee && this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
+            this.form.hauler && this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
+            this.form.plate_no && this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
+            this.form.remarks && this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             await axios.post('/admin/update/receiving', this.form).then(async data => {
               this.loading = false
               $('#savingDialog').modal('hide');
@@ -1111,6 +1130,7 @@
 
                     if (selectedDisplayElement) { // if has active selection
                       if (a) {
+                        assignToVueDOM(focusedDropdownItem.nodeValue, a.innerHTML)
                         displayElement.children[0].innerHTML = a.innerHTML
                       }
                     }
@@ -1119,6 +1139,7 @@
                         if (!displayElement.children[1]) {
 
                           setTimeout(() => {
+                            assignToVueDOM(focusedDropdownItem.nodeValue, document.getElementById(aria_control).children[0].innerHTML)
                             var spanElement = document.createElement('span')
                             spanElement.innerHTML = document.getElementById(aria_control).children[0].innerHTML
                             spanElement.classList = ['vs__selected']
@@ -1154,6 +1175,36 @@
           if (item.classList.contains("vs__clear")) {
             item.style.display = "none"
           }
+        }
+      }
+
+      function trimString(x) {
+        return _.unescape(x.replace(/^\s+|\s+$/gm,''))
+      }
+
+      function assignToVueDOM(vselect, value) {
+        let vs = vselect.split('__option-')[0]
+        const vsi = vs.split('vs')[1]
+        const itemIndex = vselect.split('__option-')[1]
+        const val = trimString(value)
+
+        if (vsi == 1) {
+          app.$data.dropDownForms.size_type = app.$data.sizeTypeList[itemIndex].id
+        }
+        if (vsi == 2) {
+          app.$data.dropDownForms.client_id = app.$data.clientList[itemIndex].id
+        }
+        if (vsi == 3) {
+          app.$data.dropDownForms.yard_location = app.$data.yardList[itemIndex].id
+        }
+        if (vsi == 4) {
+          app.$data.dropDownForms.type_id = app.$data.typeList[itemIndex].id
+        }
+        if (vsi == 5) {
+          app.$data.dropDownForms.class = app.$data.classList[itemIndex].id
+        }
+        if (vsi == 6) {
+          app.$data.dropDownForms.empty_loaded = val
         }
       }
 
