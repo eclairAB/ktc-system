@@ -331,3 +331,6 @@ th {
   text-align: center; 
   color: #249dff;
 }
+.uppercaseText {
+  text-transform: uppercase;
+}

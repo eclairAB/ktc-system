@@ -207,6 +207,7 @@
                             v-model="form.consignee"
                             :disabled="!isOk"
                             :class="errors.consignee ? 'isError form-control' : 'form-control'"
+                            style="height: 37px; text-transform:uppercase"
                           >
                           <label for="consignee" class="form-control-placeholder"> Consignee</label>
                           <div class="customErrorText"><small>@{{ errors.consignee ? errors.consignee[0] : '' }}</small></div>
@@ -220,6 +221,7 @@
                             v-model="form.hauler"
                             :disabled="!isOk"
                             :class="errors.hauler ? 'isError form-control' : 'form-control'"
+                            style="height: 37px; text-transform:uppercase"
                           >
                           <label for="hauler" class="form-control-placeholder"> Hauler</label>
                           <div class="customErrorText"><small>@{{ errors.hauler ? errors.hauler[0] : '' }}</small></div>
@@ -233,6 +235,7 @@
                             v-model="form.plate_no"
                             :disabled="!isOk"
                             :class="errors.plate_no ? 'isError form-control' : 'form-control'"
+                            style="height: 37px; text-transform:uppercase"
                           >
                           <label for="plate_no" class="form-control-placeholder"> Plate No.</label>
                           <div class="customErrorText"><small>@{{ errors.plate_no ? errors.plate_no[0] : '' }}</small></div>
@@ -248,6 +251,7 @@
                             v-model="form.remarks" 
                             :disabled="!isOk" 
                             :class="errors.remarks ? 'isError form-control' : 'form-control'"
+                            style="height: 37px; text-transform:uppercase"
                           >
                           <label for="consignee" class="form-control-placeholder"> Remarks</label>
                         </div>
@@ -290,7 +294,7 @@
                                 <div class="col-lg-12 form-group mt-3">
                                   <autocomplete
                                     ref="autocompleteRepair"
-                                    base-class="repair autocomplete"
+                                    base-class="uppercaseText repair autocomplete"
                                     :search="searchRepair"
                                     :get-result-value="getResultRepair"
                                     @update="handleUpdateRepair"
@@ -303,7 +307,7 @@
                                 <div class="col-lg-12 form-group mt-3">
                                   <autocomplete
                                     ref="autocompleteComponent"
-                                    base-class="component autocomplete"
+                                    base-class="comuppercaseText ponent autocomplete"
                                     :search="searchComponent"
                                     :get-result-value="getResultComponent"
                                     @update="handleUpdateComponent"
@@ -315,7 +319,7 @@
                                 <div class="col-lg-12 form-group mt-3">
                                   <autocomplete
                                     ref="autocompleteDamage"
-                                    base-class="damage autocomplete"
+                                    base-class="uppercaseText damage autocomplete"
                                     :search="searchDamage"
                                     :get-result-value="getResultDamage"
                                     @update="handleUpdateDamage"
@@ -325,19 +329,19 @@
                                   <label for="damage" class="form-control-placeholder"> Damage</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="margin-top: 10px;">
+                                  <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="location" class="form-control-placeholder"> Location</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px;">
+                                  <input type="text" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="length" class="form-control-placeholder"> Length</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px;">
+                                  <input type="text" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="width" class="form-control-placeholder"> Width</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px;">
+                                  <input type="text" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="quantity" class="form-control-placeholder"> Quantity</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
@@ -557,16 +561,18 @@
           classList: [],
           yardList: [],
           images: [],
-          choosenSize: {},
-          choosenType: {},
-          choosenClient: {},
-          choosenYard: {},
-          choosenClass: {},
           classSearch: '',
           sizeSearch: '',
-          typeSearch: '',
           clientSearch: '',
           yardSearch: '',
+          dropDownForms: {
+            size_type: '',
+            client_id: '',
+            yard_location: '',
+            type_id: '',
+            class: '',
+            empty_loaded: '',
+          },
           emptyloaded: [
             'Empty',
             'Loaded'
@@ -574,7 +580,6 @@
           errors: {},
           containerError: {},
           isOk: false,
-          customload: false,
           damages: {},
           damageError: {},
           input: {},
@@ -769,7 +774,11 @@
             $('#dialog').modal('hide');
           },
           pasmo () {
-            this.damages.description = (this.damages.repair ? this.damages.repair.name : '') + ' ' + (this.damages.location ? `(${this.damages.location})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name : '') + ' ' + (this.damages.component ? this.damages.component.name : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity})` : '') + ' ' + (this.damages.length ? `${this.damages.length}` : '') + '' + (this.damages.width ? `X${this.damages.width}` : '')
+            this.damages.description = (this.damages.repair ? this.damages.repair.name.toUpperCase() : '') + ' ' + (this.damages.location ? `(${this.damages.location.toUpperCase()})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name.toUpperCase() : '') + ' ' + (this.damages.component ? this.damages.component.name.toUpperCase() : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity.toUpperCase()})` : '') + ' ' + (this.damages.length ? `${this.damages.length.toUpperCase()}` : '') + '' + (this.damages.width ? `X${this.damages.width.toUpperCase()}` : '')
+            this.$set(this.damages, 'location', this.damages.location.toUpperCase())
+            this.$set(this.damages, 'length', this.damages.length.toUpperCase())
+            this.$set(this.damages, 'width', this.damages.width.toUpperCase())
+            this.$set(this.damages, 'quantity', this.damages.quantity.toUpperCase())
           },
           async checkDamage () {
             this.damageLoad = true
@@ -926,14 +935,35 @@
               this.damageLoad = false
             })
           },
+          bindTabs () {
+            this.form.size_type = this.dropDownForms.size_type
+            this.form.client_id = this.dropDownForms.client_id
+            this.form.yard_location = this.dropDownForms.yard_location
+            this.form.type_id = this.dropDownForms.type_id
+            this.form.class = this.dropDownForms.class
+            this.form.empty_loaded = this.dropDownForms.empty_loaded
+          },
+          clearTabs() {
+            this.form.size_type = ""
+            this.form.client_id = ""
+            this.form.yard_location = ""
+            this.form.type_id = ""
+            this.form.class = ""
+            this.form.empty_loaded = ""
+          },
           async saveReceiving () {
             $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.loading = true
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
-            this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.form.container_no && this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.form.consignee && this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
+            this.form.hauler && this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
+            this.form.plate_no && this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
+            this.form.remarks && this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             this.$set(this.form, 'manufactured_date', this.pasmoDate)
             this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
+            this.bindTabs()
             await axios.post('/admin/create/receiving', this.form).then(async data => {
               this.loading = false
               $('#savingDialog').modal('hide');
@@ -956,6 +986,7 @@
                 }, 100);
               })
             }).catch(error => {
+              this.clearTabs()
               this.loading = false
               $('#savingDialog').modal('hide');
               this.errors = error.response.data.errors
@@ -965,6 +996,11 @@
             $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.loading = true
             this.form.inspected_by = this.form.inspected_by.id
+            this.form.container_no && this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.form.consignee && this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
+            this.form.hauler && this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
+            this.form.plate_no && this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
+            this.form.remarks && this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             await axios.post('/admin/update/receiving', this.form).then(async data => {
               this.loading = false
               $('#savingDialog').modal('hide');
@@ -1094,6 +1130,7 @@
 
                     if (selectedDisplayElement) { // if has active selection
                       if (a) {
+                        assignToVueDOM(focusedDropdownItem.nodeValue, a.innerHTML)
                         displayElement.children[0].innerHTML = a.innerHTML
                       }
                     }
@@ -1102,6 +1139,7 @@
                         if (!displayElement.children[1]) {
 
                           setTimeout(() => {
+                            assignToVueDOM(focusedDropdownItem.nodeValue, document.getElementById(aria_control).children[0].innerHTML)
                             var spanElement = document.createElement('span')
                             spanElement.innerHTML = document.getElementById(aria_control).children[0].innerHTML
                             spanElement.classList = ['vs__selected']
@@ -1137,6 +1175,36 @@
           if (item.classList.contains("vs__clear")) {
             item.style.display = "none"
           }
+        }
+      }
+
+      function trimString(x) {
+        return _.unescape(x.replace(/^\s+|\s+$/gm,''))
+      }
+
+      function assignToVueDOM(vselect, value) {
+        let vs = vselect.split('__option-')[0]
+        const vsi = vs.split('vs')[1]
+        const itemIndex = vselect.split('__option-')[1]
+        const val = trimString(value)
+
+        if (vsi == 1) {
+          app.$data.dropDownForms.size_type = app.$data.sizeTypeList[itemIndex].id
+        }
+        if (vsi == 2) {
+          app.$data.dropDownForms.client_id = app.$data.clientList[itemIndex].id
+        }
+        if (vsi == 3) {
+          app.$data.dropDownForms.yard_location = app.$data.yardList[itemIndex].id
+        }
+        if (vsi == 4) {
+          app.$data.dropDownForms.type_id = app.$data.typeList[itemIndex].id
+        }
+        if (vsi == 5) {
+          app.$data.dropDownForms.class = app.$data.classList[itemIndex].id
+        }
+        if (vsi == 6) {
+          app.$data.dropDownForms.empty_loaded = val
         }
       }
 

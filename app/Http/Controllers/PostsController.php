@@ -86,8 +86,8 @@ class PostsController extends Controller
     public function createClient(ValidateClientField $request)
     {
         $account = $this->createUser($request, 'client');
-        if( $account=='exists') return 'Username already in use.';
-        elseif ($account=='no_role') return 'Role "client" does not exist!';
+        if( $account=='exists') return response('Username already in use.', 400);
+        elseif ($account=='no_role') return response('Role "client" does not exist!', 400);
 
         $params = [
             'account_id' => $account->id,
@@ -104,8 +104,8 @@ class PostsController extends Controller
     public function createStaff(ValidateStaffField $request)
     {
         $account = $this->createUser($request, 'staff');
-        if( $account=='exists') return 'Username already in use.';
-        elseif ($account=='no_role') return 'Role "staff" does not exist!';
+        if( $account=='exists') return response('Username already in use.', 400);
+        elseif ($account=='no_role') return response('Role "staff" does not exist!', 400);
 
         $params = [
             'account_id' => $account->id,
@@ -124,8 +124,8 @@ class PostsController extends Controller
     public function createChecker(ValidateCheckerField $request)
     {
         $account = $this->createUser($request, 'checker');
-        if( $account=='exists') return 'Username already in use.';
-        elseif ($account=='no_role') return 'Role "checker" does not exist!';
+        if( $account=='exists') return response('Username already in use.', 400);
+        elseif ($account=='no_role') return response('Role "checker" does not exist!', 400);
 
         $params = [
             'account_id' => $account->id,
