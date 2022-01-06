@@ -101,33 +101,33 @@
                           <div style="font-weight: 700; font-size: 15px; color: black;">Shipment Details</div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :disabled="!isOk" name="consignee" id="consignee" v-model="form.consignee" style="height: 37px;" :class="errors.consignee ? 'isError form-control' : 'form-control'">
+                          <input type="text" :disabled="!isOk" name="consignee" id="consignee" v-model="form.consignee" style="height: 37px;  text-transform: uppercase;" :class="errors.consignee ? 'isError form-control' : 'form-control'">
                           <label for="consignee" class="form-control-placeholder"> Consignee <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.consignee ? errors.consignee[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :disabled="!isOk" name="hauler" id="hauler" v-model="form.hauler" style="height: 37px;" :class="errors.hauler ? 'isError form-control' : 'form-control'">
+                          <input type="text" :disabled="!isOk" name="hauler" id="hauler" v-model="form.hauler" style="height: 37px;  text-transform: uppercase;" :class="errors.hauler ? 'isError form-control' : 'form-control'">
                           <label for="hauler" class="form-control-placeholder"> Hauler <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.hauler ? errors.hauler[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :disabled="!isOk" name="plate_no" id="plate_no" v-model="form.plate_no" style="height: 37px;" :class="errors.plate_no ? 'isError form-control' : 'form-control'">
+                          <input type="text" :disabled="!isOk" name="plate_no" id="plate_no" v-model="form.plate_no" style="height: 37px;  text-transform: uppercase;" :class="errors.plate_no ? 'isError form-control' : 'form-control'">
                           <label for="plate_no" class="form-control-placeholder"> Plate No. <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.plate_no ? errors.plate_no[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :disabled="!isOk" name="booking_no" id="booking_no" v-model="form.booking_no" style="height: 37px;" :class="errors.booking_no ? 'isError form-control' : 'form-control'">
+                          <input type="text" :disabled="!isOk" name="booking_no" id="booking_no" v-model="form.booking_no" style="height: 37px;  text-transform: uppercase;" :class="errors.booking_no ? 'isError form-control' : 'form-control'">
                           <label for="booking_no" class="form-control-placeholder"> Booking No. <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.booking_no ? errors.booking_no[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input type="text" :disabled="!isOk" name="seal_no" id="seal_no" v-model="form.seal_no" style="height: 37px;" :class="errors.seal_no ? 'isError form-control' : 'form-control'">
+                          <input type="text" :disabled="!isOk" name="seal_no" id="seal_no" v-model="form.seal_no" style="height: 37px;  text-transform: uppercase;" :class="errors.seal_no ? 'isError form-control' : 'form-control'">
                           <label for="seal_no" class="form-control-placeholder"> Seal No. <span style="color: red"> *</span></label>
                           <div class="customErrorText"><small>@{{ errors.seal_no ? errors.seal_no[0] : '' }}</small></div>
                         </div>
 
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-                          <input type="text" placeholder="Write Something..." name="remarks" id="remarks" v-model="form.remarks" :disabled="!isOk" :class="errors.remarks ? 'isError form-control' : 'form-control'">
+                          <input type="text" placeholder="Write Something..." name="remarks" id="remarks" v-model="form.remarks" :disabled="!isOk" :class="errors.remarks ? 'isError form-control' : 'form-control'" style="height: 37px; text-transform: uppercase;">
                           <label for="consignee" class="form-control-placeholder"> Remarks </label>
                           <div class="customErrorText"><small>@{{ errors.remarks ? errors.remarks[0] : '' }}</small></div>
                         </div>
@@ -398,6 +398,12 @@
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
+            this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
+            this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
+            this.$set(this.form, 'booking_no', this.form.booking_no.toUpperCase())
+            this.$set(this.form, 'seal_no', this.form.seal_no.toUpperCase())
+            this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
             await axios.post('/admin/create/releasing', this.form).then(async data => {
               this.loading = false
@@ -427,6 +433,13 @@
             $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.loading = true
             this.form.inspected_by = this.form.inspected_by.id
+            this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
+            this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
+            this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
+            this.$set(this.form, 'booking_no', this.form.booking_no.toUpperCase())
+            this.$set(this.form, 'seal_no', this.form.seal_no.toUpperCase())
+            this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             await axios.post('/admin/update/releasing', this.form).then(async data => {
               this.loading = false
               $('#savingDialog').modal('hide');
