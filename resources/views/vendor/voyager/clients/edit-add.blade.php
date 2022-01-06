@@ -31,7 +31,7 @@
                         <div class="panel-body">
                             <div class="row" style="padding: 0px 10px;">
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
-                                <input type="text" name="code_name" id="code_name" v-model="form.code_name" class="form-control" :class="errors.code_name ? 'isError' : ''">
+                                <input type="text" name="code_name" id="code_name" v-model="form.code_name" class="form-control" :class="errors.code_name ? 'isError' : ''" style="height: 37px; text-transform: uppercase;">
                                 <label for="code_name" class="form-control-placeholder"> Code Name</label>
                                 <div class="customErrorText"><small>@{{ errors.code_name ? errors.code_name[0] : ''  }}</small></div>
                               </div>
@@ -206,6 +206,7 @@
             $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.customload = true
             let currentUrl = window.location.href
+            this.$set(this.form, 'code_name', this.form.code_name.toUpperCase())
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             await axios.post('/admin/create/client', this.form).then(data => {
               this.customload = false
@@ -223,6 +224,7 @@
             this.customload = true
             let currentUrl = window.location.origin
             let browseUrl = `${currentUrl}/admin/clients`
+            this.$set(this.form, 'code_name', this.form.code_name.toUpperCase())
             await axios.post('/admin/update/client', this.form).then(data => {
               this.customload = false
               $('#savingDialog').modal('hide');

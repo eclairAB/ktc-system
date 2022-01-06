@@ -31,17 +31,17 @@
                         <div class="panel-body">
                             <div class="row" style="padding: 0px 10px;">
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
-                                <input type="text" name="id_no" id="id_no" v-model="form.id_no" class="form-control" :class="errors.id_no ? 'isError' : ''">
+                                <input type="text" name="id_no" id="id_no" v-model="form.id_no" class="form-control" :class="errors.id_no ? 'isError' : ''" style="text-transform: uppercase;">
                                 <label for="id_no" class="form-control-placeholder"> ID No.</label>
                                 <div class="customErrorText"><small>@{{ errors.id_no ? errors.id_no[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
-                                <input type="text" name="firstname" id="firstname" v-model="form.firstname" class="form-control" :class="errors.firstname ? 'isError' : ''">
+                                <input type="text" name="firstname" id="firstname" v-model="form.firstname" class="form-control" :class="errors.firstname ? 'isError' : ''" style="text-transform: uppercase;">
                                 <label for="firstname" class="form-control-placeholder"> First Name</label>
                                 <div class="customErrorText"><small>@{{ errors.firstname ? errors.firstname[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
-                                <input type="text" name="lastname" id="lastname" v-model="form.lastname" class="form-control" :class="errors.lastname ? 'isError' : ''">
+                                <input type="text" name="lastname" id="lastname" v-model="form.lastname" class="form-control" :class="errors.lastname ? 'isError' : ''" style="text-transform: uppercase;">
                                 <label for="lastname" class="form-control-placeholder"> Last Name</label>
                                 <div class="customErrorText"><small>@{{ errors.lastname ? errors.lastname[0] : '' }}</small></div>
                               </div>
@@ -217,6 +217,9 @@
             this.customload = true
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
+            this.$set(this.form, 'id_no', this.form.id_no.toUpperCase())
+            this.$set(this.form, 'firstname', this.form.firstname.toUpperCase())
+            this.$set(this.form, 'lastname', this.form.lastname.toUpperCase())
             await axios.post('/admin/create/Staff', this.form).then(data => {
               this.customload = false
               $('#savingDialog').modal('hide');
@@ -233,6 +236,9 @@
             this.customload = true
             let currentUrl = window.location.origin
             let browseUrl = `${currentUrl}/admin/staff`
+            this.$set(this.form, 'id_no', this.form.id_no.toUpperCase())
+            this.$set(this.form, 'firstname', this.form.firstname.toUpperCase())
+            this.$set(this.form, 'lastname', this.form.lastname.toUpperCase())
             await axios.post('/admin/update/Staff', this.form).then(data => {
               this.customload = false
               $('#savingDialog').modal('hide');

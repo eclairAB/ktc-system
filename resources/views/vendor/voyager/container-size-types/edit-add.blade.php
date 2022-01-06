@@ -42,7 +42,7 @@
                                 <div class="customErrorText"><small>@{{ errors.name ? errors.name[0] : '' }}</small></div>
                               </div> -->
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
-                                <input type="text" name="size" id="size" v-model="form.size" class="form-control" :class="errors.size ? 'isError' : ''">
+                                <input type="text" name="size" id="size" v-model="form.size" class="form-control" :class="errors.size ? 'isError' : ''" style="text-transform: uppercase;">
                                 <label for="size" class="form-control-placeholder"> Size</label>
                                 <div class="customErrorText"><small>@{{ errors.size ? errors.size[0] : '' }}</small></div>
                               </div>
@@ -217,6 +217,7 @@
             this.customload = true
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
+            this.$set(this.form, 'size', this.form.size.toUpperCase())
             await axios.post('/admin/create/sizeType', this.form).then(data => {
               this.customload = false
               $('#savingDialog').modal('hide');
@@ -233,6 +234,7 @@
             this.customload = true
             let currentUrl = window.location.origin
             let browseUrl = `${currentUrl}/admin/container-size-types`
+            this.$set(this.form, 'size', this.form.size.toUpperCase())
             await axios.post('/admin/update/sizeType', this.form).then(data => {
               this.customload = false
               $('#savingDialog').modal('hide');
