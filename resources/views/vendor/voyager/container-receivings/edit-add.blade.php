@@ -307,7 +307,7 @@
                                 <div class="col-lg-12 form-group mt-3">
                                   <autocomplete
                                     ref="autocompleteComponent"
-                                    base-class="comuppercaseText ponent autocomplete"
+                                    base-class="uppercaseText ponent autocomplete"
                                     :search="searchComponent"
                                     :get-result-value="getResultComponent"
                                     @update="handleUpdateComponent"
@@ -648,6 +648,7 @@
               this.submittedRepair = true
             }
             this.handleSubmitRepair(result)
+            console.log(123, result)
           },
           handleSubmitRepair(result) {
             this.$set(this.damages, 'repair', result)
@@ -1208,7 +1209,33 @@
         }
       }
 
+      function setAutocomplete() {
+        const autocompletes = document.querySelectorAll('div.uppercaseText.autocomplete > input')
+        for(let item of autocompletes) {
+
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.type == "attributes") {
+                
+                const classList = item
+                const elem = item.parentNode.children[1].children
+                for(let childSelection of elem) {
+                  if(childSelection.attributes['aria-selected']) {
+                    childSelection.style.background = "#dbdbdb"
+                  }
+                  else {
+                    childSelection.style.background = "unset"
+                  }
+                }
+              }
+            })
+          })
+          observer.observe(item, {attributes: true})
+        }
+      }
+
       setDropdownListeners()
+      setAutocomplete()
     </script>
     <!--  -->
 @stop
