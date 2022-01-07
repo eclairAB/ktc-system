@@ -392,4 +392,12 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         return Type::get();
     }
+
+    public function getEmptyLoaded(Request $request)
+    {
+        $path = file_get_contents(resource_path()."/js/mixins/emptyloaded.json");
+        $emptyloaded = json_decode( preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $path), true );
+
+        return $path;
+    }
 }

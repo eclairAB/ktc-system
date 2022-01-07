@@ -170,9 +170,11 @@
                             style="height: 30px !important;"
                             tabindex="7"
                             :class="errors.empty_loaded ? 'isError form-control' : 'form-control'"
-                            :disabled="!isOk"
-                            :options="emptyloaded"
+                            :options="emptyLoadedList"
                             v-model="form.empty_loaded"
+                            :disabled="!isOk"
+                            label="name"
+                            :reduce="name => name.name"
                           ></v-select>
                           <label for="empty_loaded" class="form-control-placeholder"> Empty/Loaded</label>
                           <div class="customErrorText"><small>@{{ errors.empty_loaded ? errors.empty_loaded[0] : '' }}</small></div>
@@ -597,7 +599,8 @@
           selectedIndexDamage: -1,
           submittedDamage: false,
           isEdit: false,
-          damageLoad: false
+          damageLoad: false,
+          emptyLoadedList: []
         },
         watch: {
           'damages': {
@@ -1061,6 +1064,11 @@
               }
             }
           },
+          async getEmptyLoaded () {
+            await axios.get(`/admin/get/emptyloaded`).then(data => {
+              this.emptyLoadedList = data.data
+            })
+          },
           async getDamages () {
             await axios.get(`/admin/get/damage/${this.form.id}`).then(data => {
               this.damageList = data.data
@@ -1077,6 +1085,7 @@
           this.getClient()
           this.getYard()
           this.getClass()
+          this.getEmptyLoaded()
         }
       })
     </script>
