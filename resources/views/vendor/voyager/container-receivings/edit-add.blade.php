@@ -776,10 +776,15 @@
           },
           pasmo () {
             this.damages.description = (this.damages.repair ? this.damages.repair.name.toUpperCase() : '') + ' ' + (this.damages.location ? `(${this.damages.location.toUpperCase()})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name.toUpperCase() : '') + ' ' + (this.damages.component ? this.damages.component.name.toUpperCase() : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity.toUpperCase()})` : '') + ' ' + (this.damages.length ? `${this.damages.length.toUpperCase()}` : '') + '' + (this.damages.width ? `X${this.damages.width.toUpperCase()}` : '')
-            this.$set(this.damages, 'location', this.damages.location.toUpperCase())
-            this.$set(this.damages, 'length', this.damages.length.toUpperCase())
-            this.$set(this.damages, 'width', this.damages.width.toUpperCase())
-            this.$set(this.damages, 'quantity', this.damages.quantity.toUpperCase())
+            if (this.damages.location) {
+              this.$set(this.damages, 'location', this.damages.location.toUpperCase())
+            }
+            if (this.damages.width) {
+              this.$set(this.damages, 'width', this.damages.width.toUpperCase())
+            }
+            if (this.damages.quantity) {
+              this.$set(this.damages, 'quantity', this.damages.quantity.toUpperCase())
+            }
           },
           async checkDamage () {
             this.damageLoad = true
