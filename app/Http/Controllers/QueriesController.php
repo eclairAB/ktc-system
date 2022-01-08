@@ -379,7 +379,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $type = Type::when(!empty($request->keyword), function ($q) use ($request){
             return $q->where('code', 'ilike', '%'.$request->keyword.'%')
             ->orwhere('name', 'ilike', '%'.$request->keyword.'%');
-        })->get();
+        })->orderBy('id','ASC')->get();
 
         return $type;
     }
