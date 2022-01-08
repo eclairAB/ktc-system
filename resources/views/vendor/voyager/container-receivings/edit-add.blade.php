@@ -117,8 +117,8 @@
                             :options="clientList"
                             v-model="form.client_id"
                             :disabled="!isOk"
-                            label="code_name"
-                            :reduce="code_name => code_name.id"
+                            label="code"
+                            :reduce="code => code.id"
                           ></v-select>
                           <label for="client" class="form-control-placeholder"> Client</label>
                           <div class="customErrorText"><small>@{{ errors.client_id ? errors.client_id[0] : '' }}</small></div>
@@ -640,7 +640,7 @@
             })
           },
           getResultRepair(result) {
-            return result.code
+            return result.code + ' - (' +  result.name + ')'
           },
           handleUpdateRepair(results, selectedIndex) {
             this.repairresults = results
@@ -671,7 +671,7 @@
             })
           },
           getResultComponent(result) {
-            return result.code
+            return result.code + ' - (' +  result.name + ')'
           },
           handleUpdateComponent(results, selectedIndex) {
             this.componentresults = results
@@ -701,7 +701,7 @@
             })
           },
           getResultDamage(result) {
-            return result.code
+            return result.code + ' - (' +  result.name + ')'
           },
           handleUpdateDamage(results, selectedIndex) {
             this.damageresults = results
@@ -1035,7 +1035,7 @@
                 this.sizeSearch = data.data.size_type.code
                 this.classSearch = data.data.container_class.class_code
                 this.yardSearch = data.data.yard_location.name
-                this.clientSearch = data.data.client.code_name
+                this.clientSearch = data.data.client.code
                 this.form.size_type = data.data.size_type.id
                 this.form.type_id = data.data.type_id
                 this.form.client_id = data.data.client.id
