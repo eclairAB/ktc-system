@@ -24,7 +24,7 @@
           <td>{{ Carbon\Carbon::parse($item->created_at)->format('F d, Y') }}</td>
           <td>{{ $item->booking_no }}</td>
           <td>{{ $item->seal_no }}</td>
-          <td>{{ $item->container->client->code_name }}</td>
+          <td>{{ $item->container->client->code }}</td>
           <td>{{ $item->hauler }}</td>
           <td>{{ $item->plate_no }}</td>
           <td>{{ $item->inspector->name }}</td>

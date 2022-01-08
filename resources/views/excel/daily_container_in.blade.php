@@ -20,7 +20,7 @@
           <td>{{ $item->container_no }}</td>
           <td>{{ $item->sizeType->code }} - {{ $item->sizeType->name }}</td>
           <td>{{ Carbon\Carbon::parse($item->created_at)->format('F d, Y') }}</td>
-          <td>{{ $item->client->code_name }}</td>
+          <td>{{ $item->client->code }}</td>
           <td>{{ $item->hauler }}</td>
           <td>{{ $item->plate_no }}</td>
           <td>{{ $item->inspector->name }}</td>

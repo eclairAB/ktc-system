@@ -57,7 +57,8 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function getClient(Request $request)
     {
         $client = Client::when(!empty($request->keyword), function ($q) use ($request){
-            return $q->where('code_name', 'ilike', '%'.$request->keyword.'%');
+            return $q->where('code', 'ilike', '%'.$request->keyword.'%') 
+            ->orwhere('name', 'ilike', '%'.$request->keyword.'%');
         })->get();
 
         return $client;
@@ -140,7 +141,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     public function geDetailsForUpdate(Request $request)
     {
         return ContainerReceiving::where('container_no',$request->container_no)
-        ->with('client:id,code_name','sizeType:id,size','containerClass:id,class_code,class_name','type:id,code,name')
+        ->with('client:id,code,name','sizeType:id,size','containerClass:id,class_code,class_name','type:id,code,name')
         ->select(
             'id',
             'client_id',
@@ -179,7 +180,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             if($request->type == "releasing" && $contRecieving)
             {
                 return ContainerReceiving::where('container_no',$request->container_no)
-                ->with('client:id,code_name','sizeType:id,size','type:id,code,name','containerClass:id,class_code,class_name')
+                ->with('client:id,code,name','sizeType:id,size','type:id,code,name','containerClass:id,class_code,class_name')
                 ->select(
                     'id',
                     'client_id',

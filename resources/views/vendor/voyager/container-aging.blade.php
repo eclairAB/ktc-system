@@ -34,9 +34,9 @@
 	                style="height: 37px !important;"
 	                :options="clientList"
 	                v-model="form.client"
-	                label="code_name"
+	                label="code"
 	                class="form-control"
-	                :reduce="code_name => code_name.id"
+	                :reduce="code => code.id"
 	              ></v-select>
 	              <label for="client" class="form-control-placeholder"> Client <span style="color: red;"> *</span></label>
 	            </div>
@@ -129,7 +129,7 @@
 	        <tbody v-if="containerAgingList.length > 0">
 	          <tr v-for="(item, index) in containerAgingList" :key="index">
 	            <td>@{{ item.id }}</td>
-	            <td>@{{ item.client ? item.client.code_name : '' }}</td>
+	            <td>@{{ item.client ? item.client.code : '' }}</td>
 	            <td>@{{ item.container_no }}</td>
 	            <td>@{{ item.type ? item.type.code : '' }}</td>
 	            <td>@{{ moment(item.manufactured_date).format('MMMM YYYY') }}</td>
