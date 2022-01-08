@@ -26,7 +26,7 @@ class ValidateSizeType extends FormRequest
         return [
             // 'code' => 'required',
             // 'name' => 'required',
-            'size' => 'required',
+            'size' => 'required|unique',
             // 'type' => 'required',
         ];
     }
@@ -37,6 +37,7 @@ class ValidateSizeType extends FormRequest
             // 'code.required' => 'Code field is required.',
             // 'name.required' => 'Name field is required.',
             'size.required' => 'Size field is required.',
+            'size.unique' => 'Size already exist.',
             // 'type.required' => 'Type field is required.',
         ];
     }

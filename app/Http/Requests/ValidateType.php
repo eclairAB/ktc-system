@@ -24,7 +24,7 @@ class ValidateType extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required',
+            'code' => 'required|unique',
             'name' => 'required',
         ];
     }
@@ -33,6 +33,7 @@ class ValidateType extends FormRequest
     {
         return [
             'code.required' => 'Code field is required.',
+            'code.unique' => 'Code already exist.',
             'name.required' => 'Name field is required.',
         ];
     }
