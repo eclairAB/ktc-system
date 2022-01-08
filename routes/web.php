@@ -38,6 +38,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/container/damage',[QueriesController::class,"getContainerDamage"]);
     Route::get('/get/container/component',[QueriesController::class,"getContainerComponent"]);
     Route::get('/get/container/repair',[QueriesController::class,"getContainerRepair"]);
+    Route::get('/get/emptyloaded',[QueriesController::class,"getEmptyLoaded"]);
 
     Route::post('/create/client', [PostsController::class, "createClient"]);
     Route::post('/create/Staff', [PostsController::class, "createStaff"]);
