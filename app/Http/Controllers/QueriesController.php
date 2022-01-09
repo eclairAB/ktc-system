@@ -113,7 +113,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     }
     public function getClassById($id)
     {
-        return ContainterClass::where('id', $id)->first();
+        return ContainerClass::where('id', $id)->first();
     }
     public function getYardById($id)
     {
