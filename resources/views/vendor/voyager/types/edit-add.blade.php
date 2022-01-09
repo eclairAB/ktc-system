@@ -192,53 +192,55 @@
         },
         methods:{
           async saveType () {
-            // $('#savingDialog').modal({backdrop: 'static', keyboard: true});
-            // this.customload = true
-            // let currentUrl = window.location.href
-            // let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
-            // this.$set(this.form, 'size', this.form.size.toUpperCase())
-            // await axios.post('/admin/create/sizeType', this.form).then(data => {
-            //   this.customload = false
-            //   $('#savingDialog').modal('hide');
-            //   this.errors = {}
-            //   window.location = checkedit
-            // }).catch(error => {
-            //   this.customload = false
-            //   $('#savingDialog').modal('hide');
-            //   this.errors = error.response.data.errors
-            // })
+            $('#savingDialog').modal({backdrop: 'static', keyboard: true});
+            this.customload = true
+            let currentUrl = window.location.href
+            let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
+            this.$set(this.form, 'code', this.form.code.toUpperCase())
+            this.$set(this.form, 'name', this.form.name.toUpperCase())
+            await axios.post('/admin/create/type', this.form).then(data => {
+              this.customload = false
+              $('#savingDialog').modal('hide');
+              this.errors = {}
+              window.location = checkedit
+            }).catch(error => {
+              this.customload = false
+              $('#savingDialog').modal('hide');
+              this.errors = error.response.data.errors
+            })
           },
           async updateType () {
-            // $('#savingDialog').modal({backdrop: 'static', keyboard: true});
-            // this.customload = true
-            // let currentUrl = window.location.origin
-            // let browseUrl = `${currentUrl}/admin/container-size-types`
-            // this.$set(this.form, 'size', this.form.size.toUpperCase())
-            // await axios.post('/admin/update/sizeType', this.form).then(data => {
-            //   this.customload = false
-            //   $('#savingDialog').modal('hide');
-            //   this.errors = {}
-            //   window.location = browseUrl
-            // }).catch(error => {
-            //   this.customload = false
-            //   $('#savingDialog').modal('hide');
-            //   this.errors = error.response.data.errors
-            // })
+            $('#savingDialog').modal({backdrop: 'static', keyboard: true});
+            this.customload = true
+            let currentUrl = window.location.origin
+            let browseUrl = `${currentUrl}/admin/types`
+            this.$set(this.form, 'code', this.form.code.toUpperCase())
+            this.$set(this.form, 'name', this.form.name.toUpperCase())
+            await axios.post('/admin/update/type', this.form).then(data => {
+              this.customload = false
+              $('#savingDialog').modal('hide');
+              this.errors = {}
+              window.location = browseUrl
+            }).catch(error => {
+              this.customload = false
+              $('#savingDialog').modal('hide');
+              this.errors = error.response.data.errors
+            })
           },
           async getdata () {
-            // let currentUrl = window.location.href
-            // let checkedit = currentUrl.split('/')[currentUrl.split('/').length - 1]
-            // if (checkedit === 'edit') {
-            //   let dataId = currentUrl.split('/')[currentUrl.split('/').length - 2]
-            //   let payload = {
-            //     id: parseInt(dataId)
-            //   }
-            //   await axios.get(`/admin/get/sizeType/byId/${payload.id}`).then(data => {
-            //     this.form = data.data
-            //   }).catch(error => {
-            //     console.log('error: ', error)
-            //   })
-            // }
+            let currentUrl = window.location.href
+            let checkedit = currentUrl.split('/')[currentUrl.split('/').length - 1]
+            if (checkedit === 'edit') {
+              let dataId = currentUrl.split('/')[currentUrl.split('/').length - 2]
+              let payload = {
+                id: parseInt(dataId)
+              }
+              await axios.get(`/admin/get/type/byId/${payload.id}`).then(data => {
+                this.form = data.data
+              }).catch(error => {
+                console.log('error: ', error)
+              })
+            }
           }
         },
         mounted () {

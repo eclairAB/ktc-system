@@ -24,7 +24,7 @@ class ValidateContainerClass extends FormRequest
     public function rules()
     {
         return [
-            'class_code' => ['required', Rule::unique('container_classes','code')],
+            'class_code' => ['required', Rule::unique('container_classes','class_code')],
             'class_name' => 'required',
         ];
     }
