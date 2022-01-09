@@ -778,7 +778,10 @@
             $('#dialog').modal('hide');
           },
           pasmo () {
-            this.damages.description = (this.damages.repair ? this.damages.repair.name.toUpperCase() : '') + ' ' + (this.damages.location ? `(${this.damages.location.toUpperCase()})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name.toUpperCase() : '') + ' ' + (this.damages.component ? this.damages.component.name.toUpperCase() : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity.toUpperCase()})` : '') + ' ' + (this.damages.length ? `${this.damages.length.toUpperCase()}` : '') + '' + (this.damages.width ? `X${this.damages.width.toUpperCase()}` : '')
+            let desc = (this.damages.repair ? this.damages.repair.name.toUpperCase() : '') + ' ' + (this.damages.location ? `(${this.damages.location.toUpperCase()})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name.toUpperCase() : '') + ' ' + (this.damages.component ? this.damages.component.name.toUpperCase() : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity.toUpperCase()})` : '') + ' ' + (this.damages.length ? `${this.damages.length.toUpperCase()}` : '') + '' + (this.damages.width ? `X${this.damages.width.toUpperCase()}` : '')
+
+            this.$set(this.damages, 'description', desc)
+            
             if (this.damages.location) {
               this.$set(this.damages, 'location', this.damages.location.toUpperCase())
             }
