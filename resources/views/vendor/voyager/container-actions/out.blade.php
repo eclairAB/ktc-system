@@ -42,9 +42,9 @@
                 style="height: 37px !important;"
                 :options="clientList"
                 v-model="form.client"
-                label="code_name"
+                label="code"
                 class="form-control"
-                :reduce="code_name => code_name.id"
+                :reduce="code => code.id"
               ></v-select>
               <label for="client" class="form-control-placeholder"> Client <span style="color: red;"> *</span></label>
             </div>
@@ -162,7 +162,7 @@
             <td>@{{ moment(item.inspected_date).format('MMMM DD, YYYY') }}</td>
             <td>@{{ item.booking_no }}</td>
             <td>@{{ item.seal_no }}</td>
-            <td>@{{ item.container.client ? item.container.client.code_name : '' }}</td>
+            <td>@{{ item.container.client ? item.container.client.code : '' }}</td>
             <td>@{{ item.hauler }}</td>
             <td>@{{ item.plate_no }}</td>
             <td>@{{ item.inspector.name }}</td>
