@@ -302,6 +302,7 @@
                                     @update="handleUpdateRepair"
                                     auto-select
                                     @submit="handleAutocompleteSubmitRepair"
+                                    @blur="handleAutocompleteSubmitRepair"
                                   ></autocomplete>
                                   <label for="repair" class="form-control-placeholder"> Repair</label>
                                   <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
@@ -315,6 +316,7 @@
                                     @update="handleUpdateComponent"
                                     auto-select
                                     @submit="handleAutocompleteSubmitComponent"
+                                    @blur="handleAutocompleteSubmitComponent"
                                   ></autocomplete>
                                   <label for="component" class="form-control-placeholder"> Component</label>
                                 </div>
@@ -327,6 +329,7 @@
                                     @update="handleUpdateDamage"
                                     auto-select
                                     @submit="handleAutocompleteSubmitDamage"
+                                    @blur="handleAutocompleteSubmitDamage"
                                   ></autocomplete>
                                   <label for="damage" class="form-control-placeholder"> Damage</label>
                                 </div>
@@ -600,7 +603,11 @@
           submittedDamage: false,
           isEdit: false,
           damageLoad: false,
-          emptyLoadedList: []
+          emptyLoadedList: [],
+          damagesAutocomplete: {
+            selections: {},
+            values: {}
+          },
         },
         watch: {
           'damages': {
@@ -635,6 +642,7 @@
               }
               axios.get(`/admin/get/container/repair?keyword=${input}`)
                 .then((data) => {
+                  this.damagesAutocomplete.selections.repair = data.data
                   resolve(data.data)
                 })
             })
@@ -650,8 +658,10 @@
             if (result !== undefined) {
               this.submittedRepair = true
             }
-            this.handleSubmitRepair(result)
-            console.log(123, result)
+            if(result.id) this.handleSubmitRepair(result)
+            else {
+              this.handleSubmitRepair(this.damagesAutocomplete.values.repair)
+            }
           },
           handleSubmitRepair(result) {
             this.$set(this.damages, 'repair', result)
@@ -666,6 +676,7 @@
               }
               axios.get(`/admin/get/container/component?keyword=${input}`)
                 .then((data) => {
+                  this.damagesAutocomplete.selections.component = data.data
                   resolve(data.data)
                 })
             })
@@ -681,7 +692,10 @@
             if (result !== undefined) {
               this.submittedComponent = true
             }
-            this.handleSubmitComponent(result)
+            if(result.id) this.handleSubmitComponent(result)
+            else {
+              this.handleSubmitComponent(this.damagesAutocomplete.values.component)
+            }
           },
           handleSubmitComponent(result) {
             this.$set(this.damages, 'component', result)
@@ -696,6 +710,8 @@
               }
               axios.get(`/admin/get/container/damage?keyword=${input}`)
                 .then((data) => {
+                  this.damagesAutocomplete.selections.damage = data.data
+                  console.log(this.damagesAutocomplete)
                   resolve(data.data)
                 })
             })
@@ -711,7 +727,10 @@
             if (result !== undefined) {
               this.submittedDamage = true
             }
-            this.handleSubmitDamage(result)
+            if(result.id) this.handleSubmitDamage(result)
+            else {
+              this.handleSubmitDamage(this.damagesAutocomplete.values.damage)
+            }
           },
           handleSubmitDamage(result) {
             this.$set(this.damages, 'damage', result)
@@ -804,6 +823,9 @@
           },
           addNew () {
             $('#dialog').modal({backdrop: 'static', keyboard: false});
+            const asd = document.querySelector('div.uppercaseText.repair.autocomplete')/*.focus()*/
+            asd && asd.focus()
+            console.log(asd)
           },
           closeDialog () {
             this.clearDamage()
@@ -1233,11 +1255,20 @@
           const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
               if (mutation.type == "attributes") {
-                
-                const classList = item
+
+                const listNo = item.attributes['aria-owns'].value
+                const autocompleteItem = Number(listNo.split('autocomplete-result-list-')[1])
+
                 const elem = item.parentNode.children[1].children
                 for(let childSelection of elem) {
                   if(childSelection.attributes['aria-selected']) {
+
+                    const dataResultIndex = Number(childSelection.attributes['data-result-index'].value)
+
+                    if(autocompleteItem == 1) app.$data.damagesAutocomplete.values.repair = app.$data.damagesAutocomplete.selections.repair[dataResultIndex]
+                    if(autocompleteItem == 2) app.$data.damagesAutocomplete.values.component = app.$data.damagesAutocomplete.selections.component[dataResultIndex]
+                    if(autocompleteItem == 3) app.$data.damagesAutocomplete.values.damage = app.$data.damagesAutocomplete.selections.damage[dataResultIndex]
+
                     childSelection.style.background = "#dbdbdb"
                   }
                   else {
