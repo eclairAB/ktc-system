@@ -29,7 +29,7 @@ class UpdateController extends Controller
         $type = Type::where('id',$request->id)->first();
         $type->update($validate_type);
 
-        return $sizeType;
+        return $type;
     }
 
     public function updateSizeType(Request $request)
@@ -235,7 +235,7 @@ class UpdateController extends Controller
         return $dmgs;
     }
 
-    public function updateRepairs(ValidateRepairs $request)
+    public function updateRepairs(Request $request)
     {
         $rep_data = $request->all();
         $rep = ContainerRepair::where('id',$request->id)->first();

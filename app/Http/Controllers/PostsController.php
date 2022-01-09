@@ -30,6 +30,7 @@ use App\Models\ContainerDamage;
 use App\Models\ContainerRepair;
 use App\Models\ContainerClass;
 use App\Models\YardLocation;
+use App\Models\Type;
 use App\Models\EirNumber;
 use Carbon\Carbon;
 use DB;

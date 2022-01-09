@@ -55,11 +55,11 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/check/damage',[PostsController::class,"ReceivingDamageChecker"]);
     Route::post('/create/type',[PostsController::class,"createType"]);
 
-    Route::post('/update/container/classes', [PostsController::class, "updateClass"]);
-    Route::post('/update/container/damages', [PostsController::class, "updateDamages"]);
-    Route::post('/update/container/repairs', [PostsController::class, "updateRepairs"]);
-    Route::post('/update/container/components', [PostsController::class, "updateComponents"]);
-    Route::post('/update/yards', [PostsController::class, "updateYard"]);
+    Route::post('/update/container/classes', [UpdateController::class, "updateClass"]);
+    Route::post('/update/container/damages', [UpdateController::class, "updateDamages"]);
+    Route::post('/update/container/repairs', [UpdateController::class, "updateRepairs"]);
+    Route::post('/update/container/components', [UpdateController::class, "updateComponents"]);
+    Route::post('/update/yards', [UpdateController::class, "updateYard"]);
     Route::post('/update/client', [UpdateController::class, "updateClient"]);
     Route::post('/update/Staff', [UpdateController::class, "updateStaff"]);
     Route::post('/update/checker', [UpdateController::class, "updateChecker"]);
