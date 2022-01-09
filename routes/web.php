@@ -71,6 +71,11 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/releasing/byId/{id}',[QueriesController::class,"getReleasingById"]);
     Route::get('/get/receiving/byId/{id}',[QueriesController::class,"getReceivingById"]);
 
+    Route::get('/get/container/components/byId/{id}',[QueriesController::class,"getComponentsById"]);
+    Route::get('/get/container/repairs/byId/{id}',[QueriesController::class,"getRepairsById"]);
+    Route::get('/get/container/damages/byId/{id}',[QueriesController::class,"getDamagesById"]);
+    Route::get('/get/container/classes/byId/{id}',[QueriesController::class,"getClassById"]);
+    Route::get('/get/yards/byId/{id}',[QueriesController::class,"getYardById"]);
     Route::get('/get/sizeType/byId/{id}',[QueriesController::class,"getSizeTypeById"]);
     Route::get('/get/client/byId/{id}',[QueriesController::class,"getClientById"]);
     Route::get('/get/Staff/byId/{id}',[QueriesController::class,"getStaffById"]);
