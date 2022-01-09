@@ -40,6 +40,11 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/container/repair',[QueriesController::class,"getContainerRepair"]);
     Route::get('/get/emptyloaded',[QueriesController::class,"getEmptyLoaded"]);
 
+    Route::post('/create/container/classes', [PostsController::class, "createClass"]);
+    Route::post('/create/container/damages', [PostsController::class, "createDamages"]);
+    Route::post('/create/container/repairs', [PostsController::class, "createRepairs"]);
+    Route::post('/create/container/components', [PostsController::class, "createComponents"]);
+    Route::post('/create/yards', [PostsController::class, "createYard"]);
     Route::post('/create/client', [PostsController::class, "createClient"]);
     Route::post('/create/Staff', [PostsController::class, "createStaff"]);
     Route::post('/create/checker', [PostsController::class, "createChecker"]);
@@ -48,9 +53,13 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/create/sizeType',[PostsController::class,"createSizeType"]);
     Route::post('/create/damage',[PostsController::class,"ReceivingDamage"]);
     Route::post('/check/damage',[PostsController::class,"ReceivingDamageChecker"]);
-
     Route::post('/create/type',[PostsController::class,"createType"]);
 
+    Route::post('/update/container/classes', [PostsController::class, "updateClass"]);
+    Route::post('/update/container/damages', [PostsController::class, "updateDamages"]);
+    Route::post('/update/container/repairs', [PostsController::class, "updateRepairs"]);
+    Route::post('/update/container/components', [PostsController::class, "updateComponents"]);
+    Route::post('/update/yards', [PostsController::class, "updateYard"]);
     Route::post('/update/client', [UpdateController::class, "updateClient"]);
     Route::post('/update/Staff', [UpdateController::class, "updateStaff"]);
     Route::post('/update/checker', [UpdateController::class, "updateChecker"]);
@@ -62,6 +71,11 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/releasing/byId/{id}',[QueriesController::class,"getReleasingById"]);
     Route::get('/get/receiving/byId/{id}',[QueriesController::class,"getReceivingById"]);
 
+    Route::get('/get/container/components/byId/{id}',[QueriesController::class,"getComponentsById"]);
+    Route::get('/get/container/repairs/byId/{id}',[QueriesController::class,"getRepairsById"]);
+    Route::get('/get/container/damages/byId/{id}',[QueriesController::class,"getDamagesById"]);
+    Route::get('/get/container/classes/byId/{id}',[QueriesController::class,"getClassById"]);
+    Route::get('/get/yards/byId/{id}',[QueriesController::class,"getYardById"]);
     Route::get('/get/sizeType/byId/{id}',[QueriesController::class,"getSizeTypeById"]);
     Route::get('/get/client/byId/{id}',[QueriesController::class,"getClientById"]);
     Route::get('/get/Staff/byId/{id}',[QueriesController::class,"getStaffById"]);
