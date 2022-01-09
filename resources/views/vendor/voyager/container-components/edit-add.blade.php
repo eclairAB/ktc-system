@@ -8,6 +8,8 @@
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
@@ -26,82 +28,40 @@
             <div class="col-md-12">
 
                 <div class="panel panel-bordered">
-                    <!-- form start -->
-                    <form role="form"
-                            class="form-edit-add"
-                            action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
-                            method="POST" enctype="multipart/form-data">
-                        <!-- PUT Method if we are editing -->
-                        @if($edit)
-                            {{ method_field("PUT") }}
-                        @endif
-
-                        <!-- CSRF TOKEN -->
-                        {{ csrf_field() }}
-
+                    <div id="componentsForm">
                         <div class="panel-body">
-
-                            @if (count($errors) > 0)
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
-                            <!-- Adding / Editing -->
                             <div class="row" style="padding: 0px 10px;">
-                            @php
-                                $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
-                            @endphp
+                              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group mt-3">
+                                <input type="text" name="code" id="code" v-model="form.code" class="form-control" :class="errors.code ? 'isError' : ''">
+                                <label for="code" class="form-control-placeholder"> Code</label>
+                                <div class="customErrorText"><small>@{{ errors.code ? errors.code[0] : ''  }}</small></div>
+                              </div>
+                              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group mt-3">
+                                <input type="text" name="name" id="name" v-model="form.name" class="form-control" :class="errors.name ? 'isError' : ''">
+                                <label for="name" class="form-control-placeholder"> Name</label>
+                                <div class="customErrorText"><small>@{{ errors.name ? errors.name[0] : '' }}</small></div>
+                              </div>
+                            </div>
+                        </div>
 
-                            @foreach($dataTypeRows as $row)
-                                <!-- GET THE DISPLAY OPTIONS -->
-                                @php
-                                    $display_options = $row->details->display ?? NULL;
-                                    if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
-                                        $dataTypeContent->{$row->field} = $dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')};
-                                    }
-                                @endphp
-                                @if (isset($row->details->legend) && isset($row->details->legend->text))
-                                    <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
-                                @endif
-                                <div style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
-                                    {{ $row->slugify }}
-                                    @include('voyager::multilingual.input-hidden-bread-edit-add')
-                                    @if (isset($row->details->view))
-                                        @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $dataTypeContent->{$row->field}, 'action' => ($edit ? 'edit' : 'add'), 'view' => ($edit ? 'edit' : 'add'), 'options' => $row->details])
-                                    @elseif ($row->type == 'relationship')
-                                        @include('voyager::formfields.relationship', ['options' => $row->details])
-                                    @else
-                                        {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
-                                    @endif
+                        <div class="panel-footer" style="display: flex; justify-content: flex-end;">
+                            <button type="submit" :disabled="customload" class="btn btn-primary save buttonload" @click="form.id ? updateComponent() : saveComponent()" style="display: flex; align-items:center;">
+                                <i :class="customload === false ? 'fa fa-save' : 'fa fa-refresh fa-spin'"></i>
+                                <div style="margin-left: 5px;">@{{ customload === false ? (form.id ? 'Update' : 'Save') : 'Loading' }}</div>
+                            </button>
+                        </div>
 
-                                    @foreach (app('voyager')->afterFormFields($row, $dataType, $dataTypeContent) as $after)
-                                        {!! $after->handle($row, $dataType, $dataTypeContent) !!}
-                                    @endforeach
-
-                                    <label class="form-control-placeholder" for="name">{{ $row->getTranslatedAttribute('display_name') }}</label>
-                                    @if ($errors->has($row->field))
-                                        @foreach ($errors->get($row->field) as $error)
-                                            <span class="help-block">{{ $error }}</span>
-                                        @endforeach
-                                    @endif
+                        <div class="modal fade" id="savingDialog" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
+                            <div class="modal-success-dialog modal-dialog" role="document" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                              <div class="modal-content">
+                                <div class="modal-body savingDiv" style="margin-top: 15px;">
+                                  <p class="saving">Saving<span>.</span><span>.</span><span>.</span></p>
                                 </div>
-                            @endforeach
+                              </div>
+                            </div>
                         </div>
 
-                        </div><!-- panel-body -->
-
-                        <div class="panel-footer" style="display: flex; justify-content: flex-end; padding-top: 0px;">
-                            @section('submit-buttons')
-                                <button id="defaultSaveBtn" type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
-                            @stop
-                            @yield('submit-buttons')
-                        </div>
-                    </form>
+                    </div>
 
                     <iframe id="form_target" name="form_target" style="display:none"></iframe>
                     <form id="my_form" action="{{ route('voyager.upload') }}" target="form_target" method="post"
@@ -142,13 +102,6 @@
 @stop
 
 @section('javascript')
-    <script>
-        $('#defaultSaveBtn').click(function(event) {
-          if(!event.detail || event.detail == 1){ return true; }
-          else { return false; }
-        })
-    </script>
-
     <script>
         var params = {};
         var $file;
@@ -221,4 +174,77 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
+    <script src="https://unpkg.com/vue-select@latest"></script>
+
+    <!-- VUE -->
+    <script type="text/javascript">
+        Vue.component('v-select', VueSelect.VueSelect)
+
+        var app = new Vue({
+        el: '#componentsForm',
+        data: {
+          form: {},
+          errors: {},
+          customload: false
+        },
+        methods:{
+          async saveComponent () {
+            // $('#savingDialog').modal({backdrop: 'static', keyboard: true});
+            // this.customload = true
+            // let currentUrl = window.location.href
+            // let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
+            // this.$set(this.form, 'size', this.form.size.toUpperCase())
+            // await axios.post('/admin/create/sizeType', this.form).then(data => {
+            //   this.customload = false
+            //   $('#savingDialog').modal('hide');
+            //   this.errors = {}
+            //   window.location = checkedit
+            // }).catch(error => {
+            //   this.customload = false
+            //   $('#savingDialog').modal('hide');
+            //   this.errors = error.response.data.errors
+            // })
+          },
+          async updateComponent () {
+            // $('#savingDialog').modal({backdrop: 'static', keyboard: true});
+            // this.customload = true
+            // let currentUrl = window.location.origin
+            // let browseUrl = `${currentUrl}/admin/container-size-types`
+            // this.$set(this.form, 'size', this.form.size.toUpperCase())
+            // await axios.post('/admin/update/sizeType', this.form).then(data => {
+            //   this.customload = false
+            //   $('#savingDialog').modal('hide');
+            //   this.errors = {}
+            //   window.location = browseUrl
+            // }).catch(error => {
+            //   this.customload = false
+            //   $('#savingDialog').modal('hide');
+            //   this.errors = error.response.data.errors
+            // })
+          },
+          async getdata () {
+            // let currentUrl = window.location.href
+            // let checkedit = currentUrl.split('/')[currentUrl.split('/').length - 1]
+            // if (checkedit === 'edit') {
+            //   let dataId = currentUrl.split('/')[currentUrl.split('/').length - 2]
+            //   let payload = {
+            //     id: parseInt(dataId)
+            //   }
+            //   await axios.get(`/admin/get/sizeType/byId/${payload.id}`).then(data => {
+            //     this.form = data.data
+            //   }).catch(error => {
+            //     console.log('error: ', error)
+            //   })
+            // }
+          }
+        },
+        mounted () {
+          this.getdata()
+        }
+      })
+    </script>
+    <!--  -->
 @stop
