@@ -78,27 +78,27 @@ class PostsController extends Controller
         $checker = Checker::where('user_id', $user_id)->pluck('user_id');
         if(count($checker) > 0) return true;
 
-        $client = Client::where('user_id', $user_id)->pluck('user_id');
-        if(count($client) > 0) return true;
+        // $client = Client::where('user_id', $user_id)->pluck('user_id');
+        // if(count($client) > 0) return true;
         else return false;
     }
 
     public function createClient(ValidateClientField $request)
     {
-        $account = $this->createUser($request, 'client');
-        if( $account=='exists') return response('Username already in use.', 400);
-        elseif ($account=='no_role') return response('Role "client" does not exist!', 400);
-
+        // $account = $this->createUser($request, 'client');
+        // if( $account=='exists') return response('Username already in use.', 400);
+        // elseif ($account=='no_role') return response('Role "client" does not exist!', 400);
+        $validate_client = $request->validated();
         $params = [
-            'account_id' => $account->id,
-            'code_name' => $request->code_name,
+            // 'account_id' => $account->id,
+            'code' => $validate_client['code'],
+            'name' => $validate_client['name'],
             // 'contact_no' => $request->contact_no,
-            'user_id' => $request->user_id,
+            // 'user_id' => $request->user_id,
         ];
 
-        $client = Client::create($params);
-        $account['client'] = $client;
-        return $account;
+        return Client::create($params);
+        // $account['client'] = $client;
     }
 
     public function createStaff(ValidateStaffField $request)

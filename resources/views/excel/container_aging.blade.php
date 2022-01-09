@@ -17,7 +17,7 @@
         </tr>
         @foreach($data as $key => $item)
         <tr>
-          <td>{{ $item->client->code_name }}</td>
+          <td>{{ $item->client->code }}</td>
           <td>{{ $item->container_no }}</td>
           <td>{{ $item->sizeType->code }}</td>
           <td>{{ $item->type->code }}</td>

@@ -59,7 +59,7 @@
                                             {{ $item->inspector->name }}&nbsp
                                         </td>
                                         <td style="padding: 0 10px;" v-on:click="viewContainerInfo( {{ $item }} )" class="viewItemOnClick">
-                                            {{ $item->client->code_name }}
+                                            {{ $item->client->code }}
                                         </td>
                                         <td>
                                             <button class="btn btn-sm btn-warning pull-right edit" style="margin-right: 5px;" v-on:click="printDatareceiving( {{ $item->id }} )">
@@ -109,7 +109,7 @@
                                             {{ $item->inspector->name }}&nbsp
                                         </td>
                                         <td style="padding: 0 10px" v-on:click="viewContainerInfo( {{ $item }} )" class="viewItemOnClick">
-                                            {{ $item->container->receiving->client->code_name }}
+                                            {{ $item->container->receiving->client->code }}
                                         </td>
                                         <td>
                                             <button class="btn btn-sm btn-warning pull-right edit" style="margin-right:5px;" v-on:click="printDatareleasing( {{ $item->id }} )">
@@ -225,7 +225,7 @@
                                         Client:
                                     </span>
                                     <span>
-                                        @{{containerInfo.client && containerInfo.client.code_name}}
+                                        @{{containerInfo.client && containerInfo.client.code}}
                                     </span>
                                 </div>
                                 <div v-if="containerInfo.damages">

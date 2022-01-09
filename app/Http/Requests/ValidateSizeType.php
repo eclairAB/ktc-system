@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
-
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ValidateSizeType extends FormRequest
@@ -26,7 +26,7 @@ class ValidateSizeType extends FormRequest
         return [
             // 'code' => 'required',
             // 'name' => 'required',
-            'size' => 'required|unique',
+            'size' => ['required', Rule::unique('container_size_types','code')],
             // 'type' => 'required',
         ];
     }

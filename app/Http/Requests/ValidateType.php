@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
-
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ValidateType extends FormRequest
@@ -24,7 +24,7 @@ class ValidateType extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|unique',
+            'code' => ['required', Rule::unique('types','code')],
             'name' => 'required',
         ];
     }
@@ -33,7 +33,7 @@ class ValidateType extends FormRequest
     {
         return [
             'code.required' => 'Code field is required.',
-            'code.unique' => 'Code already exist.',
+            'code.unique' => 'Code already exists.',
             'name.required' => 'Name field is required.',
         ];
     }

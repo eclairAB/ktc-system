@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
-
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ValidateCheckerField extends FormRequest
@@ -24,7 +24,7 @@ class ValidateCheckerField extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'email|unique',
+            'email' => ['required', Rule::unique('users','email')],
             'password_confirmation' => 'same:password',
             'id_no' => 'required',
             'firstname' => 'required',

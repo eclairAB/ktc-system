@@ -31,16 +31,21 @@
                         <div class="panel-body">
                             <div class="row" style="padding: 0px 10px;">
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
-                                <input type="text" name="code_name" id="code_name" v-model="form.code_name" class="form-control" :class="errors.code_name ? 'isError' : ''" style="height: 37px; text-transform: uppercase;">
-                                <label for="code_name" class="form-control-placeholder"> Code Name</label>
-                                <div class="customErrorText"><small>@{{ errors.code_name ? errors.code_name[0] : ''  }}</small></div>
+                                <input type="text" name="code" id="code" v-model="form.code" class="form-control" :class="errors.code ? 'isError' : ''" style="height: 37px; text-transform: uppercase;">
+                                <label for="code" class="form-control-placeholder"> Code</label>
+                                <div class="customErrorText"><small>@{{ errors.code ? errors.code[0] : ''  }}</small></div>
+                              </div>
+                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
+                                <input type="text" name="name" id="name" v-model="form.name" class="form-control" :class="errors.name ? 'isError' : ''" style="height: 37px; text-transform: uppercase;">
+                                <label for="name" class="form-control-placeholder"> Name</label>
+                                <div class="customErrorText"><small>@{{ errors.name ? errors.name[0] : ''  }}</small></div>
                               </div>
                               <!-- <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
                                 <input type="text" name="contact_no" id="contact_no" v-model="form.contact_no" class="form-control" :class="errors.contact_no ? 'isError' : ''">
                                 <label for="contact_no" class="form-control-placeholder"> Contact Number</label>
                                 <div class="customErrorText"><small>@{{ errors.contact_no ? errors.contact_no[0] : '' }}</small></div>
                               </div> -->
-                              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
+                              <!-- <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group mt-3">
                                 <input type="text" name="user_id" id="user_id" v-model="form.user_id" class="form-control" :class="errors.user_id ? 'isError' : ''">
                                 <label for="user_id" class="form-control-placeholder"> User Name</label>
                                 <div class="customErrorText"><small>@{{ errors.user_id ? errors.user_id[0] : '' }}</small></div>
@@ -54,7 +59,7 @@
                                 <input type="text" name="password_confirmation" id="password_confirmation" v-model="form.password_confirmation" class="form-control" :class="errors.password_confirmation ? 'isError' : ''">
                                 <label for="password_confirmation" class="form-control-placeholder"> Confirm Password</label>
                                 <div class="customErrorText"><small>@{{ errors.password_confirmation ? errors.password_confirmation[0] : '' }}</small></div>
-                              </div>
+                              </div> -->
                             </div>
                         </div>
 
@@ -206,7 +211,8 @@
             $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.customload = true
             let currentUrl = window.location.href
-            this.$set(this.form, 'code_name', this.form.code_name.toUpperCase())
+            this.$set(this.form, 'code', this.form.code.toUpperCase())
+            this.$set(this.form, 'name', this.form.name.toUpperCase())
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
             await axios.post('/admin/create/client', this.form).then(data => {
               this.customload = false
@@ -224,7 +230,8 @@
             this.customload = true
             let currentUrl = window.location.origin
             let browseUrl = `${currentUrl}/admin/clients`
-            this.$set(this.form, 'code_name', this.form.code_name.toUpperCase())
+            this.$set(this.form, 'code', this.form.code.toUpperCase())
+            this.$set(this.form, 'name', this.form.name.toUpperCase())
             await axios.post('/admin/update/client', this.form).then(data => {
               this.customload = false
               $('#savingDialog').modal('hide');

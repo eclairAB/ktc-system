@@ -77,7 +77,7 @@
                           <div class="customHintText" v-else></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
-                          <input type="text" name="client" disabled id="client" :value="containerInfo.client ? containerInfo.client.code_name : ''" style="height: 37px;" class="form-control">
+                          <input type="text" name="client" disabled id="client" :value="containerInfo.client ? containerInfo.client.code : ''" style="height: 37px;" class="form-control">
                           <label for="client" class="form-control-placeholder"> Client</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
