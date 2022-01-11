@@ -99,6 +99,26 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
         return $comp;
     }
+    public function getComponentsById($id)
+    {
+        return ContainerComponent::where('id', $id)->first();
+    }
+    public function getRepairsById($id)
+    {
+        return ContainerRepair::where('id', $id)->first();
+    }
+    public function getDamagesById($id)
+    {
+        return ContainerDamage::where('id', $id)->first();
+    }
+    public function getClassById($id)
+    {
+        return ContainerClass::where('id', $id)->first();
+    }
+    public function getYardById($id)
+    {
+        return YardLocation::where('id', $id)->first();
+    }
 
     public function getClientById($id)
     {

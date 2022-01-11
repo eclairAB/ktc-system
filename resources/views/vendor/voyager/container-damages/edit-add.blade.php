@@ -32,12 +32,12 @@
                         <div class="panel-body">
                             <div class="row" style="padding: 0px 10px;">
                               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group mt-3">
-                                <input type="text" name="code" id="code" v-model="form.code" class="form-control" :class="errors.code ? 'isError' : ''">
+                                <input type="text" name="code" id="code" v-model="form.code" class="form-control" :class="errors.code ? 'isError' : ''" style="text-transform: uppercase;">
                                 <label for="code" class="form-control-placeholder"> Code</label>
                                 <div class="customErrorText"><small>@{{ errors.code ? errors.code[0] : ''  }}</small></div>
                               </div>
                               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group mt-3">
-                                <input type="text" name="name" id="name" v-model="form.name" class="form-control" :class="errors.name ? 'isError' : ''">
+                                <input type="text" name="name" id="name" v-model="form.name" class="form-control" :class="errors.name ? 'isError' : ''" style="text-transform: uppercase;">
                                 <label for="name" class="form-control-placeholder"> Name</label>
                                 <div class="customErrorText"><small>@{{ errors.name ? errors.name[0] : '' }}</small></div>
                               </div>
@@ -192,53 +192,55 @@
         },
         methods:{
           async saveDamage () {
-            // $('#savingDialog').modal({backdrop: 'static', keyboard: true});
-            // this.customload = true
-            // let currentUrl = window.location.href
-            // let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
-            // this.$set(this.form, 'size', this.form.size.toUpperCase())
-            // await axios.post('/admin/create/sizeType', this.form).then(data => {
-            //   this.customload = false
-            //   $('#savingDialog').modal('hide');
-            //   this.errors = {}
-            //   window.location = checkedit
-            // }).catch(error => {
-            //   this.customload = false
-            //   $('#savingDialog').modal('hide');
-            //   this.errors = error.response.data.errors
-            // })
+            $('#savingDialog').modal({backdrop: 'static', keyboard: true});
+            this.customload = true
+            let currentUrl = window.location.href
+            let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
+            this.$set(this.form, 'code', this.form.code.toUpperCase())
+            this.$set(this.form, 'name', this.form.name.toUpperCase())
+            await axios.post('/admin/create/container/damages', this.form).then(data => {
+              this.customload = false
+              $('#savingDialog').modal('hide');
+              this.errors = {}
+              window.location = checkedit
+            }).catch(error => {
+              this.customload = false
+              $('#savingDialog').modal('hide');
+              this.errors = error.response.data.errors
+            })
           },
           async updateDamage () {
-            // $('#savingDialog').modal({backdrop: 'static', keyboard: true});
-            // this.customload = true
-            // let currentUrl = window.location.origin
-            // let browseUrl = `${currentUrl}/admin/container-size-types`
-            // this.$set(this.form, 'size', this.form.size.toUpperCase())
-            // await axios.post('/admin/update/sizeType', this.form).then(data => {
-            //   this.customload = false
-            //   $('#savingDialog').modal('hide');
-            //   this.errors = {}
-            //   window.location = browseUrl
-            // }).catch(error => {
-            //   this.customload = false
-            //   $('#savingDialog').modal('hide');
-            //   this.errors = error.response.data.errors
-            // })
+            $('#savingDialog').modal({backdrop: 'static', keyboard: true});
+            this.customload = true
+            let currentUrl = window.location.origin
+            let browseUrl = `${currentUrl}/admin/container-damages`
+            this.$set(this.form, 'code', this.form.code.toUpperCase())
+            this.$set(this.form, 'name', this.form.name.toUpperCase())
+            await axios.post('/admin/update/container/damages', this.form).then(data => {
+              this.customload = false
+              $('#savingDialog').modal('hide');
+              this.errors = {}
+              window.location = browseUrl
+            }).catch(error => {
+              this.customload = false
+              $('#savingDialog').modal('hide');
+              this.errors = error.response.data.errors
+            })
           },
           async getdata () {
-            // let currentUrl = window.location.href
-            // let checkedit = currentUrl.split('/')[currentUrl.split('/').length - 1]
-            // if (checkedit === 'edit') {
-            //   let dataId = currentUrl.split('/')[currentUrl.split('/').length - 2]
-            //   let payload = {
-            //     id: parseInt(dataId)
-            //   }
-            //   await axios.get(`/admin/get/sizeType/byId/${payload.id}`).then(data => {
-            //     this.form = data.data
-            //   }).catch(error => {
-            //     console.log('error: ', error)
-            //   })
-            // }
+            let currentUrl = window.location.href
+            let checkedit = currentUrl.split('/')[currentUrl.split('/').length - 1]
+            if (checkedit === 'edit') {
+              let dataId = currentUrl.split('/')[currentUrl.split('/').length - 2]
+              let payload = {
+                id: parseInt(dataId)
+              }
+              await axios.get(`/admin/get/container/damages/byId/${payload.id}`).then(data => {
+                this.form = data.data
+              }).catch(error => {
+                console.log('error: ', error)
+              })
+            }
           }
         },
         mounted () {

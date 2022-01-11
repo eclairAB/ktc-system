@@ -10,6 +10,11 @@ use App\Models\ContainerSizeType;
 use App\Models\ReceivingDamage;
 use App\Models\Staff;
 use App\Models\Type;
+use App\Models\ContainerComponent;
+use App\Models\ContainerDamage;
+use App\Models\ContainerRepair;
+use App\Models\ContainerClass;
+use App\Models\YardLocation;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -24,7 +29,7 @@ class UpdateController extends Controller
         $type = Type::where('id',$request->id)->first();
         $type->update($validate_type);
 
-        return $sizeType;
+        return $type;
     }
 
     public function updateSizeType(Request $request)
@@ -196,5 +201,45 @@ class UpdateController extends Controller
     public function ReceivingDamageDelete($id)
     {
         return ReceivingDamage::where('id',$id)->delete();
+    }
+
+    public function updateYard(Request $request)
+    {
+        $yard_data = $request->all();
+        $yard = YardLocation::where('id',$request->id)->first();
+        $yard->update($yard_data);
+        return $yard;
+    }
+
+    public function updateClass(Request $request)
+    {
+        $class_data = $request->all();
+        $class = ContainerClass::where('id',$request->id)->first();
+        $class->update($class_data);
+        return $class;
+    }
+
+    public function updateComponents(Request $request)
+    {
+        $comp_data = $request->all();
+        $comp = ContainerComponent::where('id',$request->id)->first();
+        $comp->update($comp_data);
+        return $comp;
+    }
+
+    public function updateDamages(Request $request)
+    {
+        $dmgs_data = $request->all();
+        $dmgs =  ContainerDamage::where('id',$request->id)->first();
+        $dmgs->update($dmgs_data);
+        return $dmgs;
+    }
+
+    public function updateRepairs(Request $request)
+    {
+        $rep_data = $request->all();
+        $rep = ContainerRepair::where('id',$request->id)->first();
+        $rep->update($rep_data);
+        return $rep;
     }
 }

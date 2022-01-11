@@ -10,6 +10,11 @@ use App\Http\Requests\ValidateSizeType;
 use App\Http\Requests\ValidateReceivingDamage;
 use App\Http\Requests\ValidateEmptyReceivingDamage;
 use App\Http\Requests\ValidateType;
+use App\Http\Requests\ValidateComponents;
+use App\Http\Requests\ValidateDamages;
+use App\Http\Requests\ValidateRepairs;
+use App\Http\Requests\ValidateContainerClass;
+use App\Http\Requests\ValidateYardLocation;
 use App\Models\ContainerSizeType;
 use App\Models\Client;
 use App\Models\Checker;
@@ -20,6 +25,12 @@ use App\Models\ContainerReceiving;
 use App\Models\Container;
 use App\Models\ContainerRemark;
 use App\Models\ReceivingDamage;
+use App\Models\ContainerComponent;
+use App\Models\ContainerDamage;
+use App\Models\ContainerRepair;
+use App\Models\ContainerClass;
+use App\Models\YardLocation;
+use App\Models\Type;
 use App\Models\EirNumber;
 use Carbon\Carbon;
 use DB;
@@ -233,6 +244,25 @@ class PostsController extends Controller
         return $receive;
     }
 
+    public function createYard(ValidateYardLocation $request)
+    {
+        $yard = $request->validated();
+        $dataYard = [
+            'name'=>$yard['name'],
+        ];
+        return YardLocation::create($dataYard);
+    }
+
+    public function createClass(ValidateContainerClass $request)
+    {
+        $class = $request->validated();
+        $dataClass = [
+            'class_code'=>$class['class_code'],
+            'class_name'=>$class['class_name'],
+        ];
+        return ContainerClass::create($dataClass);
+    }
+
     public function createSizeType(ValidateSizeType $request)
     {
         $sizeType = $request->validated();
@@ -243,6 +273,36 @@ class PostsController extends Controller
             // 'type'=>$sizeType['type']
         ];
         return ContainerSizeType::create($dataSizeT);
+    }
+
+    public function createComponents(ValidateComponents $request)
+    {
+        $comp = $request->validated();
+        $dataComp = [
+            'code'=>$comp['code'],
+            'name'=>$comp['name'],
+        ];
+        return ContainerComponent::create($dataComp);
+    }
+
+    public function createDamages(ValidateDamages $request)
+    {
+        $dmgs = $request->validated();
+        $dataDmg = [
+            'code'=>$dmgs['code'],
+            'name'=>$dmgs['name'],
+        ];
+        return ContainerDamage::create($dataDmg);
+    }
+
+    public function createRepairs(ValidateRepairs $request)
+    {
+        $reps = $request->validated();
+        $dataRep = [
+            'code'=>$reps['code'],
+            'name'=>$reps['name'],
+        ];
+        return ContainerRepair::create($dataRep);
     }
 
     protected function imageUpload($payload, $photo, $id=null)
