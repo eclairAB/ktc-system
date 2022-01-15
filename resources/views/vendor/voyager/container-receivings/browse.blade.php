@@ -452,6 +452,9 @@
             }, 100);
           })
         }
+      },
+      created() {
+        location.href='container-receivings/create'
       }
     })
   </script>

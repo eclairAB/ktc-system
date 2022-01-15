@@ -447,6 +447,9 @@
             }, 100);
           })
         }
+      },
+      created() {
+        location.href='container-releasings/create'
       }
     })
   </script>
