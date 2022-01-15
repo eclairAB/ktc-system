@@ -25,14 +25,6 @@ Route::get('/', function () {
 Route::group(['prefix' => 'admin'], function () {
     require __DIR__.'/voyager.php';
 
-    // restrict routes on the ff browse pages
-    Route::get('/container-receivings', function () { 
-        return redirect()->intended('/admin/container-receivings/create');
-    });
-    Route::get('/container-releasings', function () { 
-        return redirect()->intended('/admin/container-releasings/create');
-    });
-
     Route::get('/{url_role}', [ViewsController::class, "roleView"]);
     Route::get('/container-actions/{action}', [ViewsController::class, "containerActions"]);
     Route::get('/container-receivings-and-releasing/{action}', [ViewsController::class, "containerReceivingsAndReleasings"]);
