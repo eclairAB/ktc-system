@@ -380,7 +380,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     
             return $data;
         }
-        else
+        else if($request->option == 'ALL')
         {
             $data = Continer::when($request->type != 'NA', function ($q)  use($request){
                 return $q->where('type_id',$request->type);
