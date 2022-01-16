@@ -9,24 +9,25 @@
           <th style="font-weight:bold;">Date IN</th>
           <th style="font-weight:bold;">Consignee</th>
           <th style="font-weight:bold;">Date OUT</th>
+          <th style="font-weight:bold;">Consignee</th>
           <th style="font-weight:bold;">Booking</th>
           <th style="font-weight:bold;">Seal</th>
           <th style="font-weight:bold;">Days</th>
         </tr>
         @foreach($data as $key => $item)
         <tr>
-          <td>{{ $item->client->code }}</td>
           <td>{{ $item->container_no }}</td>
-          <td>{{ $item->sizeType->code }}</td>
-          <td>{{ $item->type->code }}</td>
-          <td>{{ Carbon\Carbon::parse($item->manufactured_date)->format('F d, Y') }}</td>
-          <td>{{ $item->containerClass->class_code }}</td>
-          <td>{{ Carbon\Carbon::parse($item->created_at)->format('F d, Y') }}</td>
+          <td>{{ $item->sizeType->size??'' }}</td>
+          <td>{{ $item->type->code??'' }}</td>
+          <td>{{ $item->receiving->empty_loaded??'' }}</td>
+          <td>{{ $item->client->code??'' }}</td>
+          <td>{{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}</td>
+          <td>{{ $item->receiving->consignee??'' }}</td>
+          <td>{{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}</td>
+          <td>{{ $item->releasing->consignee??'' }}</td>
+          <td>{{ $item->releasing->booking_no??'' }}</td>
+          <td>{{ $item->releasing->seal_no??'' }}</td>
           <td>{{ $item->total_no_days }}</td>
-          <td>{{ $item->empty_loaded }}</td>
-          <td>Received</td>
-          <td>{{ $item->consignee }}</td>
-          <td>{{ $item->remarks }}</td>
         </tr>
       @endforeach
 </table>
