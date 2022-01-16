@@ -406,7 +406,7 @@
             this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
             await axios.post('/admin/create/releasing', this.form).then(async data => {
-              this.loading = false
+              // this.loading = false
               $('#savingDialog').modal('hide');
               this.errors = {}
               let customId = data.data[0].container_id
@@ -420,7 +420,8 @@
                     w.print();
                     w.close();
                     let customUrl = `${window.location.origin}/admin/container-inquiry/${this.form.container_no}`
-                    window.location = customUrl
+                    // window.location = customUrl
+                    parent.window.location.reload();
                 }, 100);
               })
             }).catch(error => {
@@ -441,7 +442,7 @@
             this.$set(this.form, 'seal_no', this.form.seal_no.toUpperCase())
             this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             await axios.post('/admin/update/releasing', this.form).then(async data => {
-              this.loading = false
+              // this.loading = false
               $('#savingDialog').modal('hide');
               this.errors = {}
               let customUrl = `${window.location.origin}/admin/container-inquiry/${this.form.container_no}`

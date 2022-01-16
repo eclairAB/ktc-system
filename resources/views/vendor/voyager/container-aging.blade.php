@@ -111,36 +111,34 @@
 	      <table class="table table-bordered" style="margin-bottom: 0; color: black;">
 	        <thead>
 	          <tr>
-	            <th style="text-align: left;" scope="col">#</th>
-	            <th scope="col">Client</th>
 	            <th scope="col">Container No.</th>
+	            <th scope="col">Size</th>
 	            <th scope="col">Type</th>
-	            <th scope="col">Mfg Date</th>
-	            <th scope="col">Class</th>
-	            <th scope="col">Date In</th>
-	            <th scope="col">Total No. of Days</th>
-	            <th scope="col">Empty/Loaded</th>
-	            <th scope="col">Yard</th>
 	            <th scope="col">Status</th>
+	            <th scope="col">Client</th>
+	            <th scope="col">Date In</th>
 	            <th scope="col">Consignee</th>
-	            <th scope="col">Remarks</th>
+	            <th scope="col">Date Out</th>
+	            <th scope="col">Consignee</th>
+	            <th scope="col">Booking</th>
+	            <th scope="col">Seal</th>
+	            <th scope="col">Days</th>
 	          </tr>
 	        </thead>
 	        <tbody v-if="containerAgingList.length > 0">
 	          <tr v-for="(item, index) in containerAgingList" :key="index">
-	            <td>@{{ item.id }}</td>
-	            <td>@{{ item.client ? item.client.code : '' }}</td>
 	            <td>@{{ item.container_no }}</td>
+	            <td>@{{ item.size_type ? item.size_type.code : '' }}</td>
 	            <td>@{{ item.type ? item.type.code : '' }}</td>
-	            <td>@{{ moment(item.manufactured_date).format('MMMM YYYY') }}</td>
-	            <td>@{{ item.container_class ? item.container_class.class_code : '' }}</td>
-	            <td>@{{ moment(item.created_at).format('MMMM DD, YYYY') }}</td>
-	            <td>@{{ item.total_no_days }}</td>
-	            <td>@{{ item.empty_loaded }}</td>
-	            <td>@{{ item.yard_location ? item.yard_location.name : '' }}</td>
 	            <td>Received</td>
+	            <td>@{{ item.client ? item.client.code : '' }}</td>
+	            <td>@{{ moment(item.created_at).format('MMMM DD, YYYY') }}</td>
 	            <td>@{{ item.consignee }}</td>
-	            <td>@{{ item.remarks }}</td>
+	            <td>@{{ '' }}</td>
+	            <td>@{{ '' }}</td>
+	            <td>@{{ '' }}</td>
+	            <td>@{{ '' }}</td>
+	            <td>@{{ '' }}</td>
 	          </tr>
 	        </tbody>
 	        <tbody v-else>
