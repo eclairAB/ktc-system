@@ -38,6 +38,33 @@
                           <th style="padding: 10px 10px;">
                               Container
                           </th>
+                          <th style="padding: 10px 10px;">
+                              Size
+                          </th>
+                          <th style="padding: 10px 10px;">
+                              Type
+                          </th>
+                          <th style="padding: 10px 10px;">
+                              Eir-in
+                          </th>
+                          <th style="padding: 10px 10px;">
+                              Eir-out
+                          </th>
+                          <th style="padding: 10px 10px;">
+                              Status
+                          </th>
+                          <th style="padding: 10px 10px;">
+                              Client
+                          </th>
+                          <th style="padding: 10px 10px;">
+                              Gate-in
+                          </th>
+                          <th style="padding: 10px 10px;">
+                              Gate-out
+                          </th>
+                          <th style="padding: 10px 10px;">
+                              Remarks
+                          </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,11 +74,38 @@
                                     line-height: 30px;
                                 "
                                 class="viewItemOnClick"
-                                v-on:click="reroute('{{ $item->container_no }}')"
+                                v-on:click="reroute('{{ $item->receiving_id }}','{{ $item->releasing_id }}')"
                             >
                                 <td style="padding: 0 10px">
                                     {{ $item->container_no }}
                                 </td>
+                                <td style="padding: 0 10px">
+                                    {{ $item->sizeType->size??'' }}
+                                </td> 
+                                <td style="padding: 0 10px">
+                                    {{ $item->type->code??'' }}
+                                </td>    
+                                <td style="padding: 0 10px">
+                                    {{ $item->eirNoIn->eir_no??'' }}
+                                </td>    
+                                <td style="padding: 0 10px">
+                                    {{ $item->eirNoOut->eir_no??'' }}
+                                </td> 
+                                <td style="padding: 0 10px">
+                                    {{ $item->receiving->empty_loaded??'' }}
+                                </td>    
+                                <td style="padding: 0 10px">
+                                    {{ $item->client->code??'' }}
+                                </td>    
+                                <td style="padding: 0 10px">
+                                    {{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}
+                                </td>    
+                                <td style="padding: 0 10px">
+                                    {{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}
+                                </td> 
+                                <td style="padding: 0 10px">
+                                    {{ $item->receiving->remarks??'' }}
+                                </td>     
                             </tr>
                         @empty
                             <tr style="border-top: solid #5c5c5c29 1px; font-weight: bold; color: #979797;">
@@ -74,8 +128,16 @@
         searchinput: '',
     },
     methods: {
-        reroute(x) {
-            location.href = x
+        reroute(receiving_id,releasing_id) {
+           if(releasing_id)
+           {
+                let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+                window.location = customUrl
+           }
+           else{
+                let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
+                window.location = customUrl
+           }
         },
         submitForm(page_) {
             const page = document.querySelector("ul.pagination li.active span")

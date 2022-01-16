@@ -1,19 +1,17 @@
 <table>
     
         <tr>
-        <th style="font-weight:bold;">Shipping Line</th>
           <th style="font-weight:bold;">Container No.</th> 
           <th style="font-weight:bold;">Size</th>
           <th style="font-weight:bold;">Type</th>
-          <th style="font-weight:bold;">Manufactured Date</th>
-          <th style="font-weight:bold;">Class</th>
-          <th style="font-weight:bold;">Date IN</th>
-          <th style="font-weight:bold;">Total No. of Days</th>
-          <th style="font-weight:bold;">Empty/Loaded</th>
-          <th style="font-weight:bold;">Yard</th>
           <th style="font-weight:bold;">Status</th>
+          <th style="font-weight:bold;">Client</th>
+          <th style="font-weight:bold;">Date IN</th>
           <th style="font-weight:bold;">Consignee</th>
-          <th style="font-weight:bold;">Remarks</th>
+          <th style="font-weight:bold;">Date OUT</th>
+          <th style="font-weight:bold;">Booking</th>
+          <th style="font-weight:bold;">Seal</th>
+          <th style="font-weight:bold;">Days</th>
         </tr>
         @foreach($data as $key => $item)
         <tr>
