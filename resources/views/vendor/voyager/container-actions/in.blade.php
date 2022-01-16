@@ -67,11 +67,11 @@
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
                 class="form-control"
-                :options="typeList"
+                :options="emptyLoadedList"
                 style="height: 37px !important;"
-                v-model="form.type"
-                label="code"
-                :reduce="code => code.id"
+                v-model="form.status"
+                label="name"
+                :reduce="name => name.name"
               ></v-select>
               <label for="type" class="form-control-placeholder"> Status</label>
             </div>
@@ -93,11 +93,11 @@
                 style="height: 37px !important;"
                 class="form-control"
                 :options="classList"
-                v-model="form.loc"
+                v-model="form.class"
                 label="class_code"
                 :reduce="class_code => class_code.id"
               ></v-select>
-              <label for="loc" class="form-control-placeholder"> Class <span style="color: red;"> *</span></label>
+              <label for="class" class="form-control-placeholder"> Class <span style="color: red;"> *</span></label>
             </div>
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px; display: flex; justify-content: flex-end;">
@@ -136,7 +136,7 @@
         <tbody v-if="containerInList.length > 0">
           <tr v-for="(item, index) in containerInList" :key="index">
             <td>@{{ item.container_no }}</td>
-            <td>@{{ item.id }}</td>
+            <td>@{{ item }}</td>
             <td>@{{ item.size_type.code }} - @{{ item.size_type.name }}</td>
             <td>@{{ item.type.code }} - @{{ item.type.name }}</td>
             <td>@{{ item.client.code  }}</td>
@@ -188,6 +188,7 @@
       typeList: [],
       bookingNoList: [],
       containerNoList: [],
+      emptyLoadedList: [],
       classList: [],
       loading: false,
       containerInList: [],
@@ -200,16 +201,17 @@
         return moment(date).format('MM/DD/yyyy');
       },
       async getContainerIn () {
-        if (this.form.sizeType && this.form.client && this.form.container_no) {
+        console.log(this.form)
+        if (this.form.client && this.form.class && this.form.from && this.form.to) {
           this.generateLoad = true
           let payload = {
-            type: this.form.type,
-            sizeType: this.form.sizeType,
+            type: this.form.type === undefined || null ? 'NA' : this.form.type,
+            sizeType: this.form.sizeType === undefined || null ? 'NA' : this.form.sizeType,
             client: this.form.client,
-            container_no: this.form.container_no,
-            loc: this.form.from === undefined || null ? 'NA' : this.form.loc,
-            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
-            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
+            class: this.form.class,
+            status: this.form.status === undefined || null ? 'NA' : this.form.status,
+            from: moment(this.form.from).format('YYYY-MM-DD'),
+            to: moment(this.form.to).format('YYYY-MM-DD')
           }
           await axios.post(`/admin/get/daily_in`, payload).then(data => {
             this.generateLoad = false
@@ -234,20 +236,20 @@
         }
       },
       async exportContainerIn () {
-        if (this.form.sizeType && this.form.client && this.form.container_no) {
+        if (this.form.client && this.form.class && this.form.from && this.form.to) {
           this.exportLoad = true
           let payload = {
-            type: this.form.type,
-            sizeType: this.form.sizeType,
+            type: this.form.type === undefined || null ? 'NA' : this.form.type,
+            sizeType: this.form.sizeType === undefined || null ? 'NA' : this.form.sizeType,
             client: this.form.client,
-            container_no: this.form.container_no,
-            loc: this.form.from === undefined || null ? 'NA' : this.form.loc,
-            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
-            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
+            class: this.form.class,
+            status: this.form.status === undefined || null ? 'NA' : this.form.status,
+            from: moment(this.form.from).format('YYYY-MM-DD'),
+            to: moment(this.form.to).format('YYYY-MM-DD')
           }
-          await axios.get(`/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`).then(data => {
+          await axios.get(`/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`).then(data => {
             this.exportLoad = false
-            window.open(`${location.origin}/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`, "_blank");
+            window.open(`${location.origin}/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.status}/${payload.from}/${payload.to}`, "_blank");
           }).catch(error => {
             this.exportLoad = false
             console.log(error)
@@ -321,7 +323,12 @@
         }).catch(error => {
           console.log('error: ', error)
         })
-      }
+      },
+      async getEmptyLoaded () {
+        await axios.get(`/admin/get/emptyloaded`).then(data => {
+          this.emptyLoadedList = data.data
+        })
+      },
     },
     mounted () {
       this.getSize()
@@ -329,6 +336,7 @@
       this.getClient()
       this.getContainerNo()
       this.getClass()
+      this.getEmptyLoaded()
     }
   })
 
