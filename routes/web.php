@@ -39,6 +39,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/container/component',[QueriesController::class,"getContainerComponent"]);
     Route::get('/get/container/repair',[QueriesController::class,"getContainerRepair"]);
     Route::get('/get/emptyloaded',[QueriesController::class,"getEmptyLoaded"]);
+    Route::get('/get/client/dateIn',[QueriesController::class,"getClientByDateIn"]);
+    Route::get('/get/client/dateOut',[QueriesController::class,"getClientByDateOut"]);
 
     Route::post('/create/container/classes', [PostsController::class, "createClass"]);
     Route::post('/create/container/damages', [PostsController::class, "createDamages"]);

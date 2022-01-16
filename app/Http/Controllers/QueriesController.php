@@ -64,6 +64,31 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         return $client;
     }
 
+    public function getClientByDateIn(Request $request)
+    {
+        $recs = ContainerReceiving::when($request->from, function ($q){
+            return $q->whereDate('inspected_date','>=',$request->from);
+        })->when($request->to, function ($q){
+            return $q->whereDate('inspected_date','<=',$request->to);
+        })->pluck('client_id');
+
+        $client = Client::whereIn('id',$recs)->get();
+        return $client;
+    }
+
+    public function getClientByDateOut(Request $request)
+    {
+        $rels = ContainerReleasing::when($request->from, function ($q){
+            return $q->whereDate('inspected_date','>=',$re->from);
+        })->when($request->to, function ($q){
+            return $q->whereDate('inspected_date','<=',$this->to);
+        })->pluck('id');
+        $conts = Container::whereIn('releasing_id',$rels)->pluck('client_id');
+
+        $client = Client::whereIn('id',$conts)->get();
+        return $client;
+    }
+
     public function getYardLocation(Request $request)
     {
         $yardloc = YardLocation::when(!empty($request->keyword), function ($q) use ($request){
@@ -295,6 +320,32 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         return $data;
     }
 
+    public function getContainerAging(Request $request)
+    {
+        $data = ContainerReceiving::when($request->type != 'NA', function ($q)  use($request){
+            return $q->where('type_id',$request->type);
+        })->when($request->sizeType != 'NA', function ($q) use($request){
+            return $q->where('size_type',$request->sizeType);
+        })->when($request->client != 'NA', function ($q) use($request){
+            return $q->where('client_id',$request->client);
+        })->when($request->class != 'NA', function ($q) use($request){
+            return $q->where('class',$request->class);
+        })->when($request->date_as_of != 'NA', function ($q) use($request){
+            return $q->whereDate('inspected_date','=',$request->date_as_of);
+        })->whereHas('container',function( $query ) use($request){
+            $query->where('client_id',$request->client)
+                ->where('size_type',$request->sizeType)->whereNull('releasing_id')->latest('created_at');
+        })->with('client','sizeType','yardLocation','containerClass','type')->get();
+
+        foreach($data as $res)
+        {
+            $diff_days = Carbon::parse($res->inspected_date)->diffInDays('now');
+            $res->total_no_days = $diff_days;
+        }
+
+        return $data;
+    }
+
     public function containerInquiry(Request $request, $container_no)
     {
         if($container_no == 'browse')
@@ -378,32 +429,6 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $zip->close();
         }
         return response()->download($path . $fileName);
-    }
-
-    public function getContainerAging(Request $request)
-    {
-        $data = ContainerReceiving::when($request->type != 'NA', function ($q)  use($request){
-            return $q->where('type_id',$request->type);
-        })->when($request->sizeType != 'NA', function ($q) use($request){
-            return $q->where('size_type',$request->sizeType);
-        })->when($request->client != 'NA', function ($q) use($request){
-            return $q->where('client_id',$request->client);
-        })->when($request->class != 'NA', function ($q) use($request){
-            return $q->where('class',$request->class);
-        })->when($request->date_as_of != 'NA', function ($q) use($request){
-            return $q->whereDate('inspected_date','=',$request->date_as_of);
-        })->whereHas('container',function( $query ) use($request){
-            $query->where('client_id',$request->client)
-                ->where('size_type',$request->sizeType)->whereNull('releasing_id')->latest('created_at');
-        })->with('client','sizeType','yardLocation','containerClass','type')->get();
-
-        foreach($data as $res)
-        {
-            $diff_days = Carbon::parse($res->inspected_date)->diffInDays('now');
-            $res->total_no_days = $diff_days;
-        }
-
-        return $data;
     }
 
     public function getType(Request $request)
