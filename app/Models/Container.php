@@ -15,6 +15,7 @@ class Container extends Model
         'class',
         'receiving_id',
         'releasing_id',
+        'type_id',
     ];
 
     public function client()
@@ -40,5 +41,20 @@ class Container extends Model
     public function releasing()
     {
         return $this->belongsTo(ContainerReleasing::class);
+    }
+
+    public function eirNoIn()
+    {
+        return $this->HasOne(EirNumber::class, 'container_id','id')->where('eir_no','ilike','%I-%');
+    }
+
+    public function eirNoOut()
+    {
+        return $this->HasOne(EirNumber::class, 'container_id','id')->where('eir_no','ilike','%O-%');
+    }
+
+    public function type()
+    {
+        return $this->HasOne(Type::class, 'id','type_id');
     }
 }

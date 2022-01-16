@@ -32,7 +32,7 @@ class ContainerReleasing extends Model
 
     public function container()
     {
-        return $this->HasOne(Container::class, 'container_no', 'container_no');
+        return $this->HasOne(Container::class, 'releasing_id', 'id');
     }
 
     public function receiving()
