@@ -322,28 +322,98 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getContainerAging(Request $request)
     {
-        $data = ContainerReceiving::when($request->type != 'NA', function ($q)  use($request){
-            return $q->where('type_id',$request->type);
-        })->when($request->sizeType != 'NA', function ($q) use($request){
-            return $q->where('size_type',$request->sizeType);
-        })->when($request->client != 'NA', function ($q) use($request){
-            return $q->where('client_id',$request->client);
-        })->when($request->class != 'NA', function ($q) use($request){
-            return $q->where('class',$request->class);
-        })->when($request->date_as_of != 'NA', function ($q) use($request){
-            return $q->whereDate('inspected_date','=',$request->date_as_of);
-        })->whereHas('container',function( $query ) use($request){
-            $query->where('client_id',$request->client)
-                ->where('size_type',$request->sizeType)->whereNull('releasing_id')->latest('created_at');
-        })->with('client','sizeType','yardLocation','containerClass','type')->get();
-
-        foreach($data as $res)
+        if($request->option == 'IN')
         {
-            $diff_days = Carbon::parse($res->inspected_date)->diffInDays('now');
-            $res->total_no_days = $diff_days;
+            $data = Container::when($request->type != 'NA', function ($q)  use($request){
+                return $q->where('type_id',$request->type);
+            })->when($request->sizeType != 'NA', function ($q) use($request){
+                return $q->where('size_type',$request->sizeType);
+            })->when($request->client != 'NA', function ($q) use($request){
+                return $q->where('client_id',$request->client);
+            })->when($request->class != 'NA', function ($q) use($request){
+                return $q->where('class',$request->class);
+            })->whereHas('receiving',function( $query ) use($request){
+                $query->when($request->date_in_from != 'NA', function ($q) use($request){
+                    return $q->whereDate('inspected_date','>=',$request->date_in_from);
+                })->when($request->date_in_to != 'NA', function ($q) use($request){
+                    return $q->whereDate('inspected_date','<=',$request->date_in_to);
+                })->when($request->status != 'NA', function ($q) use($request){
+                    return $q->where('empty_loaded',$request->status);
+                });
+            })->with('client','sizeType','containerClass','type','receiving')->orderBy('created_at','ASC')->get();
+    
+            foreach($data as $res)
+            {
+                $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
+                $res->total_no_days = $diff_days;
+            }
+    
+            return $data;
         }
-
-        return $data;
+        else if($request->option == 'OUT')
+        {
+            $data = Container::when($request->type != 'NA', function ($q)  use($request){
+                return $q->where('type_id',$request->type);
+            })->when($request->sizeType != 'NA', function ($q) use($request){
+                return $q->where('size_type',$request->sizeType);
+            })->when($request->client != 'NA', function ($q) use($request){
+                return $q->where('client_id',$request->client);
+            })->when($request->class != 'NA', function ($q) use($request){
+                return $q->where('class',$request->class);
+            })->whereHas('releasing',function( $query ) use($request){
+                $query->when($request->date_out_from != 'NA', function ($q) use($request){
+                    return $q->whereDate('inspected_date','>=',$request->date_out_from);
+                })->when($request->date_out_to != 'NA', function ($q) use($request){
+                    return $q->whereDate('inspected_date','<=',$request->date_out_to);
+                });
+            })->whereHas('receiving',function( $query ) use($request){
+                $query->when($request->status != 'NA', function ($q) use($request){
+                    return $q->where('empty_loaded',$request->status);
+                });
+            })->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
+    
+            foreach($data as $res)
+            {
+                $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
+                $res->total_no_days = $diff_days;
+            }
+    
+            return $data;
+        }
+        else
+        {
+            $data = Continer::when($request->type != 'NA', function ($q)  use($request){
+                return $q->where('type_id',$request->type);
+            })->when($request->sizeType != 'NA', function ($q) use($request){
+                return $q->where('size_type',$request->sizeType);
+            })->when($request->client != 'NA', function ($q) use($request){
+                return $q->where('client_id',$request->client);
+            })->when($request->class != 'NA', function ($q) use($request){
+                return $q->where('class',$request->class);
+            })->whereHas('receiving',function( $query ) use($request){
+                $query->when($request->date_in_from != 'NA', function ($q) use($request){
+                    return $q->whereDate('inspected_date','>=',$request->date_in_from);
+                })->when($request->date_in_to != 'NA', function ($q) use($request){
+                    return $q->whereDate('inspected_date','<=',$request->date_in_to);
+                })->when($request->status != 'NA', function ($q) use($request){
+                    return $q->where('empty_loaded',$request->status);
+                });
+            })->whereHas('releasing',function( $query ) use($request){
+                $query->when($request->date_out_from != 'NA', function ($q) use($request){
+                    return $q->whereDate('inspected_date','>=',$request->date_out_from);
+                })->when($request->date_out_to != 'NA', function ($q) use($request){
+                    return $q->whereDate('inspected_date','<=',$request->date_out_to);
+                });
+            })->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
+    
+            foreach($data as $res)
+            {
+                $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
+                $res->total_no_days = $diff_days;
+            }
+    
+            return $data;
+        }
     }
 
     public function containerInquiry(Request $request, $container_no)
