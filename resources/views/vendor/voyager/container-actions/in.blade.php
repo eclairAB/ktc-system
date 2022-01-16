@@ -13,16 +13,55 @@
         </div>
         <div class="col-xs-12" style="margin: 0;">
           <div class="row" style="padding: 0 15px;">
-          	<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+              <vuejs-datepicker
+                v-model="form.from"
+                placeholder="mm/dd/yyyyy"
+                input-class="form-control"
+                :typeable="true"
+                name="from"
+                :format="dateFormat"
+                :required="true">
+              </vuejs-datepicker>
+              <label for="from" class="form-control-placeholder"> Date In <span style="color: red;"> *</span></label>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+              <vuejs-datepicker
+                v-model="form.to"
+                placeholder="mm/dd/yyyyy"
+                input-class="form-control"
+                :typeable="true"
+                name="to"
+                :format="dateFormat"
+                :required="true">
+              </vuejs-datepicker>
+              <label for="to" class="form-control-placeholder"> Date To <span style="color: red;"> *</span></label>
+            </div>
+            
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
-                :options="sizeTypeList"
                 style="height: 37px !important;"
-                v-model="form.sizeType"
+                :options="clientList"
+                v-model="form.client"
+                label="code"
                 class="form-control"
+                :reduce="code => code.id"
+              ></v-select>
+              <label for="client" class="form-control-placeholder"> Client <span style="color: red;"> *</span></label>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+              <v-select
+                class="form-control"
+                :options="typeList"
+                style="height: 37px !important;"
+                v-model="form.type"
                 label="code"
                 :reduce="code => code.id"
               ></v-select>
-              <label for="code" class="form-control-placeholder"> Size<span style="color: red;"> *</span></label>
+              <label for="type" class="form-control-placeholder"> Type</label>
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -34,77 +73,31 @@
                 label="code"
                 :reduce="code => code.id"
               ></v-select>
-              <label for="type" class="form-control-placeholder"> Type</label>
+              <label for="type" class="form-control-placeholder"> Status</label>
+            </div>
+
+          	<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+              <v-select
+                :options="sizeTypeList"
+                style="height: 37px !important;"
+                v-model="form.sizeType"
+                class="form-control"
+                label="code"
+                :reduce="code => code.id"
+              ></v-select>
+              <label for="code" class="form-control-placeholder"> Size</label>
             </div>
             
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
                 style="height: 37px !important;"
-                :options="clientList"
-                v-model="form.client"
-                label="code"
                 class="form-control"
-                :reduce="code => code.id"
-              ></v-select>
-              <label for="client" class="form-control-placeholder"> Client <span style="color: red;"> *</span></label>
-            </div>
-            
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-              <v-select
-                style="height: 37px !important;"
-                class="form-control"
-                :options="yardList"
+                :options="classList"
                 v-model="form.loc"
-                label="name"
-                :reduce="name => name.id"
+                label="class_code"
+                :reduce="class_code => class_code.id"
               ></v-select>
-              <label for="loc" class="form-control-placeholder"> Yard Location</label>
-            </div>
-
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-              <v-select
-                style="height: 37px !important;"
-                :class="errors.type ? 'isError form-control' : 'form-control'"
-                :options="containerNoList"
-                v-model="form.container_no"
-              >
-              	<template #search="{attributes, events}">
-                  <input
-                    class="vs__search"
-                    v-bind="attributes"
-                    v-on="events"
-                    style="color: black;"
-                    @input="searchContainerNo()"
-                  />
-                </template>
-              </v-select>
-              <label for="lastname" class="form-control-placeholder"> Container No. <span style="color: red;"> *</span></label>
-            </div>
-
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-            	<vuejs-datepicker
-                v-model="form.from"
-                placeholder="mm/dd/yyyyy"
-                input-class="form-control"
-                :typeable="true"
-                name="from"
-                :format="dateFormat"
-                :required="true">
-              </vuejs-datepicker>
-              <label for="from" class="form-control-placeholder"> Date From</label>
-            </div>
-
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-            	<vuejs-datepicker
-                v-model="form.to"
-                placeholder="mm/dd/yyyyy"
-                input-class="form-control"
-                :typeable="true"
-                name="to"
-                :format="dateFormat"
-                :required="true">
-              </vuejs-datepicker>
-              <label for="to" class="form-control-placeholder"> Date To</label>
+              <label for="loc" class="form-control-placeholder"> Class <span style="color: red;"> *</span></label>
             </div>
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px; display: flex; justify-content: flex-end;">
@@ -127,34 +120,32 @@
       <table class="table table-bordered" style="margin-bottom: 0; color: black;">
         <thead>
           <tr>
-            <th style="text-align: left;" scope="col">Eir No.</th>
-            <th scope="col">Container No.</th>
-            <th scope="col">Size/Type</th>
-            <th scope="col">Date In</th>
-            <th scope="col">Shipping Line</th>
-            <th scope="col">Truckers</th>
+            <th style="text-align: left;" scope="col">Container No.</th>
+            <th scope="col">EIR</th>
+            <th scope="col">Size</th>
+            <th scope="col">Type</th>
+            <th scope="col">Client</th>
+            <th scope="col">Consignee</th>
             <th scope="col">Plate No.</th>
-            <th scope="col">Inspected By</th>
+            <th scope="col">Trucker</th>
             <th scope="col">Class</th>
-            <th scope="col">Manufactured Date</th>
-            <th scope="col">Status</th>
             <th scope="col">Remarks</th>
+            <th scope="col">Date In</th>
           </tr>
         </thead>
         <tbody v-if="containerInList.length > 0">
           <tr v-for="(item, index) in containerInList" :key="index">
-            <td>@{{ item.id }}</td>
             <td>@{{ item.container_no }}</td>
+            <td>@{{ item.id }}</td>
             <td>@{{ item.size_type.code }} - @{{ item.size_type.name }}</td>
-            <td>@{{ moment(item.inspected_date).format('MMMM DD, YYYY') }}</td>
-            <td>@{{ item.client.code }}</td>
-            <td>@{{ item.hauler }}</td>
+            <td>@{{ item.type.code }} - @{{ item.type.name }}</td>
+            <td>@{{ item.client.code  }}</td>
+            <td>@{{ item.consignee }}</td>
             <td>@{{ item.plate_no }}</td>
-            <td>@{{ item.inspector.name }}</td>
+            <td>@{{ item.hauler }}</td>
             <td>@{{ item.container_class.class_name }}</td>
-            <td>@{{ moment(item.manufactured_date).format('MMMM YYYY') }}</td>
-            <td>Received</td>
             <td>@{{ item.remarks }}</td>
+            <td>@{{ moment(item.inspected_date).format('MMMM DD, YYYY') }}</td>
           </tr>
         </tbody>
         <tbody v-else>
@@ -197,7 +188,7 @@
       typeList: [],
       bookingNoList: [],
       containerNoList: [],
-      yardList: [],
+      classList: [],
       loading: false,
       containerInList: [],
       tableLoad: false,
@@ -299,12 +290,12 @@
           console.log('error: ', error)
         })
       },
-      async getYard () {
+      async getClass () {
         let search = {
           keyword: ''
         }
-        await axios.get(`/admin/get/yards?keyword=${search.keyword}`, search).then( data => {
-          this.yardList = data.data
+        await axios.get(`/admin/get/container/classes?keyword=${search.keyword}`, search).then( data => {
+          this.classList = data.data
         }).catch(error => {
           console.log('error: ', error)
         })
@@ -337,7 +328,7 @@
       this.getType()
       this.getClient()
       this.getContainerNo()
-      this.getYard()
+      this.getClass()
     }
   })
 
