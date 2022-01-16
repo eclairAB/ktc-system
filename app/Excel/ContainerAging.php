@@ -89,7 +89,7 @@ class ContainerAging implements  FromView, ShouldAutoSize
     
             return view('excel.container_aging',compact('data'));
         }
-        else
+        else if($this->option == 'ALL')
         {
             $data = Continer::when($this->type != 'NA', function ($q)  {
                 return $q->where('type_id',$this->type);
