@@ -21,7 +21,8 @@
                 :typeable="true"
                 name="from"
                 :format="dateFormat"
-                :required="true">
+                :required="true"
+                @input="getClient">
               </vuejs-datepicker>
               <label for="from" class="form-control-placeholder"> Date Out <span style="color: red;"> *</span></label>
             </div>
@@ -34,7 +35,8 @@
                 :typeable="true"
                 name="to"
                 :format="dateFormat"
-                :required="true">
+                :required="true"
+                @input="getClient">
               </vuejs-datepicker>
               <label for="to" class="form-control-placeholder"> Date To <span style="color: red;"> *</span></label>
             </div>
@@ -199,6 +201,20 @@
     	dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
       },
+      async getClient () {
+        if (this.form.from && this.form.to) {
+          let search = {
+            keyword: '',
+            from: moment(this.form.from).format('YYYY-MM-DD'),
+            to: moment(this.form.to).format('YYYY-MM-DD'),
+          }
+          await axios.get(`/admin/get/client/dateOut?keyword=${search.keyword}&from=${search.from}&to=${search.to}`, search).then( data => {
+            this.clientList = data.data
+          }).catch(error => {
+            console.log('error: ', error)
+          })
+        }
+      },
       async getContainerOut () {
         if (this.form.client && this.form.class && this.form.from && this.form.to) {
         	this.generateLoad = true
@@ -280,16 +296,6 @@
           console.log('error: ', error)
         })
       },
-      async getClient () {
-        let search = {
-          keyword: ''
-        }
-        await axios.get(`/admin/get/clients?keyword=${search.keyword}`, search).then( data => {
-          this.clientList = data.data
-        }).catch(error => {
-          console.log('error: ', error)
-        })
-      },
       selectBooking () {
       	this.isOk = false
       	this.getContainerNo()
@@ -357,7 +363,6 @@
     mounted () {
       this.getSize()
       this.getType()
-      this.getClient()
       this.getBookingNo()
       this.getClass()
       this.getEmptyLoaded()

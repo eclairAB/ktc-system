@@ -29,7 +29,92 @@
 	        <div class="col-xs-12" style="margin: 0;">
 	          <div class="row" style="padding: 0 15px;">
 	            
-	            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+	            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+	              <v-select
+	                style="height: 37px !important;"
+	                :options="['ALL','IN','OUT']"
+	                v-model="form.option"
+	                class="form-control"
+	              ></v-select>
+	              <label for="option" class="form-control-placeholder"> Container Record</label>
+	            </div>
+
+	            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+	              <vuejs-datepicker
+	                v-model="form.date_in_from"
+	                placeholder="mm/dd/yyyyy"
+	                input-class="form-control"
+	                :disabled="inDate"
+	                :typeable="true"
+	                name="from"
+	                :format="dateFormat"
+	                :required="true"
+	                @input="getClient">
+	              </vuejs-datepicker>
+	              <label for="from" class="form-control-placeholder"> Container In Date From</label>
+	            </div>
+
+	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+	              <vuejs-datepicker
+	                v-model="form.date_in_to"
+	                placeholder="mm/dd/yyyyy"
+	                input-class="form-control"
+	                :typeable="true"
+	                :disabled="inDate"
+	                name="to"
+	                :format="dateFormat"
+	                :required="true"
+	                @input="getClient">
+	              </vuejs-datepicker>
+	              <label for="to" class="form-control-placeholder"> Container In Date To </label>
+	            </div>
+
+	            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+	              <vuejs-datepicker
+	                v-model="form.date_out_from"
+	                placeholder="mm/dd/yyyyy"
+	                input-class="form-control"
+	                :disabled="outDate"
+	                :typeable="true"
+	                name="from"
+	                :format="dateFormat"
+	                :required="true"
+	                @input="getClient">
+	              </vuejs-datepicker>
+	              <label for="from" class="form-control-placeholder"> Container Out Date In </label>
+	            </div>
+
+	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+	              <vuejs-datepicker
+	                v-model="form.date_out_to"
+	                placeholder="mm/dd/yyyyy"
+	                input-class="form-control"
+	                :disabled="outDate"
+	                :typeable="true"
+	                name="to"
+	                :format="dateFormat"
+	                :required="true"
+	                @input="getClient">
+	              </vuejs-datepicker>
+	              <label for="to" class="form-control-placeholder"> Container Out Date To </label>
+	            </div>
+
+	            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px;">
+	            </div>
+
+	            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+	              <v-select
+	                :options="emptyLoadedList"
+	                style="height: 37px !important;"
+	                v-model="form.status"
+	                class="form-control"
+	                label="name"
+	                :reduce="name => name.name"
+	              ></v-select>
+	              <label for="status" class="form-control-placeholder"> Status</label>
+	            </div>
+
+	            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
 	              <v-select
 	                style="height: 37px !important;"
 	                :options="clientList"
@@ -38,7 +123,7 @@
 	                class="form-control"
 	                :reduce="code => code.id"
 	              ></v-select>
-	              <label for="client" class="form-control-placeholder"> Client <span style="color: red;"> *</span></label>
+	              <label for="client" class="form-control-placeholder"> Client </label>
 	            </div>
 
 	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -62,7 +147,7 @@
 	                label="code"
 	                :reduce="code => code.id"
 	              ></v-select>
-	              <label for="sizeType" class="form-control-placeholder"> Size<span style="color: red;"> *</span></label>
+	              <label for="sizeType" class="form-control-placeholder"> Size</label>
 	            </div>
 
 	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -74,22 +159,9 @@
                   label="code"
                   :reduce="code => code.id"
                 ></v-select>
-                <label for="type" class="form-control-placeholder"> Type <span style="color: red;"> *</span></label>
+                <label for="type" class="form-control-placeholder"> Type </label>
                 <div class="customErrorText"><small>@{{ errors.size_type ? errors.size_type[0] : '' }}</small></div>
               </div>
-
-	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-	            	<vuejs-datepicker
-	                v-model="form.date_as_of"
-	                placeholder="mm/dd/yyyyy"
-	                input-class="form-control"
-	                :typeable="true"
-	                name="date_as_of"
-	                :format="dateFormat"
-	                :required="true">
-	              </vuejs-datepicker>
-	              <label for="date_as_of" class="form-control-placeholder"> Date as of</label>
-	            </div>
 
 	            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px; display: flex; justify-content: flex-end;">
 	            	<button class="btn btn-primary" :disabled="generateLoad" @click="getContainerAging">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
@@ -130,15 +202,15 @@
 	            <td>@{{ item.container_no }}</td>
 	            <td>@{{ item.size_type ? item.size_type.code : '' }}</td>
 	            <td>@{{ item.type ? item.type.code : '' }}</td>
-	            <td>Received</td>
+	            <td>@{{ item.receiving.empty_loaded }}</td>
 	            <td>@{{ item.client ? item.client.code : '' }}</td>
-	            <td>@{{ moment(item.created_at).format('MMMM DD, YYYY') }}</td>
-	            <td>@{{ item.consignee }}</td>
-	            <td>@{{ '' }}</td>
-	            <td>@{{ '' }}</td>
-	            <td>@{{ '' }}</td>
-	            <td>@{{ '' }}</td>
-	            <td>@{{ '' }}</td>
+	            <td>@{{ item.receiving ? moment(item.receiving.inspected_date).format('MMMM DD, YYYY') : '' }}</td>
+	            <td>@{{ item.receiving ? item.receiving.consignee : '' }}</td>
+	            <td>@{{ item.releasing ? moment(item.releasing.inspected_date).format('MMMM DD, YYYY') : '' }}</td>
+	            <td>@{{ item.releasing ? item.releasing.consignee : '' }}</td>
+	            <td>@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
+	            <td>@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
+	            <td>@{{ item.total_no_days }}</td>
 	          </tr>
 	        </tbody>
 	        <tbody v-else>
@@ -182,71 +254,80 @@
       sizeTypeList: [],
       typeList: [],
       containerAgingList: [],
+      emptyLoadedList: [],
       loading: false,
       tableLoad: false,
       generateLoad: false,
       exportLoad: false
+    },
+    computed: {
+    	inDate () {
+    		if(this.form.option === 'IN' || this.form.option === 'ALL'){
+    			return false
+    		} else {
+    			return true
+    		}
+    	},
+			outDate () {
+				if(this.form.option === 'OUT' || this.form.option === 'ALL'){
+					return false
+				} else {
+					return true
+				}
+			},
     },
     methods: {
     	dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
       },
       async getContainerAging () {
-        if (this.form.sizeType && this.form.client && this.form.type) {
-          this.generateLoad = true
-          let payload = {
-            client: this.form.client,
-            type: this.form.type === undefined || null ? 'NA' : this.form.type,
-            class: this.form.class === undefined || null ? 'NA' : this.form.class,
-            sizeType: this.form.sizeType,
-            date_as_of: this.form.date_as_of === undefined || null ? 'NA' : moment(this.form.date_as_of).format('YYYY-MM-DD')
-          }
-          await axios.post(`/admin/get/container/aging`, payload).then(data => {
-            this.generateLoad = false
-            this.containerAgingList = data.data
-            if (data.data.length === 0) {
-              Swal.fire({
-                title: '',
-                text: 'No record found!',
-                icon: 'error',
-              })
-            }
-          }).catch(error => {
-            this.generateLoad = false
-            console.log(error)
-          })
-        } else {
-          Swal.fire({
-            title: '',
-            text: 'Please fill out the required fields!',
-            icon: 'error',
-          })
+        this.generateLoad = true
+        let payload = {
+          type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
+          sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
+          client: this.form.client === undefined || this.form.client === null ? 'NA' : this.form.client,
+          class: this.form.class === undefined || this.form.class === null ? 'NA' : this.form.class,
+          status: this.form.status === undefined || this.form.status === null ? 'NA' : this.form.status,
+          date_in_from: this.form.date_in_from === undefined || this.form.date_in_from === null ? 'NA' : moment(this.form.date_in_from).format('YYYY-MM-DD'),
+          date_in_to: this.form.date_in_to === undefined || this.form.date_in_to === null ? 'NA' : moment(this.form.date_in_to).format('YYYY-MM-DD'),
+          date_out_from: this.form.date_out_from === undefined || this.form.date_out_from === null ? 'NA' : moment(this.form.date_out_from).format('YYYY-MM-DD'),
+          date_out_to: this.form.date_out_to === undefined || this.form.date_out_to === null ? 'NA' : moment(this.form.date_out_to).format('YYYY-MM-DD')
         }
+        await axios.post(`/admin/get/container/aging`, payload).then(data => {
+          this.generateLoad = false
+          this.containerAgingList = data.data
+          if (data.data.length === 0) {
+            Swal.fire({
+              title: '',
+              text: 'No record found!',
+              icon: 'error',
+            })
+          }
+        }).catch(error => {
+          this.generateLoad = false
+          console.log(error)
+        })
       },
       async exportContainerIn () {
-        if (this.form.sizeType && this.form.client && this.form.type) {
-          this.exportLoad = true
-          let payload = {
-            client: this.form.client,
-            type: this.form.type === undefined || null ? 'NA' : this.form.type,
-            class: this.form.class === undefined || null ? 'NA' : this.form.class,
-            sizeType: this.form.sizeType,
-            date_as_of: this.form.date_as_of === undefined || null ? 'NA' : moment(this.form.date_as_of).format('YYYY-MM-DD')
-          }
-          await axios.get(`/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_as_of}`).then(data => {
-            this.exportLoad = false
-            window.open(`${location.origin}/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_as_of}`, "_blank");
-          }).catch(error => {
-            this.exportLoad = false
-            console.log(error)
-          })
-        } else {
-          Swal.fire({
-            title: '',
-            text: 'Please fill out the required fields!',
-            icon: 'error',
-          })
+        this.exportLoad = true
+        let payload = {
+          type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
+          sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
+          client: this.form.client === undefined || this.form.client === null ? 'NA' : this.form.client,
+          class: this.form.class === undefined || this.form.class === null ? 'NA' : this.form.class,
+          status: this.form.status === undefined || this.form.status === null ? 'NA' : this.form.status,
+          date_in_from: this.form.date_in_from === undefined || this.form.date_in_from === null ? 'NA' : moment(this.form.date_in_from).format('YYYY-MM-DD'),
+          date_in_to: this.form.date_in_to === undefined || this.form.date_in_to === null ? 'NA' : moment(this.form.date_in_to).format('YYYY-MM-DD'),
+          date_out_from: this.form.date_out_from === undefined || this.form.date_out_from === null ? 'NA' : moment(this.form.date_out_from).format('YYYY-MM-DD'),
+          date_out_to: this.form.date_out_to === undefined || this.form.date_out_to === null ? 'NA' : moment(this.form.date_out_to).format('YYYY-MM-DD')
         }
+        await axios.get(`/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_as_of}`).then(data => {
+          this.exportLoad = false
+          window.open(`${location.origin}/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_as_of}`, "_blank");
+        }).catch(error => {
+          this.exportLoad = false
+          console.log(error)
+        })
       },
       async getSize () {
         let search = {
@@ -287,6 +368,11 @@
         }).catch(error => {
           console.log('error: ', error)
         })
+      },
+      async getEmptyLoaded () {
+        await axios.get(`/admin/get/emptyloaded`).then(data => {
+          this.emptyLoadedList = data.data
+        })
       }
     },
     mounted () {
@@ -294,6 +380,7 @@
       this.getType()
       this.getClient()
       this.getClass()
+      this.getEmptyLoaded()
     }
   })
 

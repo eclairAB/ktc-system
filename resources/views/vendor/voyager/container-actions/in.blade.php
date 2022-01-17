@@ -22,7 +22,8 @@
                 :typeable="true"
                 name="from"
                 :format="dateFormat"
-                :required="true">
+                :required="true"
+                @input="getClient">
               </vuejs-datepicker>
               <label for="from" class="form-control-placeholder"> Date In <span style="color: red;"> *</span></label>
             </div>
@@ -35,7 +36,8 @@
                 :typeable="true"
                 name="to"
                 :format="dateFormat"
-                :required="true">
+                :required="true"
+                @input="getClient">
               </vuejs-datepicker>
               <label for="to" class="form-control-placeholder"> Date To <span style="color: red;"> *</span></label>
             </div>
@@ -136,7 +138,7 @@
         <tbody v-if="containerInList.length > 0">
           <tr v-for="(item, index) in containerInList" :key="index">
             <td>@{{ item.container_no }}</td>
-            <td>@{{ item }}</td>
+            <td>@{{ item.id }}</td>
             <td>@{{ item.size_type.code }} - @{{ item.size_type.name }}</td>
             <td>@{{ item.type.code }} - @{{ item.type.name }}</td>
             <td>@{{ item.client.code  }}</td>
@@ -200,8 +202,21 @@
     	dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
       },
+      async getClient () {
+        if (this.form.from && this.form.to) {
+          let search = {
+            keyword: '',
+            from: moment(this.form.from).format('YYYY-MM-DD'),
+            to: moment(this.form.to).format('YYYY-MM-DD'),
+          }
+          await axios.get(`/admin/get/client/dateIn?keyword=${search.keyword}&from=${search.from}&to=${search.to}`, search).then( data => {
+            this.clientList = data.data
+          }).catch(error => {
+            console.log('error: ', error)
+          })
+        }
+      },
       async getContainerIn () {
-        console.log(this.form)
         if (this.form.client && this.form.class && this.form.from && this.form.to) {
           this.generateLoad = true
           let payload = {
@@ -282,16 +297,6 @@
           console.log('error: ', error)
         })
       },
-      async getClient () {
-        let search = {
-          keyword: ''
-        }
-        await axios.get(`/admin/get/clients?keyword=${search.keyword}`, search).then( data => {
-          this.clientList = data.data
-        }).catch(error => {
-          console.log('error: ', error)
-        })
-      },
       async getClass () {
         let search = {
           keyword: ''
@@ -333,7 +338,6 @@
     mounted () {
       this.getSize()
       this.getType()
-      this.getClient()
       this.getContainerNo()
       this.getClass()
       this.getEmptyLoaded()
