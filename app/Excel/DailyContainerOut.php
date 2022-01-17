@@ -12,35 +12,38 @@ Use \Maatwebsite\Excel\Sheet;
 
 class DailyContainerOut implements  FromView, ShouldAutoSize
 {
-    protected $type,$sizeType,$client,$container_no,$booking_no,$from,$to;
+    protected $type,$sizeType,$client,$class,$status,$from,$to;
 
-    public function __construct($type,$sizeType,$client,$container_no,$booking_no,$from,$to)
+    public function __construct($type,$sizeType,$client,$class,$status,$from,$to)
     {
         $this->type = $type;
         $this->sizeType = $sizeType;
         $this->client = $client;
-        $this->container_no = $container_no;
-        $this->booking_no = $booking_no;
+        $this->class = $class;
+        $this->status = $status;
         $this->from = $from;
         $this->to = $to;
     }
 
     public function view(): View
     {
-        $data = ContainerReleasing::when($this->container_no != 'NA', function ($q){
-            return $q->where('container_no',$this->container_no);
-        })->when($this->booking_no != 'NA', function ($q){
-            return $q->where('booking_no',$this->booking_no);
-        })->when($this->from != 'NA', function ($q){
+        $data = ContainerReleasing::when($this->from != 'NA', function ($q){
             return $q->whereDate('inspected_date','>=',$this->from);
         })->when($this->to != 'NA', function ($q){
             return $q->whereDate('inspected_date','<=',$this->to);
         })->whereHas('container',function( $query ) {
-            $query->where('container_no',$this->container_no)->where('client_id',$this->client)
-                ->where('size_type',$this->sizeType)->whereNotNull('releasing_id')->latest('created_at');
-        })->whereHas('receiving',function( $query ) {
-            $query->where('container_no',$this->container_no)->where('type_id',$this->type);
-        })->with('container.client','container.sizeType','inspector','container.containerClass','receiving','receiving.type')->get();
+            $query->when($this->type != 'NA', function ($q){
+                return $q->where('type_id',$this->type);
+            })->when($this->sizeType != 'NA', function ($q){
+                return $q->where('size_type',$this->sizeType);
+            })->when($this->client != 'NA', function ($q){
+                return $q->where('client_id',$this->client);
+            })->when($this->class != 'NA', function ($q){
+                return $q->where('class',$this->class);
+            })->when($this->status != 'NA', function ($q){
+                return $q->where('receiving.empty_loaded',$this->status);
+            });
+        })->with('container.client','container.sizeType','container.containerClass','container.type','container.eirNoOut','receiving')->get();
 
         return view('excel.daily_container_out',compact('data'));
     }

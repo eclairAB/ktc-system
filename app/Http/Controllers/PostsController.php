@@ -227,6 +227,7 @@ class PostsController extends Controller
                 'container_no'=>$receiving['container_no'],
                 'client_id'=>$receiving['client_id'],
                 'size_type'=>$receiving['size_type'],
+                'type_id'=>$receiving['type_id'],
                 'class'=>$receiving['class'],
                 'receiving_id'=>$receive[0]->container_id,
             ];

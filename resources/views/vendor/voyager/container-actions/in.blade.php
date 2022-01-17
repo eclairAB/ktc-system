@@ -13,31 +13,36 @@
         </div>
         <div class="col-xs-12" style="margin: 0;">
           <div class="row" style="padding: 0 15px;">
-          	<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-              <v-select
-                :options="sizeTypeList"
-                style="height: 37px !important;"
-                v-model="form.sizeType"
-                class="form-control"
-                label="code"
-                :reduce="code => code.id"
-              ></v-select>
-              <label for="code" class="form-control-placeholder"> Size<span style="color: red;"> *</span></label>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+              <vuejs-datepicker
+                v-model="form.from"
+                placeholder="mm/dd/yyyyy"
+                input-class="form-control"
+                :typeable="true"
+                name="from"
+                :format="dateFormat"
+                :required="true"
+                @input="getClient">
+              </vuejs-datepicker>
+              <label for="from" class="form-control-placeholder"> Date In <span style="color: red;"> *</span></label>
             </div>
 
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-              <v-select
-                class="form-control"
-                :options="typeList"
-                style="height: 37px !important;"
-                v-model="form.type"
-                label="code"
-                :reduce="code => code.id"
-              ></v-select>
-              <label for="type" class="form-control-placeholder"> Type</label>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+              <vuejs-datepicker
+                v-model="form.to"
+                placeholder="mm/dd/yyyyy"
+                input-class="form-control"
+                :typeable="true"
+                name="to"
+                :format="dateFormat"
+                :required="true"
+                @input="getClient">
+              </vuejs-datepicker>
+              <label for="to" class="form-control-placeholder"> Date To <span style="color: red;"> *</span></label>
             </div>
             
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
                 style="height: 37px !important;"
                 :options="clientList"
@@ -48,63 +53,53 @@
               ></v-select>
               <label for="client" class="form-control-placeholder"> Client <span style="color: red;"> *</span></label>
             </div>
-            
+
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+              <v-select
+                class="form-control"
+                :options="typeList"
+                style="height: 37px !important;"
+                v-model="form.type"
+                label="code"
+                :reduce="code => code.id"
+              ></v-select>
+              <label for="type" class="form-control-placeholder"> Type</label>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+              <v-select
+                class="form-control"
+                :options="emptyLoadedList"
+                style="height: 37px !important;"
+                v-model="form.status"
+                label="name"
+                :reduce="name => name.name"
+              ></v-select>
+              <label for="type" class="form-control-placeholder"> Status</label>
+            </div>
+
+          	<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+              <v-select
+                :options="sizeTypeList"
+                style="height: 37px !important;"
+                v-model="form.sizeType"
+                class="form-control"
+                label="code"
+                :reduce="code => code.id"
+              ></v-select>
+              <label for="code" class="form-control-placeholder"> Size</label>
+            </div>
+            
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
                 style="height: 37px !important;"
                 class="form-control"
-                :options="yardList"
-                v-model="form.loc"
-                label="name"
-                :reduce="name => name.id"
+                :options="classList"
+                v-model="form.class"
+                label="class_code"
+                :reduce="class_code => class_code.id"
               ></v-select>
-              <label for="loc" class="form-control-placeholder"> Yard Location</label>
-            </div>
-
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-              <v-select
-                style="height: 37px !important;"
-                :class="errors.type ? 'isError form-control' : 'form-control'"
-                :options="containerNoList"
-                v-model="form.container_no"
-              >
-              	<template #search="{attributes, events}">
-                  <input
-                    class="vs__search"
-                    v-bind="attributes"
-                    v-on="events"
-                    style="color: black;"
-                    @input="searchContainerNo()"
-                  />
-                </template>
-              </v-select>
-              <label for="lastname" class="form-control-placeholder"> Container No. <span style="color: red;"> *</span></label>
-            </div>
-
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-            	<vuejs-datepicker
-                v-model="form.from"
-                placeholder="mm/dd/yyyyy"
-                input-class="form-control"
-                :typeable="true"
-                name="from"
-                :format="dateFormat"
-                :required="true">
-              </vuejs-datepicker>
-              <label for="from" class="form-control-placeholder"> Date From</label>
-            </div>
-
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-            	<vuejs-datepicker
-                v-model="form.to"
-                placeholder="mm/dd/yyyyy"
-                input-class="form-control"
-                :typeable="true"
-                name="to"
-                :format="dateFormat"
-                :required="true">
-              </vuejs-datepicker>
-              <label for="to" class="form-control-placeholder"> Date To</label>
+              <label for="class" class="form-control-placeholder"> Class <span style="color: red;"> *</span></label>
             </div>
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px; display: flex; justify-content: flex-end;">
@@ -127,34 +122,32 @@
       <table class="table table-bordered" style="margin-bottom: 0; color: black;">
         <thead>
           <tr>
-            <th style="text-align: left;" scope="col">Eir No.</th>
-            <th scope="col">Container No.</th>
-            <th scope="col">Size/Type</th>
-            <th scope="col">Date In</th>
-            <th scope="col">Shipping Line</th>
-            <th scope="col">Truckers</th>
+            <th style="text-align: left;" scope="col">Container No.</th>
+            <th scope="col">EIR</th>
+            <th scope="col">Size</th>
+            <th scope="col">Type</th>
+            <th scope="col">Client</th>
+            <th scope="col">Consignee</th>
             <th scope="col">Plate No.</th>
-            <th scope="col">Inspected By</th>
+            <th scope="col">Trucker</th>
             <th scope="col">Class</th>
-            <th scope="col">Manufactured Date</th>
-            <th scope="col">Status</th>
             <th scope="col">Remarks</th>
+            <th scope="col">Date In</th>
           </tr>
         </thead>
         <tbody v-if="containerInList.length > 0">
           <tr v-for="(item, index) in containerInList" :key="index">
-            <td>@{{ item.id }}</td>
             <td>@{{ item.container_no }}</td>
+            <td>@{{ item.id }}</td>
             <td>@{{ item.size_type.code }} - @{{ item.size_type.name }}</td>
-            <td>@{{ moment(item.inspected_date).format('MMMM DD, YYYY') }}</td>
-            <td>@{{ item.client.code }}</td>
-            <td>@{{ item.hauler }}</td>
+            <td>@{{ item.type.code }} - @{{ item.type.name }}</td>
+            <td>@{{ item.client.code  }}</td>
+            <td>@{{ item.consignee }}</td>
             <td>@{{ item.plate_no }}</td>
-            <td>@{{ item.inspector.name }}</td>
+            <td>@{{ item.hauler }}</td>
             <td>@{{ item.container_class.class_name }}</td>
-            <td>@{{ moment(item.manufactured_date).format('MMMM YYYY') }}</td>
-            <td>Received</td>
             <td>@{{ item.remarks }}</td>
+            <td>@{{ moment(item.inspected_date).format('MMMM DD, YYYY') }}</td>
           </tr>
         </tbody>
         <tbody v-else>
@@ -197,7 +190,8 @@
       typeList: [],
       bookingNoList: [],
       containerNoList: [],
-      yardList: [],
+      emptyLoadedList: [],
+      classList: [],
       loading: false,
       containerInList: [],
       tableLoad: false,
@@ -208,17 +202,31 @@
     	dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
       },
+      async getClient () {
+        if (this.form.from && this.form.to) {
+          let search = {
+            keyword: '',
+            from: moment(this.form.from).format('YYYY-MM-DD'),
+            to: moment(this.form.to).format('YYYY-MM-DD'),
+          }
+          await axios.get(`/admin/get/client/dateIn?keyword=${search.keyword}&from=${search.from}&to=${search.to}`, search).then( data => {
+            this.clientList = data.data
+          }).catch(error => {
+            console.log('error: ', error)
+          })
+        }
+      },
       async getContainerIn () {
-        if (this.form.sizeType && this.form.client && this.form.container_no) {
+        if (this.form.client && this.form.class && this.form.from && this.form.to) {
           this.generateLoad = true
           let payload = {
-            type: this.form.type,
-            sizeType: this.form.sizeType,
+            type: this.form.type === undefined || null ? 'NA' : this.form.type,
+            sizeType: this.form.sizeType === undefined || null ? 'NA' : this.form.sizeType,
             client: this.form.client,
-            container_no: this.form.container_no,
-            loc: this.form.from === undefined || null ? 'NA' : this.form.loc,
-            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
-            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
+            class: this.form.class,
+            status: this.form.status === undefined || null ? 'NA' : this.form.status,
+            from: moment(this.form.from).format('YYYY-MM-DD'),
+            to: moment(this.form.to).format('YYYY-MM-DD')
           }
           await axios.post(`/admin/get/daily_in`, payload).then(data => {
             this.generateLoad = false
@@ -243,20 +251,20 @@
         }
       },
       async exportContainerIn () {
-        if (this.form.sizeType && this.form.client && this.form.container_no) {
+        if (this.form.client && this.form.class && this.form.from && this.form.to) {
           this.exportLoad = true
           let payload = {
-            type: this.form.type,
-            sizeType: this.form.sizeType,
+            type: this.form.type === undefined || null ? 'NA' : this.form.type,
+            sizeType: this.form.sizeType === undefined || null ? 'NA' : this.form.sizeType,
             client: this.form.client,
-            container_no: this.form.container_no,
-            loc: this.form.from === undefined || null ? 'NA' : this.form.loc,
-            from: this.form.from === undefined || null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
-            to: this.form.to === undefined || null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
+            class: this.form.class,
+            status: this.form.status === undefined || null ? 'NA' : this.form.status,
+            from: moment(this.form.from).format('YYYY-MM-DD'),
+            to: moment(this.form.to).format('YYYY-MM-DD')
           }
-          await axios.get(`/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`).then(data => {
+          await axios.get(`/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`).then(data => {
             this.exportLoad = false
-            window.open(`${location.origin}/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.container_no}/${payload.loc}/${payload.from}/${payload.to}`, "_blank");
+            window.open(`${location.origin}/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.status}/${payload.from}/${payload.to}`, "_blank");
           }).catch(error => {
             this.exportLoad = false
             console.log(error)
@@ -289,22 +297,12 @@
           console.log('error: ', error)
         })
       },
-      async getClient () {
+      async getClass () {
         let search = {
           keyword: ''
         }
-        await axios.get(`/admin/get/clients?keyword=${search.keyword}`, search).then( data => {
-          this.clientList = data.data
-        }).catch(error => {
-          console.log('error: ', error)
-        })
-      },
-      async getYard () {
-        let search = {
-          keyword: ''
-        }
-        await axios.get(`/admin/get/yards?keyword=${search.keyword}`, search).then( data => {
-          this.yardList = data.data
+        await axios.get(`/admin/get/container/classes?keyword=${search.keyword}`, search).then( data => {
+          this.classList = data.data
         }).catch(error => {
           console.log('error: ', error)
         })
@@ -330,14 +328,19 @@
         }).catch(error => {
           console.log('error: ', error)
         })
-      }
+      },
+      async getEmptyLoaded () {
+        await axios.get(`/admin/get/emptyloaded`).then(data => {
+          this.emptyLoadedList = data.data
+        })
+      },
     },
     mounted () {
       this.getSize()
       this.getType()
-      this.getClient()
       this.getContainerNo()
-      this.getYard()
+      this.getClass()
+      this.getEmptyLoaded()
     }
   })
 

@@ -12,15 +12,15 @@ Use \Maatwebsite\Excel\Sheet;
 
 class DailyContainerIn implements  FromView, ShouldAutoSize
 {
-    protected $type,$sizeType,$client,$container_no,$loc,$from,$to;
+    protected $type,$sizeType,$client,$class,$status,$from,$to;
 
-    public function __construct($type,$sizeType,$client,$container_no,$loc,$from,$to)
+    public function __construct($type,$sizeType,$client,$class,$status,$from,$to)
     {
         $this->type = $type;
         $this->sizeType = $sizeType;
         $this->client = $client;
-        $this->container_no = $container_no;
-        $this->loc = $loc;
+        $this->class = $class;
+        $this->status = $status;
         $this->from = $from;
         $this->to = $to;
     }
@@ -33,17 +33,17 @@ class DailyContainerIn implements  FromView, ShouldAutoSize
             return $q->where('size_type',$this->sizeType);
         })->when($this->client != 'NA', function ($q){
             return $q->where('client_id',$this->client);
-        })->when($this->container_no != 'NA', function ($q){
-            return $q->where('container_no',$this->container_no);
-        })->when($this->loc != 'NA', function ($q){
-            return $q->where('yard_location',$this->loc);
+        })->when($this->class != 'NA', function ($q){
+            return $q->where('class',$this->class);
+        })->when($this->status != 'NA', function ($q){
+            return $q->where('empty_loaded',$this->status);
         })->when($this->from != 'NA', function ($q){
             return $q->whereDate('inspected_date','>=',$this->from);
         })->when($this->to != 'NA', function ($q){
             return $q->whereDate('inspected_date','<=',$this->to);
         })->whereHas('container',function( $query ) {
-            $query->where('container_no',$this->container_no)->where('client_id',$this->client)->where('size_type',$this->sizeType)->whereNull('releasing_id');
-        })->with('client','sizeType','yardLocation','inspector','containerClass','container','type')->get();
+            $query->where('class',$this->class)->where('client_id',$this->client)->where('size_type',$this->sizeType);
+        })->with('client','sizeType','containerClass','type','container.eirNoIn')->get();
 
         return view('excel.daily_container_in',compact('data'));
     }

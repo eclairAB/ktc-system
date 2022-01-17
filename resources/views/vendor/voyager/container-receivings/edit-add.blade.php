@@ -338,15 +338,15 @@
                                   <label for="location" class="form-control-placeholder"> Location</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px; text-transform: uppercase;">
+                                  <input type="number" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="length" class="form-control-placeholder"> Length</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px; text-transform: uppercase;">
+                                  <input type="number" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="width" class="form-control-placeholder"> Width</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="text" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px; text-transform: uppercase;">
+                                  <input type="number" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="quantity" class="form-control-placeholder"> Quantity</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
@@ -797,7 +797,7 @@
             $('#dialog').modal('hide');
           },
           pasmo () {
-            let desc = (this.damages.repair ? this.damages.repair.name.toUpperCase() : '') + ' ' + (this.damages.location ? `(${this.damages.location.toUpperCase()})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name.toUpperCase() : '') + ' ' + (this.damages.component ? this.damages.component.name.toUpperCase() : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity.toUpperCase()})` : '') + ' ' + (this.damages.length ? `${this.damages.length.toUpperCase()}` : '') + '' + (this.damages.width ? `X${this.damages.width.toUpperCase()}` : '')
+            let desc = (this.damages.repair ? this.damages.repair.name.toUpperCase() : '') + ' ' + (this.damages.location ? `(${this.damages.location.toUpperCase()})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name.toUpperCase() : '') + ' ' + (this.damages.component ? this.damages.component.name.toUpperCase() : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity.toUpperCase()})` : '') + ' ' + (this.damages.length ? `${this.damages.length.toUpperCase()}CM` : '') + '' + (this.damages.width ? `X${this.damages.width.toUpperCase()}CM` : '')
 
             this.$set(this.damages, 'description', desc)
             
@@ -999,7 +999,7 @@
             this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
             this.bindTabs()
             await axios.post('/admin/create/receiving', this.form).then(async data => {
-              this.loading = false
+              // this.loading = false
               $('#savingDialog').modal('hide');
               this.errors = {}
               for (let i = 0; i < this.damageList.length; i++) {
@@ -1016,7 +1016,8 @@
                   w.print();
                   w.close();
                   let customUrl = `${window.location.origin}/admin/container-inquiry/${this.form.container_no}`
-                  window.location = customUrl
+                  // window.location = customUrl
+                  parent.window.location.reload();
                 }, 100);
               })
             }).catch(error => {
@@ -1036,7 +1037,7 @@
             this.form.plate_no && this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
             this.form.remarks && this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             await axios.post('/admin/update/receiving', this.form).then(async data => {
-              this.loading = false
+              // this.loading = false
               $('#savingDialog').modal('hide');
               this.errors = {}
               let customUrl = `${window.location.origin}/admin/container-inquiry/${this.form.container_no}`
