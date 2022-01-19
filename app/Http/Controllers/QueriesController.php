@@ -66,9 +66,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getClientByDateIn(Request $request)
     {
-        $recs = ContainerReceiving::when($request->from, function ($q){
+        $recs = ContainerReceiving::when($request->from, function ($q) use ($request){
             return $q->whereDate('inspected_date','>=',$request->from);
-        })->when($request->to, function ($q){
+        })->when($request->to, function ($q) use ($request){
             return $q->whereDate('inspected_date','<=',$request->to);
         })->pluck('client_id');
 
@@ -78,10 +78,10 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getClientByDateOut(Request $request)
     {
-        $rels = ContainerReleasing::when($request->from, function ($q){
-            return $q->whereDate('inspected_date','>=',$re->from);
-        })->when($request->to, function ($q){
-            return $q->whereDate('inspected_date','<=',$this->to);
+        $rels = ContainerReleasing::when($request->from, function ($q) use ($request){
+            return $q->whereDate('inspected_date','>=',$request->from);
+        })->when($request->to, function ($q) use ($request){
+            return $q->whereDate('inspected_date','<=',$request->to);
         })->pluck('id');
         $conts = Container::whereIn('releasing_id',$rels)->pluck('client_id');
 
@@ -312,8 +312,10 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return $q->where('client_id',$request->client);
             })->when($request->class != 'NA', function ($q) use($request){
                 return $q->where('class',$request->class);
-            })->when($request->status != 'NA', function ($q) use($request){
-                return $q->where('receiving.empty_loaded',$request->status);
+            });
+        })->whereHas('receiving',function( $query ) use($request){
+            $query->when($request->status != 'NA', function ($q) use($request){
+                return $q->where('empty_loaded',$request->status);
             });
         })->with('container.client','container.eirNoOut','container.sizeType','container.type','container.containerClass','receiving')->get();
 
