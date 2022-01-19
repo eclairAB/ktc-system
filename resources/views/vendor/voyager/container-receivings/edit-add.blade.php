@@ -346,7 +346,7 @@
                                   <label for="width" class="form-control-placeholder"> Width</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
-                                  <input type="number" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px; text-transform: uppercase;">
+                                  <input type="text" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="quantity" class="form-control-placeholder"> Quantity</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3">
