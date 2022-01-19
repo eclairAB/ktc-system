@@ -264,7 +264,7 @@
           }
           await axios.get(`/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`).then(data => {
             this.exportLoad = false
-            window.open(`${location.origin}/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.status}/${payload.from}/${payload.to}`, "_blank");
+            window.open(`${location.origin}/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`, "_blank");
           }).catch(error => {
             this.exportLoad = false
             console.log(error)

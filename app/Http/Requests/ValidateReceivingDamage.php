@@ -28,10 +28,10 @@ class ValidateReceivingDamage extends FormRequest
             'component_id'=> 'required',
             'repair_id'=> 'required',
             'receiving_id'=> 'required',
-            'location'=> 'required',
-            'length'=> 'required',
-            'width'=> 'required',
-            'quantity'=> 'required',
+            // 'location'=> 'required',
+            // 'length'=> 'required',
+            // 'width'=> 'required',
+            // 'quantity'=> 'required',
             'description'=> 'required'
         ];
     }
@@ -43,10 +43,10 @@ class ValidateReceivingDamage extends FormRequest
             'component_id.required'=> 'Container Component required',
             'repair_id.required'=> 'Container Repair required',
             'receiving_id.required'=> 'receiving_id required',
-            'location.required'=> 'Location required',
-            'length.required'=> 'Length required',
-            'width.required'=> 'Width required',
-            'quantity.required'=> 'Quantity required',
+            // 'location.required'=> 'Location required',
+            // 'length.required'=> 'Length required',
+            // 'width.required'=> 'Width required',
+            // 'quantity.required'=> 'Quantity required',
             'description.required'=> 'Description required'
         ];
     }
