@@ -50,7 +50,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $sizetype = ContainerSizeType::when(!empty($request->keyword), function ($q) use ($request){
             return $q->where('size', 'ilike', '%'.$request->keyword.'%');
             // ->orwhere('name', 'ilike', '%'.$request->keyword.'%');
-        })->get();
+        })->orderBy('size','ASC')->get();
 
         return $sizetype;
     }

@@ -103,8 +103,8 @@
                             style="height: 30px !important;"
                             v-model="form.size_type"
                             :disabled="!isOk"
-                            label="name"
-                            :reduce="name => name.id"
+                            label="size"
+                            :reduce="size => size.id"
                           ></v-select>
                           <label for="lastname" class="form-control-placeholder"> Size</label>
                           <div class="customErrorText"><small>@{{ errors.size_type ? errors.size_type[0] : '' }}</small></div>
@@ -1058,7 +1058,7 @@
               }
               await axios.get(`/admin/get/receiving/byId/${payload.id}`).then(data => {
                 this.form = data.data
-                this.sizeSearch = data.data.size_type.code
+                this.sizeSearch = data.data.size_type.size
                 this.classSearch = data.data.container_class.class_code
                 this.yardSearch = data.data.yard_location.name
                 this.clientSearch = data.data.client.code
