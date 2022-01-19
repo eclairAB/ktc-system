@@ -312,8 +312,10 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return $q->where('client_id',$request->client);
             })->when($request->class != 'NA', function ($q) use($request){
                 return $q->where('class',$request->class);
-            })->when($request->status != 'NA', function ($q) use($request){
-                return $q->where('receiving.empty_loaded',$request->status);
+            });
+        })->whereHas('receiving',function( $query ) use($request){
+            $query->when($request->status != 'NA', function ($q) use($request){
+                return $q->where('empty_loaded',$request->status);
             });
         })->with('container.client','container.eirNoOut','container.sizeType','container.type','container.containerClass','receiving')->get();
 

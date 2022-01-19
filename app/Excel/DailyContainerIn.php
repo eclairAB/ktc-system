@@ -42,7 +42,7 @@ class DailyContainerIn implements  FromView, ShouldAutoSize
         })->when($this->to != 'NA', function ($q){
             return $q->whereDate('inspected_date','<=',$this->to);
         })->whereHas('container',function( $query ) {
-            $query->where('class',$this->class)->where('client_id',$this->client)->where('size_type',$this->sizeType);
+            $query->where('type_id',$this->type)->where('client_id',$this->client)->where('size_type',$this->sizeType);
         })->with('client','sizeType','containerClass','type','container.eirNoIn')->get();
 
         return view('excel.daily_container_in',compact('data'));
