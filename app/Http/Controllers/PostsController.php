@@ -159,21 +159,26 @@ class PostsController extends Controller
         $receiving = ContainerReceiving::where('container_no',$releasing['container_no'])->first();
         if($receiving)
         {
-            foreach ($releasing['container_photo'] as $key => $value) {
-                $params = [];
-                $params['file_name'] = Str::random(32);
-                $params['type'] = 'releasing';
-                $container_photo[] = array(
-                    'container_type' => $params['type'],
-                    'photo' => $params['file_name'] . '.png',
-                    'params' => $params,
-                    'base64_file' => $releasing['container_photo'][$key]['storage_path'],
-                );
-            }
-            $release = ContainerReleasing::create($releasing)->photos()->createMany($container_photo);
+            if($receiving['container_photo']) {
+                foreach ($releasing['container_photo'] as $key => $value) {
+                    $params = [];
+                    $params['file_name'] = Str::random(32);
+                    $params['type'] = 'releasing';
+                    $container_photo[] = array(
+                        'container_type' => $params['type'],
+                        'photo' => $params['file_name'] . '.png',
+                        'params' => $params,
+                        'base64_file' => $releasing['container_photo'][$key]['storage_path'],
+                    );
+                }
+                $release = ContainerReleasing::create($releasing)->photos()->createMany($container_photo);
 
-            foreach($container_photo as $key => $value) {
-                $this->imageUpload($value['params'], $value['base64_file'],  $release[0]->container_id);
+                foreach($container_photo as $key => $value) {
+                    $this->imageUpload($value['params'], $value['base64_file'],  $release[0]->container_id);
+                }
+            }
+            else {
+                $release = ContainerReleasing::create($releasing);
             }
 
             if($release)
@@ -203,7 +208,8 @@ class PostsController extends Controller
     public function createReceiving(ValidateContainerReceiving $request)
     {
         $receiving = $request->validated();
-        foreach ($receiving['container_photo'] as $key => $value) {
+        if($receiving['container_photo']) {
+            foreach ($receiving['container_photo'] as $key => $value) {
                 $params = [];
                 $params['file_name'] = Str::random(32);
                 $params['type'] = 'receiving';
@@ -214,11 +220,18 @@ class PostsController extends Controller
                     'base64_file' => $receiving['container_photo'][$key]['storage_path'],
                 );
             }
+        }
         $receiving['inspected_by'] = Auth::user()->id;
-        $receive = ContainerReceiving::create($receiving)->photos()->createMany($container_photo);
 
-        foreach($container_photo as $key => $value) {
-            $this->imageUpload($value['params'], $value['base64_file'], $receive[0]->container_id);
+        if($receiving['container_photo']) {
+            $receive = ContainerReceiving::create($receiving)->photos()->createMany($container_photo);
+
+            foreach($container_photo as $key => $value) {
+                $this->imageUpload($value['params'], $value['base64_file'], $receive[0]->container_id);
+            }
+        }
+        else {
+            $receive = ContainerReceiving::create($receiving);
         }
 
         if($receive)
