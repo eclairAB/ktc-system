@@ -40,7 +40,7 @@ class ValidateContainerReceiving extends FormRequest
             'hauler'=> 'required',
             'plate_no'=> 'required',
             // 'upload_photo'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'container_photo'=> 'required',
+            'container_photo'=> 'nullable',
             'remarks'=> 'nullable',
             'type_id'=> 'required',
         ];
@@ -63,7 +63,7 @@ class ValidateContainerReceiving extends FormRequest
             'plate_no.required' => 'Plate No. field required.',
             // 'acceptance_no.required' => 'Acceptance No. field required.',
             // 'upload_photo.max'  => 'Maximum size to upload is 2MB.',
-            'container_photo.required'  => 'Photo is required.',
+            // 'container_photo.required'  => 'Photo is required.',
             'type_id.required' => 'Type field required.',
         ];
     }

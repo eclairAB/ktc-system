@@ -172,6 +172,7 @@ class PostsController extends Controller
                     );
                 }
                 $release = ContainerReleasing::create($releasing)->photos()->createMany($container_photo);
+                $rel_id = $release[0]->container_id;
 
                 foreach($container_photo as $key => $value) {
                     $this->imageUpload($value['params'], $value['base64_file'],  $release[0]->container_id);
@@ -179,12 +180,13 @@ class PostsController extends Controller
             }
             else {
                 $release = ContainerReleasing::create($releasing);
+                $rel_id = $release->id;
             }
 
             if($release)
             {
                 $dataCont = Container::where('container_no',$releasing['container_no'])->whereNotNull('receiving_id')->latest('created_at')->first();
-                $dataCont->releasing_id = $release[0]->container_id;
+                $dataCont->releasing_id = $rel_id;
                 $dataCont->save();
 
                 $dataContRemark = [
@@ -225,6 +227,7 @@ class PostsController extends Controller
 
         if($receiving['container_photo']) {
             $receive = ContainerReceiving::create($receiving)->photos()->createMany($container_photo);
+            $rec_id = $receive[0]->container_id;
 
             foreach($container_photo as $key => $value) {
                 $this->imageUpload($value['params'], $value['base64_file'], $receive[0]->container_id);
@@ -232,6 +235,7 @@ class PostsController extends Controller
         }
         else {
             $receive = ContainerReceiving::create($receiving);
+            $rec_id = $receive->id;
         }
 
         if($receive)
@@ -242,7 +246,7 @@ class PostsController extends Controller
                 'size_type'=>$receiving['size_type'],
                 'type_id'=>$receiving['type_id'],
                 'class'=>$receiving['class'],
-                'receiving_id'=>$receive[0]->container_id,
+                'receiving_id'=>$rec_id,
             ];
             $cont = Container::create($dataCont);
 

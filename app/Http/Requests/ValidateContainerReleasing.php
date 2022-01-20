@@ -32,7 +32,7 @@ class ValidateContainerReleasing extends FormRequest
             'hauler'=> 'required',
             'plate_no'=> 'required',
             'seal_no'=> 'nullable',
-            'container_photo'=> 'required',
+            'container_photo'=> 'nullable',
             'remarks'=> 'required',
         ];
     }
@@ -48,7 +48,7 @@ class ValidateContainerReleasing extends FormRequest
             'hauler.required' => 'Hauler  fieldrequired.',
             'plate_no.required' => 'Plate No. field required.',
             // 'seal_no.required' => 'Seal No. field required.',
-            'container_photo.required'  => 'Photo is required.',
+            // 'container_photo.required'  => 'Photo is required.',
         ];
     }
 }
