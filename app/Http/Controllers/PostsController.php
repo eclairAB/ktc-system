@@ -159,7 +159,7 @@ class PostsController extends Controller
         $receiving = ContainerReceiving::where('container_no',$releasing['container_no'])->first();
         if($receiving)
         {
-            if($receiving['container_photo']) {
+            if($releasing['container_photo']) {
                 foreach ($releasing['container_photo'] as $key => $value) {
                     $params = [];
                     $params['file_name'] = Str::random(32);
