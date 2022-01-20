@@ -81,7 +81,7 @@
                           <label for="client" class="form-control-placeholder"> Client</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
-                          <input type="text" name="size" disabled id="size" :value="containerInfo.size_type ? containerInfo.size_type.name : ''" style="height: 37px;" class="form-control">
+                          <input type="text" name="size" disabled id="size" :value="containerInfo.size_type ? containerInfo.size_type.size : ''" style="height: 37px;" class="form-control">
                           <label for="size" class="form-control-placeholder"> Size</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
@@ -154,7 +154,7 @@
                   <!--  -->
 
                   <div style="display: flex; justify-content: flex-end; padding-top: 0;" v-if="isOk === true">
-                    <button style="width: 100px;" class="btn btn-primary save" :disabled="loading === true" @click="form.id ? upadteReleasing() : saveReleasing() ">@{{loading === false ? (form.id ? 'Update' : 'Save') : 'Loading...'}}</button>
+                    <button style="width: 100px;" class="btn btn-primary save" :disabled="loading === true" @click="form.id ? updateReleasing() : saveReleasing() ">@{{loading === false ? (form.id ? 'Update' : 'Save') : 'Loading...'}}</button>
                   </div>
 
                   <div class="modal fade" id="savingDialog" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
@@ -397,13 +397,13 @@
             this.loading = true
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
-            this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
-            this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
-            this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
-            this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
-            this.$set(this.form, 'booking_no', this.form.booking_no.toUpperCase())
-            this.$set(this.form, 'seal_no', this.form.seal_no.toUpperCase())
-            this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
+            this.form.container_no && this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.form.consignee && this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
+            this.form.hauler && this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
+            this.form.plate_no && this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
+            this.form.booking_no && this.$set(this.form, 'booking_no', this.form.booking_no.toUpperCase())
+            this.form.seal_no && this.$set(this.form, 'seal_no', this.form.seal_no.toUpperCase())
+            this.form.remarks && this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
             await axios.post('/admin/create/releasing', this.form).then(async data => {
               // this.loading = false
@@ -430,23 +430,22 @@
               this.errors = error.response.data.errors
             })
           },
-          async upadteReleasing () {
+          async updateReleasing () {
             $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.loading = true
             this.form.inspected_by = this.form.inspected_by.id
-            this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
-            this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
-            this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
-            this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
-            this.$set(this.form, 'booking_no', this.form.booking_no.toUpperCase())
-            this.$set(this.form, 'seal_no', this.form.seal_no.toUpperCase())
-            this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
+            this.form.container_no && this.$set(this.form, 'container_no', this.form.container_no.toUpperCase())
+            this.form.consignee && this.$set(this.form, 'consignee', this.form.consignee.toUpperCase())
+            this.form.hauler && this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
+            this.form.plate_no && this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
+            this.form.booking_no && this.$set(this.form, 'booking_no', this.form.booking_no.toUpperCase())
+            this.form.seal_no && this.$set(this.form, 'seal_no', this.form.seal_no.toUpperCase())
+            this.form.remarks && this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             await axios.post('/admin/update/releasing', this.form).then(async data => {
               // this.loading = false
               $('#savingDialog').modal('hide');
               this.errors = {}
-              let customUrl = `${window.location.origin}/admin/container-inquiry/${this.form.container_no}`
-              window.location = customUrl
+              window.location.reload()
             }).catch(error => {
               this.loading = false
               $('#savingDialog').modal('hide');

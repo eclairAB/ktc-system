@@ -393,7 +393,7 @@
                   </div>
 
                   <div style="display: flex; justify-content: flex-end; padding-top: 0;" v-if="isOk === true">
-                    <button style="width: 100px;" class="btn btn-primary save" :disabled="loading === true" @click="form.id ? upadteReceiving() : saveReceiving() ">@{{loading === false ? (form.id ? 'Update' : 'Save') : 'Loading...'}}</button>
+                    <button style="width: 100px;" class="btn btn-primary save" :disabled="loading === true" @click="form.id ? updateReceiving() : saveReceiving() ">@{{loading === false ? (form.id ? 'Update' : 'Save') : 'Loading...'}}</button>
                   </div>
 
                   <div class="modal fade" id="savingDialog" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
@@ -1027,7 +1027,7 @@
               this.errors = error.response.data.errors
             })
           },
-          async upadteReceiving () {
+          async updateReceiving () {
             $('#savingDialog').modal({backdrop: 'static', keyboard: true});
             this.loading = true
             this.form.inspected_by = this.form.inspected_by.id
@@ -1040,8 +1040,7 @@
               // this.loading = false
               $('#savingDialog').modal('hide');
               this.errors = {}
-              let customUrl = `${window.location.origin}/admin/container-inquiry/${this.form.container_no}`
-              window.location = customUrl
+              window.location.reload()
             }).catch(error => {
               this.loading = false
               $('#savingDialog').modal('hide');
