@@ -102,7 +102,9 @@ Route::group(['prefix' => 'admin'], function () {
     // fetch container aging
     Route::get('/container-aging/all', [ViewsController::class, "containerAging"]);
     Route::post('/get/container/aging',[QueriesController::class,"getContainerAging"]);
-
+    Route::get('/get/print/aging',[QueriesController::class,"prntAging"]);
+    Route::get('/get/print/daily_in',[QueriesController::class,"prntDailyIn"]);
+    Route::get('/get/print/daily_out',[QueriesController::class,"prntDailyOut"]);
     // fetch container inquiry
     Route::get('/container-inquiry/{container_no}',[QueriesController::class,"containerInquiry"]);
     Route::get('/container-inquiry/download/{record_type}/{container_no}',['as' => 'admin.container-inquiry.download', 'uses' => 'App\Http\Controllers\QueriesController@saveImages']);
