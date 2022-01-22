@@ -5,7 +5,11 @@
       <div class="row">
         <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
           <span style="font-weight: bold; font-size: 18px;">Daily Container Out Report</span>
-          <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerOut">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
+          <div>
+            <button class="btn btn-primary" :disabled="generateLoad" @click="getContainerOut">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
+            <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerOut">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
+            <button class="btn btn-danger" :disabled="printLoad" @click="printContainerOut">@{{ exportLoad === false ? 'Print' : 'Loading...' }}</button>
+          </div>
         </div>
         <div class="col-xs-12" style="margin-bottom: 0;">
           <hr style="margin: 5px 0;">
@@ -101,10 +105,6 @@
               <label for="class" class="form-control-placeholder"> Class <span style="color: red;"> *</span></label>
             </div>
 
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px; display: flex; justify-content: flex-end;">
-            	<button class="btn btn-primary" :disabled="generateLoad" @click="getContainerOut">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
-            </div>
-
           </div>
         </div>
       </div>
@@ -195,11 +195,15 @@
       tableLoad: false,
       generateLoad: false,
       exportLoad: false,
-      isOk: true
+      isOk: true,
+      printLoad: false
     },
     methods: {
     	dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
+      },
+      printContainerOut () {
+        alert('Print')
       },
       async getClient () {
         if (this.form.from && this.form.to) {

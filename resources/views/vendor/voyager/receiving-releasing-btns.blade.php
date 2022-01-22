@@ -1,5 +1,5 @@
-<div id="customBtns" style="height: 55px !important;">
-  <div row v-if="isEdit === false">
+<div id="customBtns">
+  <div row v-if="isEdit === false"  style="height: 55px !important;">
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin: 0; padding: 0;">
       <button class="btn btn-primary btn-block" @click="reroute('container-receivings')" style="border: 1px solid white;" :style="action === 'container-receivings' ? 'border-bottom: 4px solid black;' : '' ">Container Receiving</button> 
     </div>

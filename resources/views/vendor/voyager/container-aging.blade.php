@@ -21,9 +21,13 @@
 	      <div class="row">
 	        <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
 	          <span style="font-weight: bold; font-size: 18px;">Container Aging and Inventory</span>
-	          <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
+	          <div>
+	          	<button class="btn btn-primary" :disabled="generateLoad" @click="getContainerAging">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
+	          	<button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
+	          	<button class="btn btn-danger" :disabled="printLoad" @click="printContainerAging">@{{ exportLoad === false ? 'Print' : 'Loading...' }}</button>
+	          </div>
 	        </div>
-	        <div class="col-xs-12" style="margin-bottom: 0;">
+	        <div class="col-xs-12" style="margin-bottom: 10px;">
 	          <hr style="margin: 5px 0;">
 	        </div>
 	        <div class="col-xs-12" style="margin: 0;">
@@ -163,10 +167,6 @@
                 <div class="customErrorText"><small>@{{ errors.size_type ? errors.size_type[0] : '' }}</small></div>
               </div>
 
-	            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px; display: flex; justify-content: flex-end;">
-	            	<button class="btn btn-primary" :disabled="generateLoad" @click="getContainerAging">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
-	            </div>
-
 	          </div>
 	        </div>
 	      </div>
@@ -258,7 +258,8 @@
       loading: false,
       tableLoad: false,
       generateLoad: false,
-      exportLoad: false
+      exportLoad: false,
+      printLoad: false
     },
     computed: {
     	inDate () {
@@ -328,6 +329,9 @@
           this.exportLoad = false
           console.log(error)
         })
+      },
+      printContainerAging () {
+      	alert('Print')
       },
       async getSize () {
         let search = {

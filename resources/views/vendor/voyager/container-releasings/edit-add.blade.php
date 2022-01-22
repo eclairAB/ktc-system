@@ -39,6 +39,9 @@
             <div class="col-md-12">
                 <div id="containerReleasing">
                   <!--  -->
+                  <div style="display: flex; justify-content: flex-end;" v-if="form.id">
+                    <button class="btn btn-success" @click="printData"><i class="voyager-file-text"></i> Print</button>
+                  </div>
                   <div class="panel panel-bordered" style="margin-bottom: 5px;">
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
@@ -320,6 +323,17 @@
           loading: false
         },
         methods:{
+          async printData () {
+            await axios.get(`/admin/get/print/releasing/${this.form.id}`).then(data => {
+              let pasmo = data.data
+              let w = window.open('', '_blank');
+              w.document.write(pasmo);
+              setTimeout(() => { 
+                  w.print();
+                  w.close();
+              }, 100);
+            })
+          },
           setContainerNumber (item) {
             this.$set(this.form, 'container_no', item)
             this.searchContainer()
@@ -406,10 +420,15 @@
             this.form.remarks && this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
             await axios.post('/admin/create/releasing', this.form).then(async data => {
-              // this.loading = false
+              this.loading = false
               $('#savingDialog').modal('hide');
               this.errors = {}
-              let customId = data.data[0].container_id
+              let customID = null
+              if (data.data[0]) {
+                customId = data.data[0].container_id  
+              } else {
+                customId = data.data.id
+              }
               await axios.get(`/admin/get/print/releasing/${customId}`).then(data => {
                 let pasmo = data.data
                 let w = window.open('', '_blank');
