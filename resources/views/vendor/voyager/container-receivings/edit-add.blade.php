@@ -1013,7 +1013,7 @@
             this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
             this.bindTabs()
             await axios.post('/admin/create/receiving', this.form).then(async data => {
-              // this.loading = false
+              this.loading = false
               $('#savingDialog').modal('hide');
               this.errors = {}
               for (let i = 0; i < this.damageList.length; i++) {
@@ -1021,7 +1021,12 @@
                 axios.post(`/admin/create/damage`, this.damageList[i]).then(data2 => {
                 })
               }
-              let customId = data.data[0].container_id
+              let customID = null
+              if (data.data[0]) {
+                customId = data.data[0].container_id  
+              } else {
+                customId = data.data.id
+              }
               await axios.get(`/admin/get/print/receiving/${customId}`).then(data => {
                 let pasmo = data.data
                 let w = window.open('', '_blank');
@@ -1038,8 +1043,7 @@
               this.clearTabs()
               this.loading = false
               $('#savingDialog').modal('hide');
-              console.log(error.response)
-              // this.errors = error.response.data.errors
+              this.errors = error.response.data.errors
             })
           },
           async updateReceiving () {

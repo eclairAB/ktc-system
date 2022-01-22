@@ -420,10 +420,15 @@
             this.form.remarks && this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
             this.$set(this.form, 'inspected_date', `${moment(this.form.inspected_date).format('YYYY-MM-DD')} ${this.form.inspected_time}`)
             await axios.post('/admin/create/releasing', this.form).then(async data => {
-              // this.loading = false
+              this.loading = false
               $('#savingDialog').modal('hide');
               this.errors = {}
-              let customId = data.data[0].container_id
+              let customID = null
+              if (data.data[0]) {
+                customId = data.data[0].container_id  
+              } else {
+                customId = data.data.id
+              }
               await axios.get(`/admin/get/print/releasing/${customId}`).then(data => {
                 let pasmo = data.data
                 let w = window.open('', '_blank');
