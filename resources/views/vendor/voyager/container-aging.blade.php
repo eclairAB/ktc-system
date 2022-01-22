@@ -24,7 +24,7 @@
 	          <div>
 	          	<button class="btn btn-primary" :disabled="generateLoad" @click="getContainerAging">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
 	          	<button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
-	          	<button class="btn btn-danger" :disabled="printLoad" @click="printContainerAging">@{{ exportLoad === false ? 'Print' : 'Loading...' }}</button>
+	          	<button class="btn btn-danger" @click="printContainerAging">@{{ exportLoad === false ? 'Print' : 'Loading...' }}</button>
 	          </div>
 	        </div>
 	        <div class="col-xs-12" style="margin-bottom: 10px;">
@@ -258,8 +258,7 @@
       loading: false,
       tableLoad: false,
       generateLoad: false,
-      exportLoad: false,
-      printLoad: false
+      exportLoad: false
     },
     computed: {
     	inDate () {
@@ -330,8 +329,27 @@
           console.log(error)
         })
       },
-      printContainerAging () {
-      	alert('Print')
+      async printContainerAging () {
+      	let payload = {
+          type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
+          sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
+          client: this.form.client === undefined || this.form.client === null ? 'NA' : this.form.client,
+          class: this.form.class === undefined || this.form.class === null ? 'NA' : this.form.class,
+          status: this.form.status === undefined || this.form.status === null ? 'NA' : this.form.status,
+          date_in_from: this.form.date_in_from === undefined || this.form.date_in_from === null ? 'NA' : moment(this.form.date_in_from).format('YYYY-MM-DD'),
+          date_in_to: this.form.date_in_to === undefined || this.form.date_in_to === null ? 'NA' : moment(this.form.date_in_to).format('YYYY-MM-DD'),
+          date_out_from: this.form.date_out_from === undefined || this.form.date_out_from === null ? 'NA' : moment(this.form.date_out_from).format('YYYY-MM-DD'),
+          date_out_to: this.form.date_out_to === undefined || this.form.date_out_to === null ? 'NA' : moment(this.form.date_out_to).format('YYYY-MM-DD')
+        }
+      	await axios.post(`/admin/get/print/aging`, payload).then(data => {
+          let pasmo = data.data
+          let w = window.open('', '_blank');
+          w.document.write(pasmo);
+          setTimeout(() => { 
+              w.print();
+              w.close();
+          }, 100);
+        })
       },
       async getSize () {
         let search = {

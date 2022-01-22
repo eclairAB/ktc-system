@@ -203,8 +203,25 @@
     	dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
       },
-      printContainerIn () {
-        alert('Print')
+      async printContainerIn () {
+        let payload = {
+          type: this.form.type === undefined || null ? 'NA' : this.form.type,
+          sizeType: this.form.sizeType === undefined || null ? 'NA' : this.form.sizeType,
+          client: this.form.client,
+          class: this.form.class,
+          status: this.form.status === undefined || null ? 'NA' : this.form.status,
+          from: moment(this.form.from).format('YYYY-MM-DD'),
+          to: moment(this.form.to).format('YYYY-MM-DD')
+        }
+        await axios.post(`/admin/get/print/daily_in`, payload).then(data => {
+          let pasmo = data.data
+          let w = window.open('', '_blank');
+          w.document.write(pasmo);
+          setTimeout(() => { 
+              w.print();
+              w.close();
+          }, 100);
+        })
       },
       async getClient () {
         if (this.form.from && this.form.to) {
