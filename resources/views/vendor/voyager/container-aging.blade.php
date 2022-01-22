@@ -283,6 +283,7 @@
       async getContainerAging () {
         this.generateLoad = true
         let payload = {
+          option: this.form.option === undefined || this.form.option === null ? 'ALL' : this.form.option,
           type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
           sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
           client: this.form.client === undefined || this.form.client === null ? 'NA' : this.form.client,
@@ -311,6 +312,7 @@
       async exportContainerIn () {
         this.exportLoad = true
         let payload = {
+          option: this.form.option === undefined || this.form.option === null ? 'ALL' : this.form.option,
           type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
           sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
           client: this.form.client === undefined || this.form.client === null ? 'NA' : this.form.client,
@@ -331,6 +333,7 @@
       },
       async printContainerAging () {
       	let payload = {
+          option: this.form.option === undefined || this.form.option === null ? 'ALL' : this.form.option,
           type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
           sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
           client: this.form.client === undefined || this.form.client === null ? 'NA' : this.form.client,
