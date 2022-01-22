@@ -43,6 +43,9 @@
             <div class="col-md-12">
                 <div id="containerReceiving">
                   <!--  -->
+                  <div style="display: flex; justify-content: flex-end;" v-if="form.id">
+                    <button class="btn btn-success" @click="printData"><i class="voyager-file-text"></i> Print</button>
+                  </div>
                   <div class="panel panel-bordered" style="margin-bottom: 5px;">
                     <div class="panel-body" style="padding: 15px 15px 0 15px;">
                       <div class="row" style="padding: 0px 10px;">
@@ -627,6 +630,17 @@
           }
         },
         methods:{
+          async printData () {
+            await axios.get(`/admin/get/print/receiving/${this.form.id}`).then(data => {
+              let pasmo = data.data
+              let w = window.open('', '_blank');
+              w.document.write(pasmo);
+              setTimeout(() => { 
+                  w.print();
+                  w.close();
+              }, 100);
+            })
+          },
           dateFormatFull (date) {
             return moment(date).format('MMMM DD, YYYY');
           },
@@ -1024,7 +1038,8 @@
               this.clearTabs()
               this.loading = false
               $('#savingDialog').modal('hide');
-              this.errors = error.response.data.errors
+              console.log(error.response)
+              // this.errors = error.response.data.errors
             })
           },
           async updateReceiving () {
