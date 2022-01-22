@@ -19,6 +19,7 @@
     <!-- HEADER -->
     <div style="width: 100%; display: flex;">
       <div style="text-align: left; width: 100%;">
+        <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
         <h4 style="margin-bottom: 1px;">KUDOS TRUCKING CORPORATION</h4>
         <small>#15 KM9 OLD AIRPORT, DAVAO CITY</small><br>
         <div style="font-size: 14px; margin-top: 10px; margin-bottom: 3px;"><b>Container Inventory</b></div>
