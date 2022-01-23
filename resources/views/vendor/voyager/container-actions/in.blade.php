@@ -249,7 +249,7 @@
             from: moment(this.form.from).format('YYYY-MM-DD'),
             to: moment(this.form.to).format('YYYY-MM-DD')
           }
-          await axios.post(`/admin/get/daily_in`).then(data => {
+          await axios.post(`/admin/get/daily_in`, payload).then(data => {
             this.generateLoad = false
             this.containerInList = data.data
             if (data.data.length === 0) {
