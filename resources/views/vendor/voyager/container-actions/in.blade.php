@@ -138,14 +138,14 @@
         <tbody v-if="containerInList.length > 0">
           <tr v-for="(item, index) in containerInList" :key="index">
             <td>@{{ item.container_no }}</td>
-            <td>@{{ item.id }}</td>
-            <td>@{{ item.size_type.code }} - @{{ item.size_type.name }}</td>
-            <td>@{{ item.type.code }} - @{{ item.type.name }}</td>
+            <td>@{{ item.container.eir_no_in.eir_no }}</td>
+            <td>@{{ item.size_type.size }}</td>
+            <td>@{{ item.type.code }}</td>
             <td>@{{ item.client.code  }}</td>
             <td>@{{ item.consignee }}</td>
             <td>@{{ item.plate_no }}</td>
             <td>@{{ item.hauler }}</td>
-            <td>@{{ item.container_class.class_name }}</td>
+            <td>@{{ item.container_class.class_code }}</td>
             <td>@{{ item.remarks }}</td>
             <td>@{{ moment(item.inspected_date).format('MMMM DD, YYYY') }}</td>
           </tr>

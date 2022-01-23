@@ -22,7 +22,7 @@
         <div style="width: 100%; text-align: center;">
           <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
           <small><b>Container Daily In Report</b></small><br>
-          <small>Print Date: 01/22/22</small>
+          <small>Print Date: {{ Carbon\Carbon::now()->format('Y-m-d') }}</small>
         </div>
         <table style="margin-top: 20px">
           <tr style="border-top: 2px solid; border-bottom: 2px solid">
