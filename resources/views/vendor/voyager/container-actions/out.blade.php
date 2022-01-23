@@ -137,13 +137,13 @@
           <tr v-for="(item, index) in containerOutList" :key="index">
             <td>@{{ item.container_no }}</td>
             <td>@{{ item.container.eir_no_out.eir_no }}</td>
-            <td>@{{ item.size_type.size }}</td>
-            <td>@{{ item.type.code }}</td>
-            <td>@{{ item.client.code  }}</td>
+            <td>@{{ item.container.size_type.size }}</td>
+            <td>@{{ item.container.type.code }}</td>
+            <td>@{{ item.container.client.code  }}</td>
             <td>@{{ item.consignee }}</td>
             <td>@{{ item.plate_no }}</td>
             <td>@{{ item.hauler }}</td>
-            <td>@{{ item.container_class.class_name }}</td>
+            <td>@{{ item.container.container_class.class_name }}</td>
             <td>@{{ item.remarks }}</td>
             <td>@{{ moment(item.inspected_date).format('MMMM DD, YYYY') }}</td>
           </tr>
