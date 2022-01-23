@@ -136,9 +136,9 @@
         <tbody v-if="containerOutList.length > 0">
           <tr v-for="(item, index) in containerOutList" :key="index">
             <td>@{{ item.container_no }}</td>
-            <td>@{{ item.id }}</td>
-            <td>@{{ item.size_type.code }} - @{{ item.size_type.name }}</td>
-            <td>@{{ item.type.code }} - @{{ item.type.name }}</td>
+            <td>@{{ item.container.eir_no_out.eir_no }}</td>
+            <td>@{{ item.size_type.size }}</td>
+            <td>@{{ item.type.code }}</td>
             <td>@{{ item.client.code  }}</td>
             <td>@{{ item.consignee }}</td>
             <td>@{{ item.plate_no }}</td>
@@ -212,9 +212,9 @@
           from: moment(this.form.from).format('YYYY-MM-DD'),
           to: moment(this.form.to).format('YYYY-MM-DD')
         }
-        await axios.get(`/admin/get/print/daily_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`).then(data => {
+        await axios.get(`/admin/get/print/daily_out/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`).then(data => {
           let pasmo = data.data
-          let w = window.open(`/admin/get/print/daily_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`, '_blank');
+          let w = window.open(`/admin/get/print/daily_out/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`, '_blank');
           w.document.write(pasmo);
           setTimeout(() => { 
               w.print();

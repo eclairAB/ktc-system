@@ -22,7 +22,7 @@
         <div style="width: 100%; text-align: center;">
           <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
           <small><b>Container Daily Out Report</b></small><br>
-          <small>Print Date: 01/22/22</small>
+          <small>Print Date: {{ Carbon\Carbon::now()->format('Y-m-d') }}</small>
         </div>
         <table style="margin-top: 20px">
           <tr style="border-top: 2px solid; border-bottom: 2px solid">
@@ -51,6 +51,8 @@
             <td>{{ $item->container->containerClass->class_code??'' }}</td>
             <td>{{ $item->remarks }}</td>
             <td>{{ Carbon\Carbon::parse($item->inspected_date)->format('Y-m-d') }}</td>
+          </tr>
+          @endforeach
         </table>
         <div style="border-top: 2px solid; display: flex; font-size: 14px; font-weight: 700; padding-top: 10px">
         </div>

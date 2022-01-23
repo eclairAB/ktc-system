@@ -41,9 +41,9 @@ class DailyContainerOut implements  FromView, ShouldAutoSize
             })->when($this->class != 'NA', function ($q){
                 return $q->where('class',$this->class);
             });
-        })->whereHas('receiving',function( $query ) use($request){
-            $query->when($request->status != 'NA', function ($q) use($request){
-                return $q->where('empty_loaded',$request->status);
+        })->whereHas('receiving',function( $query ){
+            $query->when($this->status != 'NA', function ($q){
+                return $q->where('empty_loaded',$this->status);
             });
         })->with('container.client','container.sizeType','container.containerClass','container.type','container.eirNoOut','receiving')->get();
 
