@@ -213,9 +213,9 @@
           from: moment(this.form.from).format('YYYY-MM-DD'),
           to: moment(this.form.to).format('YYYY-MM-DD')
         }
-        await axios.post(`/admin/get/print/daily_in`, payload).then(data => {
+        await axios.get(`/admin/get/print/daily_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`).then(data => {
           let pasmo = data.data
-          let w = window.open('', '_blank');
+          let w = window.open(`/admin/get/print/daily_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`, '_blank');
           w.document.write(pasmo);
           setTimeout(() => { 
               w.print();
@@ -249,7 +249,7 @@
             from: moment(this.form.from).format('YYYY-MM-DD'),
             to: moment(this.form.to).format('YYYY-MM-DD')
           }
-          await axios.post(`/admin/get/daily_in`, payload).then(data => {
+          await axios.post(`/admin/get/daily_in`).then(data => {
             this.generateLoad = false
             this.containerInList = data.data
             if (data.data.length === 0) {
