@@ -26,17 +26,17 @@
         </div>
         <table style="margin-top: 20px">
           <tr style="border-top: 2px solid; border-bottom: 2px solid">
-            <th>Container No.</th> 
-            <th>EIR No.</th> 
-            <th>Size</th>
-            <th>Type</th>
-            <th>Client</th>
-            <th>Consignee</th>
-            <th>Plate No.</th>
-            <th>Trucker</th>
-            <th>Class</th>
-            <th>Remarks</th>
-            <th>Date IN</th>
+            <th scope="col">Container No.</th> 
+            <th scope="col">EIR No.</th> 
+            <th scope="col">Size</th>
+            <th scope="col">Type</th>
+            <th scope="col">Client</th>
+            <th scope="col">Consignee</th>
+            <th scope="col">Plate No.</th>
+            <th scope="col">Trucker</th>
+            <th scope="col">Class</th>
+            <th scope="col">Remarks</th>
+            <th scope="col">Date IN</th>
           </tr>
           @foreach($data as $key => $item)
             <tr>
