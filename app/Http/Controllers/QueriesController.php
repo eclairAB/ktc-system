@@ -322,143 +322,75 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         return $data;
     }
 
-    public function prntDailyIn(Request $request)
+    public function prntDailyIn($type,$sizeType,$client,$class,$status,$from,$to)
     {
-        $data = ContainerReceiving::when($request->type != 'NA', function ($q) use($request){
-            return $q->where('type_id',$request->type);
-        })->when($request->sizeType != 'NA', function ($q) use($request){
-            return $q->where('size_type',$request->sizeType);
-        })->when($request->client != 'NA', function ($q) use($request){
-            return $q->where('client_id',$request->client);
-        })->when($request->class != 'NA', function ($q) use($request){
-            return $q->where('class',$request->class);
-        })->when($request->status != 'NA', function ($q) use($request){
-            return $q->where('empty_loaded',$request->status);
-        })->when($request->from != 'NA', function ($q) use($request){
-            return $q->whereDate('inspected_date','>=',$request->from);
-        })->when($request->to != 'NA', function ($q) use($request){
-            return $q->whereDate('inspected_date','<=',$request->to);
-        })->whereHas('container',function( $query ) use($request){
-            $query->where('type_id',$request->type)->where('client_id',$request->client)->where('size_type',$request->sizeType);
+        $data = ContainerReceiving::when($type != 'NA', function ($q) use($type){
+            return $q->where('type_id',$type);
+        })->when($sizeType != 'NA', function ($q) use($sizeType){
+            return $q->where('size_type',$sizeType);
+        })->when($client != 'NA', function ($q) use($client){
+            return $q->where('client_id',$client);
+        })->when($class != 'NA', function ($q) use($class){
+            return $q->where('class',$class);
+        })->when($status != 'NA', function ($q) use($status){
+            return $q->where('empty_loaded',$status);
+        })->when($from != 'NA', function ($q) use($from){
+            return $q->whereDate('inspected_date','>=',$from);
+        })->when($to != 'NA', function ($q) use($to){
+            return $q->whereDate('inspected_date','<=',$to);
+        })->whereHas('container',function( $query ) use($type,$client,$sizeType){
+            $query->where('type_id',$type)->where('client_id',$client)->where('size_type',$sizeType);
         })->with('client','sizeType','containerClass','container.eirNoIn','type')->get();
 
         return view('print_container_in')->with(compact('data'));
     }
 
-    public function prntDailyOut(Request $request)
+    public function prntDailyOut($type,$sizeType,$client,$class,$status,$from,$to)
     {
-        $data = ContainerReleasing::when($request->from != 'NA', function ($q) use($request){
-            return $q->whereDate('inspected_date','>=',$request->from);
-        })->when($request->to != 'NA', function ($q) use($request){
-            return $q->whereDate('inspected_date','<=',$request->to);
-        })->whereHas('container',function( $query ) use($request){
-            $query->when($request->type != 'NA', function ($q) use($request){
-                return $q->where('type_id',$request->type);
-            })->when($request->sizeType != 'NA', function ($q) use($request){
-                return $q->where('size_type',$request->sizeType);
-            })->when($request->client != 'NA', function ($q) use($request){
-                return $q->where('client_id',$request->client);
-            })->when($request->class != 'NA', function ($q) use($request){
-                return $q->where('class',$request->class);
+        $data = ContainerReleasing::when($from != 'NA', function ($q) use($from){
+            return $q->whereDate('inspected_date','>=',$from);
+        })->when($to != 'NA', function ($q) use($to){
+            return $q->whereDate('inspected_date','<=',$to);
+        })->whereHas('container',function( $query ) use($type,$client,$sizeType,$class){
+            $query->when($type != 'NA', function ($q) use($type){
+                return $q->where('type_id',$type);
+            })->when($sizeType != 'NA', function ($q) use($sizeType){
+                return $q->where('size_type',$sizeType);
+            })->when($client != 'NA', function ($q) use($client){
+                return $q->where('client_id',$client);
+            })->when($class != 'NA', function ($q) use($class){
+                return $q->where('class',$class);
             });
-        })->whereHas('receiving',function( $query ) use($request){
-            $query->when($request->status != 'NA', function ($q) use($request){
-                return $q->where('empty_loaded',$request->status);
+        })->whereHas('receiving',function( $query ) use($status){
+            $query->when($status != 'NA', function ($q) use($status){
+                return $q->where('empty_loaded',$status);
             });
         })->with('container.client','container.eirNoOut','container.sizeType','container.type','container.containerClass','receiving')->get();
 
         return view('print_container_out')->with(compact('data'));
     }
 
-    public function prntAging(Request $request)
+    public function prntAging($type,$sizeType,$client,$class,$date_in_from,$date_in_to,$date_out_from,$date_out_to,$option,$status)
     {
-        if($request->option == 'IN')
+        if($option == 'IN')
         {
-            $data = Container::when($request->type != 'NA', function ($q)  use($request){
-                return $q->where('type_id',$request->type);
-            })->when($request->sizeType != 'NA', function ($q) use($request){
-                return $q->where('size_type',$request->sizeType);
-            })->when($request->client != 'NA', function ($q) use($request){
-                return $q->where('client_id',$request->client);
-            })->when($request->class != 'NA', function ($q) use($request){
-                return $q->where('class',$request->class);
-            })->whereHas('receiving',function( $query ) use($request){
-                $query->when($request->date_in_from != 'NA', function ($q) use($request){
-                    return $q->whereDate('inspected_date','>=',$request->date_in_from);
-                })->when($request->date_in_to != 'NA', function ($q) use($request){
-                    return $q->whereDate('inspected_date','<=',$request->date_in_to);
-                })->when($request->status != 'NA', function ($q) use($request){
-                    return $q->where('empty_loaded',$request->status);
+            $data = Container::when($type != 'NA', function ($q) use($type){
+                return $q->where('type_id',$type);
+            })->when($sizeType != 'NA', function ($q) use($sizeType){
+                return $q->where('size_type',$sizeType);
+            })->when($client != 'NA', function ($q) use($client){
+                return $q->where('client_id',$client);
+            })->when($class != 'NA', function ($q) use($class){
+                return $q->where('class',$class);
+            })->whereHas('receiving',function( $query ) use($date_in_from,$date_in_to,$status){
+                $query->when($date_in_from != 'NA', function ($q) use($date_in_from){
+                    return $q->whereDate('inspected_date','>=',$date_in_from);
+                })->when($date_in_to != 'NA', function ($q) use($date_in_to){
+                    return $q->whereDate('inspected_date','<=',$date_in_to);
+                })->when($status != 'NA', function ($q) use($status){
+                    return $q->where('empty_loaded',$status);
                 });
-            })->with('client','sizeType','containerClass','type','receiving')->orderBy('created_at','ASC')->get();
-    
-            foreach($data as $res)
-            {
-                $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
-                $res->total_no_days = $diff_days;
-            }
-    
-            $option = $request->option;
-            $count = count($data);
-            return view('print_aging')->with(compact('data','count','option'));
-        }
-        else if($request->option == 'OUT')
-        {
-            $data = Container::when($request->type != 'NA', function ($q)  use($request){
-                return $q->where('type_id',$request->type);
-            })->when($request->sizeType != 'NA', function ($q) use($request){
-                return $q->where('size_type',$request->sizeType);
-            })->when($request->client != 'NA', function ($q) use($request){
-                return $q->where('client_id',$request->client);
-            })->when($request->class != 'NA', function ($q) use($request){
-                return $q->where('class',$request->class);
-            })->whereHas('releasing',function( $query ) use($request){
-                $query->when($request->date_out_from != 'NA', function ($q) use($request){
-                    return $q->whereDate('inspected_date','>=',$request->date_out_from);
-                })->when($request->date_out_to != 'NA', function ($q) use($request){
-                    return $q->whereDate('inspected_date','<=',$request->date_out_to);
-                });
-            })->whereHas('receiving',function( $query ) use($request){
-                $query->when($request->status != 'NA', function ($q) use($request){
-                    return $q->where('empty_loaded',$request->status);
-                });
-            })->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
-    
-            foreach($data as $res)
-            {
-                $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
-                $res->total_no_days = $diff_days;
-            }
-    
-            $option = $request->option;
-            $count = count($data);
-            return view('print_aging')->with(compact('data','count','option'));
-        }
-        else if($request->option == 'ALL')
-        {
-            $data = Continer::when($request->type != 'NA', function ($q)  use($request){
-                return $q->where('type_id',$request->type);
-            })->when($request->sizeType != 'NA', function ($q) use($request){
-                return $q->where('size_type',$request->sizeType);
-            })->when($request->client != 'NA', function ($q) use($request){
-                return $q->where('client_id',$request->client);
-            })->when($request->class != 'NA', function ($q) use($request){
-                return $q->where('class',$request->class);
-            })->whereHas('receiving',function( $query ) use($request){
-                $query->when($request->date_in_from != 'NA', function ($q) use($request){
-                    return $q->whereDate('inspected_date','>=',$request->date_in_from);
-                })->when($request->date_in_to != 'NA', function ($q) use($request){
-                    return $q->whereDate('inspected_date','<=',$request->date_in_to);
-                })->when($request->status != 'NA', function ($q) use($request){
-                    return $q->where('empty_loaded',$request->status);
-                });
-            })->whereHas('releasing',function( $query ) use($request){
-                $query->when($request->date_out_from != 'NA', function ($q) use($request){
-                    return $q->whereDate('inspected_date','>=',$request->date_out_from);
-                })->when($request->date_out_to != 'NA', function ($q) use($request){
-                    return $q->whereDate('inspected_date','<=',$request->date_out_to);
-                });
-            })->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
+            })->whereNull('releasing_id')->with('client','sizeType','containerClass','type','receiving')->orderBy('created_at','ASC')->get();
     
             foreach($data as $res)
             {
@@ -466,9 +398,77 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 $res->total_no_days = $diff_days;
             }
 
-            $option = $request->option;
+            $client = Client::where('id',$client)->first();
             $count = count($data);
-            return view('print_aging')->with(compact('data','count','option'));
+            return view('print_aging')->with(compact('data','count','option','client'));
+        }
+        else if($option == 'OUT')
+        {
+            $data = Container::when($type != 'NA', function ($q) use($type){
+                return $q->where('type_id',$type);
+            })->when($sizeType != 'NA', function ($q) use($sizeType){
+                return $q->where('size_type',$sizeType);
+            })->when($client != 'NA', function ($q) use($client){
+                return $q->where('client_id',$client);
+            })->when($class != 'NA', function ($q) use($class){
+                return $q->where('class',$class);
+            })->whereHas('releasing',function( $query ) use($date_out_from,$date_out_to){
+                $query->when($date_out_from != 'NA', function ($q) use($date_out_from){
+                    return $q->whereDate('inspected_date','>=',$date_out_from);
+                })->when($date_out_to != 'NA', function ($q) use($date_out_to){
+                    return $q->whereDate('inspected_date','<=',$date_out_to);
+                });
+            })->whereHas('receiving',function( $query ) use($status){
+                $query->when($status != 'NA', function ($q) use($status){
+                    return $q->where('empty_loaded',$status);
+                });
+            })->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
+    
+            foreach($data as $res)
+            {
+                $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays($res->releasing->inspected_date);
+                $res->total_no_days = $diff_days;
+            }
+    
+            $client = Client::where('id',$client)->first();
+            $count = count($data);
+            return view('print_aging')->with(compact('data','count','option','client'));
+        }
+        else if($option == 'ALL')
+        {
+            $data = Container::when($type != 'NA', function ($q) use($type){
+                return $q->where('type_id',$type);
+            })->when($sizeType != 'NA', function ($q) use($sizeType){
+                return $q->where('size_type',$sizeType);
+            })->when($client != 'NA', function ($q) use($client){
+                return $q->where('client_id',$client);
+            })->when($class != 'NA', function ($q) use($class){
+                return $q->where('class',$class);
+            })->whereHas('receiving',function( $query ) use($date_in_from,$date_in_to,$status){
+                $query->when($date_in_from != 'NA', function ($q) use($date_in_from){
+                    return $q->whereDate('inspected_date','>=',$date_in_from);
+                })->when($date_in_to != 'NA', function ($q) use($date_in_to){
+                    return $q->whereDate('inspected_date','<=',$date_in_to);
+                })->when($status != 'NA', function ($q) use($status){
+                    return $q->where('empty_loaded',$status);
+                });
+            })->orWhereHas('releasing',function( $query ) use($date_out_from,$date_out_to){
+                $query->when($date_out_from != 'NA', function ($q) use($date_out_from){
+                    return $q->whereDate('inspected_date','>=',$date_out_from);
+                })->when($date_out_to != 'NA', function ($q) use($date_out_to){
+                    return $q->whereDate('inspected_date','<=',$date_out_to);
+                });
+            })->whereNotNull('receiving_id')->whereNotNull('releasing_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
+    
+            foreach($data as $res)
+            {
+                $diff_days = isset($res->releasing)?Carbon::parse($res->receiving->inspected_date)->diffInDays($res->releasing->inspected_date):Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
+                $res->total_no_days = $diff_days;
+            }
+
+            $client = Client::where('id',$client)->first();
+            $count = count($data);
+            return view('print_aging')->with(compact('data','count','option','client'));
         }
        
     }
@@ -493,7 +493,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 })->when($request->status != 'NA', function ($q) use($request){
                     return $q->where('empty_loaded',$request->status);
                 });
-            })->with('client','sizeType','containerClass','type','receiving')->orderBy('created_at','ASC')->get();
+            })->whereNull('releasing_id')->with('client','sizeType','containerClass','type','receiving')->orderBy('created_at','ASC')->get();
     
             foreach($data as $res)
             {
@@ -523,11 +523,11 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 $query->when($request->status != 'NA', function ($q) use($request){
                     return $q->where('empty_loaded',$request->status);
                 });
-            })->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
+            })->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
     
             foreach($data as $res)
             {
-                $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
+                $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays($res->releasing->inspected_date);
                 $res->total_no_days = $diff_days;
             }
     
@@ -535,7 +535,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         }
         else if($request->option == 'ALL')
         {
-            $data = Continer::when($request->type != 'NA', function ($q)  use($request){
+            $data = Container::when($request->type != 'NA', function ($q)  use($request){
                 return $q->where('type_id',$request->type);
             })->when($request->sizeType != 'NA', function ($q) use($request){
                 return $q->where('size_type',$request->sizeType);
@@ -551,17 +551,17 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 })->when($request->status != 'NA', function ($q) use($request){
                     return $q->where('empty_loaded',$request->status);
                 });
-            })->whereHas('releasing',function( $query ) use($request){
+            })->orWhereHas('releasing',function( $query ) use($request){
                 $query->when($request->date_out_from != 'NA', function ($q) use($request){
                     return $q->whereDate('inspected_date','>=',$request->date_out_from);
                 })->when($request->date_out_to != 'NA', function ($q) use($request){
                     return $q->whereDate('inspected_date','<=',$request->date_out_to);
                 });
-            })->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
+            })->whereNotNull('receiving_id')->whereNotNull('releasing_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
     
             foreach($data as $res)
             {
-                $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
+                $diff_days = isset($res->releasing)?Carbon::parse($res->receiving->inspected_date)->diffInDays($res->releasing->inspected_date):Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
                 $res->total_no_days = $diff_days;
             }
     

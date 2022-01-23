@@ -28,8 +28,8 @@
           <span>Printed Record: <b style="font-size: 16px;">{{ $option }}</b></span>
         </div>
         <div style="font-size: 14px; display: flex; justify-content: space-between;">
-          <b>{{ $data->client->code }}</b>
-          <span>Print Date: {{ Carbon\Carbon::now()->format('m-d-Y') }}</span>
+          <b>{{ $client->code }}</b>
+          <span>Print Date: {{ Carbon\Carbon::now()->format('Y-m-d') }}</span>
         </div>
         <table style="margin-top: 20px">
           <tr style="border-top: 2px solid; border-bottom: 2px solid">
@@ -41,15 +41,17 @@
             <th scope="col">Date Out</th>
             <th scope="col">Days</th>
           </tr>
+          @foreach($data as $key => $item)
           <tr>
-            <td>{{ $data->container_no }}</td>
-            <td>{{ $data->sizeType->size??'' }}</td>
-            <td>{{ $data->type->code??'' }}</td>
-            <td>{{ $data->receiving->empty_loaded??'' }}</td>
-            <td>{{ is_null($data->receiving)?'':Carbon\Carbon::parse($data->receiving->inspected_date)->format('Y-m-d') }} }}</td>
-            <td>{{ is_null($data->releasing)?'':Carbon\Carbon::parse($data->releasing->inspected_date)->format('Y-m-d') }} }}</td>
-            <td>1</td>
+            <td>{{ $item->container_no }}</td>
+            <td>{{ $item->sizeType->size??'' }}</td>
+            <td>{{ $item->type->code??'' }}</td>
+            <td>{{ $item->receiving->empty_loaded??'' }}</td>
+            <td>{{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}</td>
+            <td>{{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}</td>
+            <td>{{ isset($item->total_no_days)?$item->total_no_days:0 }}</td>
           </tr>
+          @endforeach
         </table>
         <div style="border-top: 2px solid; display: flex; font-size: 14px; font-weight: 700; padding-top: 10px">
           <div>Container Count</div>
