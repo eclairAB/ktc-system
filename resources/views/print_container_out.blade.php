@@ -19,40 +19,40 @@
     <!-- HEADER -->
     <div style="width: 100%; display: flex;">
       <div style="text-align: left; width: 100%;">
-        <h4 style="margin-bottom: 1px;">KUDOS TRUCKING CORPORATION</h4>
-        <small>#15 KM9 OLD AIRPORT, DAVAO CITY</small><br>
-        <div style="font-size: 14px; margin-top: 10px; margin-bottom: 3px;"><b>Container Inventory</b></div>
-        <div style="font-size: 14px; margin-left: 40px; margin-bottom: 3px; display: flex; justify-content: space-between;">
-          <span>to</span>
-          <span>Printed Record: <b style="font-size: 16px;">Container Out</b></span>
-        </div>
-        <div style="font-size: 14px; display: flex; justify-content: space-between;">
-          <b>CLIENT NAME</b>
-          <span>Print Date: 01/22/22</span>
+        <div style="width: 100%; text-align: center;">
+          <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
+          <small><b>Container Daily Out Report</b></small><br>
+          <small>Print Date: 01/22/22</small>
         </div>
         <table style="margin-top: 20px">
           <tr style="border-top: 2px solid; border-bottom: 2px solid">
-            <th scope="col">Container No.</th>
-            <th scope="col">EIR</th>
-            <th scope="col">Size</th>
-            <th scope="col">Type</th>
-            <th scope="col">Status</th>
-            <th scope="col">Date Out</th>
-            <th scope="col">Remarks</th>
+            <th">Container No.</th>
+            <th">EIR No.</th> 
+            <th">Size</th>
+            <th">Type</th>
+            <th">Client</th>
+            <th">Consignee</th>
+            <th">Plate No.</th>
+            <th">Trucker</th>
+            <th">Class</th>
+            <th">Remarks</th>
+            <th">Date OUT</th>
           </tr>
+          @foreach($data as $key => $item)
           <tr>
-            <td>BSKD-JVBJSD-V</td>
-            <td>487236</td>
-            <td>10</td>
-            <td>T1</td>
-            <td>EMPTY</td>
-            <td>2022-01-23</td>
-            <td>Pasmo</td>
-          </tr>
+            <td>{{ $item->container_no }}</td>
+            <td>{{ $item->container->eirNoOut->eir_no??'' }}</td>
+            <td>{{ $item->container->sizeType->size??'' }}</td>
+            <td>{{ $item->container->type->code??'' }}</td>
+            <td>{{ $item->container->client->code??'' }}</td>
+            <td>{{ $item->consignee }}</td>
+            <td>{{ $item->plate_no }}</td>
+            <td>{{ $item->hauler }}</td>
+            <td>{{ $item->container->containerClass->class_code??'' }}</td>
+            <td>{{ $item->remarks }}</td>
+            <td>{{ Carbon\Carbon::parse($item->inspected_date)->format('Y-m-d') }}</td>
         </table>
         <div style="border-top: 2px solid; display: flex; font-size: 14px; font-weight: 700; padding-top: 10px">
-          <div>Container Count</div>
-          <div style="margin-left: 40px;">22</div>
         </div>
       </div>
     </div>
