@@ -49,7 +49,7 @@ class ContainerAging implements  FromView, ShouldAutoSize
                 })->when($this->status != 'NA', function ($q) {
                     return $q->where('empty_loaded',$this->status);
                 });
-            })->whereNull('releasing_id')->with('client','sizeType','containerClass','type','receiving')->orderBy('created_at','ASC')->get();
+            })->whereNull('releasing_id')->with('client','sizeType','containerClass','type','receiving')->orderBy('container_no','ASC')->get();
     
             foreach($data as $res)
             {
@@ -79,7 +79,7 @@ class ContainerAging implements  FromView, ShouldAutoSize
                 $query->when($this->status != 'NA', function ($q) {
                     return $q->where('empty_loaded',$this->status);
                 });
-            })->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
+            })->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
     
             foreach($data as $res)
             {
@@ -113,7 +113,7 @@ class ContainerAging implements  FromView, ShouldAutoSize
                 })->when($this->date_out_to != 'NA', function ($q) {
                     return $q->whereDate('inspected_date','<=',$this->date_out_to);
                 });
-            })->whereNotNull('receiving_id')->whereNotNull('releasing_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
+            })->whereNotNull('receiving_id')->whereNotNull('releasing_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
     
             foreach($data as $res)
             {
