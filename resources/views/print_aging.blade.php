@@ -28,7 +28,7 @@
           <span>Printed Record: <b style="font-size: 16px;">{{ $option }}</b></span>
         </div>
         <div style="font-size: 14px; display: flex; justify-content: space-between;">
-          <b>{{ $client->code }}</b>
+          <b>{{ isset($client)?$client->code:'' }}</b>
           <span>Print Date: {{ Carbon\Carbon::now()->format('Y-m-d') }}</span>
         </div>
         <table style="margin-top: 20px">

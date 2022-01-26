@@ -54,7 +54,7 @@
                 class="form-control"
                 :reduce="code => code.id"
               ></v-select>
-              <label for="client" class="form-control-placeholder"> Client <span style="color: red;"> *</span></label>
+              <label for="client" class="form-control-placeholder"> Client</span></label>
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -102,7 +102,7 @@
                 label="class_code"
                 :reduce="class_code => class_code.id"
               ></v-select>
-              <label for="class" class="form-control-placeholder"> Class <span style="color: red;"> *</span></label>
+              <label for="class" class="form-control-placeholder"> Class</span></label>
             </div>
 
           </div>
@@ -134,18 +134,18 @@
           </tr>
         </thead>
         <tbody v-if="containerOutList.length > 0">
-          <tr v-for="(item, index) in containerOutList" :key="index">
-            <td>@{{ item.container_no }}</td>
-            <td>@{{ item.container.eir_no_out.eir_no }}</td>
-            <td>@{{ item.container.size_type.size }}</td>
-            <td>@{{ item.container.type.code }}</td>
-            <td>@{{ item.container.client.code  }}</td>
-            <td>@{{ item.consignee }}</td>
-            <td>@{{ item.plate_no }}</td>
-            <td>@{{ item.hauler }}</td>
-            <td>@{{ item.container.container_class.class_name }}</td>
-            <td>@{{ item.remarks }}</td>
-            <td>@{{ moment(item.inspected_date).format('MMMM DD, YYYY') }}</td>
+          <tr class="viewItemOnClick" v-for="(item, index) in containerOutList" :key="index">
+            <td v-on:click="reroute(item.id)">@{{ item.container_no }}</td>
+            <td v-on:click="reroute(item.id)">@{{ item.container.eir_no_out ? item.container.eir_no_out.eir_no : '' }}</td>
+            <td v-on:click="reroute(item.id)">@{{ item.container.size_type ? item.container.size_type.size : '' }}</td>
+            <td v-on:click="reroute(item.id)">@{{ item.container.type ? item.container.type.code : '' }}</td>
+            <td v-on:click="reroute(item.id)">@{{ item.container.client ? item.container.client.code : ''  }}</td>
+            <td v-on:click="reroute(item.id)">@{{ item.consignee }}</td>
+            <td v-on:click="reroute(item.id)">@{{ item.plate_no }}</td>
+            <td v-on:click="reroute(item.id)">@{{ item.hauler }}</td>
+            <td v-on:click="reroute(item.id)">@{{ item.container.container_class ? item.container.container_class.class_name : '' }}</td>
+            <td v-on:click="reroute(item.id)">@{{ item.remarks }}</td>
+            <td v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
           </tr>
         </tbody>
         <tbody v-else>
@@ -199,6 +199,10 @@
       printLoad: false
     },
     methods: {
+      reroute(releasing_id) {
+				let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+				window.location = customUrl
+		  },
     	dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
       },
@@ -206,8 +210,8 @@
         let payload = {
           type: this.form.type === undefined || null ? 'NA' : this.form.type,
           sizeType: this.form.sizeType === undefined || null ? 'NA' : this.form.sizeType,
-          client: this.form.client,
-          class: this.form.class,
+          client: this.form.client === undefined || null ? 'NA' : this.form.client,
+          class: this.form.class === undefined || null ? 'NA' : this.form.class,
           status: this.form.status === undefined || null ? 'NA' : this.form.status,
           from: moment(this.form.from).format('YYYY-MM-DD'),
           to: moment(this.form.to).format('YYYY-MM-DD')
@@ -237,13 +241,13 @@
         }
       },
       async getContainerOut () {
-        if (this.form.client && this.form.class && this.form.from && this.form.to) {
+        if (this.form.from && this.form.to) {
         	this.generateLoad = true
           let payload = {
             type: this.form.type === undefined || null ? 'NA' : this.form.type,
             sizeType: this.form.sizeType === undefined || null ? 'NA' : this.form.sizeType,
-            client: this.form.client,
-            class: this.form.class,
+            client: this.form.client === undefined || null ? 'NA' : this.form.client,
+            class: this.form.class === undefined || null ? 'NA' : this.form.class,
             status: this.form.status === undefined || null ? 'NA' : this.form.status,
             from: moment(this.form.from).format('YYYY-MM-DD'),
             to: moment(this.form.to).format('YYYY-MM-DD')
@@ -271,13 +275,13 @@
         }
       },
       async exportContainerOut () {
-        if (this.form.client && this.form.class && this.form.from && this.form.to) {
+        if (this.form.from && this.form.to) {
         	this.exportLoad = true
           let payload = {
             type: this.form.type === undefined || null ? 'NA' : this.form.type,
             sizeType: this.form.sizeType === undefined || null ? 'NA' : this.form.sizeType,
-            client: this.form.client,
-            class: this.form.class,
+            client: this.form.client === undefined || null ? 'NA' : this.form.client,
+            class: this.form.class === undefined || null ? 'NA' : this.form.class,
             status: this.form.status === undefined || null ? 'NA' : this.form.status,
             from: moment(this.form.from).format('YYYY-MM-DD'),
             to: moment(this.form.to).format('YYYY-MM-DD')

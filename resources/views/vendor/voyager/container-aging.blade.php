@@ -198,19 +198,19 @@
 	          </tr>
 	        </thead>
 	        <tbody v-if="containerAgingList.length > 0">
-	          <tr v-for="(item, index) in containerAgingList" :key="index">
-	            <td>@{{ item.container_no }}</td>
-	            <td>@{{ item.size_type ? item.size_type.code : '' }}</td>
-	            <td>@{{ item.type ? item.type.code : '' }}</td>
-	            <td>@{{ item.receiving.empty_loaded }}</td>
-	            <td>@{{ item.client ? item.client.code : '' }}</td>
-	            <td>@{{ item.receiving ? moment(item.receiving.inspected_date).format('MMMM DD, YYYY') : '' }}</td>
-	            <td>@{{ item.receiving ? item.receiving.consignee : '' }}</td>
-	            <td>@{{ item.releasing ? moment(item.releasing.inspected_date).format('MMMM DD, YYYY') : '' }}</td>
-	            <td>@{{ item.releasing ? item.releasing.consignee : '' }}</td>
-	            <td>@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
-	            <td>@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
-	            <td>@{{ item.total_no_days }}</td>
+	          <tr class="viewItemOnClick" v-for="(item, index) in containerAgingList" :key="index">
+	            <td v-on:click="reroute(item.receiving_id,item.releasing_id)">@{{ item.container_no }}</td>
+	            <td v-on:click="reroute(item.receiving_id,item.releasing_id)">@{{ item.size_type ? item.size_type.code : '' }}</td>
+	            <td v-on:click="reroute(item.receiving_id,item.releasing_id)">@{{ item.type ? item.type.code : '' }}</td>
+	            <td v-on:click="reroute(item.receiving_id,item.releasing_id)">@{{ item.receiving.empty_loaded }}</td>
+	            <td v-on:click="reroute(item.receiving_id,item.releasing_id)">@{{ item.client ? item.client.code : '' }}</td>
+	            <td v-on:click="reroute(item.receiving_id,item.releasing_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}</td>
+	            <td v-on:click="reroute(item.receiving_id,item.releasing_id)">@{{ item.receiving ? item.receiving.consignee : '' }}</td>
+	            <td v-on:click="reroute(item.receiving_id,item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}</td>
+	            <td v-on:click="reroute(item.receiving_id,item.releasing_id)">@{{ item.releasing ? item.releasing.consignee : '' }}</td>
+	            <td v-on:click="reroute(item.receiving_id,item.releasing_id)">@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
+	            <td v-on:click="reroute(item.receiving_id,item.releasing_id)">@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
+	            <td v-on:click="reroute(item.receiving_id,item.releasing_id)">@{{ item.total_no_days }}</td>
 	          </tr>
 	        </tbody>
 	        <tbody v-else>
@@ -223,6 +223,9 @@
 	          </tr>
 	        </tbody>
 	      </table>
+		  <span v-if="containerAgingList.length > 0" style="font-weight:bold;">Van Count: @{{ van_total }}</span><br>
+		  <span v-if="containerAgingList.length > 0" style="font-weight:bold;">IN @{{ van_in }}</span><br>
+		  <span v-if="containerAgingList.length > 0" style="font-weight:bold;">OUT: @{{ van_out }}</span>
 	    </div>  
 	  </div>
 
@@ -258,7 +261,10 @@
       loading: false,
       tableLoad: false,
       generateLoad: false,
-      exportLoad: false
+      exportLoad: false,
+	  van_total: '',
+	  van_in: '',
+	  van_out: ''
     },
     computed: {
     	inDate () {
@@ -277,6 +283,17 @@
 			},
     },
     methods: {
+		reroute(receiving_id,releasing_id) {
+			if(releasing_id)
+			{
+				let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+				window.location = customUrl
+			}
+			else{
+				let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
+				window.location = customUrl
+			}
+		},
     	dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
       },
@@ -296,8 +313,11 @@
         }
         await axios.post(`/admin/get/container/aging`, payload).then(data => {
           this.generateLoad = false
-          this.containerAgingList = data.data
-          if (data.data.length === 0) {
+          this.containerAgingList = data.data.data
+		  this.van_total = data.data.van_count
+		  this.van_in = data.data.in
+		  this.van_out = data.data.out
+          if (data.data.data.length === 0) {
             Swal.fire({
               title: '',
               text: 'No record found!',

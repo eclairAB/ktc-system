@@ -29,11 +29,11 @@ class ValidateContainerReleasing extends FormRequest
             'booking_no'=> 'nullable',
             'consignee'=> 'required',
             'container_no'=> 'required',
-            'hauler'=> 'required',
-            'plate_no'=> 'required',
+            'hauler'=> 'nullable',
+            'plate_no'=> 'nullable',
             'seal_no'=> 'nullable',
             'container_photo'=> 'nullable',
-            'remarks'=> 'required',
+            'remarks'=> 'nullable',
         ];
     }
 

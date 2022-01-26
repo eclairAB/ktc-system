@@ -110,22 +110,22 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" :disabled="!isOk" name="hauler" id="hauler" v-model="form.hauler" style="height: 37px;  text-transform: uppercase;" :class="errors.hauler ? 'isError form-control' : 'form-control'">
-                          <label for="hauler" class="form-control-placeholder"> Hauler <span style="color: red"> *</span></label>
+                          <label for="hauler" class="form-control-placeholder"> Hauler </span></label>
                           <div class="customErrorText"><small>@{{ errors.hauler ? errors.hauler[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" :disabled="!isOk" name="plate_no" id="plate_no" v-model="form.plate_no" style="height: 37px;  text-transform: uppercase;" :class="errors.plate_no ? 'isError form-control' : 'form-control'">
-                          <label for="plate_no" class="form-control-placeholder"> Plate No. <span style="color: red"> *</span></label>
+                          <label for="plate_no" class="form-control-placeholder"> Plate No. </span></label>
                           <div class="customErrorText"><small>@{{ errors.plate_no ? errors.plate_no[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" :disabled="!isOk" name="booking_no" id="booking_no" v-model="form.booking_no" style="height: 37px;  text-transform: uppercase;" :class="errors.booking_no ? 'isError form-control' : 'form-control'">
-                          <label for="booking_no" class="form-control-placeholder"> Booking No. <span style="color: red"> *</span></label>
+                          <label for="booking_no" class="form-control-placeholder"> Booking No. </span></label>
                           <div class="customErrorText"><small>@{{ errors.booking_no ? errors.booking_no[0] : '' }}</small></div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
                           <input type="text" :disabled="!isOk" name="seal_no" id="seal_no" v-model="form.seal_no" style="height: 37px;  text-transform: uppercase;" :class="errors.seal_no ? 'isError form-control' : 'form-control'">
-                          <label for="seal_no" class="form-control-placeholder"> Seal No. <span style="color: red"> *</span></label>
+                          <label for="seal_no" class="form-control-placeholder"> Seal No. </span></label>
                           <div class="customErrorText"><small>@{{ errors.seal_no ? errors.seal_no[0] : '' }}</small></div>
                         </div>
 

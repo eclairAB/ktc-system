@@ -1016,16 +1016,16 @@
               this.loading = false
               $('#savingDialog').modal('hide');
               this.errors = {}
-              for (let i = 0; i < this.damageList.length; i++) {
-                this.$set(this.damageList[i], 'receiving_id', (+data.data[0].container_id))
-                axios.post(`/admin/create/damage`, this.damageList[i]).then(data2 => {
-                })
-              }
               let customID = null
               if (data.data[0]) {
                 customId = data.data[0].container_id  
               } else {
                 customId = data.data.id
+              }
+              for (let i = 0; i < this.damageList.length; i++) {
+                this.$set(this.damageList[i], 'receiving_id', (+customId))
+                axios.post(`/admin/create/damage`, this.damageList[i]).then(data2 => {
+                })
               }
               await axios.get(`/admin/get/print/receiving/${customId}`).then(data => {
                 let pasmo = data.data
