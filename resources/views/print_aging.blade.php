@@ -53,9 +53,18 @@
           </tr>
           @endforeach
         </table>
-        <div style="border-top: 2px solid; display: flex; font-size: 14px; font-weight: 700; padding-top: 10px">
-          <div>Container Count</div>
-          <div style="margin-left: 40px;">{{ $count }}</div>
+        <div style="border-top: 2px solid; display: flex; font-size: 14px; font-weight: 700; padding-top: 10px"></div>
+        <div style="font-weight: bold; display: flex; font-size: 14px;">
+          <div style="width: 100px;">Van Count:</div>
+          {{ $count }}
+        </div>
+        <div style="font-weight: bold; display: flex; font-size: 14px;">
+          <div style="width: 100px;">IN:</div>
+          {{ $in }}
+        </div>
+        <div style="font-weight: bold; display: flex; font-size: 14px;">
+          <div style="width: 100px;">OUT:</div>
+          {{ $out }}
         </div>
       </div>
     </div>

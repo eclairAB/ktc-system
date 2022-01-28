@@ -178,60 +178,69 @@
     
     </div>
 
-    <div class="panel panel-default" style="margin-top: 15px;">
-      <div class="panel-body">
-        <div style="color: black; font-weight: bold; text-align: center; margin-bottom: 10px;">
-            <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
-            <span>Container Aging and Inventory</span>
-        </div>
-        <table class="table table-bordered" style="margin-bottom: 0; color: black;">
-          <thead>
-            <tr>
-              <th scope="col">Container No.</th>
-              <th scope="col">Size</th>
-              <th scope="col">Type</th>
-              <th scope="col">Status</th>
-              <th scope="col">Client</th>
-              <th scope="col">Date In</th>
-              <th scope="col">Consignee</th>
-              <th scope="col">Date Out</th>
-              <th scope="col">Consignee</th>
-              <th scope="col">Booking</th>
-              <th scope="col">Seal</th>
-              <th scope="col">Days</th>
-            </tr>
-          </thead>
-          <tbody v-if="containerAgingList.length > 0">
-            <tr class="viewItemOnClick" v-for="(item, index) in containerAgingList" :key="index">
-              <td>@{{ item.container_no }}</td>
-              <td>@{{ item.size_type ? item.size_type.code : '' }}</td>
-              <td>@{{ item.type ? item.type.code : '' }}</td>
-              <td>@{{ item.receiving.empty_loaded }}</td>
-              <td>@{{ item.client ? item.client.code : '' }}</td>
-              <td v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}</td>
-              <td>@{{ item.receiving ? item.receiving.consignee : '' }}</td>
-              <td v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}</td>
-              <td>@{{ item.releasing ? item.releasing.consignee : '' }}</td>
-              <td>@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
-              <td>@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
-              <td>@{{ item.total_no_days }}</td>
-            </tr>
-          </tbody>
-          <tbody v-else>
-            <tr>
-              <td colspan="12" style="text-align: center;" v-if="tableLoad === true">
-                <div class="lds-facebook"><div></div><div></div><div></div></div><br>
-                <div>Fetching...</div>
-              </td>
-              <td colspan="12" style="text-align: center;" v-else>No Data Available</td>
-            </tr>
-          </tbody>
-        </table>
-      <span v-if="containerAgingList.length > 0" style="font-weight:bold;">Van Count: @{{ van_total }}</span><br>
-      <span v-if="containerAgingList.length > 0" style="font-weight:bold;">IN @{{ van_in }}</span><br>
-      <span v-if="containerAgingList.length > 0" style="font-weight:bold;">OUT: @{{ van_out }}</span>
-      </div>  
-    </div>
+	  <div class="panel panel-default" style="margin-top: 15px;">
+	    <div class="panel-body">
+	      <div style="color: black; font-weight: bold; text-align: center; margin-bottom: 10px;">
+	          <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
+	          <span>Container Aging and Inventory</span>
+	      </div>
+	      <table class="table table-bordered" style="margin-bottom: 0; color: black;">
+	        <thead>
+	          <tr>
+	            <th scope="col">Container No.</th>
+	            <th scope="col">Size</th>
+	            <th scope="col">Type</th>
+	            <th scope="col">Status</th>
+	            <th scope="col">Client</th>
+	            <th scope="col">Date In</th>
+	            <th scope="col">Consignee</th>
+	            <th scope="col">Date Out</th>
+	            <th scope="col">Consignee</th>
+	            <th scope="col">Booking</th>
+	            <th scope="col">Seal</th>
+	            <th scope="col">Days</th>
+	          </tr>
+	        </thead>
+	        <tbody v-if="containerAgingList.length > 0">
+	          <tr class="viewItemOnClick" v-for="(item, index) in containerAgingList" :key="index">
+	            <td>@{{ item.container_no }}</td>
+	            <td>@{{ item.size_type ? item.size_type.code : '' }}</td>
+	            <td>@{{ item.type ? item.type.code : '' }}</td>
+	            <td>@{{ item.receiving.empty_loaded }}</td>
+	            <td>@{{ item.client ? item.client.code : '' }}</td>
+	            <td v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}</td>
+	            <td>@{{ item.receiving ? item.receiving.consignee : '' }}</td>
+	            <td v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}</td>
+	            <td>@{{ item.releasing ? item.releasing.consignee : '' }}</td>
+	            <td>@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
+	            <td>@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
+	            <td>@{{ item.total_no_days }}</td>
+	          </tr>
+	        </tbody>
+	        <tbody v-else>
+	          <tr>
+	            <td colspan="12" style="text-align: center;" v-if="tableLoad === true">
+	              <div class="lds-facebook"><div></div><div></div><div></div></div><br>
+	              <div>Fetching...</div>
+	            </td>
+	            <td colspan="12" style="text-align: center;" v-else>No Data Available</td>
+	          </tr>
+	        </tbody>
+	      </table>
+			  <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex;">
+			  	<div style="width: 100px;">Van Count:</div>
+			  	@{{ van_total }}
+			  </div>
+			  <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex;">
+			  	<div style="width: 100px;">IN:</div>
+			  	@{{ van_in }}
+			  </div>
+			  <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex;">
+			  	<div style="width: 100px;">OUT:</div>
+				  @{{ van_out }}
+				</div>
+	    </div>  
+	  </div>
 
   </div>
 </body>
