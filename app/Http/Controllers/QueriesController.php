@@ -460,7 +460,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $client_id = $client != 'NA'?$client:null;
             $client = Client::where('id',$client_id)->first();
             $count = count($data);
-            return view('print_aging')->with(compact('data','count','option','client'));
+            $in = count($data);
+            $out = 0;
+            return view('print_aging')->with(compact('data','count','option','client','in','out'));
         }
         else if($option == 'OUT')
         {
@@ -493,7 +495,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $client_id = $client != 'NA'?$client:null;
             $client = Client::where('id',$client_id)->first();
             $count = count($data);
-            return view('print_aging')->with(compact('data','count','option','client'));
+            $in = 0;
+            $out = count($data);
+            return view('print_aging')->with(compact('data','count','option','client','in','out'));
         }
         else if($option == 'ALL')
         {
@@ -530,7 +534,43 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $client_id = $client != 'NA'?$client:null;
             $client = Client::where('id',$client_id)->first();
             $count = count($data);
-            return view('print_aging')->with(compact('data','count','option','client'));
+            $in = Container::when($type != 'NA', function ($q)  use($type){
+                return $q->where('type_id',$type);
+            })->when($sizeType != 'NA', function ($q) use($sizeType){
+                return $q->where('size_type',$sizeType);
+            })->when($client != 'NA', function ($q) use($client){
+                return $q->where('client_id',$client);
+            })->when($class != 'NA', function ($q) use($class){
+                return $q->where('class',$class);
+            })->whereHas('receiving',function( $query ) use($date_in_from,$date_in_to,$status){
+                $query->when($date_in_from != 'NA', function ($q) use($date_in_from){
+                    return $q->whereDate('inspected_date','>=',$date_in_from);
+                })->when($date_in_to != 'NA', function ($q) use($date_in_to){
+                    return $q->whereDate('inspected_date','<=',$date_in_to);
+                })->when($status != 'NA', function ($q) use($status){
+                    return $q->where('empty_loaded',$status);
+                });
+            })->whereNull('releasing_id')->count();
+            $out = Container::when($type != 'NA', function ($q)  use($type){
+                return $q->where('type_id',$type);
+            })->when($sizeType != 'NA', function ($q) use($sizeType){
+                return $q->where('size_type',$sizeType);
+            })->when($client != 'NA', function ($q) use($client){
+                return $q->where('client_id',$client);
+            })->when($class != 'NA', function ($q) use($class){
+                return $q->where('class',$class);
+            })->whereHas('releasing',function( $query ) use($date_out_from,$date_out_to){
+                $query->when($date_out_from != 'NA', function ($q) use($date_out_from){
+                    return $q->whereDate('inspected_date','>=',$date_out_from);
+                })->when($date_out_to != 'NA', function ($q) use($date_out_to){
+                    return $q->whereDate('inspected_date','<=',$date_out_to);
+                });
+            })->whereHas('receiving',function( $query ) use($status){
+                $query->when($status != 'NA', function ($q) use($status){
+                    return $q->where('empty_loaded',$status);
+                });
+            })->whereNotNull('receiving_id')->count();
+            return view('print_aging')->with(compact('data','count','option','client','in','out'));
         }
        
     }
