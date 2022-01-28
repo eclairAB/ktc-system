@@ -220,6 +220,21 @@
         await axios.get(`/admin/get/print/daily_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`).then(data => {
           let pasmo = data.data
           let w = window.open(`/admin/get/print/daily_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`, '_blank');
+
+          var css = '@page { size: landscape; }',
+              head = document.head || document.getElementsByTagName('head')[0],
+              style = document.createElement('style');
+
+          style.type = 'text/css';
+          style.media = 'print';
+
+          if (style.styleSheet){
+            style.styleSheet.cssText = css;
+          } else {
+            style.appendChild(document.createTextNode(css));
+          }
+
+          head.appendChild(style);
           w.document.write(pasmo);
           setTimeout(() => { 
               w.print();
