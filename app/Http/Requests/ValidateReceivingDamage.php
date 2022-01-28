@@ -28,10 +28,10 @@ class ValidateReceivingDamage extends FormRequest
             'component_id'=> 'required',
             'repair_id'=> 'required',
             'receiving_id'=> 'required',
-            // 'location'=> 'required',
-            // 'length'=> 'required',
-            // 'width'=> 'required',
-            // 'quantity'=> 'required',
+            'location'=> 'nullable',
+            'length'=> 'nullable',
+            'width'=> 'nullable',
+            'quantity'=> 'nullable',
             'description'=> 'required'
         ];
     }
