@@ -223,9 +223,18 @@
 	          </tr>
 	        </tbody>
 	      </table>
-		  <span v-if="containerAgingList.length > 0" style="font-weight:bold;">Van Count: @{{ van_total }}</span><br>
-		  <span v-if="containerAgingList.length > 0" style="font-weight:bold;">IN @{{ van_in }}</span><br>
-		  <span v-if="containerAgingList.length > 0" style="font-weight:bold;">OUT: @{{ van_out }}</span>
+			  <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex;">
+			  	<div style="width: 100px;">Van Count:</div>
+			  	@{{ van_total }}
+			  </div>
+			  <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex;">
+			  	<div style="width: 100px;">IN:</div>
+			  	@{{ van_in }}
+			  </div>
+			  <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex;">
+			  	<div style="width: 100px;">OUT:</div>
+				  @{{ van_out }}
+				</div>
 	    </div>  
 	  </div>
 
