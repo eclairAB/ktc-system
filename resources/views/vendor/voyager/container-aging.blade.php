@@ -21,9 +21,13 @@
 	      <div class="row">
 	        <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
 	          <span style="font-weight: bold; font-size: 18px;">Container Aging and Inventory</span>
-	          <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
+	          <div>
+	          	<button class="btn btn-primary" :disabled="generateLoad" @click="getContainerAging">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
+	          	<button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
+	          	<button class="btn btn-danger" @click="printContainerAging">@{{ exportLoad === false ? 'Print' : 'Loading...' }}</button>
+	          </div>
 	        </div>
-	        <div class="col-xs-12" style="margin-bottom: 0;">
+	        <div class="col-xs-12" style="margin-bottom: 10px;">
 	          <hr style="margin: 5px 0;">
 	        </div>
 	        <div class="col-xs-12" style="margin: 0;">
@@ -163,10 +167,6 @@
                 <div class="customErrorText"><small>@{{ errors.size_type ? errors.size_type[0] : '' }}</small></div>
               </div>
 
-	            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px; display: flex; justify-content: flex-end;">
-	            	<button class="btn btn-primary" :disabled="generateLoad" @click="getContainerAging">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
-	            </div>
-
 	          </div>
 	        </div>
 	      </div>
@@ -198,15 +198,15 @@
 	          </tr>
 	        </thead>
 	        <tbody v-if="containerAgingList.length > 0">
-	          <tr v-for="(item, index) in containerAgingList" :key="index">
+	          <tr class="viewItemOnClick" v-for="(item, index) in containerAgingList" :key="index">
 	            <td>@{{ item.container_no }}</td>
 	            <td>@{{ item.size_type ? item.size_type.code : '' }}</td>
 	            <td>@{{ item.type ? item.type.code : '' }}</td>
 	            <td>@{{ item.receiving.empty_loaded }}</td>
 	            <td>@{{ item.client ? item.client.code : '' }}</td>
-	            <td>@{{ item.receiving ? moment(item.receiving.inspected_date).format('MMMM DD, YYYY') : '' }}</td>
+	            <td v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}</td>
 	            <td>@{{ item.receiving ? item.receiving.consignee : '' }}</td>
-	            <td>@{{ item.releasing ? moment(item.releasing.inspected_date).format('MMMM DD, YYYY') : '' }}</td>
+	            <td v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}</td>
 	            <td>@{{ item.releasing ? item.releasing.consignee : '' }}</td>
 	            <td>@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
 	            <td>@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
@@ -223,6 +223,9 @@
 	          </tr>
 	        </tbody>
 	      </table>
+		  <span v-if="containerAgingList.length > 0" style="font-weight:bold;">Van Count: @{{ van_total }}</span><br>
+		  <span v-if="containerAgingList.length > 0" style="font-weight:bold;">IN @{{ van_in }}</span><br>
+		  <span v-if="containerAgingList.length > 0" style="font-weight:bold;">OUT: @{{ van_out }}</span>
 	    </div>  
 	  </div>
 
@@ -258,7 +261,10 @@
       loading: false,
       tableLoad: false,
       generateLoad: false,
-      exportLoad: false
+      exportLoad: false,
+	  van_total: '',
+	  van_in: '',
+	  van_out: ''
     },
     computed: {
     	inDate () {
@@ -277,12 +283,21 @@
 			},
     },
     methods: {
+		rerouteReceiving(receiving_id) {
+			let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
+			window.location = customUrl
+		},
+		rerouteReleasing(releasing_id) {
+			let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+			window.location = customUrl
+		},
     	dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
       },
       async getContainerAging () {
         this.generateLoad = true
         let payload = {
+          option: this.form.option === undefined || this.form.option === null ? 'ALL' : this.form.option,
           type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
           sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
           client: this.form.client === undefined || this.form.client === null ? 'NA' : this.form.client,
@@ -295,8 +310,11 @@
         }
         await axios.post(`/admin/get/container/aging`, payload).then(data => {
           this.generateLoad = false
-          this.containerAgingList = data.data
-          if (data.data.length === 0) {
+          this.containerAgingList = data.data.data
+		  this.van_total = data.data.van_count
+		  this.van_in = data.data.in
+		  this.van_out = data.data.out
+          if (data.data.data.length === 0) {
             Swal.fire({
               title: '',
               text: 'No record found!',
@@ -311,6 +329,7 @@
       async exportContainerIn () {
         this.exportLoad = true
         let payload = {
+          option: this.form.option === undefined || this.form.option === null ? 'ALL' : this.form.option,
           type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
           sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
           client: this.form.client === undefined || this.form.client === null ? 'NA' : this.form.client,
@@ -321,12 +340,35 @@
           date_out_from: this.form.date_out_from === undefined || this.form.date_out_from === null ? 'NA' : moment(this.form.date_out_from).format('YYYY-MM-DD'),
           date_out_to: this.form.date_out_to === undefined || this.form.date_out_to === null ? 'NA' : moment(this.form.date_out_to).format('YYYY-MM-DD')
         }
-        await axios.get(`/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_as_of}`).then(data => {
+        await axios.get(`/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}`).then(data => {
           this.exportLoad = false
-          window.open(`${location.origin}/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_as_of}`, "_blank");
+          window.open(`${location.origin}/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}`, "_blank");
         }).catch(error => {
           this.exportLoad = false
           console.log(error)
+        })
+      },
+      async printContainerAging () {
+      	let payload = {
+          option: this.form.option === undefined || this.form.option === null ? 'ALL' : this.form.option,
+          type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
+          sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
+          client: this.form.client === undefined || this.form.client === null ? 'NA' : this.form.client,
+          class: this.form.class === undefined || this.form.class === null ? 'NA' : this.form.class,
+          status: this.form.status === undefined || this.form.status === null ? 'NA' : this.form.status,
+          date_in_from: this.form.date_in_from === undefined || this.form.date_in_from === null ? 'NA' : moment(this.form.date_in_from).format('YYYY-MM-DD'),
+          date_in_to: this.form.date_in_to === undefined || this.form.date_in_to === null ? 'NA' : moment(this.form.date_in_to).format('YYYY-MM-DD'),
+          date_out_from: this.form.date_out_from === undefined || this.form.date_out_from === null ? 'NA' : moment(this.form.date_out_from).format('YYYY-MM-DD'),
+          date_out_to: this.form.date_out_to === undefined || this.form.date_out_to === null ? 'NA' : moment(this.form.date_out_to).format('YYYY-MM-DD')
+        }
+      	await axios.get(`/admin/get/print/aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}`).then(data => {
+          let pasmo = data.data
+          let w = window.open(`/admin/get/print/aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}`, '_blank');
+          w.document.write(pasmo);
+          setTimeout(() => { 
+              w.print();
+              w.close();
+          }, 100);
         })
       },
       async getSize () {
