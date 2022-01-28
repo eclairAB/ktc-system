@@ -1,26 +1,27 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\ContainerClass;
+use App\Http\Requests\ValidateContainerAging;
+use App\Models\Checker;
+use App\Models\Client;
 use App\Models\Container;
-use App\Models\ContainerSizeType;
+use App\Models\ContainerClass;
 use App\Models\ContainerComponent;
 use App\Models\ContainerDamage;
-use App\Models\ContainerRepair;
 use App\Models\ContainerReceiving;
 use App\Models\ContainerReleasing;
-use App\Models\Client;
-use DB;
-use App\Models\Staff;
-use App\Models\Checker;
-use App\Models\Type;
-use App\Models\ReceivingDamage;
-use App\Models\YardLocation;
+use App\Models\ContainerRepair;
+use App\Models\ContainerSizeType;
 use App\Models\EirNumber;
+use App\Models\ReceivingDamage;
+use App\Models\Staff;
+use App\Models\Type;
+use App\Models\YardLocation;
 use Carbon\Carbon;
+use DB;
 use File;
-use ZipArchive;
 use Illuminate\Http\Request;
+use ZipArchive;
 
 class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
 {
@@ -575,7 +576,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
        
     }
 
-    public function getContainerAging(Request $request)
+    public function getContainerAging(ValidateContainerAging $request)
     {
         if($request->option == 'IN')
         {
