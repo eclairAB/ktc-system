@@ -207,15 +207,21 @@
             </tr>
           </thead>
           <tbody v-if="containerAgingList.length > 0">
-            <tr class="viewItemOnClick" v-for="(item, index) in containerAgingList" :key="index">
+            <tr v-for="(item, index) in containerAgingList" :key="index">
               <td>@{{ item.container_no }}</td>
               <td>@{{ item.size_type ? item.size_type.code : '' }}</td>
               <td>@{{ item.type ? item.type.code : '' }}</td>
               <td>@{{ item.receiving.empty_loaded }}</td>
               <td>@{{ item.client ? item.client.code : '' }}</td>
-              <td v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}</td>
+              <td
+                class="viewItemOnClick"
+                v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}
+              </td>
               <td>@{{ item.receiving ? item.receiving.consignee : '' }}</td>
-              <td v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}</td>
+              <td
+                :class="item.releasing_id ? 'viewItemOnClick' : ''"
+                v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}
+              </td>
               <td>@{{ item.releasing ? item.releasing.consignee : '' }}</td>
               <td>@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
               <td>@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
@@ -300,8 +306,10 @@
         window.location = customUrl
       },
       rerouteReleasing(releasing_id) {
-        let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
-        window.location = customUrl
+        if(releasing_id) {
+          let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+          window.location = customUrl
+        }
       },
       dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');

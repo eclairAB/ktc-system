@@ -1,6 +1,6 @@
 @extends('voyager::master')
 @section('css')
-	<link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
+	<link rel="stylesheet" href="https://unpkg.com/vue-select@3.16.0/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
 @stop
 @section('content')

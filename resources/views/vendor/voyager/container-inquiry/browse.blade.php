@@ -73,7 +73,6 @@
                                     border-top: solid #5c5c5c29 1px;
                                     line-height: 30px;
                                 "
-                                class="viewItemOnClick"
                             >
                                 <td style="padding: 0 10px">
                                     {{ $item->container_no }}
@@ -96,10 +95,18 @@
                                 <td style="padding: 0 10px">
                                     {{ $item->client->code??'' }}
                                 </td>    
-                                <td style="padding: 0 10px"  v-on:click="rerouteReceiving('{{ $item->receiving_id }}')">
+                                <td 
+                                    class="viewItemOnClick"
+                                    style="padding: 0 10px"
+                                    v-on:click="rerouteReceiving('{{ $item->receiving_id }}')"
+                                >
                                     {{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}
                                 </td>    
-                                <td style="padding: 0 10px"  v-on:click="rerouteReleasing('{{ $item->releasing_id }}')">
+                                <td 
+                                    :class="'{{ $item->releasing_id }}' ? 'viewItemOnClick' : ''"
+                                    style="padding: 0 10px"
+                                    v-on:click="rerouteReleasing('{{ $item->releasing_id }}')"
+                                >
                                     {{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}
                                 </td> 
                                 <td style="padding: 0 10px">
@@ -132,8 +139,10 @@
 			window.location = customUrl
 		},
 		rerouteReleasing(releasing_id) {
-			let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
-			window.location = customUrl
+            if(releasing_id) {
+    			let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+    			window.location = customUrl
+            }
 		},
         submitForm(page_) {
             const page = document.querySelector("ul.pagination li.active span")
