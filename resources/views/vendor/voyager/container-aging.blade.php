@@ -24,6 +24,7 @@
         <div class="row">
           <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
             <span style="font-weight: bold; font-size: 18px;">Container Aging and Inventory</span>
+            @{{ generateErrorList }}
             <div>
               <button class="btn btn-primary" :disabled="generateLoad" @click="getContainerAging">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
               <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
@@ -56,6 +57,7 @@
                   name="from"
                   :format="dateFormat"
                   :required="true"
+                  :class="generateErrorList.option ? 'form-control form-error' : 'form-control'"
                   @input="getClient">
                 </vuejs-datepicker>
                 <label for="from" class="form-control-placeholder"> Container In Date From</label>
