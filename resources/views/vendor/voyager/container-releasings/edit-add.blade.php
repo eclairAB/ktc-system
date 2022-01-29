@@ -7,7 +7,7 @@
 
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
+    <link rel="stylesheet" href="https://unpkg.com/vue-select@3.16.0/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
     <style type="text/css">
       .page-title {
