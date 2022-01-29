@@ -2,14 +2,14 @@
 
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
+    <link rel="stylesheet" href="https://unpkg.com/vue-select@3.16.0/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
     <style type="text/css">
       .form-control {
         color: black !important;
       }
       .form-error {
-            border: 1px solid #ff0000;
+        border: 1px solid #ff0000;
       }
     </style>
 @stop
@@ -24,6 +24,7 @@
         <div class="row">
           <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
             <span style="font-weight: bold; font-size: 18px;">Container Aging and Inventory</span>
+            @{{ generateErrorList }}
             <div>
               <button class="btn btn-primary" :disabled="generateLoad" @click="getContainerAging">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
               <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
@@ -41,8 +42,7 @@
                   style="height: 37px !important;"
                   :options="['ALL','IN','OUT']"
                   v-model="form.option"
-                  class="form-control"
-                  {{-- @option:selected="alert(form.option)" --}}
+                  :clearable=false
                 ></v-select>
                 <label for="option" class="form-control-placeholder"> Container Record</label>
               </div>
@@ -51,12 +51,13 @@
                 <vuejs-datepicker
                   v-model="form.date_in_from"
                   placeholder="mm/dd/yyyyy"
-                  input-class="form-control"
+                  input-class="form-control asd"
                   :disabled="inDate"
                   :typeable="true"
                   name="from"
                   :format="dateFormat"
                   :required="true"
+                  :class="generateErrorList.option ? 'form-control form-error' : 'form-control'"
                   @input="getClient">
                 </vuejs-datepicker>
                 <label for="from" class="form-control-placeholder"> Container In Date From</label>
@@ -178,77 +179,68 @@
     
     </div>
 
-	  <div class="panel panel-default" style="margin-top: 15px;">
-	    <div class="panel-body">
-	      <div style="color: black; font-weight: bold; text-align: center; margin-bottom: 10px;">
-	          <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
-	          <span>Container Aging and Inventory</span>
-	      </div>
-	      <table class="table table-bordered" style="margin-bottom: 0; color: black;">
-	        <thead>
-	          <tr>
-	            <th scope="col">Container No.</th>
-	            <th scope="col">Size</th>
-	            <th scope="col">Type</th>
-	            <th scope="col">Status</th>
-	            <th scope="col">Client</th>
-	            <th scope="col">Date In</th>
-	            <th scope="col">Consignee</th>
-	            <th scope="col">Date Out</th>
-	            <th scope="col">Consignee</th>
-	            <th scope="col">Booking</th>
-	            <th scope="col">Seal</th>
-	            <th scope="col">Days</th>
-	          </tr>
-	        </thead>
-	        <tbody v-if="containerAgingList.length > 0">
-	          <tr class="viewItemOnClick" v-for="(item, index) in containerAgingList" :key="index">
-	            <td>@{{ item.container_no }}</td>
-	            <td>@{{ item.size_type ? item.size_type.code : '' }}</td>
-	            <td>@{{ item.type ? item.type.code : '' }}</td>
-	            <td>@{{ item.receiving.empty_loaded }}</td>
-	            <td>@{{ item.client ? item.client.code : '' }}</td>
-	            <td v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}</td>
-	            <td>@{{ item.receiving ? item.receiving.consignee : '' }}</td>
-	            <td v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}</td>
-	            <td>@{{ item.releasing ? item.releasing.consignee : '' }}</td>
-	            <td>@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
-	            <td>@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
-	            <td>@{{ item.total_no_days }}</td>
-	          </tr>
-	        </tbody>
-	        <tbody v-else>
-	          <tr>
-	            <td colspan="12" style="text-align: center;" v-if="tableLoad === true">
-	              <div class="lds-facebook"><div></div><div></div><div></div></div><br>
-	              <div>Fetching...</div>
-	            </td>
-	            <td colspan="12" style="text-align: center;" v-else>No Data Available</td>
-	          </tr>
-	        </tbody>
-	      </table>
-			  <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex;">
-			  	<div style="width: 100px;">Van Count:</div>
-			  	@{{ van_total }}
-			  </div>
-			  <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex;">
-			  	<div style="width: 100px;">IN:</div>
-			  	@{{ van_in }}
-			  </div>
-			  <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex;">
-			  	<div style="width: 100px;">OUT:</div>
-				  @{{ van_out }}
-				</div>
-	    </div>  
-	  </div>
+    <div class="panel panel-default" style="margin-top: 15px;">
+      <div class="panel-body">
+        <div style="color: black; font-weight: bold; text-align: center; margin-bottom: 10px;">
+            <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
+            <span>Container Aging and Inventory</span>
+        </div>
+        <table class="table table-bordered" style="margin-bottom: 0; color: black;">
+          <thead>
+            <tr>
+              <th scope="col">Container No.</th>
+              <th scope="col">Size</th>
+              <th scope="col">Type</th>
+              <th scope="col">Status</th>
+              <th scope="col">Client</th>
+              <th scope="col">Date In</th>
+              <th scope="col">Consignee</th>
+              <th scope="col">Date Out</th>
+              <th scope="col">Consignee</th>
+              <th scope="col">Booking</th>
+              <th scope="col">Seal</th>
+              <th scope="col">Days</th>
+            </tr>
+          </thead>
+          <tbody v-if="containerAgingList.length > 0">
+            <tr class="viewItemOnClick" v-for="(item, index) in containerAgingList" :key="index">
+              <td>@{{ item.container_no }}</td>
+              <td>@{{ item.size_type ? item.size_type.code : '' }}</td>
+              <td>@{{ item.type ? item.type.code : '' }}</td>
+              <td>@{{ item.receiving.empty_loaded }}</td>
+              <td>@{{ item.client ? item.client.code : '' }}</td>
+              <td v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}</td>
+              <td>@{{ item.receiving ? item.receiving.consignee : '' }}</td>
+              <td v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}</td>
+              <td>@{{ item.releasing ? item.releasing.consignee : '' }}</td>
+              <td>@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
+              <td>@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
+              <td>@{{ item.total_no_days }}</td>
+            </tr>
+          </tbody>
+          <tbody v-else>
+            <tr>
+              <td colspan="12" style="text-align: center;" v-if="tableLoad === true">
+                <div class="lds-facebook"><div></div><div></div><div></div></div><br>
+                <div>Fetching...</div>
+              </td>
+              <td colspan="12" style="text-align: center;" v-else>No Data Available</td>
+            </tr>
+          </tbody>
+        </table>
+      <span v-if="containerAgingList.length > 0" style="font-weight:bold;">Van Count: @{{ van_total }}</span><br>
+      <span v-if="containerAgingList.length > 0" style="font-weight:bold;">IN @{{ van_in }}</span><br>
+      <span v-if="containerAgingList.length > 0" style="font-weight:bold;">OUT: @{{ van_out }}</span>
+      </div>  
+    </div>
 
   </div>
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://unpkg.com/vue-select@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/vue-select@3.16.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-date-dropdown@1.0.5/dist/vue-date-dropdown.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuejs-datepicker@1.6.2/dist/vuejs-datepicker.min.js"></script>
@@ -338,9 +330,9 @@
             })
           }
         }).catch(error => {
-          this.generateErrorList = error.errors
+          this.generateErrorList = error.response.data.errors
           this.generateLoad = false
-          console.log(error.errors)
+          console.log(error.response.data.errors)
         })
       },
       async exportContainerIn () {
