@@ -26,6 +26,6 @@ class ExcelController extends Controller
     public function containerAging($type,$sizeType,$client,$class,$date_in_from,$date_in_to,$date_out_from,$date_out_to,$option,$status)
     {
         $now = Carbon::now()->format('Y-m-d');
-        return Excel::download(new ContainerAging($type,$sizeType,$client,$class,$date_in_from,$date_in_to,$date_out_from,$date_out_to,$option,$status), 'Container_Aging_'.$now.'.xlsx');
+        return Excel::download(new ContainerAging($type,$sizeType,$client,$class,$date_in_from,$date_in_to,$date_out_from,$date_out_to,$option,$status), 'Container_Aging_'.$now.'('.$option.').xlsx');
     }
 }

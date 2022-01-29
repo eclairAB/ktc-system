@@ -5,129 +5,137 @@
     <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
     <style type="text/css">
-		  .form-control {
-		    color: black !important;
-		  }
-		</style>
+      .form-control {
+        color: black !important;
+      }
+      .form-error {
+            border: 1px solid #ff0000;
+      }
+    </style>
 @stop
 
 @section('content')
 <body>
-	<div id="containerIn">
+  <div id="containerIn">
 
-	  <div class="panel panel-default" style="margin-top: 15px;">
-	    
-	    <div class="panel-body" style="background-color: #fff; border: 0;">
-	      <div class="row">
-	        <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
-	          <span style="font-weight: bold; font-size: 18px;">Container Aging and Inventory</span>
-	          <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
-	        </div>
-	        <div class="col-xs-12" style="margin-bottom: 0;">
-	          <hr style="margin: 5px 0;">
-	        </div>
-	        <div class="col-xs-12" style="margin: 0;">
-	          <div class="row" style="padding: 0 15px;">
-	            
-	            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-	              <v-select
-	                style="height: 37px !important;"
-	                :options="['ALL','IN','OUT']"
-	                v-model="form.option"
-	                class="form-control"
-	              ></v-select>
-	              <label for="option" class="form-control-placeholder"> Container Record</label>
-	            </div>
+    <div class="panel panel-default" style="margin-top: 15px;">
+      
+      <div class="panel-body" style="background-color: #fff; border: 0;">
+        <div class="row">
+          <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: bold; font-size: 18px;">Container Aging and Inventory</span>
+            <div>
+              <button class="btn btn-primary" :disabled="generateLoad" @click="getContainerAging">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
+              <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
+              <button class="btn btn-danger" @click="printContainerAging">@{{ exportLoad === false ? 'Print' : 'Loading...' }}</button>
+            </div>
+          </div>
+          <div class="col-xs-12" style="margin-bottom: 10px;">
+            <hr style="margin: 5px 0;">
+          </div>
+          <div class="col-xs-12" style="margin: 0;">
+            <div class="row" style="padding: 0 15px;">
+              
+              <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <v-select
+                  style="height: 37px !important;"
+                  :options="['ALL','IN','OUT']"
+                  v-model="form.option"
+                  class="form-control"
+                  {{-- @option:selected="alert(form.option)" --}}
+                ></v-select>
+                <label for="option" class="form-control-placeholder"> Container Record</label>
+              </div>
 
-	            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-	              <vuejs-datepicker
-	                v-model="form.date_in_from"
-	                placeholder="mm/dd/yyyyy"
-	                input-class="form-control"
-	                :disabled="inDate"
-	                :typeable="true"
-	                name="from"
-	                :format="dateFormat"
-	                :required="true"
-	                @input="getClient">
-	              </vuejs-datepicker>
-	              <label for="from" class="form-control-placeholder"> Container In Date From</label>
-	            </div>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <vuejs-datepicker
+                  v-model="form.date_in_from"
+                  placeholder="mm/dd/yyyyy"
+                  input-class="form-control"
+                  :disabled="inDate"
+                  :typeable="true"
+                  name="from"
+                  :format="dateFormat"
+                  :required="true"
+                  @input="getClient">
+                </vuejs-datepicker>
+                <label for="from" class="form-control-placeholder"> Container In Date From</label>
+              </div>
 
-	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-	              <vuejs-datepicker
-	                v-model="form.date_in_to"
-	                placeholder="mm/dd/yyyyy"
-	                input-class="form-control"
-	                :typeable="true"
-	                :disabled="inDate"
-	                name="to"
-	                :format="dateFormat"
-	                :required="true"
-	                @input="getClient">
-	              </vuejs-datepicker>
-	              <label for="to" class="form-control-placeholder"> Container In Date To </label>
-	            </div>
+              <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <vuejs-datepicker
+                  v-model="form.date_in_to"
+                  placeholder="mm/dd/yyyyy"
+                  input-class="form-control"
+                  :typeable="true"
+                  :disabled="inDate"
+                  name="to"
+                  :format="dateFormat"
+                  :required="true"
+                  @input="getClient">
+                </vuejs-datepicker>
+                <label for="to" class="form-control-placeholder"> Container In Date To </label>
+              </div>
 
-	            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-	              <vuejs-datepicker
-	                v-model="form.date_out_from"
-	                placeholder="mm/dd/yyyyy"
-	                input-class="form-control"
-	                :disabled="outDate"
-	                :typeable="true"
-	                name="from"
-	                :format="dateFormat"
-	                :required="true"
-	                @input="getClient">
-	              </vuejs-datepicker>
-	              <label for="from" class="form-control-placeholder"> Container Out Date In </label>
-	            </div>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <vuejs-datepicker
+                  v-model="form.date_out_from"
+                  placeholder="mm/dd/yyyyy"
+                  input-class="form-control"
+                  :disabled="outDate"
+                  :typeable="true"
+                  name="from"
+                  :format="dateFormat"
+                  :required="true"
+                  @input="getClient">
+                </vuejs-datepicker>
+                <label for="from" class="form-control-placeholder"> Container Out Date In </label>
+              </div>
 
-	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-	              <vuejs-datepicker
-	                v-model="form.date_out_to"
-	                placeholder="mm/dd/yyyyy"
-	                input-class="form-control"
-	                :disabled="outDate"
-	                :typeable="true"
-	                name="to"
-	                :format="dateFormat"
-	                :required="true"
-	                @input="getClient">
-	              </vuejs-datepicker>
-	              <label for="to" class="form-control-placeholder"> Container Out Date To </label>
-	            </div>
+              <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <vuejs-datepicker
+                  v-model="form.date_out_to"
+                  placeholder="mm/dd/yyyyy"
+                  input-class="form-control"
+                  :disabled="outDate"
+                  :typeable="true"
+                  name="to"
+                  :format="dateFormat"
+                  :required="true"
+                  @input="getClient">
+                </vuejs-datepicker>
+                <label for="to" class="form-control-placeholder"> Container Out Date To </label>
+              </div>
 
-	            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px;">
-	            </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px;">
+              </div>
 
-	            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-	              <v-select
-	                :options="emptyLoadedList"
-	                style="height: 37px !important;"
-	                v-model="form.status"
-	                class="form-control"
-	                label="name"
-	                :reduce="name => name.name"
-	              ></v-select>
-	              <label for="status" class="form-control-placeholder"> Status</label>
-	            </div>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <v-select
+                  :options="emptyLoadedList"
+                  style="height: 37px !important;"
+                  v-model="form.status"
+                  class="form-control"
+                  label="name"
+                  :reduce="name => name.name"
+                ></v-select>
+                <label for="status" class="form-control-placeholder"> Status</label>
+              </div>
 
-	            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-	              <v-select
-	                style="height: 37px !important;"
-	                :options="clientList"
-	                v-model="form.client"
-	                label="code"
-	                class="form-control"
-	                :reduce="code => code.id"
-	              ></v-select>
-	              <label for="client" class="form-control-placeholder"> Client </label>
-	            </div>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <v-select
+                  style="height: 37px !important;"
+                  :options="clientList"
+                  v-model="form.client"
+                  label="code"
+                  class="form-control"
+                  :reduce="code => code.id"
+                ></v-select>
+                <label for="client" class="form-control-placeholder"> Client </label>
+              </div>
 
-	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-	            	<v-select
+              <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <v-select
                   style="height: 37px !important;"
                   class="form-control"
                   :options="classList"
@@ -136,21 +144,21 @@
                   :reduce="class_code => class_code.id"
                 ></v-select>
                 <label for="contact_number" class="form-control-placeholder"> Class</label>
-	            </div>
+              </div>
 
-	          	<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-	              <v-select
-	                :options="sizeTypeList"
-	                style="height: 37px !important;"
-	                v-model="form.sizeType"
-	                class="form-control"
-	                label="code"
-	                :reduce="code => code.id"
-	              ></v-select>
-	              <label for="sizeType" class="form-control-placeholder"> Size</label>
-	            </div>
+              <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <v-select
+                  :options="sizeTypeList"
+                  style="height: 37px !important;"
+                  v-model="form.sizeType"
+                  class="form-control"
+                  label="code"
+                  :reduce="code => code.id"
+                ></v-select>
+                <label for="sizeType" class="form-control-placeholder"> Size</label>
+              </div>
 
-	            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+              <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
                 <v-select
                   :class="errors.type ? 'isError form-control' : 'form-control'"
                   :options="typeList"
@@ -163,16 +171,12 @@
                 <div class="customErrorText"><small>@{{ errors.size_type ? errors.size_type[0] : '' }}</small></div>
               </div>
 
-	            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px; display: flex; justify-content: flex-end;">
-	            	<button class="btn btn-primary" :disabled="generateLoad" @click="getContainerAging">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
-	            </div>
-
-	          </div>
-	        </div>
-	      </div>
-	    </div>
-	  
-	  </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    </div>
 
 	  <div class="panel panel-default" style="margin-top: 15px;">
 	    <div class="panel-body">
@@ -198,15 +202,15 @@
 	          </tr>
 	        </thead>
 	        <tbody v-if="containerAgingList.length > 0">
-	          <tr v-for="(item, index) in containerAgingList" :key="index">
+	          <tr class="viewItemOnClick" v-for="(item, index) in containerAgingList" :key="index">
 	            <td>@{{ item.container_no }}</td>
 	            <td>@{{ item.size_type ? item.size_type.code : '' }}</td>
 	            <td>@{{ item.type ? item.type.code : '' }}</td>
 	            <td>@{{ item.receiving.empty_loaded }}</td>
 	            <td>@{{ item.client ? item.client.code : '' }}</td>
-	            <td>@{{ item.receiving ? moment(item.receiving.inspected_date).format('MMMM DD, YYYY') : '' }}</td>
+	            <td v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}</td>
 	            <td>@{{ item.receiving ? item.receiving.consignee : '' }}</td>
-	            <td>@{{ item.releasing ? moment(item.releasing.inspected_date).format('MMMM DD, YYYY') : '' }}</td>
+	            <td v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}</td>
 	            <td>@{{ item.releasing ? item.releasing.consignee : '' }}</td>
 	            <td>@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
 	            <td>@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
@@ -223,10 +227,22 @@
 	          </tr>
 	        </tbody>
 	      </table>
+			  <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex;">
+			  	<div style="width: 100px;">Van Count:</div>
+			  	@{{ van_total }}
+			  </div>
+			  <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex;">
+			  	<div style="width: 100px;">IN:</div>
+			  	@{{ van_in }}
+			  </div>
+			  <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex;">
+			  	<div style="width: 100px;">OUT:</div>
+				  @{{ van_out }}
+				</div>
 	    </div>  
 	  </div>
 
-	</div>
+  </div>
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
@@ -240,14 +256,17 @@
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 
 <script type="text/javascript">
-	Vue.component('v-select', VueSelect.VueSelect)
+  Vue.component('v-select', VueSelect.VueSelect)
   var app = new Vue({
     el: '#containerIn',
     components: {
       vuejsDatepicker,
     },
     data: {
-      form: {},
+      form: {
+        option: 'ALL',
+      },
+      generateErrorList: {},
       errors: [],
       classList: [],
       clientList: [],
@@ -258,45 +277,60 @@
       loading: false,
       tableLoad: false,
       generateLoad: false,
-      exportLoad: false
+      exportLoad: false,
+      van_total: '',
+      van_in: '',
+      van_out: ''
     },
     computed: {
-    	inDate () {
-    		if(this.form.option === 'IN' || this.form.option === 'ALL'){
-    			return false
-    		} else {
-    			return true
-    		}
-    	},
-			outDate () {
-				if(this.form.option === 'OUT' || this.form.option === 'ALL'){
-					return false
-				} else {
-					return true
-				}
-			},
+      inDate () {
+        if(this.form.option === 'IN' || this.form.option === 'ALL'){
+          return false
+        } else {
+          return true
+        }
+      },
+      outDate () {
+        if(this.form.option === 'OUT' || this.form.option === 'ALL'){
+          return false
+        } else {
+          return true
+        }
+      },
     },
     methods: {
-    	dateFormat(date) {
+      rerouteReceiving(receiving_id) {
+        let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
+        window.location = customUrl
+      },
+      rerouteReleasing(releasing_id) {
+        let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+        window.location = customUrl
+      },
+      dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
       },
       async getContainerAging () {
         this.generateLoad = true
         let payload = {
+          option: this.form.option === undefined || this.form.option === null ? 'ALL' : this.form.option,
           type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
           sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
           client: this.form.client === undefined || this.form.client === null ? 'NA' : this.form.client,
           class: this.form.class === undefined || this.form.class === null ? 'NA' : this.form.class,
           status: this.form.status === undefined || this.form.status === null ? 'NA' : this.form.status,
-          date_in_from: this.form.date_in_from === undefined || this.form.date_in_from === null ? 'NA' : moment(this.form.date_in_from).format('YYYY-MM-DD'),
-          date_in_to: this.form.date_in_to === undefined || this.form.date_in_to === null ? 'NA' : moment(this.form.date_in_to).format('YYYY-MM-DD'),
-          date_out_from: this.form.date_out_from === undefined || this.form.date_out_from === null ? 'NA' : moment(this.form.date_out_from).format('YYYY-MM-DD'),
-          date_out_to: this.form.date_out_to === undefined || this.form.date_out_to === null ? 'NA' : moment(this.form.date_out_to).format('YYYY-MM-DD')
+          date_in_from: this.form.date_in_from === undefined || this.form.date_in_from === null ? null : moment(this.form.date_in_from).format('YYYY-MM-DD'),
+          date_in_to: this.form.date_in_to === undefined || this.form.date_in_to === null ? null : moment(this.form.date_in_to).format('YYYY-MM-DD'),
+          date_out_from: this.form.date_out_from === undefined || this.form.date_out_from === null ? null : moment(this.form.date_out_from).format('YYYY-MM-DD'),
+          date_out_to: this.form.date_out_to === undefined || this.form.date_out_to === null ? null : moment(this.form.date_out_to).format('YYYY-MM-DD')
         }
         await axios.post(`/admin/get/container/aging`, payload).then(data => {
           this.generateLoad = false
-          this.containerAgingList = data.data
-          if (data.data.length === 0) {
+          this.containerAgingList = data.data.data
+          this.van_total = data.data.van_count
+          this.van_in = data.data.in
+          this.van_out = data.data.out
+          if (data.data.data.length === 0) {
             Swal.fire({
               title: '',
               text: 'No record found!',
@@ -304,13 +338,15 @@
             })
           }
         }).catch(error => {
+          this.generateErrorList = error.errors
           this.generateLoad = false
-          console.log(error)
+          console.log(error.errors)
         })
       },
       async exportContainerIn () {
         this.exportLoad = true
         let payload = {
+          option: this.form.option === undefined || this.form.option === null ? 'ALL' : this.form.option,
           type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
           sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
           client: this.form.client === undefined || this.form.client === null ? 'NA' : this.form.client,
@@ -321,12 +357,35 @@
           date_out_from: this.form.date_out_from === undefined || this.form.date_out_from === null ? 'NA' : moment(this.form.date_out_from).format('YYYY-MM-DD'),
           date_out_to: this.form.date_out_to === undefined || this.form.date_out_to === null ? 'NA' : moment(this.form.date_out_to).format('YYYY-MM-DD')
         }
-        await axios.get(`/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_as_of}`).then(data => {
+        await axios.get(`/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}`).then(data => {
           this.exportLoad = false
-          window.open(`${location.origin}/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_as_of}`, "_blank");
+          window.open(`${location.origin}/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}`, "_blank");
         }).catch(error => {
           this.exportLoad = false
           console.log(error)
+        })
+      },
+      async printContainerAging () {
+        let payload = {
+          option: this.form.option === undefined || this.form.option === null ? 'ALL' : this.form.option,
+          type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
+          sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
+          client: this.form.client === undefined || this.form.client === null ? 'NA' : this.form.client,
+          class: this.form.class === undefined || this.form.class === null ? 'NA' : this.form.class,
+          status: this.form.status === undefined || this.form.status === null ? 'NA' : this.form.status,
+          date_in_from: this.form.date_in_from === undefined || this.form.date_in_from === null ? 'NA' : moment(this.form.date_in_from).format('YYYY-MM-DD'),
+          date_in_to: this.form.date_in_to === undefined || this.form.date_in_to === null ? 'NA' : moment(this.form.date_in_to).format('YYYY-MM-DD'),
+          date_out_from: this.form.date_out_from === undefined || this.form.date_out_from === null ? 'NA' : moment(this.form.date_out_from).format('YYYY-MM-DD'),
+          date_out_to: this.form.date_out_to === undefined || this.form.date_out_to === null ? 'NA' : moment(this.form.date_out_to).format('YYYY-MM-DD')
+        }
+        await axios.get(`/admin/get/print/aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}`).then(data => {
+          let pasmo = data.data
+          let w = window.open(`/admin/get/print/aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}`, '_blank');
+          w.document.write(pasmo);
+          setTimeout(() => { 
+              w.print();
+              w.close();
+          }, 100);
         })
       },
       async getSize () {

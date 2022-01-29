@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Excel;
-use App\Models\ContainerReceiving;
+use App\Models\Container;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -49,7 +49,7 @@ class ContainerAging implements  FromView, ShouldAutoSize
                 })->when($this->status != 'NA', function ($q) {
                     return $q->where('empty_loaded',$this->status);
                 });
-            })->with('client','sizeType','containerClass','type','receiving')->orderBy('created_at','ASC')->get();
+            })->whereNull('releasing_id')->with('client','sizeType','containerClass','type','receiving')->orderBy('container_no','ASC')->get();
     
             foreach($data as $res)
             {
@@ -79,11 +79,11 @@ class ContainerAging implements  FromView, ShouldAutoSize
                 $query->when($this->status != 'NA', function ($q) {
                     return $q->where('empty_loaded',$this->status);
                 });
-            })->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
+            })->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
     
             foreach($data as $res)
             {
-                $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
+                $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays($res->releasing->inspected_date);
                 $res->total_no_days = $diff_days;
             }
     
@@ -91,7 +91,7 @@ class ContainerAging implements  FromView, ShouldAutoSize
         }
         else if($this->option == 'ALL')
         {
-            $data = Continer::when($this->type != 'NA', function ($q)  {
+            $data = Container::when($this->type != 'NA', function ($q)  {
                 return $q->where('type_id',$this->type);
             })->when($this->sizeType != 'NA', function ($q) {
                 return $q->where('size_type',$this->sizeType);
@@ -107,17 +107,17 @@ class ContainerAging implements  FromView, ShouldAutoSize
                 })->when($this->status != 'NA', function ($q) {
                     return $q->where('empty_loaded',$this->status);
                 });
-            })->whereHas('releasing',function( $query ) {
+            })->orWhereHas('releasing',function( $query ) {
                 $query->when($this->date_out_from != 'NA', function ($q) {
                     return $q->whereDate('inspected_date','>=',$this->date_out_from);
                 })->when($this->date_out_to != 'NA', function ($q) {
                     return $q->whereDate('inspected_date','<=',$this->date_out_to);
                 });
-            })->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('created_at','ASC')->get();
+            })->whereNotNull('receiving_id')->whereNotNull('releasing_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
     
             foreach($data as $res)
             {
-                $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
+                $diff_days = isset($res->releasing)?Carbon::parse($res->receiving->inspected_date)->diffInDays($res->releasing->inspected_date):Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
                 $res->total_no_days = $diff_days;
             }
     

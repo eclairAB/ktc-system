@@ -22,7 +22,7 @@
         <small>Kudos Trucking Corporation Container Terminal</small><br>
         <small>(082) 235-8234 235-8235</small>
       </div>
-      <div style="width: 20%; padding: 10px;display: flex; align-items:center; font-size: 22px; color: red;">
+      <div style="width: 20%; padding: 10px 0; display: flex; align-items:center; font-size: 18px; color: red;">
         <div style="margin-right: 10px;">NO.</div>
         <div>{{ $eirNumber->eir_no }}</div>
       </div>
@@ -221,7 +221,7 @@
         <small>Kudos Trucking Corporation Container Terminal</small><br>
         <small>(082) 235-8234 235-8235</small>
       </div>
-      <div style="width: 20%; padding: 10px;display: flex; align-items:center; font-size: 22px; color: red;">
+      <div style="width: 20%; padding: 10px 0; display: flex; align-items:center; font-size: 18px; color: red;">
         <div style="margin-right: 10px;">NO.</div>
         <div>{{ $eirNumber->eir_no }}</div>
       </div>
