@@ -51,7 +51,7 @@
                 <vuejs-datepicker
                   v-model="form.date_in_from"
                   placeholder="mm/dd/yyyyy"
-                  input-class="form-control"
+                  :input-class="generateErrorList.date_in_from ? 'form-control form-error' : 'form-control'"
                   :disabled="inDate"
                   :typeable="true"
                   name="from"
@@ -60,13 +60,14 @@
                   @input="getClient">
                 </vuejs-datepicker>
                 <label for="from" class="form-control-placeholder"> Container In Date From</label>
+                <div class="customErrorText"><small>@{{ generateErrorList.date_in_from ? generateErrorList.date_in_from[0] : '' }}</small></div>
               </div>
 
               <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
                 <vuejs-datepicker
                   v-model="form.date_in_to"
                   placeholder="mm/dd/yyyyy"
-                  input-class="form-control"
+                  :input-class="generateErrorList.date_in_to ? 'form-control form-error' : 'form-control'"
                   :typeable="true"
                   :disabled="inDate"
                   name="to"
@@ -75,13 +76,14 @@
                   @input="getClient">
                 </vuejs-datepicker>
                 <label for="to" class="form-control-placeholder"> Container In Date To </label>
+                <div class="customErrorText"><small>@{{ generateErrorList.date_in_to ? generateErrorList.date_in_to[0] : '' }}</small></div>
               </div>
 
               <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
                 <vuejs-datepicker
                   v-model="form.date_out_from"
                   placeholder="mm/dd/yyyyy"
-                  input-class="form-control"
+                  :input-class="generateErrorList.date_out_from ? 'form-control form-error' : 'form-control'"
                   :disabled="outDate"
                   :typeable="true"
                   name="from"
@@ -90,13 +92,14 @@
                   @input="getClient">
                 </vuejs-datepicker>
                 <label for="from" class="form-control-placeholder"> Container Out Date In </label>
+                <div class="customErrorText"><small>@{{ generateErrorList.date_out_from ? generateErrorList.date_out_from[0] : '' }}</small></div>
               </div>
 
               <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
                 <vuejs-datepicker
                   v-model="form.date_out_to"
                   placeholder="mm/dd/yyyyy"
-                  input-class="form-control"
+                  :input-class="generateErrorList.date_out_to ? 'form-control form-error' : 'form-control'"
                   :disabled="outDate"
                   :typeable="true"
                   name="to"
@@ -105,6 +108,7 @@
                   @input="getClient">
                 </vuejs-datepicker>
                 <label for="to" class="form-control-placeholder"> Container Out Date To </label>
+                <div class="customErrorText"><small>@{{ generateErrorList.date_out_to ? generateErrorList.date_out_to[0] : '' }}</small></div>
               </div>
 
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px;">
@@ -338,7 +342,7 @@
             })
           }
         }).catch(error => {
-          this.generateErrorList = error.errors
+          this.generateErrorList = error.response.data.errors
           this.generateLoad = false
           console.log(error.errors)
         })
