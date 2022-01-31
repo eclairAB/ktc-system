@@ -295,15 +295,19 @@
     },
     computed: {
       inDate () {
-        if(this.form.option === 'IN' || this.form.option === 'ALL'){
+        if(this.form.option === 'IN' ){
           return false
+        }  else if (this.form.option === 'ALL'){
+          return true
         } else {
           return true
         }
       },
       outDate () {
-        if(this.form.option === 'OUT' || this.form.option === 'ALL'){
+        if(this.form.option === 'OUT'){
           return false
+        } else if (this.form.option === 'ALL'){
+          return true
         } else {
           return true
         }
