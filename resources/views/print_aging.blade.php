@@ -53,19 +53,24 @@
           </tr>
           @endforeach
         </table>
+        
         <div style="border-top: 2px solid; display: flex; font-size: 14px; font-weight: 700; padding-top: 10px"></div>
-        <div style="font-weight: bold; display: flex; font-size: 14px;">
-          <div style="width: 100px;">Van Count:</div>
-          {{ $count }}
+
+        <div style="display: flex; font-size: 14px;">
+          <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex; margin-right: 20px; align-items: center;">
+            Van Count: 
+            <div style="margin-left: 10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">{{ $count }}</div>
+          </div>
+          <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex; margin-right: 20px; align-items: center;">
+            IN: 
+            <div style="margin-left: 10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">{{ $in }}</div>
+          </div>
+          <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex; margin-right: 20px; align-items: center;">
+            OUT: 
+            <div style="margin-left: 10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">{{ $out }}</div>
+          </div>
         </div>
-        <div style="font-weight: bold; display: flex; font-size: 14px;">
-          <div style="width: 100px;">IN:</div>
-          {{ $in }}
-        </div>
-        <div style="font-weight: bold; display: flex; font-size: 14px;">
-          <div style="width: 100px;">OUT:</div>
-          {{ $out }}
-        </div>
+
       </div>
     </div>
     <!-- END OF HEADER -->
