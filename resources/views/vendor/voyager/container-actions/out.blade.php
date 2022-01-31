@@ -134,18 +134,18 @@
           </tr>
         </thead>
         <tbody v-if="containerOutList.length > 0">
-          <tr class="viewItemOnClick" v-for="(item, index) in containerOutList" :key="index">
-            <td v-on:click="reroute(item.id)">@{{ item.container_no }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.container.eir_no_out ? item.container.eir_no_out.eir_no : '' }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.container.size_type ? item.container.size_type.size : '' }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.container.type ? item.container.type.code : '' }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.container.client ? item.container.client.code : ''  }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.consignee }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.plate_no }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.hauler }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.container.container_class ? item.container.container_class.class_name : '' }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.remarks }}</td>
-            <td v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
+          <tr v-for="(item, index) in containerOutList" :key="index">
+            <td>@{{ item.container_no }}</td>
+            <td>@{{ item.container.eir_no_out ? item.container.eir_no_out.eir_no : '' }}</td>
+            <td>@{{ item.container.size_type ? item.container.size_type.size : '' }}</td>
+            <td>@{{ item.container.type ? item.container.type.code : '' }}</td>
+            <td>@{{ item.container.client ? item.container.client.code : ''  }}</td>
+            <td>@{{ item.consignee }}</td>
+            <td>@{{ item.plate_no }}</td>
+            <td>@{{ item.hauler }}</td>
+            <td>@{{ item.container.container_class ? item.container.container_class.class_name : '' }}</td>
+            <td>@{{ item.remarks }}</td>
+            <td class="viewItemOnClick"  v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
           </tr>
         </tbody>
         <tbody v-else>
