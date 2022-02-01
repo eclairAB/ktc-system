@@ -56,8 +56,10 @@ class ContainerAging implements  FromView, ShouldAutoSize
                 $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
                 $res->total_no_days = $diff_days;
             }
-    
-            return view('excel.container_aging',compact('data'));
+            $count = count($data);
+            $in = count($data);
+            $out = 0;
+            return view('excel.container_aging',compact('data','count','in','out'));
         }
         else if($this->option == 'OUT')
         {
@@ -87,7 +89,10 @@ class ContainerAging implements  FromView, ShouldAutoSize
                 $res->total_no_days = $diff_days;
             }
     
-            return view('excel.container_aging',compact('data'));
+            $count = count($data);
+            $in = 0;
+            $out = count($data);
+            return view('excel.container_aging',compact('data','count','in','out'));
         }
         else if($this->option == 'ALL')
         {
@@ -121,7 +126,44 @@ class ContainerAging implements  FromView, ShouldAutoSize
                 $res->total_no_days = $diff_days;
             }
     
-            return view('excel.container_aging',compact('data'));
+            $count = count($data);
+            $in = Container::when($this->type != 'NA', function ($q){
+                return $q->where('type_id',$this->type);
+            })->when($this->sizeType != 'NA', function ($q){
+                return $q->where('size_type',$this->sizeType);
+            })->when($this->client != 'NA', function ($q){
+                return $q->where('client_id',$this->client);
+            })->when($this->class != 'NA', function ($q){
+                return $q->where('class',$this->class);
+            })->whereHas('receiving',function( $query ){
+                $query->when($this->date_in_from != 'NA', function ($q){
+                    return $q->whereDate('inspected_date','>=',$this->date_in_from);
+                })->when($this->date_in_to != 'NA', function ($q){
+                    return $q->whereDate('inspected_date','<=',$this->date_in_to);
+                })->when($this->status != 'NA', function ($q){
+                    return $q->where('empty_loaded',$this->status);
+                });
+            })->whereNull('releasing_id')->count();
+            $out = Container::when($this->type != 'NA', function ($q){
+                return $q->where('type_id',$this->type);
+            })->when($this->sizeType != 'NA', function ($q){
+                return $q->where('size_type',$this->sizeType);
+            })->when($this->client != 'NA', function ($q){
+                return $q->where('client_id',$this->client);
+            })->when($this->class != 'NA', function ($q){
+                return $q->where('class',$this->class);
+            })->whereHas('releasing',function( $query ){
+                $query->when($this->date_out_from != 'NA', function ($q){
+                    return $q->whereDate('inspected_date','>=',$this->date_out_from);
+                })->when($this->date_out_to != 'NA', function ($q){
+                    return $q->whereDate('inspected_date','<=',$this->date_out_to);
+                });
+            })->whereHas('receiving',function( $query ){
+                $query->when($this->status != 'NA', function ($q){
+                    return $q->where('empty_loaded',$this->status);
+                });
+            })->whereNotNull('receiving_id')->count();
+            return view('excel.container_aging',compact('data','count','in','out'));
         }
 
         

@@ -37,6 +37,7 @@
             <th scope="col">Class</th>
             <th scope="col">Remarks</th>
             <th scope="col">Date IN</th>
+            <th scope="col">Damages</th>
           </tr>
           @foreach($data as $key => $item)
             <tr>
@@ -51,6 +52,15 @@
               <td>{{ $item->containerClass->class_code??'' }}</td>
               <td>{{ $item->remarks }}</td>
               <td>{{ Carbon\Carbon::parse($item->inspected_date)->format('Y-m-d') }}</td>
+              <td>
+                @foreach($item->damages as $dmg)
+                <ul style="display:flex;">
+                  <li>
+		                {{ $dmg->description }}
+                  </li>
+                </ul>
+                @endforeach
+            </td>
             </tr>
           @endforeach
         </table>

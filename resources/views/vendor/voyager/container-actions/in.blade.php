@@ -133,21 +133,30 @@
             <th scope="col">Class</th>
             <th scope="col">Remarks</th>
             <th scope="col">Date In</th>
+            <th scope="col">Damages</th>
           </tr>
         </thead>
         <tbody v-if="containerInList.length > 0">
-          <tr class="viewItemOnClick" v-for="(item, index) in containerInList" :key="index">
-            <td v-on:click="reroute(item.id)">@{{ item.container_no }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.container.eir_no_in ? item.container.eir_no_in.eir_no : '' }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.size_type ? item.size_type.size : '' }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.type ? item.type.code : '' }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.client ? item.client.code : ''  }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.consignee }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.plate_no }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.hauler }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.container_class ? item.container_class.class_code : '' }}</td>
-            <td v-on:click="reroute(item.id)">@{{ item.remarks }}</td>
-            <td v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
+          <tr  v-for="(item, index) in containerInList" :key="index">
+            <td>@{{ item.container_no }}</td>
+            <td>@{{ item.container.eir_no_in ? item.container.eir_no_in.eir_no : '' }}</td>
+            <td>@{{ item.size_type ? item.size_type.size : '' }}</td>
+            <td>@{{ item.type ? item.type.code : '' }}</td>
+            <td>@{{ item.client ? item.client.code : ''  }}</td>
+            <td>@{{ item.consignee }}</td>
+            <td>@{{ item.plate_no }}</td>
+            <td>@{{ item.hauler }}</td>
+            <td>@{{ item.container_class ? item.container_class.class_code : '' }}</td>
+            <td>@{{ item.remarks }}</td>
+            <td class="viewItemOnClick" v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
+            <td>
+                <ul style="display:flex;" v-for="(item,i) in item.damages" :key="i">
+                  <li>
+		              @{{ item.description }}
+                  </li>
+                </ul>
+	            </div>
+            </td>
           </tr>
         </tbody>
         <tbody v-else>
@@ -168,7 +177,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://unpkg.com/vue-select@latest"></script>
+<script src="https://unpkg.com/vue-select@3.16.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-date-dropdown@1.0.5/dist/vue-date-dropdown.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuejs-datepicker@1.6.2/dist/vuejs-datepicker.min.js"></script>

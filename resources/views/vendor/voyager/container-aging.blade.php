@@ -24,7 +24,6 @@
         <div class="row">
           <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
             <span style="font-weight: bold; font-size: 18px;">Container Aging and Inventory</span>
-            @{{ generateErrorList }}
             <div>
               <button class="btn btn-primary" :disabled="generateLoad" @click="getContainerAging">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
               <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
@@ -51,23 +50,23 @@
                 <vuejs-datepicker
                   v-model="form.date_in_from"
                   placeholder="mm/dd/yyyyy"
-                  input-class="form-control asd"
+                  :input-class="generateErrorList.date_in_from ? 'form-control form-error' : 'form-control'"
                   :disabled="inDate"
                   :typeable="true"
                   name="from"
                   :format="dateFormat"
                   :required="true"
-                  :class="generateErrorList.option ? 'form-control form-error' : 'form-control'"
                   @input="getClient">
                 </vuejs-datepicker>
                 <label for="from" class="form-control-placeholder"> Container In Date From</label>
+                <div class="customErrorText"><small>@{{ generateErrorList.date_in_from ? generateErrorList.date_in_from[0] : '' }}</small></div>
               </div>
 
               <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
                 <vuejs-datepicker
                   v-model="form.date_in_to"
                   placeholder="mm/dd/yyyyy"
-                  input-class="form-control"
+                  :input-class="generateErrorList.date_in_to ? 'form-control form-error' : 'form-control'"
                   :typeable="true"
                   :disabled="inDate"
                   name="to"
@@ -76,13 +75,14 @@
                   @input="getClient">
                 </vuejs-datepicker>
                 <label for="to" class="form-control-placeholder"> Container In Date To </label>
+                <div class="customErrorText"><small>@{{ generateErrorList.date_in_to ? generateErrorList.date_in_to[0] : '' }}</small></div>
               </div>
 
               <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
                 <vuejs-datepicker
                   v-model="form.date_out_from"
                   placeholder="mm/dd/yyyyy"
-                  input-class="form-control"
+                  :input-class="generateErrorList.date_out_from ? 'form-control form-error' : 'form-control'"
                   :disabled="outDate"
                   :typeable="true"
                   name="from"
@@ -91,13 +91,14 @@
                   @input="getClient">
                 </vuejs-datepicker>
                 <label for="from" class="form-control-placeholder"> Container Out Date In </label>
+                <div class="customErrorText"><small>@{{ generateErrorList.date_out_from ? generateErrorList.date_out_from[0] : '' }}</small></div>
               </div>
 
               <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
                 <vuejs-datepicker
                   v-model="form.date_out_to"
                   placeholder="mm/dd/yyyyy"
-                  input-class="form-control"
+                  :input-class="generateErrorList.date_out_to ? 'form-control form-error' : 'form-control'"
                   :disabled="outDate"
                   :typeable="true"
                   name="to"
@@ -106,6 +107,7 @@
                   @input="getClient">
                 </vuejs-datepicker>
                 <label for="to" class="form-control-placeholder"> Container Out Date To </label>
+                <div class="customErrorText"><small>@{{ generateErrorList.date_out_to ? generateErrorList.date_out_to[0] : '' }}</small></div>
               </div>
 
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0px;">
@@ -203,15 +205,21 @@
             </tr>
           </thead>
           <tbody v-if="containerAgingList.length > 0">
-            <tr class="viewItemOnClick" v-for="(item, index) in containerAgingList" :key="index">
+            <tr v-for="(item, index) in containerAgingList" :key="index">
               <td>@{{ item.container_no }}</td>
               <td>@{{ item.size_type ? item.size_type.code : '' }}</td>
               <td>@{{ item.type ? item.type.code : '' }}</td>
               <td>@{{ item.receiving.empty_loaded }}</td>
               <td>@{{ item.client ? item.client.code : '' }}</td>
-              <td v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}</td>
+              <td
+                class="viewItemOnClick"
+                v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}
+              </td>
               <td>@{{ item.receiving ? item.receiving.consignee : '' }}</td>
-              <td v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}</td>
+              <td
+                :class="item.releasing_id ? 'viewItemOnClick' : ''"
+                v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}
+              </td>
               <td>@{{ item.releasing ? item.releasing.consignee : '' }}</td>
               <td>@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
               <td>@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
@@ -228,9 +236,20 @@
             </tr>
           </tbody>
         </table>
-      <span v-if="containerAgingList.length > 0" style="font-weight:bold;">Van Count: @{{ van_total }}</span><br>
-      <span v-if="containerAgingList.length > 0" style="font-weight:bold;">IN @{{ van_in }}</span><br>
-      <span v-if="containerAgingList.length > 0" style="font-weight:bold;">OUT: @{{ van_out }}</span>
+        <div style="display: flex; margin-top: 10px;">
+          <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex; margin-right: 20px; align-items: center;">
+            Van Count: 
+            <div style="margin-left: 10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">@{{ van_total }}</div>
+          </div>
+          <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex; margin-right: 20px; align-items: center;">
+            IN: 
+            <div style="margin-left: 10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">@{{ van_in }}</div>
+          </div>
+          <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex; margin-right: 20px; align-items: center;">
+            OUT: 
+            <div style="margin-left: 10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">@{{ van_out }}</div>
+          </div>
+        </div>
       </div>  
     </div>
 
@@ -276,15 +295,19 @@
     },
     computed: {
       inDate () {
-        if(this.form.option === 'IN' || this.form.option === 'ALL'){
+        if(this.form.option === 'IN' ){
           return false
+        }  else if (this.form.option === 'ALL'){
+          return true
         } else {
           return true
         }
       },
       outDate () {
-        if(this.form.option === 'OUT' || this.form.option === 'ALL'){
+        if(this.form.option === 'OUT'){
           return false
+        } else if (this.form.option === 'ALL'){
+          return true
         } else {
           return true
         }
@@ -296,8 +319,10 @@
         window.location = customUrl
       },
       rerouteReleasing(releasing_id) {
-        let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
-        window.location = customUrl
+        if(releasing_id) {
+          let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+          window.location = customUrl
+        }
       },
       dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
