@@ -25,13 +25,13 @@ class ValidateContainerAging extends FormRequest
     {
         if($this->option == 'ALL') {
             return [
-                'date_in_from' => 'required',
-                'date_in_to' => 'required',
-                'date_out_from' => 'required',
-                'date_out_to' => 'required',
+                'date_in_from' => 'nullable',
+                'date_in_to' => 'nullable',
+                'date_out_from' => 'nullable',
+                'date_out_to' => 'nullable',
             ];
         }
-        else if($this->option == 'IN') {
+        if($this->option == 'IN') {
             return [
                 'date_in_from' => 'required',
                 'date_in_to' => 'required',
@@ -48,10 +48,10 @@ class ValidateContainerAging extends FormRequest
     public function messages()
     {
         return [
-            'date_in_from.required' => '"Date in from" field is required',
-            'date_in_to.required' => '"Date in to" field is required',
-            'date_out_from.required' => '"Date out from" field is required',
-            'date_out_to.required' => '"Date out to" field is required',
+            'date_in_from.required' => 'Date in from field is required',
+            'date_in_to.required' => 'Date in to field is required',
+            'date_out_from.required' => 'Date out from field is required',
+            'date_out_to.required' => 'Date out to field is required',
         ];
     }
 }

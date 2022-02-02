@@ -24,7 +24,6 @@
         <div class="row">
           <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
             <span style="font-weight: bold; font-size: 18px;">Container Aging and Inventory</span>
-            @{{ generateErrorList }}
             <div>
               <button class="btn btn-primary" :disabled="generateLoad" @click="getContainerAging">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
               <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
@@ -57,7 +56,6 @@
                   name="from"
                   :format="dateFormat"
                   :required="true"
-                  :class="generateErrorList.option ? 'form-control form-error' : 'form-control'"
                   @input="getClient">
                 </vuejs-datepicker>
                 <label for="from" class="form-control-placeholder"> Container In Date From</label>
@@ -238,9 +236,20 @@
             </tr>
           </tbody>
         </table>
-      <span v-if="containerAgingList.length > 0" style="font-weight:bold;">Van Count: @{{ van_total }}</span><br>
-      <span v-if="containerAgingList.length > 0" style="font-weight:bold;">IN @{{ van_in }}</span><br>
-      <span v-if="containerAgingList.length > 0" style="font-weight:bold;">OUT: @{{ van_out }}</span>
+        <div style="display: flex; margin-top: 10px;">
+          <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex; margin-right: 20px; align-items: center;">
+            Van Count: 
+            <div style="margin-left: 10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">@{{ van_total }}</div>
+          </div>
+          <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex; margin-right: 20px; align-items: center;">
+            IN: 
+            <div style="margin-left: 10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">@{{ van_in }}</div>
+          </div>
+          <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex; margin-right: 20px; align-items: center;">
+            OUT: 
+            <div style="margin-left: 10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">@{{ van_out }}</div>
+          </div>
+        </div>
       </div>  
     </div>
 
@@ -286,15 +295,19 @@
     },
     computed: {
       inDate () {
-        if(this.form.option === 'IN' || this.form.option === 'ALL'){
+        if(this.form.option === 'IN' ){
           return false
+        }  else if (this.form.option === 'ALL'){
+          return true
         } else {
           return true
         }
       },
       outDate () {
-        if(this.form.option === 'OUT' || this.form.option === 'ALL'){
+        if(this.form.option === 'OUT'){
           return false
+        } else if (this.form.option === 'ALL'){
+          return true
         } else {
           return true
         }

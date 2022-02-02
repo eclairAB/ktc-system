@@ -31,3 +31,10 @@
         </tr>
       @endforeach
 </table>
+<table>
+<tr>
+    <th style="font-weight:bold;">Van Count : {{ $count }}</th> 
+    <th style="font-weight:bold;">IN : {{ $in }}</th> 
+    <th style="font-weight:bold;">OUT : {{ $out }}</th> 
+</tr>
+</table>

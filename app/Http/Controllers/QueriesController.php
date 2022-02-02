@@ -309,8 +309,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             })->when($request->class != 'NA', function ($q) use($request){
                 return $q->where('class',$request->class);
             });
-        })->with('client','sizeType','containerClass','container.eirNoIn','type')->orderBy('container_no','ASC')->get();
-
+        })->with('client','sizeType','containerClass','container.eirNoIn','type','damages')->orderBy('container_no','ASC')->get();
         return $data;
     }
 
@@ -387,7 +386,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             })->when($class != 'NA', function ($q) use($class){
                 return $q->where('class',$class);
             });
-        })->with('client','sizeType','containerClass','container.eirNoIn','type')->orderBy('container_no','ASC')->get();
+        })->with('client','sizeType','containerClass','container.eirNoIn','type','damages')->orderBy('container_no','ASC')->get();
 
         return view('print_container_in')->with(compact('data'));
     }
@@ -589,9 +588,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             })->when($request->class != 'NA', function ($q) use($request){
                 return $q->where('class',$request->class);
             })->whereHas('receiving',function( $query ) use($request){
-                $query->when($request->date_in_from != 'NA', function ($q) use($request){
+                $query->when($request->date_in_from != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','>=',$request->date_in_from);
-                })->when($request->date_in_to != 'NA', function ($q) use($request){
+                })->when($request->date_in_to != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','<=',$request->date_in_to);
                 })->when($request->status != 'NA', function ($q) use($request){
                     return $q->where('empty_loaded',$request->status);
@@ -619,9 +618,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             })->when($request->class != 'NA', function ($q) use($request){
                 return $q->where('class',$request->class);
             })->whereHas('releasing',function( $query ) use($request){
-                $query->when($request->date_out_from != 'NA', function ($q) use($request){
+                $query->when($request->date_out_from != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','>=',$request->date_out_from);
-                })->when($request->date_out_to != 'NA', function ($q) use($request){
+                })->when($request->date_out_to != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','<=',$request->date_out_to);
                 });
             })->whereHas('receiving',function( $query ) use($request){
@@ -651,17 +650,17 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             })->when($request->class != 'NA', function ($q) use($request){
                 return $q->where('class',$request->class);
             })->whereHas('receiving',function( $query ) use($request){
-                $query->when($request->date_in_from != 'NA', function ($q) use($request){
+                $query->when($request->date_in_from != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','>=',$request->date_in_from);
-                })->when($request->date_in_to != 'NA', function ($q) use($request){
+                })->when($request->date_in_to != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','<=',$request->date_in_to);
                 })->when($request->status != 'NA', function ($q) use($request){
                     return $q->where('empty_loaded',$request->status);
                 });
             })->orWhereHas('releasing',function( $query ) use($request){
-                $query->when($request->date_out_from != 'NA', function ($q) use($request){
+                $query->when($request->date_out_from != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','>=',$request->date_out_from);
-                })->when($request->date_out_to != 'NA', function ($q) use($request){
+                })->when($request->date_out_to != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','<=',$request->date_out_to);
                 });
             })->whereNotNull('receiving_id')->whereNotNull('releasing_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
@@ -681,9 +680,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             })->when($request->class != 'NA', function ($q) use($request){
                 return $q->where('class',$request->class);
             })->whereHas('receiving',function( $query ) use($request){
-                $query->when($request->date_in_from != 'NA', function ($q) use($request){
+                $query->when($request->date_in_from != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','>=',$request->date_in_from);
-                })->when($request->date_in_to != 'NA', function ($q) use($request){
+                })->when($request->date_in_to != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','<=',$request->date_in_to);
                 })->when($request->status != 'NA', function ($q) use($request){
                     return $q->where('empty_loaded',$request->status);
@@ -698,9 +697,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             })->when($request->class != 'NA', function ($q) use($request){
                 return $q->where('class',$request->class);
             })->whereHas('releasing',function( $query ) use($request){
-                $query->when($request->date_out_from != 'NA', function ($q) use($request){
+                $query->when($request->date_out_from != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','>=',$request->date_out_from);
-                })->when($request->date_out_to != 'NA', function ($q) use($request){
+                })->when($request->date_out_to != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','<=',$request->date_out_to);
                 });
             })->whereHas('receiving',function( $query ) use($request){
