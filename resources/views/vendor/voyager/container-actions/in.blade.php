@@ -131,9 +131,11 @@
             <th scope="col">Plate No.</th>
             <th scope="col">Trucker</th>
             <th scope="col">Class</th>
-            <th scope="col">Remarks</th>
             <th scope="col">Date In</th>
+            <th scope="col">Time</th>
             <th scope="col">Damages</th>
+            <th scope="col">Remarks</th>
+            <th scope="col">Date Time</th>
           </tr>
         </thead>
         <tbody v-if="containerInList.length > 0">
@@ -147,16 +149,15 @@
             <td>@{{ item.plate_no }}</td>
             <td>@{{ item.hauler }}</td>
             <td>@{{ item.container_class ? item.container_class.class_code : '' }}</td>
-            <td>@{{ item.remarks }}</td>
             <td class="viewItemOnClick" v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
+            <td>@{{ moment(item.inspected_date).format('hh:mm:ss A') }}</td>
             <td>
-                <ul style="display:flex;" v-for="(item,i) in item.damages" :key="i">
-                  <li>
-		              @{{ item.description }}
-                  </li>
-                </ul>
+              <div v-for="(item,i) in item.damages" :key="i">
+		            @{{ i + 1 }}.) @{{ item.description }}
 	            </div>
             </td>
+            <td>@{{ item.remarks }}</td>
+            <td>@{{ moment(item.inspected_date).format('YYYY-MM-DD hh:mm:ss A') }}</td>
           </tr>
         </tbody>
         <tbody v-else>

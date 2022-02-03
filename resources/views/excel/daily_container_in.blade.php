@@ -10,9 +10,11 @@
           <th style="font-weight:bold;">Plate No.</th>
           <th style="font-weight:bold;">Trucker</th>
           <th style="font-weight:bold;">Class</th>
-          <th style="font-weight:bold;">Remarks</th>
           <th style="font-weight:bold;">Date IN</th>
+          <th style="font-weight:bold;">Time</th>
           <th style="font-weight:bold;">Damages</th>
+          <th style="font-weight:bold;">Remarks</th>
+          <th style="font-weight:bold;">Date Time</th>
         </tr>
         @foreach($data as $key => $item)
         <tr>
@@ -25,17 +27,17 @@
           <td>{{ $item->plate_no }}</td>
           <td>{{ $item->hauler }}</td>
           <td>{{ $item->containerClass->class_code??'' }}</td>
-          <td>{{ $item->remarks }}</td>
           <td>{{ Carbon\Carbon::parse($item->inspected_date)->format('Y-m-d') }}</td>
+          <td>{{ Carbon\Carbon::parse($item->inspected_date)->format('h:i:s A') }}</td>
           <td>
-            @foreach($item->damages as $dmg)
-            <ul style="display:flex;">
-              <li>
-                {{ $dmg->description }}
-              </li>
-            </ul>
-            @endforeach
+              @foreach($item->damages as $key=> $dmg)
+              <div>
+                {{ $key + 1 }}.) {{ $dmg->description }}<br>
+              </div>
+              @endforeach
           </td>
+          <td>{{ $item->remarks }}</td>
+          <td>{{ Carbon\Carbon::parse($item->inspected_date)->format('Y-m-d h:i:s A') }}</td>
         </tr>
       @endforeach
 </table>
