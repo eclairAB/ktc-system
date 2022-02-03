@@ -736,7 +736,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             if ( isset($request->search_input)) {
                 $q->where('container_no', 'ilike', '%' . $request->search_input . '%');
             }
-            $q->with('containerClass','sizeType','receiving','releasing','client','eirNoIn','eirNoOut','type');
+            $q->with('containerClass','sizeType','receiving','releasing','client','eirNoIn','eirNoOut','type','receiving.damages');
             $q->orderBy('id','DESC');
             $containers = $q->paginate(15);
             return view('vendor.voyager.container-inquiry.browse', ['containers' => $containers]);
