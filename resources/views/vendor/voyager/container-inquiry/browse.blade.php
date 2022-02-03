@@ -60,58 +60,81 @@
                               Gate-in
                           </th>
                           <th style="padding: 10px 10px;">
-                              Gate-out
+                              Time
+                          </th>
+                          <th style="padding: 10px 10px;">
+                              Damages
                           </th>
                           <th style="padding: 10px 10px;">
                               Remarks
                           </th>
+                          <th style="padding: 10px 10px;">
+                              Date Time
+                          </th>
+                          <th style="padding: 10px 10px;">
+                              Gate-out
+                          </th>
+                          
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($containers as $item)
                             <tr style="
                                     border-top: solid #5c5c5c29 1px;
-                                    line-height: 30px;
                                 "
                             >
-                                <td style="padding: 0 10px">
+                                <td style="padding: 0 10px; line-height: 30px;">
                                     {{ $item->container_no }}
                                 </td>
-                                <td style="padding: 0 10px">
+                                <td style="padding: 0 10px; line-height: 30px;">
                                     {{ $item->sizeType->size??'' }}
                                 </td> 
-                                <td style="padding: 0 10px">
+                                <td style="padding: 0 10px; line-height: 30px;">
                                     {{ $item->type->code??'' }}
                                 </td>    
-                                <td style="padding: 0 10px">
+                                <td style="padding: 0 10px; line-height: 30px;">
                                     {{ $item->eirNoIn->eir_no??'' }}
                                 </td>    
-                                <td style="padding: 0 10px">
+                                <td style="padding: 0 10px; line-height: 30px;">
                                     {{ $item->eirNoOut->eir_no??'' }}
                                 </td> 
-                                <td style="padding: 0 10px">
+                                <td style="padding: 0 10px; line-height: 30px;">
                                     {{ $item->receiving->empty_loaded??'' }}
                                 </td>    
-                                <td style="padding: 0 10px">
+                                <td style="padding: 0 10px; line-height: 30px;">
                                     {{ $item->client->code??'' }}
                                 </td>    
                                 <td 
                                     class="viewItemOnClick"
-                                    style="padding: 0 10px"
+                                    style="padding: 0 10px; line-height: 30px;"
                                     v-on:click="rerouteReceiving('{{ $item->receiving_id }}')"
                                 >
                                     {{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}
                                 </td>    
+                                <td style="padding: 0 10px; line-height: 30px;">
+                                    {{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('h:i:s A') }}
+                                </td>   
+                                <td>
+                                    @foreach($item->receiving->damages as $key=> $dmg)
+                                        <div>
+                                            {{ $key + 1 }}.) {{ $dmg->description }}
+                                        </div>
+                                    @endforeach
+                                </td>   
+                                <td style="padding: 0 10px; line-height: 30px;">
+                                    {{ $item->receiving->remarks??'' }}
+                                </td>
+                                <td style="padding: 0 10px; line-height: 30px;">
+                                    {{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d h:i:s A') }}
+                                </td>   
                                 <td 
                                     :class="'{{ $item->releasing_id }}' ? 'viewItemOnClick' : ''"
-                                    style="padding: 0 10px"
+                                    style="padding: 0 10px; line-height: 30px;"
                                     v-on:click="rerouteReleasing('{{ $item->releasing_id }}')"
                                 >
                                     {{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}
                                 </td> 
-                                <td style="padding: 0 10px">
-                                    {{ $item->receiving->remarks??'' }}
-                                </td>     
+                                 
                             </tr>
                         @empty
                             <tr style="border-top: solid #5c5c5c29 1px; font-weight: bold; color: #979797;">

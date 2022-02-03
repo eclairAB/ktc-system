@@ -35,9 +35,11 @@
             <th scope="col">Plate No.</th>
             <th scope="col">Trucker</th>
             <th scope="col">Class</th>
-            <th scope="col">Remarks</th>
             <th scope="col">Date IN</th>
+            <th scope="col">Time</th>
             <th scope="col">Damages</th>
+            <th scope="col">Remarks</th>
+            <th scope="col">Date Time</th>
           </tr>
           @foreach($data as $key => $item)
             <tr>
@@ -50,17 +52,17 @@
               <td>{{ $item->plate_no }}</td>
               <td>{{ $item->hauler }}</td>
               <td>{{ $item->containerClass->class_code??'' }}</td>
-              <td>{{ $item->remarks }}</td>
               <td>{{ Carbon\Carbon::parse($item->inspected_date)->format('Y-m-d') }}</td>
+              <td>{{ Carbon\Carbon::parse($item->inspected_date)->format('h:i:s A') }}</td>
               <td>
-                @foreach($item->damages as $dmg)
-                <ul style="display:flex;">
-                  <li>
-		                {{ $dmg->description }}
-                  </li>
-                </ul>
+                @foreach($item->damages as $key=> $dmg)
+                <div>
+                  {{ $key + 1 }}.) {{ $dmg->description }}
+                </div>
                 @endforeach
             </td>
+            <td>{{ $item->remarks }}</td>
+            <td>{{ Carbon\Carbon::parse($item->inspected_date)->format('Y-m-d h:i:s A') }}</td>
             </tr>
           @endforeach
         </table>
