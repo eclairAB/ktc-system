@@ -83,7 +83,9 @@
                                     border-top: solid #5c5c5c29 1px;
                                 "
                             >
-                                <td style="padding: 0 10px; line-height: 30px;">
+                                <td class="viewItemOnClick"
+                                    style="padding: 0 10px; line-height: 30px;"
+                                    v-on:click="reroute('{{ $item->releasing_id }}','{{ $item->receiving_id }}')">
                                     {{ $item->container_no }}
                                 </td>
                                 <td style="padding: 0 10px; line-height: 30px;">
@@ -99,7 +101,7 @@
                                     {{ $item->eirNoOut->eir_no??'' }}
                                 </td> 
                                 <td style="padding: 0 10px; line-height: 30px;">
-                                    {{ $item->receiving->empty_loaded??'' }}
+                                    {{ $item->status }}
                                 </td>    
                                 <td style="padding: 0 10px; line-height: 30px;">
                                     {{ $item->client->code??'' }}
@@ -167,6 +169,17 @@
     			window.location = customUrl
             }
 		},
+        reroute(releasing_id,receiving_id) {
+        if(releasing_id)
+        {
+          let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+          window.location = customUrl
+        }
+        else{
+          let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
+          window.location = customUrl
+        }
+      },
         submitForm(page_) {
             const page = document.querySelector("ul.pagination li.active span")
             let filter = {
