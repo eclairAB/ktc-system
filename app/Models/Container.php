@@ -16,6 +16,7 @@ class Container extends Model
         'receiving_id',
         'releasing_id',
         'type_id',
+        'status',
     ];
 
     public function client()
