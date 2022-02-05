@@ -206,7 +206,8 @@
           </thead>
           <tbody v-if="containerAgingList.length > 0">
             <tr v-for="(item, index) in containerAgingList" :key="index">
-              <td>@{{ item.container_no }}</td>
+              <td class="viewItemOnClick"
+                v-on:click="reroute(item.releasing_id,item.receiving_id)">@{{ item.container_no }}</td>
               <td>@{{ item.size_type ? item.size_type.code : '' }}</td>
               <td>@{{ item.type ? item.type.code : '' }}</td>
               <td>@{{ item.receiving.empty_loaded }}</td>
@@ -321,6 +322,17 @@
       rerouteReleasing(releasing_id) {
         if(releasing_id) {
           let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+          window.location = customUrl
+        }
+      },
+      reroute(releasing_id,receiving_id) {
+        if(releasing_id)
+        {
+          let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+          window.location = customUrl
+        }
+        else{
+          let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
           window.location = customUrl
         }
       },
