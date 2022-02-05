@@ -4,12 +4,18 @@
     
     <div class="panel-body" style="background-color: #fff; border: 0;">
       <div class="row">
-        <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-weight: bold; font-size: 18px;">Daily Container In Report</span>
-          <div>
-            <button class="btn btn-primary" :disabled="generateLoad" @click="getContainerIn">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
-            <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
-            <button class="btn btn-danger" :disabled="printLoad" @click="printContainerIn">@{{ exportLoad === false ? 'Print' : 'Loading...' }}</button>
+        <div class="col-xs-12" style="margin-bottom: 0;">
+          <div class="row" style="margin: 0; width: 100%;">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin: 0;">
+              <span style="font-weight: bold; font-size: 18px;">Daily Container In Report</span>
+            </div>
+            <div id="wawex" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin: 0;">
+              <div>
+                <button class="btn btn-primary" :disabled="generateLoad" @click="getContainerIn">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
+                <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
+                <button class="btn btn-danger" :disabled="printLoad" @click="printContainerIn">@{{ exportLoad === false ? 'Print' : 'Loading...' }}</button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-xs-12" style="margin-bottom: 10px;">
@@ -119,61 +125,86 @@
           <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
           <span>Container Daily In Report</span>
       </div>
-      <table class="table table-bordered" style="margin-bottom: 0; color: black;">
-        <thead>
-          <tr>
-            <th style="text-align: left;" scope="col">Container No.</th>
-            <th scope="col">EIR</th>
-            <th scope="col">Size</th>
-            <th scope="col">Type</th>
-            <th scope="col">Client</th>
-            <th scope="col">Consignee</th>
-            <th scope="col">Plate No.</th>
-            <th scope="col">Trucker</th>
-            <th scope="col">Class</th>
-            <th scope="col">Date In</th>
-            <th scope="col">Time</th>
-            <th scope="col">Damages</th>
-            <th scope="col">Remarks</th>
-            <th scope="col">Date Time</th>
-          </tr>
-        </thead>
-        <tbody v-if="containerInList.length > 0">
-          <tr  v-for="(item, index) in containerInList" :key="index">
-            <td>@{{ item.container_no }}</td>
-            <td>@{{ item.container.eir_no_in ? item.container.eir_no_in.eir_no : '' }}</td>
-            <td>@{{ item.size_type ? item.size_type.size : '' }}</td>
-            <td>@{{ item.type ? item.type.code : '' }}</td>
-            <td>@{{ item.client ? item.client.code : ''  }}</td>
-            <td>@{{ item.consignee }}</td>
-            <td>@{{ item.plate_no }}</td>
-            <td>@{{ item.hauler }}</td>
-            <td>@{{ item.container_class ? item.container_class.class_code : '' }}</td>
-            <td class="viewItemOnClick" v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
-            <td>@{{ moment(item.inspected_date).format('hh:mm:ss A') }}</td>
-            <td>
-              <div v-for="(item,i) in item.damages" :key="i">
-		            @{{ i + 1 }}.) @{{ item.description }}
-	            </div>
-            </td>
-            <td>@{{ item.remarks }}</td>
-            <td>@{{ moment(item.inspected_date).format('YYYY-MM-DD hh:mm:ss A') }}</td>
-          </tr>
-        </tbody>
-        <tbody v-else>
-          <tr>
-            <td colspan="12" style="text-align: center;" v-if="tableLoad === true">
-              <div class="lds-facebook"><div></div><div></div><div></div></div><br>
-              <div>Fetching...</div>
-            </td>
-            <td colspan="12" style="text-align: center;" v-else>No Data Available</td>
-          </tr>
-        </tbody>
-      </table>
+      <div style="overflow: auto;">
+        <table class="table table-bordered" style="margin-bottom: 0; color: black;">
+          <thead>
+            <tr>
+              <th style="text-align: left;" scope="col">Container No.</th>
+              <th scope="col">EIR</th>
+              <th scope="col">Size</th>
+              <th scope="col">Type</th>
+              <th scope="col">Client</th>
+              <th scope="col">Consignee</th>
+              <th scope="col">Plate No.</th>
+              <th scope="col">Trucker</th>
+              <th scope="col">Class</th>
+              <th scope="col">Date In</th>
+              <th scope="col">Time</th>
+              <th scope="col">Damages</th>
+              <th scope="col">Remarks</th>
+              <th scope="col">Date Time</th>
+            </tr>
+          </thead>
+          <tbody v-if="containerInList.length > 0">
+            <tr  v-for="(item, index) in containerInList" :key="index">
+              <td>@{{ item.container_no }}</td>
+              <td>@{{ item.container.eir_no_in ? item.container.eir_no_in.eir_no : '' }}</td>
+              <td>@{{ item.size_type ? item.size_type.size : '' }}</td>
+              <td>@{{ item.type ? item.type.code : '' }}</td>
+              <td>@{{ item.client ? item.client.code : ''  }}</td>
+              <td>@{{ item.consignee }}</td>
+              <td>@{{ item.plate_no }}</td>
+              <td>@{{ item.hauler }}</td>
+              <td>@{{ item.container_class ? item.container_class.class_code : '' }}</td>
+              <td class="viewItemOnClick" v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
+              <td>@{{ moment(item.inspected_date).format('hh:mm:ss A') }}</td>
+              <td>
+                <div v-for="(item,i) in item.damages" :key="i">
+  		            @{{ i + 1 }}.) @{{ item.description }}
+  	            </div>
+              </td>
+              <td>@{{ item.remarks }}</td>
+              <td>@{{ moment(item.inspected_date).format('YYYY-MM-DD hh:mm:ss A') }}</td>
+            </tr>
+          </tbody>
+          <tbody v-else>
+            <tr>
+              <td colspan="14" style="text-align: center;" v-if="tableLoad === true">
+                <div class="lds-facebook"><div></div><div></div><div></div></div><br>
+                <div>Fetching...</div>
+              </td>
+              <td colspan="14" style="text-align: center;" v-else>No Data Available</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>  
   </div>
 
 </div>
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script>
+  function checkWidth(init) {
+
+    if ($(window).width() > 480) {
+      document.getElementById("wawex").classList.add('text-right');
+      $('input').addClass('text-right');
+    } else {
+      if (!init) {
+        document.getElementById("wawex").classList.remove('text-right');
+      }
+    }
+  }
+
+  $(document).ready(function() {
+    checkWidth(true);
+
+    $(window).resize(function() {
+      checkWidth(false);
+    });
+  });
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
