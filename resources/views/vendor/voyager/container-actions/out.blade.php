@@ -3,12 +3,18 @@
   <div class="panel panel-default" style="margin-top: 15px;">
     <div class="panel-body">
       <div class="row">
-        <div class="col-xs-12" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-weight: bold; font-size: 18px;">Daily Container Out Report</span>
-          <div>
-            <button class="btn btn-primary" :disabled="generateLoad" @click="getContainerOut">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
-            <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerOut">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
-            <button class="btn btn-danger" :disabled="printLoad" @click="printContainerOut">@{{ exportLoad === false ? 'Print' : 'Loading...' }}</button>
+        <div class="col-xs-12" style="margin-bottom: 0;">
+          <div class="row" style="margin: 0; width: 100%;">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin: 0;">
+              <span style="font-weight: bold; font-size: 18px;">Daily Container Out Report</span>
+            </div>
+            <div id="wawex" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin: 0;">
+              <div>
+                <button class="btn btn-primary" :disabled="generateLoad" @click="getContainerOut">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
+                <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerOut">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
+                <button class="btn btn-danger" :disabled="printLoad" @click="printContainerOut">@{{ exportLoad === false ? 'Print' : 'Loading...' }}</button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-xs-12" style="margin-bottom: 0;">
@@ -117,51 +123,76 @@
           <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
           <span>Container Daily Out Report</span>
       </div>
-      <table class="table table-bordered" style="margin-bottom: 0; color: black;">
-        <thead>
-          <tr>
-            <th style="text-align: left;" scope="col">Container No.</th>
-            <th scope="col">EIR</th>
-            <th scope="col">Size</th>
-            <th scope="col">Type</th>
-            <th scope="col">Client</th>
-            <th scope="col">Consignee</th>
-            <th scope="col">Plate No.</th>
-            <th scope="col">Trucker</th>
-            <th scope="col">Class</th>
-            <th scope="col">Remarks</th>
-            <th scope="col">Date Out</th>
-          </tr>
-        </thead>
-        <tbody v-if="containerOutList.length > 0">
-          <tr v-for="(item, index) in containerOutList" :key="index">
-            <td class="viewItemOnClick"  v-on:click="reroute(item.id)">@{{ item.container_no }}</td>
-            <td>@{{ item.container.eir_no_out ? item.container.eir_no_out.eir_no : '' }}</td>
-            <td>@{{ item.container.size_type ? item.container.size_type.size : '' }}</td>
-            <td>@{{ item.container.type ? item.container.type.code : '' }}</td>
-            <td>@{{ item.container.client ? item.container.client.code : ''  }}</td>
-            <td>@{{ item.consignee }}</td>
-            <td>@{{ item.plate_no }}</td>
-            <td>@{{ item.hauler }}</td>
-            <td>@{{ item.container.container_class ? item.container.container_class.class_name : '' }}</td>
-            <td>@{{ item.remarks }}</td>
-            <td class="viewItemOnClick"  v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
-          </tr>
-        </tbody>
-        <tbody v-else>
-          <tr>
-            <td colspan="14" style="text-align: center;" v-if="tableLoad === true">
-              <div class="lds-facebook"><div></div><div></div><div></div></div><br>
-              <div>Fetching...</div>
-            </td>
-            <td colspan="14" style="text-align: center;" v-else>No Data Available</td>
-          </tr>
-        </tbody>
-      </table>
+      <div style="overflow: auto;">
+        <table class="table table-bordered" style="margin-bottom: 0; color: black;">
+          <thead>
+            <tr>
+              <th style="text-align: left;" scope="col">Container No.</th>
+              <th scope="col">EIR</th>
+              <th scope="col">Size</th>
+              <th scope="col">Type</th>
+              <th scope="col">Client</th>
+              <th scope="col">Consignee</th>
+              <th scope="col">Plate No.</th>
+              <th scope="col">Trucker</th>
+              <th scope="col">Class</th>
+              <th scope="col">Remarks</th>
+              <th scope="col">Date Out</th>
+            </tr>
+          </thead>
+          <tbody v-if="containerOutList.length > 0">
+            <tr v-for="(item, index) in containerOutList" :key="index">
+              <td class="viewItemOnClick"  v-on:click="reroute(item.id)">@{{ item.container_no }}</td>
+              <td>@{{ item.container.eir_no_out ? item.container.eir_no_out.eir_no : '' }}</td>
+              <td>@{{ item.container.size_type ? item.container.size_type.size : '' }}</td>
+              <td>@{{ item.container.type ? item.container.type.code : '' }}</td>
+              <td>@{{ item.container.client ? item.container.client.code : ''  }}</td>
+              <td>@{{ item.consignee }}</td>
+              <td>@{{ item.plate_no }}</td>
+              <td>@{{ item.hauler }}</td>
+              <td>@{{ item.container.container_class ? item.container.container_class.class_name : '' }}</td>
+              <td>@{{ item.remarks }}</td>
+              <td class="viewItemOnClick"  v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
+            </tr>
+          </tbody>
+          <tbody v-else>
+            <tr>
+              <td colspan="14" style="text-align: center;" v-if="tableLoad === true">
+                <div class="lds-facebook"><div></div><div></div><div></div></div><br>
+                <div>Fetching...</div>
+              </td>
+              <td colspan="14" style="text-align: center;" v-else>No Data Available</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>  
   </div>
 
 </div>
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script>
+  function checkWidth(init) {
+
+    if ($(window).width() > 480) {
+      document.getElementById("wawex").classList.add('text-right');
+      $('input').addClass('text-right');
+    } else {
+      if (!init) {
+        document.getElementById("wawex").classList.remove('text-right');
+      }
+    }
+  }
+
+  $(document).ready(function() {
+    checkWidth(true);
+
+    $(window).resize(function() {
+      checkWidth(false);
+    });
+  });
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
