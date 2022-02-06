@@ -434,7 +434,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         if($option == 'IN')
         {
-            $data = Container::when($type != 'NA', function ($q) use($type){
+            $data = Container::when($type != 'NA', function ($q)  use($type){
                 return $q->where('type_id',$type);
             })->when($sizeType != 'NA', function ($q) use($sizeType){
                 return $q->where('size_type',$sizeType);
@@ -442,15 +442,15 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return $q->where('client_id',$client);
             })->when($class != 'NA', function ($q) use($class){
                 return $q->where('class',$class);
-            })->whereHas('receiving',function( $query ) use($date_in_from,$date_in_to,$status){
-                $query->when($date_in_from != 'NA', function ($q) use($date_in_from){
+            })->when($status != 'NA', function ($q) use($status){
+                return $q->where('status',$status);
+            })->whereHas('receiving',function( $query ) use($date_in_from,$date_in_to){
+                $query->when($date_in_from != null, function ($q) use($date_in_from){
                     return $q->whereDate('inspected_date','>=',$date_in_from);
-                })->when($date_in_to != 'NA', function ($q) use($date_in_to){
+                })->when($date_in_to != null, function ($q) use($date_in_to){
                     return $q->whereDate('inspected_date','<=',$date_in_to);
-                })->when($status != 'NA', function ($q) use($status){
-                    return $q->where('empty_loaded',$status);
                 });
-            })->whereNull('releasing_id')->with('client','sizeType','containerClass','type','receiving')->orderBy('container_no','ASC')->get();
+            })->whereNotNull('receiving_id')->whereNull('releasing_id')->with('client','sizeType','containerClass','type','receiving')->get();
     
             foreach($data as $res)
             {
@@ -466,7 +466,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         }
         else if($option == 'OUT')
         {
-            $data = Container::when($type != 'NA', function ($q) use($type){
+            $data = Container::when($type != 'NA', function ($q)  use($type){
                 return $q->where('type_id',$type);
             })->when($sizeType != 'NA', function ($q) use($sizeType){
                 return $q->where('size_type',$sizeType);
@@ -474,17 +474,15 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return $q->where('client_id',$client);
             })->when($class != 'NA', function ($q) use($class){
                 return $q->where('class',$class);
+            })->when($status != 'NA', function ($q) use($status){
+                return $q->where('status',$status);
             })->whereHas('releasing',function( $query ) use($date_out_from,$date_out_to){
-                $query->when($date_out_from != 'NA', function ($q) use($date_out_from){
+                $query->when($date_out_from != null, function ($q) use($date_out_from){
                     return $q->whereDate('inspected_date','>=',$date_out_from);
-                })->when($date_out_to != 'NA', function ($q) use($date_out_to){
+                })->when($date_out_to != null, function ($q) use($date_out_to){
                     return $q->whereDate('inspected_date','<=',$date_out_to);
                 });
-            })->whereHas('receiving',function( $query ) use($status){
-                $query->when($status != 'NA', function ($q) use($status){
-                    return $q->where('empty_loaded',$status);
-                });
-            })->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
+            })->whereNotNull('releasing_id')->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
     
             foreach($data as $res)
             {
@@ -501,7 +499,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         }
         else if($option == 'ALL')
         {
-            $data = Container::when($type != 'NA', function ($q) use($type){
+            $data = Container::when($type != 'NA', function ($q)  use($type){
                 return $q->where('type_id',$type);
             })->when($sizeType != 'NA', function ($q) use($sizeType){
                 return $q->where('size_type',$sizeType);
@@ -509,21 +507,11 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return $q->where('client_id',$client);
             })->when($class != 'NA', function ($q) use($class){
                 return $q->where('class',$class);
-            })->whereHas('receiving',function( $query ) use($date_in_from,$date_in_to,$status){
-                $query->when($date_in_from != 'NA', function ($q) use($date_in_from){
-                    return $q->whereDate('inspected_date','>=',$date_in_from);
-                })->when($date_in_to != 'NA', function ($q) use($date_in_to){
-                    return $q->whereDate('inspected_date','<=',$date_in_to);
-                })->when($status != 'NA', function ($q) use($status){
-                    return $q->where('empty_loaded',$status);
-                });
-            })->orWhereHas('releasing',function( $query ) use($date_out_from,$date_out_to){
-                $query->when($date_out_from != 'NA', function ($q) use($date_out_from){
-                    return $q->whereDate('inspected_date','>=',$date_out_from);
-                })->when($date_out_to != 'NA', function ($q) use($date_out_to){
-                    return $q->whereDate('inspected_date','<=',$date_out_to);
-                });
-            })->whereNotNull('receiving_id')->whereNotNull('releasing_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
+            })->when($status != 'NA', function ($q) use($status){
+                return $q->where('status',$status);
+            })->where(function($q) {
+                $q->has('receiving')->orHas('releasing');
+            })->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
     
             foreach($data as $res)
             {
@@ -532,7 +520,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             }
 
             $client_id = $client != 'NA'?$client:null;
-            $client = Client::where('id',$client_id)->first();
+            $client_details = Client::where('id',$client_id)->first();
             $count = count($data);
             $in = Container::when($type != 'NA', function ($q)  use($type){
                 return $q->where('type_id',$type);
@@ -542,15 +530,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return $q->where('client_id',$client);
             })->when($class != 'NA', function ($q) use($class){
                 return $q->where('class',$class);
-            })->whereHas('receiving',function( $query ) use($date_in_from,$date_in_to,$status){
-                $query->when($date_in_from != 'NA', function ($q) use($date_in_from){
-                    return $q->whereDate('inspected_date','>=',$date_in_from);
-                })->when($date_in_to != 'NA', function ($q) use($date_in_to){
-                    return $q->whereDate('inspected_date','<=',$date_in_to);
-                })->when($status != 'NA', function ($q) use($status){
-                    return $q->where('empty_loaded',$status);
-                });
-            })->whereNull('releasing_id')->count();
+            })->when($status != 'NA', function ($q) use($status){
+                return $q->where('status',$status);
+            })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
             $out = Container::when($type != 'NA', function ($q)  use($type){
                 return $q->where('type_id',$type);
             })->when($sizeType != 'NA', function ($q) use($sizeType){
@@ -559,18 +541,10 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return $q->where('client_id',$client);
             })->when($class != 'NA', function ($q) use($class){
                 return $q->where('class',$class);
-            })->whereHas('releasing',function( $query ) use($date_out_from,$date_out_to){
-                $query->when($date_out_from != 'NA', function ($q) use($date_out_from){
-                    return $q->whereDate('inspected_date','>=',$date_out_from);
-                })->when($date_out_to != 'NA', function ($q) use($date_out_to){
-                    return $q->whereDate('inspected_date','<=',$date_out_to);
-                });
-            })->whereHas('receiving',function( $query ) use($status){
-                $query->when($status != 'NA', function ($q) use($status){
-                    return $q->where('empty_loaded',$status);
-                });
-            })->whereNotNull('receiving_id')->count();
-            return view('print_aging')->with(compact('data','count','option','client','in','out'));
+            })->when($status != 'NA', function ($q) use($status){
+                return $q->where('status',$status);
+            })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+            return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
         }
        
     }
@@ -587,15 +561,15 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return $q->where('client_id',$request->client);
             })->when($request->class != 'NA', function ($q) use($request){
                 return $q->where('class',$request->class);
+            })->when($request->status != 'NA', function ($q) use($request){
+                return $q->where('status',$request->status);
             })->whereHas('receiving',function( $query ) use($request){
                 $query->when($request->date_in_from != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','>=',$request->date_in_from);
                 })->when($request->date_in_to != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','<=',$request->date_in_to);
-                })->when($request->status != 'NA', function ($q) use($request){
-                    return $q->where('empty_loaded',$request->status);
                 });
-            })->whereNull('releasing_id')->with('client','sizeType','containerClass','type','receiving')->orderBy('container_no','ASC')->get();
+            })->whereNotNull('receiving_id')->whereNull('releasing_id')->with('client','sizeType','containerClass','type','receiving')->get();
     
             foreach($data as $res)
             {
@@ -617,17 +591,15 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return $q->where('client_id',$request->client);
             })->when($request->class != 'NA', function ($q) use($request){
                 return $q->where('class',$request->class);
+            })->when($request->status != 'NA', function ($q) use($request){
+                return $q->where('status',$request->status);
             })->whereHas('releasing',function( $query ) use($request){
                 $query->when($request->date_out_from != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','>=',$request->date_out_from);
                 })->when($request->date_out_to != null, function ($q) use($request){
                     return $q->whereDate('inspected_date','<=',$request->date_out_to);
                 });
-            })->whereHas('receiving',function( $query ) use($request){
-                $query->when($request->status != 'NA', function ($q) use($request){
-                    return $q->where('empty_loaded',$request->status);
-                });
-            })->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
+            })->whereNotNull('releasing_id')->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
     
             foreach($data as $res)
             {
@@ -649,21 +621,11 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return $q->where('client_id',$request->client);
             })->when($request->class != 'NA', function ($q) use($request){
                 return $q->where('class',$request->class);
-            })->whereHas('receiving',function( $query ) use($request){
-                $query->when($request->date_in_from != null, function ($q) use($request){
-                    return $q->whereDate('inspected_date','>=',$request->date_in_from);
-                })->when($request->date_in_to != null, function ($q) use($request){
-                    return $q->whereDate('inspected_date','<=',$request->date_in_to);
-                })->when($request->status != 'NA', function ($q) use($request){
-                    return $q->where('empty_loaded',$request->status);
-                });
-            })->orWhereHas('releasing',function( $query ) use($request){
-                $query->when($request->date_out_from != null, function ($q) use($request){
-                    return $q->whereDate('inspected_date','>=',$request->date_out_from);
-                })->when($request->date_out_to != null, function ($q) use($request){
-                    return $q->whereDate('inspected_date','<=',$request->date_out_to);
-                });
-            })->whereNotNull('receiving_id')->whereNotNull('releasing_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
+            })->when($request->status != 'NA', function ($q) use($request){
+                return $q->where('status',$request->status);
+            })->where(function($q) {
+                $q->has('receiving')->orHas('releasing');
+            })->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
     
             foreach($data as $res)
             {
@@ -679,15 +641,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return $q->where('client_id',$request->client);
             })->when($request->class != 'NA', function ($q) use($request){
                 return $q->where('class',$request->class);
-            })->whereHas('receiving',function( $query ) use($request){
-                $query->when($request->date_in_from != null, function ($q) use($request){
-                    return $q->whereDate('inspected_date','>=',$request->date_in_from);
-                })->when($request->date_in_to != null, function ($q) use($request){
-                    return $q->whereDate('inspected_date','<=',$request->date_in_to);
-                })->when($request->status != 'NA', function ($q) use($request){
-                    return $q->where('empty_loaded',$request->status);
-                });
-            })->whereNull('releasing_id')->count();
+            })->when($request->status != 'NA', function ($q) use($request){
+                return $q->where('status',$request->status);
+            })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
             $out = Container::when($request->type != 'NA', function ($q)  use($request){
                 return $q->where('type_id',$request->type);
             })->when($request->sizeType != 'NA', function ($q) use($request){
@@ -696,17 +652,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return $q->where('client_id',$request->client);
             })->when($request->class != 'NA', function ($q) use($request){
                 return $q->where('class',$request->class);
-            })->whereHas('releasing',function( $query ) use($request){
-                $query->when($request->date_out_from != null, function ($q) use($request){
-                    return $q->whereDate('inspected_date','>=',$request->date_out_from);
-                })->when($request->date_out_to != null, function ($q) use($request){
-                    return $q->whereDate('inspected_date','<=',$request->date_out_to);
-                });
-            })->whereHas('receiving',function( $query ) use($request){
-                $query->when($request->status != 'NA', function ($q) use($request){
-                    return $q->where('empty_loaded',$request->status);
-                });
-            })->whereNotNull('receiving_id')->count();
+            })->when($request->status != 'NA', function ($q) use($request){
+                return $q->where('status',$request->status);
+            })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
             return response()->json(compact('data','van_count','in','out'));
         }
     }
@@ -724,6 +672,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 'receiving_id',
                 'releasing_id',
                 'type_id',
+                'status'
             );
             // $q->select(
             //     DB::raw('container_no'),

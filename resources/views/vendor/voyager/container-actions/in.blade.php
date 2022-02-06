@@ -147,7 +147,7 @@
           </thead>
           <tbody v-if="containerInList.length > 0">
             <tr  v-for="(item, index) in containerInList" :key="index">
-              <td>@{{ item.container_no }}</td>
+              <td class="viewItemOnClick" v-on:click="reroute(item.id)">@{{ item.container_no }}</td>
               <td>@{{ item.container.eir_no_in ? item.container.eir_no_in.eir_no : '' }}</td>
               <td>@{{ item.size_type ? item.size_type.size : '' }}</td>
               <td>@{{ item.type ? item.type.code : '' }}</td>
