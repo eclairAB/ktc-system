@@ -726,21 +726,25 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         return view('print_receiving')->with(compact('receiving', 'damages','eirNumber'));
     }
 
-    public function saveImages($record_type, $container_no)
+    public function saveImages($record_type, $container_id)
     {
+        $now = Carbon::now()->format('Y-m-d');
+        
         if($record_type == 'receiving')
         {
-            $path = storage_path() . '/app/public/uploads/receiving/container/' . $container_no . '/';
+            $path = storage_path() . '/app/public/uploads/receiving/container/' . $container_id . '/';
+            $receiving = ContainerReceiving::where('id',$container_id)->select('container_no')->first();
         }
         else
         {
-            $path = storage_path() . '/app/public/uploads/releasing/container/' . $container_no . '/';
+            $path = storage_path() . '/app/public/uploads/releasing/container/' . $container_id . '/';
+            $releasing = ContainerReleasing::where('id',$container_id)->select('container_no')->first();
         }
 
         array_map('unlink', glob($path."*.zip"));
 
         $zip = new ZipArchive;
-        $fileName = $record_type == 'receiving'?'container_in_photos.zip':'container_out_photos.zip';
+        $fileName = $record_type == 'receiving'?$receiving->container_no.'(IN)('.$now.').zip':$releasing->container_no.'(OUT)('.$now.').zip';
         if ($zip->open($path . $fileName, ZipArchive::CREATE) === TRUE) {
             $files = File::files($path);
             foreach ($files as $key => $value) {
