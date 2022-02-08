@@ -108,6 +108,7 @@ Route::group(['prefix' => 'admin'], function () {
     // fetch container inquiry
     Route::get('/container-inquiry/{container_no}',[QueriesController::class,"containerInquiry"]);
     Route::get('/container-inquiry/download/{record_type}/{container_no}',['as' => 'admin.container-inquiry.download', 'uses' => 'App\Http\Controllers\QueriesController@saveImages']);
+    Route::get('/container-images/download/{record_type}/{container_no}',[QueriesController::class,"saveImages"]);
 
     Route::delete('/delete/damage/{id}',[UpdateController::class,"ReceivingDamageDelete"]);    
 });
