@@ -40,6 +40,7 @@
                 <div id="containerReleasing">
                   <!--  -->
                   <div style="display: flex; justify-content: flex-end;" v-if="form.id">
+                    <button style="margin-right: 5px;" class="btn btn-danger" @click="downloadPath" v-if="form.container_photo.length > 0"><i class="voyager-download"></i> Download All Photos</button>
                     <button class="btn btn-success" @click="printData"><i class="voyager-file-text"></i> Print</button>
                   </div>
                   <div class="panel panel-bordered" style="margin-bottom: 5px;">
@@ -323,6 +324,11 @@
           loading: false
         },
         methods:{
+          async downloadPath () {
+            await axios.get(`/admin/container-images/download/releasing/${this.form.id}`).then(data => {
+              window.open(`${location.origin}/admin/container-images/download/releasing/${this.form.id}`, "_blank");
+            })
+          },
           async printData () {
             await axios.get(`/admin/get/print/releasing/${this.form.id}`).then(data => {
               let pasmo = data.data

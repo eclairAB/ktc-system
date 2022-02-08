@@ -728,12 +728,19 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function saveImages($record_type, $container_no)
     {
-        $path = storage_path() . '/app/public/uploads/receiving/container/' . $container_no . '/';
+        if($record_type == 'receiving')
+        {
+            $path = storage_path() . '/app/public/uploads/receiving/container/' . $container_no . '/';
+        }
+        else
+        {
+            $path = storage_path() . '/app/public/uploads/releasing/container/' . $container_no . '/';
+        }
 
         array_map('unlink', glob($path."*.zip"));
 
         $zip = new ZipArchive;
-        $fileName = 'container_photos.zip';
+        $fileName = $record_type == 'receiving'?'container_in_photos.zip':'container_out_photos.zip';
         if ($zip->open($path . $fileName, ZipArchive::CREATE) === TRUE) {
             $files = File::files($path);
             foreach ($files as $key => $value) {
