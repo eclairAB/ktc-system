@@ -125,7 +125,7 @@
           <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
           <span>Container Daily In Report</span>
       </div>
-      <div style="overflow: auto;">
+      <div style="overflow: auto; max-height: 500px;">
         <table class="table table-bordered" style="margin-bottom: 0; color: black;">
           <thead>
             <tr>
