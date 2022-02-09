@@ -48,7 +48,7 @@
       </div>
       <div style="width: 55%; display: flex; border: 1px solid; align-items: center; padding: 0 5px; font-size: 10px;">
         <div style="margin-right: 10px; display: flex; align-items:center;">  
-        @if($receiving_details->empty_loaded == "Empty")
+        @if($receiving_details->empty_loaded == "Empty" || $receiving_details->empty_loaded == "EMPTY")
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
             <!-- &#9744; --> <!-- Unchecked -->
@@ -246,7 +246,7 @@
       </div>
       <div style="width: 55%; display: flex; border: 1px solid; align-items: center; padding: 0 5px; font-size: 10px;">
         <div style="margin-right: 10px; display: flex; align-items:center;">  
-        @if($receiving_details->empty_loaded == "Empty")
+        @if($receiving_details->empty_loaded == "Empty" || $receiving_details->empty_loaded == "EMPTY")
         <div style="margin-right: 10px; display: flex; align-items:center;">
           <span style="font-size: 25px">
             <!-- &#9744; --> <!-- Unchecked -->
