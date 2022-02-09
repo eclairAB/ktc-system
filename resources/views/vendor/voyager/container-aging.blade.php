@@ -213,25 +213,25 @@
             </thead>
             <tbody v-if="containerAgingList.length > 0">
               <tr v-for="(item, index) in containerAgingList" :key="index">
-                <td class="viewItemOnClick"
+                <td style="white-space: nowrap" class="viewItemOnClick"
                 v-on:click="reroute(item.releasing_id,item.receiving_id)">@{{ item.container_no }}</td>
-                <td>@{{ item.size_type ? item.size_type.code : '' }}</td>
-                <td>@{{ item.type ? item.type.code : '' }}</td>
-                <td>@{{ item.receiving.empty_loaded }}</td>
-                <td>@{{ item.client ? item.client.code : '' }}</td>
-                <td
+                <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.code : '' }}</td>
+                <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
+                <td style="white-space: nowrap">@{{ item.receiving.empty_loaded }}</td>
+                <td style="white-space: nowrap">@{{ item.client ? item.client.code : '' }}</td>
+                <td style="white-space: nowrap"
                   class="viewItemOnClick"
                   v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}
                 </td>
-                <td>@{{ item.receiving ? item.receiving.consignee : '' }}</td>
-                <td
+                <td style="white-space: nowrap">@{{ item.receiving ? item.receiving.consignee : '' }}</td>
+                <td style="white-space: nowrap"
                   :class="item.releasing_id ? 'viewItemOnClick' : ''"
                   v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}
                 </td>
-                <td>@{{ item.releasing ? item.releasing.consignee : '' }}</td>
-                <td>@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
-                <td>@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
-                <td>@{{ item.total_no_days }}</td>
+                <td style="white-space: nowrap">@{{ item.releasing ? item.releasing.consignee : '' }}</td>
+                <td style="white-space: nowrap">@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
+                <td style="white-space: nowrap">@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
+                <td style="white-space: nowrap">@{{ item.total_no_days }}</td>
               </tr>
             </tbody>
             <tbody v-else>

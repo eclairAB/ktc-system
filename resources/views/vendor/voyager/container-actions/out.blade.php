@@ -142,17 +142,17 @@
           </thead>
           <tbody v-if="containerOutList.length > 0">
             <tr v-for="(item, index) in containerOutList" :key="index">
-              <td class="viewItemOnClick"  v-on:click="reroute(item.id)">@{{ item.container_no }}</td>
-              <td>@{{ item.container.eir_no_out ? item.container.eir_no_out.eir_no : '' }}</td>
-              <td>@{{ item.container.size_type ? item.container.size_type.size : '' }}</td>
-              <td>@{{ item.container.type ? item.container.type.code : '' }}</td>
-              <td>@{{ item.container.client ? item.container.client.code : ''  }}</td>
-              <td>@{{ item.consignee }}</td>
-              <td>@{{ item.plate_no }}</td>
-              <td>@{{ item.hauler }}</td>
-              <td>@{{ item.container.container_class ? item.container.container_class.class_name : '' }}</td>
-              <td>@{{ item.remarks }}</td>
-              <td class="viewItemOnClick"  v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
+              <td style="white-space: nowrap" class="viewItemOnClick"  v-on:click="reroute(item.id)">@{{ item.container_no }}</td>
+              <td style="white-space: nowrap">@{{ item.container.eir_no_out ? item.container.eir_no_out.eir_no : '' }}</td>
+              <td style="white-space: nowrap">@{{ item.container.size_type ? item.container.size_type.size : '' }}</td>
+              <td style="white-space: nowrap">@{{ item.container.type ? item.container.type.code : '' }}</td>
+              <td style="white-space: nowrap">@{{ item.container.client ? item.container.client.code : ''  }}</td>
+              <td style="white-space: nowrap">@{{ item.consignee }}</td>
+              <td style="white-space: nowrap">@{{ item.plate_no }}</td>
+              <td style="white-space: nowrap">@{{ item.hauler }}</td>
+              <td style="white-space: nowrap">@{{ item.container.container_class ? item.container.container_class.class_name : '' }}</td>
+              <td style="white-space: nowrap">@{{ item.remarks }}</td>
+              <td style="white-space: nowrap" class="viewItemOnClick"  v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
             </tr>
           </tbody>
           <tbody v-else>

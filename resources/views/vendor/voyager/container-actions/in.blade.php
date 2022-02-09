@@ -147,24 +147,24 @@
           </thead>
           <tbody v-if="containerInList.length > 0">
             <tr  v-for="(item, index) in containerInList" :key="index">
-              <td class="viewItemOnClick" v-on:click="reroute(item.id)">@{{ item.container_no }}</td>
-              <td>@{{ item.container.eir_no_in ? item.container.eir_no_in.eir_no : '' }}</td>
-              <td>@{{ item.size_type ? item.size_type.size : '' }}</td>
-              <td>@{{ item.type ? item.type.code : '' }}</td>
-              <td>@{{ item.client ? item.client.code : ''  }}</td>
-              <td>@{{ item.consignee }}</td>
-              <td>@{{ item.plate_no }}</td>
-              <td>@{{ item.hauler }}</td>
-              <td>@{{ item.container_class ? item.container_class.class_code : '' }}</td>
-              <td class="viewItemOnClick" v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
-              <td>@{{ moment(item.inspected_date).format('hh:mm:ss A') }}</td>
-              <td>
+              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.id)">@{{ item.container_no }}</td>
+              <td style="white-space: nowrap">@{{ item.container.eir_no_in ? item.container.eir_no_in.eir_no : '' }}</td>
+              <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.size : '' }}</td>
+              <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
+              <td style="white-space: nowrap">@{{ item.client ? item.client.code : ''  }}</td>
+              <td style="white-space: nowrap">@{{ item.consignee }}</td>
+              <td style="white-space: nowrap">@{{ item.plate_no }}</td>
+              <td style="white-space: nowrap">@{{ item.hauler }}</td>
+              <td style="white-space: nowrap">@{{ item.container_class ? item.container_class.class_code : '' }}</td>
+              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
+              <td style="white-space: nowrap">@{{ moment(item.inspected_date).format('hh:mm:ss A') }}</td>
+              <td style="white-space: nowrap">
                 <div v-for="(item,i) in item.damages" :key="i">
   		            @{{ i + 1 }}.) @{{ item.description }}
   	            </div>
               </td>
-              <td>@{{ item.remarks }}</td>
-              <td>@{{ moment(item.inspected_date).format('YYYY-MM-DD hh:mm:ss A') }}</td>
+              <td style="white-space: nowrap">@{{ item.remarks }}</td>
+              <td style="white-space: nowrap">@{{ moment(item.inspected_date).format('YYYY-MM-DD hh:mm:ss A') }}</td>
             </tr>
           </tbody>
           <tbody v-else>
