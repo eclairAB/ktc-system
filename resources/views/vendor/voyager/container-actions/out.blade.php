@@ -132,12 +132,14 @@
               <th scope="col">Size</th>
               <th scope="col">Type</th>
               <th scope="col">Client</th>
+              <th scope="col">Date Time</th>
+              <th scope="col">Class</th>
+              <th scope="col">Remarks</th>
               <th scope="col">Consignee</th>
               <th scope="col">Plate No.</th>
               <th scope="col">Trucker</th>
-              <th scope="col">Class</th>
-              <th scope="col">Remarks</th>
               <th scope="col">Date Out</th>
+              <th scope="col">Time</th>
             </tr>
           </thead>
           <tbody v-if="containerOutList.length > 0">
@@ -147,12 +149,14 @@
               <td style="white-space: nowrap">@{{ item.container.size_type ? item.container.size_type.size : '' }}</td>
               <td style="white-space: nowrap">@{{ item.container.type ? item.container.type.code : '' }}</td>
               <td style="white-space: nowrap">@{{ item.container.client ? item.container.client.code : ''  }}</td>
+              <td style="white-space: nowrap">@{{ moment(item.inspected_date).format('YYYY-MM-DD hh:mm:ss A') }}</td>
+              <td style="white-space: nowrap">@{{ item.container.container_class ? item.container.container_class.class_name : '' }}</td>
+              <td style="white-space: nowrap">@{{ item.remarks }}</td>
               <td style="white-space: nowrap">@{{ item.consignee }}</td>
               <td style="white-space: nowrap">@{{ item.plate_no }}</td>
               <td style="white-space: nowrap">@{{ item.hauler }}</td>
-              <td style="white-space: nowrap">@{{ item.container.container_class ? item.container.container_class.class_name : '' }}</td>
-              <td style="white-space: nowrap">@{{ item.remarks }}</td>
               <td style="white-space: nowrap" class="viewItemOnClick"  v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
+              <td style="white-space: nowrap">@{{ moment(item.inspected_date).format('hh:mm:ss A') }}</td>
             </tr>
           </tbody>
           <tbody v-else>
