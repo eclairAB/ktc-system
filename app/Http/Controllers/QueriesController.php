@@ -67,9 +67,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getClientByDateIn(Request $request)
     {
-        $recs = ContainerReceiving::when($request->from, function ($q) use ($request){
+        $recs = ContainerReceiving::when($request->from != 'NA', function ($q) use ($request){
             return $q->whereDate('inspected_date','>=',$request->from);
-        })->when($request->to, function ($q) use ($request){
+        })->when($request->to != 'NA', function ($q) use ($request){
             return $q->whereDate('inspected_date','<=',$request->to);
         })->pluck('client_id');
 
@@ -79,9 +79,9 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getClientByDateOut(Request $request)
     {
-        $rels = ContainerReleasing::when($request->from, function ($q) use ($request){
+        $rels = ContainerReleasing::when($request->from != 'NA', function ($q) use ($request){
             return $q->whereDate('inspected_date','>=',$request->from);
-        })->when($request->to, function ($q) use ($request){
+        })->when($request->to != 'NA', function ($q) use ($request){
             return $q->whereDate('inspected_date','<=',$request->to);
         })->pluck('id');
         $conts = Container::whereIn('releasing_id',$rels)->pluck('client_id');
@@ -277,7 +277,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function getDailyIn(Request $request)
     {
-        $data = ContainerReceiving::when($request->type != 'NA', function ($q) use($request){
+        $data = Container::when($request->type != 'NA', function ($q)  use($request){
             return $q->where('type_id',$request->type);
         })->when($request->sizeType != 'NA', function ($q) use($request){
             return $q->where('size_type',$request->sizeType);
@@ -286,75 +286,43 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         })->when($request->class != 'NA', function ($q) use($request){
             return $q->where('class',$request->class);
         })->when($request->status != 'NA', function ($q) use($request){
-            return $q->where('empty_loaded',$request->status);
-        })->when($request->from != 'NA', function ($q) use($request){
-            return $q->whereDate('inspected_date','>=',$request->from);
-        })->when($request->to != 'NA', function ($q) use($request){
-            return $q->whereDate('inspected_date','<=',$request->to);
-        })->whereHas('container',function( $query ) use($request){
-            $query->whereHas('receiving',function( $query ) use($request){
-                $query->when($request->from != 'NA', function ($q) use($request){
-                    return $q->whereDate('inspected_date','>=',$request->from);
-                })->when($request->to != 'NA', function ($q) use($request){
-                    return $q->whereDate('inspected_date','<=',$request->to);
-                })->when($request->status != 'NA', function ($q) use($request){
-                    return $q->where('empty_loaded',$request->status);
-                });
-            })->when($request->type != 'NA', function ($q) use($request){
-                return $q->where('type_id',$request->type);
-            })->when($request->sizeType != 'NA', function ($q) use($request){
-                return $q->where('size_type',$request->sizeType);
-            })->when($request->client != 'NA', function ($q) use($request){
-                return $q->where('client_id',$request->client);
-            })->when($request->class != 'NA', function ($q) use($request){
-                return $q->where('class',$request->class);
+            return $q->where('status',$request->status);
+        })->whereHas('receiving',function( $query ) use($request){
+            $query->when($request->from != 'NA', function ($q) use($request){
+                return $q->whereDate('inspected_date','>=',$request->from);
+            })->when($request->to != 'NA', function ($q) use($request){
+                return $q->whereDate('inspected_date','<=',$request->to);
             });
-        })->with('client','sizeType','containerClass','container.eirNoIn','type','damages')->orderBy('container_no','ASC')->get();
+        })->whereNotNull('receiving_id')->whereNull('releasing_id')->with('client','sizeType','containerClass','eirNoIn','type','receiving.damages')->orderBy('container_no','ASC')->get();
         return $data;
     }
 
     public function getDailyOut(Request $request)
     {
-        $data = ContainerReleasing::when($request->from != 'NA', function ($q) use($request){
-            return $q->whereDate('inspected_date','>=',$request->from);
-        })->when($request->to != 'NA', function ($q) use($request){
-            return $q->whereDate('inspected_date','<=',$request->to);
-        })->whereHas('container',function( $query ) use($request){
-            $query->whereHas('releasing',function( $query ) use($request){
-                $query->when($request->from != 'NA', function ($q) use($request){
-                    return $q->whereDate('inspected_date','>=',$request->from);
-                })->when($request->to != 'NA', function ($q) use($request){
-                    return $q->whereDate('inspected_date','<=',$request->to);
-                });
-            })->when($request->type != 'NA', function ($q) use($request){
-                return $q->where('type_id',$request->type);
-            })->when($request->sizeType != 'NA', function ($q) use($request){
-                return $q->where('size_type',$request->sizeType);
-            })->when($request->client != 'NA', function ($q) use($request){
-                return $q->where('client_id',$request->client);
-            })->when($request->class != 'NA', function ($q) use($request){
-                return $q->where('class',$request->class);
+        $data = Container::when($request->type != 'NA', function ($q)  use($request){
+            return $q->where('type_id',$request->type);
+        })->when($request->sizeType != 'NA', function ($q) use($request){
+            return $q->where('size_type',$request->sizeType);
+        })->when($request->client != 'NA', function ($q) use($request){
+            return $q->where('client_id',$request->client);
+        })->when($request->class != 'NA', function ($q) use($request){
+            return $q->where('class',$request->class);
+        })->when($request->status != 'NA', function ($q) use($request){
+            return $q->where('status',$request->status);
+        })->whereHas('releasing',function( $query ) use($request){
+            $query->when($request->from != 'NA', function ($q) use($request){
+                return $q->whereDate('inspected_date','>=',$request->from);
+            })->when($request->to != 'NA', function ($q) use($request){
+                return $q->whereDate('inspected_date','<=',$request->to);
             });
-        })->whereHas('receiving',function( $query ) use($request){
-            $query->when($request->status != 'NA', function ($q) use($request){
-                return $q->where('empty_loaded',$request->status);
-            })->when($request->type != 'NA', function ($q) use($request){
-                return $q->where('type_id',$request->type);
-            })->when($request->sizeType != 'NA', function ($q) use($request){
-                return $q->where('size_type',$request->sizeType);
-            })->when($request->client != 'NA', function ($q) use($request){
-                return $q->where('client_id',$request->client);
-            })->when($request->class != 'NA', function ($q) use($request){
-                return $q->where('class',$request->class);
-            });
-        })->with('container.client','container.eirNoOut','container.sizeType','container.type','container.containerClass','receiving')->orderBy('container_no','ASC')->get();
+        })->whereNotNull('releasing_id')->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing','eirNoOut')->orderBy('container_no','ASC')->get();
 
         return $data;
     }
 
     public function prntDailyIn($type,$sizeType,$client,$class,$status,$from,$to)
     {
-        $data = ContainerReceiving::when($type != 'NA', function ($q) use($type){
+        $data = Container::when($type != 'NA', function ($q)  use($type){
             return $q->where('type_id',$type);
         })->when($sizeType != 'NA', function ($q) use($sizeType){
             return $q->where('size_type',$sizeType);
@@ -363,69 +331,37 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         })->when($class != 'NA', function ($q) use($class){
             return $q->where('class',$class);
         })->when($status != 'NA', function ($q) use($status){
-            return $q->where('empty_loaded',$status);
-        })->when($from != 'NA', function ($q) use($from){
-            return $q->whereDate('inspected_date','>=',$from);
-        })->when($to != 'NA', function ($q) use($to){
-            return $q->whereDate('inspected_date','<=',$to);
-        })->whereHas('container',function( $query ) use($type,$client,$sizeType,$from,$to,$status,$class){
-            $query->whereHas('receiving',function( $query ) use($from,$to,$status){
-                $query->when($from != 'NA', function ($q) use($from){
-                    return $q->whereDate('inspected_date','>=',$from);
-                })->when($to != 'NA', function ($q) use($to){
-                    return $q->whereDate('inspected_date','<=',$to);
-                })->when($status != 'NA', function ($q) use($status){
-                    return $q->where('empty_loaded',$status);
-                });
-            })->when($type != 'NA', function ($q) use($type){
-                return $q->where('type_id',$type);
-            })->when($sizeType != 'NA', function ($q) use($sizeType){
-                return $q->where('size_type',$sizeType);
-            })->when($client != 'NA', function ($q) use($client){
-                return $q->where('client_id',$client);
-            })->when($class != 'NA', function ($q) use($class){
-                return $q->where('class',$class);
+            return $q->where('status',$status);
+        })->whereHas('receiving',function( $query ) use($from,$to){
+            $query->when($from != 'NA', function ($q) use($from){
+                return $q->whereDate('inspected_date','>=',$from);
+            })->when($to != 'NA', function ($q) use($to){
+                return $q->whereDate('inspected_date','<=',$to);
             });
-        })->with('client','sizeType','containerClass','container.eirNoIn','type','damages')->orderBy('container_no','ASC')->get();
+        })->whereNotNull('receiving_id')->whereNull('releasing_id')->with('client','sizeType','containerClass','eirNoIn','type','receiving.damages')->orderBy('container_no','ASC')->get();
 
         return view('print_container_in')->with(compact('data'));
     }
 
     public function prntDailyOut($type,$sizeType,$client,$class,$status,$from,$to)
     {
-        $data = ContainerReleasing::when($from != 'NA', function ($q) use($from){
-            return $q->whereDate('inspected_date','>=',$from);
-        })->when($to != 'NA', function ($q) use($to){
-            return $q->whereDate('inspected_date','<=',$to);
-        })->whereHas('container',function( $query ) use($type,$client,$sizeType,$from,$to,$status,$class){
-            $query->whereHas('releasing',function( $query ) use($from,$to){
-                $query->when($from != 'NA', function ($q) use($from){
-                    return $q->whereDate('inspected_date','>=',$from);
-                })->when($to != 'NA', function ($q) use($to){
-                    return $q->whereDate('inspected_date','<=',$to);
-                });
-            })->when($type != 'NA', function ($q) use($type){
-                return $q->where('type_id',$type);
-            })->when($sizeType != 'NA', function ($q) use($sizeType){
-                return $q->where('size_type',$sizeType);
-            })->when($client != 'NA', function ($q) use($client){
-                return $q->where('client_id',$client);
-            })->when($class != 'NA', function ($q) use($class){
-                return $q->where('class',$class);
+        $data = Container::when($type != 'NA', function ($q)  use($type){
+            return $q->where('type_id',$type);
+        })->when($sizeType != 'NA', function ($q) use($sizeType){
+            return $q->where('size_type',$sizeType);
+        })->when($client != 'NA', function ($q) use($client){
+            return $q->where('client_id',$client);
+        })->when($class != 'NA', function ($q) use($class){
+            return $q->where('class',$class);
+        })->when($status != 'NA', function ($q) use($status){
+            return $q->where('status',$status);
+        })->whereHas('releasing',function( $query ) use($from,$to){
+            $query->when($from != 'NA', function ($q) use($from){
+                return $q->whereDate('inspected_date','>=',$from);
+            })->when($to != 'NA', function ($q) use($to){
+                return $q->whereDate('inspected_date','<=',$to);
             });
-        })->whereHas('receiving',function( $query ) use($type,$client,$sizeType,$status,$class){
-            $query->when($status != 'NA', function ($q) use($status){
-                return $q->where('empty_loaded',$status);
-            })->when($type != 'NA', function ($q) use($type){
-                return $q->where('type_id',$type);
-            })->when($sizeType != 'NA', function ($q) use($sizeType){
-                return $q->where('size_type',$sizeType);
-            })->when($client != 'NA', function ($q) use($client){
-                return $q->where('client_id',$client);
-            })->when($class != 'NA', function ($q) use($class){
-                return $q->where('class',$class);
-            });
-        })->with('container.client','container.eirNoOut','container.sizeType','container.type','container.containerClass','receiving')->orderBy('container_no','ASC')->get();
+        })->whereNotNull('releasing_id')->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing','eirNoOut')->orderBy('container_no','ASC')->get();
 
         return view('print_container_out')->with(compact('data'));
     }
