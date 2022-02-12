@@ -35,7 +35,7 @@
                 :required="true"
                 @input="getClient">
               </vuejs-datepicker>
-              <label for="from" class="form-control-placeholder"> Date In <span style="color: red;"> *</span></label>
+              <label for="from" class="form-control-placeholder"> Date In</span></label>
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -49,7 +49,7 @@
                 :required="true"
                 @input="getClient">
               </vuejs-datepicker>
-              <label for="to" class="form-control-placeholder"> Date To <span style="color: red;"> *</span></label>
+              <label for="to" class="form-control-placeholder"> Date To</span></label>
             </div>
             
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
@@ -148,14 +148,14 @@
           <tbody v-if="containerInList.length > 0">
             <tr  v-for="(item, index) in containerInList" :key="index">
               <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.id)">@{{ item.container_no }}</td>
-              <td style="white-space: nowrap">@{{ item.container.eir_no_in ? item.container.eir_no_in.eir_no : '' }}</td>
+              <td style="white-space: nowrap">@{{ item.eir_no_in ? item.eir_no_in.eir_no : '' }}</td>
               <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.size : '' }}</td>
               <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
               <td style="white-space: nowrap">@{{ item.client ? item.client.code : ''  }}</td>
-              <td style="white-space: nowrap">@{{ moment(item.inspected_date).format('YYYY-MM-DD hh:mm:ss A') }}</td>
+              <td style="white-space: nowrap">@{{ moment(item.receiving.inspected_date).format('YYYY-MM-DD hh:mm:ss A') }}</td>
               <td style="white-space: nowrap">@{{ item.container_class ? item.container_class.class_code : '' }}</td>
               <td style="white-space: nowrap">
-                <div v-for="(item,i) in item.damages" :key="i">
+                <div v-for="(item,i) in item.receiving.damages" :key="i">
   		            @{{ i + 1 }}.) @{{ item.description }}
   	            </div>
               </td>
@@ -163,8 +163,8 @@
               <td style="white-space: nowrap">@{{ item.consignee }}</td>
               <td style="white-space: nowrap">@{{ item.plate_no }}</td>
               <td style="white-space: nowrap">@{{ item.hauler }}</td>
-              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.id)">@{{ moment(item.inspected_date).format('YYYY-MM-DD') }}</td>
-              <td style="white-space: nowrap">@{{ moment(item.inspected_date).format('hh:mm:ss A') }}</td>
+              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.id)">@{{ moment(item.receiving.inspected_date).format('YYYY-MM-DD') }}</td>
+              <td style="white-space: nowrap">@{{ moment(item.receiving.inspected_date).format('hh:mm:ss A') }}</td>
             </tr>
           </tbody>
           <tbody v-else>
@@ -255,8 +255,8 @@
           client: this.form.client === undefined || null ? 'NA' : this.form.client,
           class: this.form.class === undefined || null ? 'NA' : this.form.class,
           status: this.form.status === undefined || null ? 'NA' : this.form.status,
-          from: moment(this.form.from).format('YYYY-MM-DD'),
-          to: moment(this.form.to).format('YYYY-MM-DD')
+          from: this.form.from === undefined || this.form.from === null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
+          to: this.form.to === undefined || this.form.to === null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
         }
         await axios.get(`/admin/get/print/daily_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`).then(data => {
           let pasmo = data.data
@@ -287,8 +287,8 @@
         if (this.form.from && this.form.to) {
           let search = {
             keyword: '',
-            from: moment(this.form.from).format('YYYY-MM-DD'),
-            to: moment(this.form.to).format('YYYY-MM-DD'),
+            from: this.form.from === undefined || this.form.from === null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
+            to: this.form.to === undefined || this.form.to === null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
           }
           await axios.get(`/admin/get/client/dateIn?keyword=${search.keyword}&from=${search.from}&to=${search.to}`, search).then( data => {
             this.clientList = data.data
@@ -296,9 +296,20 @@
             console.log('error: ', error)
           })
         }
+        else
+        {
+          let search = {
+            keyword: '',
+          }
+          await axios.get(`/admin/get/clients?keyword=${search.keyword}`, search).then( data => {
+            this.clientList = data.data
+          }).catch(error => {
+            console.log('error: ', error)
+          })
+        }
       },
       async getContainerIn () {
-        if (this.form.from && this.form.to) {
+        // if (this.form.from && this.form.to) {
           this.generateLoad = true
           let payload = {
             type: this.form.type === undefined || null ? 'NA' : this.form.type,
@@ -306,8 +317,8 @@
             client: this.form.client === undefined || null ? 'NA' : this.form.client,
             class: this.form.class === undefined || null ? 'NA' : this.form.class,
             status: this.form.status === undefined || null ? 'NA' : this.form.status,
-            from: moment(this.form.from).format('YYYY-MM-DD'),
-            to: moment(this.form.to).format('YYYY-MM-DD')
+            from: this.form.from === undefined || this.form.from === null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
+            to: this.form.to === undefined || this.form.to === null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
           }
           await axios.post(`/admin/get/daily_in`, payload).then(data => {
             this.generateLoad = false
@@ -323,16 +334,16 @@
             this.generateLoad = false
             console.log(error)
           })
-        } else {
-          Swal.fire({
-            title: '',
-            text: 'Please fill out the required fields!',
-            icon: 'error',
-          })
-        }
+        // } else {
+        //   Swal.fire({
+        //     title: '',
+        //     text: 'Please fill out the required fields!',
+        //     icon: 'error',
+        //   })
+        // }
       },
       async exportContainerIn () {
-        if (this.form.from && this.form.to) {
+        // if (this.form.from && this.form.to) {
           this.exportLoad = true
           let payload = {
             type: this.form.type === undefined || null ? 'NA' : this.form.type,
@@ -340,8 +351,8 @@
             client: this.form.client === undefined || null ? 'NA' : this.form.client,
             class: this.form.class === undefined || null ? 'NA' : this.form.class,
             status: this.form.status === undefined || null ? 'NA' : this.form.status,
-            from: moment(this.form.from).format('YYYY-MM-DD'),
-            to: moment(this.form.to).format('YYYY-MM-DD')
+            from: this.form.from === undefined || this.form.from === null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
+            to: this.form.to === undefined || this.form.to === null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
           }
           await axios.get(`/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`).then(data => {
             this.exportLoad = false
@@ -350,13 +361,13 @@
             this.exportLoad = false
             console.log(error)
           })
-        } else {
-          Swal.fire({
-            title: '',
-            text: 'Please fill out the required fields!',
-            icon: 'error',
-          })
-        }
+        // } else {
+        //   Swal.fire({
+        //     title: '',
+        //     text: 'Please fill out the required fields!',
+        //     icon: 'error',
+        //   })
+        // }
       },
       async getSize () {
         let search = {
@@ -422,6 +433,7 @@
       this.getContainerNo()
       this.getClass()
       this.getEmptyLoaded()
+      this.getClient()
     }
   })
 

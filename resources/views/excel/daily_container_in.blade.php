@@ -20,15 +20,15 @@
         @foreach($data as $key => $item)
         <tr>
           <td>{{ $item->container_no }}</td>
-          <td>{{ $item->container->eirNoIn->eir_no??'' }}</td>
+          <td>{{ $item->eirNoIn->eir_no??'' }}</td>
           <td>{{ ' ' }}</td>
           <td>{{ $item->sizeType->size??'' }}</td>
           <td>{{ $item->type->code??'' }}</td>
           <td>{{ $item->client->code??'' }}</td>
-          <td>{{ Carbon\Carbon::parse($item->inspected_date)->format('Y-m-d h:i:s A') }}</td>
+          <td>{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d h:i:s A') }}</td>
           <td>{{ $item->containerClass->class_code??'' }}</td>
           <td>
-              @foreach($item->damages as $key=> $dmg)
+              @foreach($item->receiving->damages as $key=> $dmg)
               <div>
                 {{ $key + 1 }}.) {{ $dmg->description }}<br>
               </div>
@@ -38,8 +38,8 @@
           <td>{{ $item->consignee }}</td>
           <td>{{ $item->plate_no }}</td>
           <td>{{ $item->hauler }}</td>
-          <td>{{ Carbon\Carbon::parse($item->inspected_date)->format('Y-m-d') }}</td>
-          <td>{{ Carbon\Carbon::parse($item->inspected_date)->format('h:i:s A') }}</td>
+          <td>{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}</td>
+          <td>{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('h:i:s A') }}</td>
         </tr>
       @endforeach
 </table>
