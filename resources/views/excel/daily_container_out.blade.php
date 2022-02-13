@@ -26,10 +26,10 @@
           <td>{{ $item->client->code??'' }}</td>
           <td>{{ Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d h:i:s A') }}</td>
           <td>{{ $item->containerClass->class_code??'' }}</td>
-          <td>{{ $item->remarks }}</td>
-          <td>{{ $item->consignee }}</td>
-          <td>{{ $item->plate_no }}</td>
-          <td>{{ $item->hauler }}</td>
+          <td>{{ $item->releasing->remarks }}</td>
+          <td>{{ $item->releasing->consignee }}</td>
+          <td>{{ $item->releasing->plate_no }}</td>
+          <td>{{ $item->releasing->hauler }}</td>
           <td>{{ Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}</td>
           <td>{{ Carbon\Carbon::parse($item->releasing->inspected_date)->format('h:i:s A') }}</td>
         </tr>
