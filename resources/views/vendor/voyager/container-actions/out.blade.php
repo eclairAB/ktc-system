@@ -144,7 +144,7 @@
           </thead>
           <tbody v-if="containerOutList.length > 0">
             <tr v-for="(item, index) in containerOutList" :key="index">
-              <td style="white-space: nowrap" class="viewItemOnClick"  v-on:click="reroute(item.id)">@{{ item.container_no }}</td>
+              <td style="white-space: nowrap" class="viewItemOnClick"  v-on:click="reroute(item.releasing.id)">@{{ item.container_no }}</td>
               <td style="white-space: nowrap">@{{ item.eir_no_out ? item.eir_no_out.eir_no : '' }}</td>
               <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.size : '' }}</td>
               <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
@@ -155,7 +155,7 @@
               <td style="white-space: nowrap">@{{ item.releasing.consignee }}</td>
               <td style="white-space: nowrap">@{{ item.releasing.plate_no }}</td>
               <td style="white-space: nowrap">@{{ item.releasing.hauler }}</td>
-              <td style="white-space: nowrap" class="viewItemOnClick"  v-on:click="reroute(item.id)">@{{ moment(item.releasing.inspected_date).format('YYYY-MM-DD') }}</td>
+              <td style="white-space: nowrap" class="viewItemOnClick"  v-on:click="reroute(item.releasing.id)">@{{ moment(item.releasing.inspected_date).format('YYYY-MM-DD') }}</td>
               <td style="white-space: nowrap">@{{ moment(item.releasing.inspected_date).format('hh:mm:ss A') }}</td>
             </tr>
           </tbody>
