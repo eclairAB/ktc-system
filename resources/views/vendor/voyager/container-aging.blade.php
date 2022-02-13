@@ -202,6 +202,7 @@
                 <th scope="col" style="white-space: nowrap">Type</th>
                 <th scope="col" style="white-space: nowrap">Status</th>
                 <th scope="col" style="white-space: nowrap">Client</th>
+                <th scope="col" style="white-space: nowrap">Class</th>
                 <th scope="col" style="white-space: nowrap">Date In</th>
                 <th scope="col" style="white-space: nowrap">Consignee</th>
                 <th scope="col" style="white-space: nowrap">Date Out</th>
@@ -217,8 +218,9 @@
                 v-on:click="reroute(item.releasing_id,item.receiving_id)">@{{ item.container_no }}</td>
                 <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.code : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
-                <td style="white-space: nowrap">@{{ item.receiving.empty_loaded }}</td>
+                <td style="white-space: nowrap">@{{ item.status }}</td>
                 <td style="white-space: nowrap">@{{ item.client ? item.client.code : '' }}</td>
+                <td style="white-space: nowrap">@{{ item.container_class ? item.container_class.class_code : '' }}</td>
                 <td style="white-space: nowrap"
                   class="viewItemOnClick"
                   v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}

@@ -151,10 +151,10 @@
               <td style="white-space: nowrap">@{{ item.client ? item.client.code : ''  }}</td>
               <td style="white-space: nowrap">@{{ moment(item.releasing.inspected_date).format('YYYY-MM-DD hh:mm:ss A') }}</td>
               <td style="white-space: nowrap">@{{ item.container_class ? item.container_class.class_name : '' }}</td>
-              <td style="white-space: nowrap">@{{ item.remarks }}</td>
-              <td style="white-space: nowrap">@{{ item.consignee }}</td>
-              <td style="white-space: nowrap">@{{ item.plate_no }}</td>
-              <td style="white-space: nowrap">@{{ item.hauler }}</td>
+              <td style="white-space: nowrap">@{{ item.releasing.remarks }}</td>
+              <td style="white-space: nowrap">@{{ item.releasing.consignee }}</td>
+              <td style="white-space: nowrap">@{{ item.releasing.plate_no }}</td>
+              <td style="white-space: nowrap">@{{ item.releasing.hauler }}</td>
               <td style="white-space: nowrap" class="viewItemOnClick"  v-on:click="reroute(item.id)">@{{ moment(item.releasing.inspected_date).format('YYYY-MM-DD') }}</td>
               <td style="white-space: nowrap">@{{ moment(item.releasing.inspected_date).format('hh:mm:ss A') }}</td>
             </tr>

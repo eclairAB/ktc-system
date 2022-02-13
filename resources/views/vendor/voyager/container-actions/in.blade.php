@@ -159,10 +159,10 @@
   		            @{{ i + 1 }}.) @{{ item.description }}
   	            </div>
               </td>
-              <td style="white-space: nowrap">@{{ item.remarks }}</td>
-              <td style="white-space: nowrap">@{{ item.consignee }}</td>
-              <td style="white-space: nowrap">@{{ item.plate_no }}</td>
-              <td style="white-space: nowrap">@{{ item.hauler }}</td>
+              <td style="white-space: nowrap">@{{ item.receiving.remarks }}</td>
+              <td style="white-space: nowrap">@{{ item.receiving.consignee }}</td>
+              <td style="white-space: nowrap">@{{ item.receiving.plate_no }}</td>
+              <td style="white-space: nowrap">@{{ item.receiving.hauler }}</td>
               <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.id)">@{{ moment(item.receiving.inspected_date).format('YYYY-MM-DD') }}</td>
               <td style="white-space: nowrap">@{{ moment(item.receiving.inspected_date).format('hh:mm:ss A') }}</td>
             </tr>
