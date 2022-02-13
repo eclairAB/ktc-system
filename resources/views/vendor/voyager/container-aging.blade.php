@@ -379,10 +379,10 @@
           client: this.form.client === undefined || this.form.client === null ? 'NA' : this.form.client,
           class: this.form.class === undefined || this.form.class === null ? 'NA' : this.form.class,
           status: this.form.status === undefined || this.form.status === null ? 'NA' : this.form.status,
-          date_in_from: this.form.date_in_from === undefined || this.form.date_in_from === null ? null : moment(this.form.date_in_from).format('YYYY-MM-DD'),
-          date_in_to: this.form.date_in_to === undefined || this.form.date_in_to === null ? null : moment(this.form.date_in_to).format('YYYY-MM-DD'),
-          date_out_from: this.form.date_out_from === undefined || this.form.date_out_from === null ? null : moment(this.form.date_out_from).format('YYYY-MM-DD'),
-          date_out_to: this.form.date_out_to === undefined || this.form.date_out_to === null ? null : moment(this.form.date_out_to).format('YYYY-MM-DD')
+          date_in_from: this.form.date_in_from === undefined || this.form.date_in_from === null ? 'NA' : moment(this.form.date_in_from).format('YYYY-MM-DD'),
+          date_in_to: this.form.date_in_to === undefined || this.form.date_in_to === null ? 'NA' : moment(this.form.date_in_to).format('YYYY-MM-DD'),
+          date_out_from: this.form.date_out_from === undefined || this.form.date_out_from === null ? 'NA' : moment(this.form.date_out_from).format('YYYY-MM-DD'),
+          date_out_to: this.form.date_out_to === undefined || this.form.date_out_to === null ? 'NA' : moment(this.form.date_out_to).format('YYYY-MM-DD')
         }
         await axios.post(`/admin/get/container/aging`, payload).then(data => {
           this.generateLoad = false
