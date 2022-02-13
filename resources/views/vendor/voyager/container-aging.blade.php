@@ -197,18 +197,18 @@
           <table class="table table-bordered" style="margin-bottom: 0; color: black;">
             <thead>
               <tr>
-                <th scope="col">Container No.</th>
-                <th scope="col">Size</th>
-                <th scope="col">Type</th>
-                <th scope="col">Status</th>
-                <th scope="col">Client</th>
-                <th scope="col">Date In</th>
-                <th scope="col">Consignee</th>
-                <th scope="col">Date Out</th>
-                <th scope="col">Consignee</th>
-                <th scope="col">Booking</th>
-                <th scope="col">Seal</th>
-                <th scope="col">Days</th>
+                <th scope="col" style="white-space: nowrap">Container No.</th>
+                <th scope="col" style="white-space: nowrap">Size</th>
+                <th scope="col" style="white-space: nowrap">Type</th>
+                <th scope="col" style="white-space: nowrap">Status</th>
+                <th scope="col" style="white-space: nowrap">Client</th>
+                <th scope="col" style="white-space: nowrap">Date In</th>
+                <th scope="col" style="white-space: nowrap">Consignee</th>
+                <th scope="col" style="white-space: nowrap">Date Out</th>
+                <th scope="col" style="white-space: nowrap">Consignee</th>
+                <th scope="col" style="white-space: nowrap">Booking</th>
+                <th scope="col" style="white-space: nowrap">Seal</th>
+                <th scope="col" style="white-space: nowrap">Days</th>
               </tr>
             </thead>
             <tbody v-if="containerAgingList.length > 0">

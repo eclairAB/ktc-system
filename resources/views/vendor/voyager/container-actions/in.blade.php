@@ -129,20 +129,20 @@
         <table class="table table-bordered" style="margin-bottom: 0; color: black;">
           <thead>
             <tr>
-              <th style="text-align: left;" scope="col">Container No.</th>
-              <th scope="col">EIR</th>
-              <th scope="col">Size</th>
-              <th scope="col">Type</th>
-              <th scope="col">Client</th>
-              <th scope="col">Date Time</th>
-              <th scope="col">Class</th>
-              <th scope="col">Damages</th>
-              <th scope="col">Remarks</th>
-              <th scope="col">Consignee</th>
-              <th scope="col">Plate No.</th>
-              <th scope="col">Trucker</th>
-              <th scope="col">Date In</th>
-              <th scope="col">Time</th>
+              <th style="text-align: left; white-space: nowrap;" scope="col">Container No.</th>
+              <th scope="col" style="white-space: nowrap">EIR</th>
+              <th scope="col" style="white-space: nowrap">Size</th>
+              <th scope="col" style="white-space: nowrap">Type</th>
+              <th scope="col" style="white-space: nowrap">Client</th>
+              <th scope="col" style="white-space: nowrap">Date Time</th>
+              <th scope="col" style="white-space: nowrap">Class</th>
+              <th scope="col" style="white-space: nowrap">Damages</th>
+              <th scope="col" style="white-space: nowrap">Remarks</th>
+              <th scope="col" style="white-space: nowrap">Consignee</th>
+              <th scope="col" style="white-space: nowrap">Plate No.</th>
+              <th scope="col" style="white-space: nowrap">Trucker</th>
+              <th scope="col" style="white-space: nowrap">Date In</th>
+              <th scope="col" style="white-space: nowrap">Time</th>
             </tr>
           </thead>
           <tbody v-if="containerInList.length > 0">
