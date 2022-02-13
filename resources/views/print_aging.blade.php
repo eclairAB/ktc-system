@@ -38,6 +38,7 @@
             <th scope="col">Type</th>
             <th scope="col">Status</th>
             <th scope="col">Client</th>
+            <th scope="col">Class</th>
             <th scope="col">Date In</th>
             <th scope="col">Consignee</th>
             <th scope="col">Date Out</th>
@@ -51,8 +52,9 @@
             <td>{{ $item->container_no }}</td>
             <td>{{ $item->sizeType->size??'' }}</td>
             <td>{{ $item->type->code??'' }}</td>
-            <td>{{ $item->receiving->empty_loaded??'' }}</td>
+            <td>{{ $item->status??'' }}</td>
             <td>{{ $item->client->code??'' }}</td>
+            <td>{{ $item->containerClass->class_code??'' }}</td>
             <td>{{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}</td>
             <td>{{ $item->receiving->consignee??'' }}</td>
             <td>{{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}</td>

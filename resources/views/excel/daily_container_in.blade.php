@@ -34,10 +34,10 @@
               </div>
               @endforeach
           </td>
-          <td>{{ $item->remarks }}</td>
-          <td>{{ $item->consignee }}</td>
-          <td>{{ $item->plate_no }}</td>
-          <td>{{ $item->hauler }}</td>
+          <td>{{ $item->receiving->remarks }}</td>
+          <td>{{ $item->receiving->consignee }}</td>
+          <td>{{ $item->receiving->plate_no }}</td>
+          <td>{{ $item->receiving->hauler }}</td>
           <td>{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}</td>
           <td>{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('h:i:s A') }}</td>
         </tr>
