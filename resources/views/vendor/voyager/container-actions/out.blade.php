@@ -127,19 +127,19 @@
         <table class="table table-bordered" style="margin-bottom: 0; color: black;">
           <thead>
             <tr>
-              <th style="text-align: left; white-space: nowrap;" scope="col">Container No.</th>
-              <th scope="col" style="white-space: nowrap">EIR</th>
-              <th scope="col" style="white-space: nowrap">Size</th>
-              <th scope="col" style="white-space: nowrap">Type</th>
-              <th scope="col" style="white-space: nowrap">Client</th>
-              <th scope="col" style="white-space: nowrap">Date Time</th>
-              <th scope="col" style="white-space: nowrap">Class</th>
-              <th scope="col" style="white-space: nowrap">Remarks</th>
-              <th scope="col" style="white-space: nowrap">Consignee</th>
-              <th scope="col" style="white-space: nowrap">Plate No.</th>
-              <th scope="col" style="white-space: nowrap">Trucker</th>
-              <th scope="col" style="white-space: nowrap">Date Out</th>
-              <th scope="col" style="white-space: nowrap">Time</th>
+              <th @click="customSort('container_no')" style="text-align: left; white-space: nowrap; cursor: pointer;" scope="col">Container No.</th>
+              <th @click="customSort('eir_no')" scope="col" style="white-space: nowrap; cursor: pointer;">EIR</th>
+              <th @click="customSort('size_type')" scope="col" style="white-space: nowrap; cursor: pointer;">Size</th>
+              <th @click="customSort('type')" scope="col" style="white-space: nowrap; cursor: pointer;">Type</th>
+              <th @click="customSort('client')" scope="col" style="white-space: nowrap; cursor: pointer;">Client</th>
+              <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date Time</th>
+              <th @click="customSort('container_class')" scope="col" style="white-space: nowrap; cursor: pointer;">Class</th>
+              <th @click="customSort('remarks')" scope="col" style="white-space: nowrap; cursor: pointer;">Remarks</th>
+              <th @click="customSort('consignee')" scope="col" style="white-space: nowrap; cursor: pointer;">Consignee</th>
+              <th @click="customSort('plate_no')" scope="col" style="white-space: nowrap; cursor: pointer;">Plate No.</th>
+              <th @click="customSort('hauler')" scope="col" style="white-space: nowrap; cursor: pointer;">Trucker</th>
+              <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date Out</th>
+              <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Time</th>
             </tr>
           </thead>
           <tbody v-if="containerOutList.length > 0">
@@ -216,7 +216,10 @@
       vuejsDatepicker,
     },
     data: {
-      form: {},
+      form: {
+        param: 'container_no',
+        order: 'ASC'
+      },
       errors: [],
       clientList: [],
       sizeTypeList: [],
@@ -234,6 +237,16 @@
       printLoad: false
     },
     methods: {
+      customSort (data) {
+        if (this.form.order === 'DESC') {
+          this.$set(this.form, 'param', data)
+          this.$set(this.form, 'order', 'ASC')
+        } else {
+          this.$set(this.form, 'param', data)
+          this.$set(this.form, 'order', 'DESC')
+        }
+        this.getContainerOut()
+      },
       reroute(releasing_id) {
 				let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
 				window.location = customUrl
@@ -304,7 +317,8 @@
         // if (this.form.from && this.form.to) {
         	this.generateLoad = true
           let payload = {
-            type: this.form.type === undefined || null ? 'NA' : this.form.type,
+            param: this.form.param,
+            order: this.form.order,
             sizeType: this.form.sizeType === undefined || null ? 'NA' : this.form.sizeType,
             client: this.form.client === undefined || null ? 'NA' : this.form.client,
             class: this.form.class === undefined || null ? 'NA' : this.form.class,
