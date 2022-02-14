@@ -88,7 +88,7 @@
               <label for="type" class="form-control-placeholder"> Status</label>
             </div>
 
-          	<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
               <v-select
                 :options="sizeTypeList"
                 style="height: 37px !important;"
@@ -129,20 +129,20 @@
         <table class="table table-bordered" style="margin-bottom: 0; color: black;">
           <thead>
             <tr>
-              <th style="text-align: left; white-space: nowrap;" scope="col">Container No.</th>
-              <th scope="col" style="white-space: nowrap">EIR</th>
-              <th scope="col" style="white-space: nowrap">Size</th>
-              <th scope="col" style="white-space: nowrap">Type</th>
-              <th scope="col" style="white-space: nowrap">Client</th>
-              <th scope="col" style="white-space: nowrap">Date Time</th>
-              <th scope="col" style="white-space: nowrap">Class</th>
+              <th @click="customSort('container_no')" style="text-align: left; white-space: nowrap; cursor: pointer;" scope="col">Container No.</th>
+              <th @click="customSort('eir_no_in')" scope="col" style="white-space: nowrap; cursor: pointer;">EIR</th>
+              <th @click="customSort('size_type')" scope="col" style="white-space: nowrap; cursor: pointer;">Size</th>
+              <th @click="customSort('type')" scope="col" style="white-space: nowrap; cursor: pointer;">Type</th>
+              <th @click="customSort('client')" scope="col" style="white-space: nowrap; cursor: pointer;">Client</th>
+              <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date Time</th>
+              <th @click="customSort('container_class')" scope="col" style="white-space: nowrap; cursor: pointer;">Class</th>
               <th scope="col" style="white-space: nowrap">Damages</th>
-              <th scope="col" style="white-space: nowrap">Remarks</th>
-              <th scope="col" style="white-space: nowrap">Consignee</th>
-              <th scope="col" style="white-space: nowrap">Plate No.</th>
-              <th scope="col" style="white-space: nowrap">Trucker</th>
-              <th scope="col" style="white-space: nowrap">Date In</th>
-              <th scope="col" style="white-space: nowrap">Time</th>
+              <th @click="customSort('remarks')" scope="col" style="white-space: nowrap">Remarks</th>
+              <th @click="customSort('consignee')" scope="col" style="white-space: nowrap">Consignee</th>
+              <th @click="customSort('plate_no')" scope="col" style="white-space: nowrap">Plate No.</th>
+              <th @click="customSort('hauler')" scope="col" style="white-space: nowrap">Trucker</th>
+              <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap">Date In</th>
+              <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap">Time</th>
             </tr>
           </thead>
           <tbody v-if="containerInList.length > 0">
@@ -156,8 +156,8 @@
               <td style="white-space: nowrap">@{{ item.container_class ? item.container_class.class_code : '' }}</td>
               <td style="white-space: nowrap">
                 <div v-for="(item,i) in item.receiving.damages" :key="i">
-  		            @{{ i + 1 }}.) @{{ item.description }}
-  	            </div>
+                  @{{ i + 1 }}.) @{{ item.description }}
+                </div>
               </td>
               <td style="white-space: nowrap">@{{ item.receiving.remarks }}</td>
               <td style="white-space: nowrap">@{{ item.receiving.consignee }}</td>
@@ -217,14 +217,17 @@
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 
 <script type="text/javascript">
-	Vue.component('v-select', VueSelect.VueSelect)
+  Vue.component('v-select', VueSelect.VueSelect)
   var app = new Vue({
     el: '#containerIn',
     components: {
       vuejsDatepicker,
     },
     data: {
-      form: {},
+      form: {
+        param: 'container_no',
+        order: 'ASC'
+      },
       errors: [],
       clientList: [],
       sizeTypeList: [],
@@ -241,11 +244,20 @@
       printLoad: false
     },
     methods: {
+      customSort (data) {
+        if (this.form.order === 'DESC') {
+          this.$set(this.form, 'param', data)
+          this.$set(this.form, 'order', 'ASC')
+        } else {
+          this.$set(this.form, 'param', data)
+          this.$set(this.form, 'order', 'DESC')
+        }
+      },
       reroute(receiving_id) {
-				let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
-				window.location = customUrl
-		  },
-    	dateFormat(date) {
+        let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
+        window.location = customUrl
+      },
+      dateFormat(date) {
         return moment(date).format('MM/DD/yyyy');
       },
       async printContainerIn () {
@@ -400,7 +412,7 @@
         })
       },
       searchContainerNo () {
-      	clearTimeout(this.timer)
+        clearTimeout(this.timer)
         this.timer = setTimeout(() => {
           const payload = {
             keyword: this.form.container_no
