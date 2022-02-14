@@ -197,19 +197,19 @@
           <table class="table table-bordered" style="margin-bottom: 0; color: black;">
             <thead>
               <tr>
-                <th scope="col" style="white-space: nowrap">Container No.</th>
-                <th scope="col" style="white-space: nowrap">Size</th>
-                <th scope="col" style="white-space: nowrap">Type</th>
-                <th scope="col" style="white-space: nowrap">Status</th>
-                <th scope="col" style="white-space: nowrap">Client</th>
-                <th scope="col" style="white-space: nowrap">Class</th>
-                <th scope="col" style="white-space: nowrap">Date In</th>
-                <th scope="col" style="white-space: nowrap">Consignee</th>
-                <th scope="col" style="white-space: nowrap">Date Out</th>
-                <th scope="col" style="white-space: nowrap">Consignee</th>
-                <th scope="col" style="white-space: nowrap">Booking</th>
-                <th scope="col" style="white-space: nowrap">Seal</th>
-                <th scope="col" style="white-space: nowrap">Days</th>
+                <th @click="customSort('container_no')" scope="col" style="white-space: nowrap; cursor: pointer;">Container No.</th>
+                <th @click="customSort('size_type')" scope="col" style="white-space: nowrap; cursor: pointer;">Size</th>
+                <th @click="customSort('type')" scope="col" style="white-space: nowrap; cursor: pointer;">Type</th>
+                <th @click="customSort('status')" scope="col" style="white-space: nowrap; cursor: pointer;">Status</th>
+                <th @click="customSort('client')" scope="col" style="white-space: nowrap; cursor: pointer;">Client</th>
+                <th @click="customSort('container_class')" scope="col" style="white-space: nowrap; cursor: pointer;">Class</th>
+                <th @click="customSort('receiving_inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date In</th>
+                <th @click="customSort('receiving_consignee')" scope="col" style="white-space: nowrap; cursor: pointer;">Consignee</th>
+                <th @click="customSort('releasing_inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date Out</th>
+                <th @click="customSort('releasing_consignee')" scope="col" style="white-space: nowrap; cursor: pointer;">Consignee</th>
+                <th @click="customSort('booking_no')" scope="col" style="white-space: nowrap; cursor: pointer;">Booking</th>
+                <th @click="customSort('seal_no')" scope="col" style="white-space: nowrap; cursor: pointer;">Seal</th>
+                <th @click="customSort('total_no_days')" scope="col" style="white-space: nowrap; cursor: pointer;">Days</th>
               </tr>
             </thead>
             <tbody v-if="containerAgingList.length > 0">
@@ -310,6 +310,8 @@
     data: {
       form: {
         option: 'ALL',
+        param: 'container_no',
+        order: 'ASC'
       },
       generateErrorList: {},
       errors: [],
@@ -348,6 +350,16 @@
       },
     },
     methods: {
+      customSort (data) {
+        if (this.form.order === 'DESC') {
+          this.$set(this.form, 'param', data)
+          this.$set(this.form, 'order', 'ASC')
+        } else {
+          this.$set(this.form, 'param', data)
+          this.$set(this.form, 'order', 'DESC')
+        }
+        this.getContainerAging()
+      },
       rerouteReceiving(receiving_id) {
         let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
         window.location = customUrl
