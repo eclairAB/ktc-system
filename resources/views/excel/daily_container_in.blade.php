@@ -17,7 +17,7 @@
           <th style="font-weight:bold;">Date IN</th>
           <th style="font-weight:bold;">Time</th>
         </tr>
-        @foreach($data as $key => $item)
+        @foreach($datus as $key => $item)
         <tr>
           <td>{{ $item->container_no }}</td>
           <td>{{ $item->eirNoIn->eir_no??'' }}</td>

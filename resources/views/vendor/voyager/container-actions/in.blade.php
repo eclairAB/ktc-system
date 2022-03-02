@@ -130,19 +130,19 @@
           <thead>
             <tr>
               <th @click="customSort('container_no')" style="text-align: left; white-space: nowrap; cursor: pointer;" scope="col">Container No.</th>
-              <th @click="customSort('eir_no_in')" scope="col" style="white-space: nowrap; cursor: pointer;">EIR</th>
+              <th @click="customSort('eir_no')" scope="col" style="white-space: nowrap; cursor: pointer;">EIR</th>
               <th @click="customSort('size_type')" scope="col" style="white-space: nowrap; cursor: pointer;">Size</th>
               <th @click="customSort('type')" scope="col" style="white-space: nowrap; cursor: pointer;">Type</th>
               <th @click="customSort('client')" scope="col" style="white-space: nowrap; cursor: pointer;">Client</th>
               <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date Time</th>
               <th @click="customSort('container_class')" scope="col" style="white-space: nowrap; cursor: pointer;">Class</th>
               <th scope="col" style="white-space: nowrap">Damages</th>
-              <th @click="customSort('remarks')" scope="col" style="white-space: nowrap">Remarks</th>
-              <th @click="customSort('consignee')" scope="col" style="white-space: nowrap">Consignee</th>
-              <th @click="customSort('plate_no')" scope="col" style="white-space: nowrap">Plate No.</th>
-              <th @click="customSort('hauler')" scope="col" style="white-space: nowrap">Trucker</th>
-              <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap">Date In</th>
-              <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap">Time</th>
+              <th @click="customSort('remarks')" scope="col" style="white-space: nowrap; cursor: pointer;">Remarks</th>
+              <th @click="customSort('consignee')" scope="col" style="white-space: nowrap; cursor: pointer;">Consignee</th>
+              <th @click="customSort('plate_no')" scope="col" style="white-space: nowrap; cursor: pointer;">Plate No.</th>
+              <th @click="customSort('hauler')" scope="col" style="white-space: nowrap; cursor: pointer;">Trucker</th>
+              <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date In</th>
+              <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Time</th>
             </tr>
           </thead>
           <tbody v-if="containerInList.length > 0">
@@ -252,6 +252,7 @@
           this.$set(this.form, 'param', data)
           this.$set(this.form, 'order', 'DESC')
         }
+        this.getContainerIn()
       },
       reroute(receiving_id) {
         let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
@@ -262,6 +263,8 @@
       },
       async printContainerIn () {
         let payload = {
+          param: this.form.param,
+          order: this.form.order,
           type: this.form.type === undefined || null ? 'NA' : this.form.type,
           sizeType: this.form.sizeType === undefined || null ? 'NA' : this.form.sizeType,
           client: this.form.client === undefined || null ? 'NA' : this.form.client,
@@ -270,9 +273,9 @@
           from: this.form.from === undefined || this.form.from === null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
           to: this.form.to === undefined || this.form.to === null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
         }
-        await axios.get(`/admin/get/print/daily_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`).then(data => {
+        await axios.get(`/admin/get/print/daily_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}/${payload.param}/${payload.order}`).then(data => {
           let pasmo = data.data
-          let w = window.open(`/admin/get/print/daily_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`, '_blank');
+          let w = window.open(`/admin/get/print/daily_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}/${payload.param}/${payload.order}`, '_blank');
 
           var css = '@page { size: landscape; }',
               head = document.head || document.getElementsByTagName('head')[0],
@@ -324,6 +327,8 @@
         // if (this.form.from && this.form.to) {
           this.generateLoad = true
           let payload = {
+            param: this.form.param,
+            order: this.form.order,
             type: this.form.type === undefined || null ? 'NA' : this.form.type,
             sizeType: this.form.sizeType === undefined || null ? 'NA' : this.form.sizeType,
             client: this.form.client === undefined || null ? 'NA' : this.form.client,
@@ -358,6 +363,8 @@
         // if (this.form.from && this.form.to) {
           this.exportLoad = true
           let payload = {
+            param: this.form.param,
+            order: this.form.order,
             type: this.form.type === undefined || null ? 'NA' : this.form.type,
             sizeType: this.form.sizeType === undefined || null ? 'NA' : this.form.sizeType,
             client: this.form.client === undefined || null ? 'NA' : this.form.client,
@@ -366,9 +373,9 @@
             from: this.form.from === undefined || this.form.from === null ? 'NA' : moment(this.form.from).format('YYYY-MM-DD'),
             to: this.form.to === undefined || this.form.to === null ? 'NA' : moment(this.form.to).format('YYYY-MM-DD'),
           }
-          await axios.get(`/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`).then(data => {
+          await axios.get(`/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}/${payload.param}/${payload.order}`).then(data => {
             this.exportLoad = false
-            window.open(`${location.origin}/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}`, "_blank");
+            window.open(`${location.origin}/excel/daily_container_in/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.status}/${payload.from}/${payload.to}/${payload.param}/${payload.order}`, "_blank");
           }).catch(error => {
             this.exportLoad = false
             console.log(error)
