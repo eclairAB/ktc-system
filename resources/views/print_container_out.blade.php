@@ -40,7 +40,7 @@
             <th scope="col">Date Out</th>
             <th scope="col">Time</th>
           </tr>
-          @foreach($data as $key => $item)
+          @foreach($datus as $key => $item)
           <tr>
             <td>{{ $item->container_no }}</td>
             <td>{{ $item->eirNoOut->eir_no??'' }}</td>

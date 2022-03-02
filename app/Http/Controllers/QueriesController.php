@@ -276,7 +276,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     }
 
     public function getDailyIn(Request $request)
-    {
+    {   
         $data = Container::when($request->type != 'NA', function ($q)  use($request){
             return $q->where('type_id',$request->type);
         })->when($request->sizeType != 'NA', function ($q) use($request){
@@ -293,8 +293,108 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             })->when($request->to != 'NA', function ($q) use($request){
                 return $q->whereDate('inspected_date','<=',$request->to);
             });
-        })->whereNotNull('receiving_id')->whereNull('releasing_id')->with('client','sizeType','containerClass','eirNoIn','type','receiving.damages')->orderBy('container_no','ASC')->get();
-        return $data;
+        })->whereNotNull('receiving_id')->whereNull('releasing_id')->with('client','sizeType','containerClass','eirNoIn','type','receiving.damages')->get();
+
+        if($request->param == 'container_no'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('container_no');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('container_no');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'eir_no'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('eirNoIn.eir_no');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('eirNoIn.eir_no');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'client'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('client.code');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('client.code');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'type'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('type.code');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('type.code');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'size_type'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('size_type.size');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('size_type.size');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'container_class'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('container_class.class_code');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('container_class.class_code');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'inspected_date'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('receiving.inspected_date');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('receiving.inspected_date');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'remarks'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('receiving.remarks');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('receiving.remarks');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'consignee'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('receiving.consignee');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('receiving.consignee');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'plate_no'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('receiving.plate_no');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('receiving.plate_no');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'hauler'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('receiving.hauler');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('receiving.hauler');
+                return $sorted->values()->all();
+            }
+        }
     }
 
     public function getDailyOut(Request $request)
@@ -315,12 +415,111 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             })->when($request->to != 'NA', function ($q) use($request){
                 return $q->whereDate('inspected_date','<=',$request->to);
             });
-        })->whereNotNull('releasing_id')->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing','eirNoOut')->orderBy('container_no','ASC')->get();
+        })->whereNotNull('releasing_id')->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing','eirNoOut')->get();
 
-        return $data;
+        if($request->param == 'container_no'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('container_no');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('container_no');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'eir_no'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('eirNoOut.eir_no');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('eirNoOut.eir_no');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'client'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('client.code');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('client.code');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'type'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('type.code');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('type.code');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'size_type'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('size_type.size');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('size_type.size');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'container_class'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('container_class.class_code');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('container_class.class_code');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'inspected_date'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.inspected_date');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.inspected_date');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'remarks'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.remarks');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.remarks');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'consignee'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.consignee');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.consignee');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'plate_no'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.plate_no');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.plate_no');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'hauler'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.hauler');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.hauler');
+                return $sorted->values()->all();
+            }
+        }
     }
 
-    public function prntDailyIn($type,$sizeType,$client,$class,$status,$from,$to)
+    public function prntDailyIn($type,$sizeType,$client,$class,$status,$from,$to,$param,$order)
     {
         $data = Container::when($type != 'NA', function ($q)  use($type){
             return $q->where('type_id',$type);
@@ -338,12 +537,133 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             })->when($to != 'NA', function ($q) use($to){
                 return $q->whereDate('inspected_date','<=',$to);
             });
-        })->whereNotNull('receiving_id')->whereNull('releasing_id')->with('client','sizeType','containerClass','eirNoIn','type','receiving.damages')->orderBy('container_no','ASC')->get();
+        })->whereNotNull('receiving_id')->whereNull('releasing_id')->with('client','sizeType','containerClass','eirNoIn','type','receiving.damages')->get();
 
-        return view('print_container_in')->with(compact('data'));
+        if($param == 'container_no'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('container_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('container_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }
+        }else if($param == 'eir_no'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('eirNoIn.eir_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('eirNoIn.eir_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }
+        }else if($param == 'client'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('client.code');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('client.code');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }
+        }else if($param == 'type'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('type.code');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('type.code');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }
+        }else if($param == 'size_type'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('size_type.size');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('size_type.size');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }
+        }else if($param == 'container_class'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('container_class.class_code');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('container_class.class_code');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }
+        }else if($param == 'inspected_date'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('receiving.inspected_date');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('receiving.inspected_date');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }
+        }else if($param == 'remarks'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('receiving.remarks');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('receiving.remarks');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }
+        }else if($param == 'consignee'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('receiving.consignee');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('receiving.consignee');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }
+        }else if($param == 'plate_no'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('receiving.plate_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('receiving.plate_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }
+        }else if($param == 'hauler'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('receiving.hauler');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('receiving.hauler');
+                $datus = $sorted->values()->all();
+                return view('print_container_in')->with(compact('datus'));
+            }
+        }   
     }
 
-    public function prntDailyOut($type,$sizeType,$client,$class,$status,$from,$to)
+    public function prntDailyOut($type,$sizeType,$client,$class,$status,$from,$to,$param,$order)
     {
         $data = Container::when($type != 'NA', function ($q)  use($type){
             return $q->where('type_id',$type);
@@ -361,9 +681,130 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             })->when($to != 'NA', function ($q) use($to){
                 return $q->whereDate('inspected_date','<=',$to);
             });
-        })->whereNotNull('releasing_id')->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing','eirNoOut')->orderBy('container_no','ASC')->get();
+        })->whereNotNull('releasing_id')->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing','eirNoOut')->get();
 
-        return view('print_container_out')->with(compact('data'));
+        if($param == 'container_no'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('container_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('container_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }
+        }else if($param == 'eir_no'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('eirNoOut.eir_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('eirNoOut.eir_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }
+        }else if($param == 'client'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('client.code');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('client.code');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }
+        }else if($param == 'type'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('type.code');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('type.code');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }
+        }else if($param == 'size_type'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('size_type.size');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('size_type.size');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }
+        }else if($param == 'container_class'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('container_class.class_code');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('container_class.class_code');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }
+        }else if($param == 'inspected_date'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.inspected_date');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.inspected_date');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }
+        }else if($param == 'remarks'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.remarks');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.remarks');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }
+        }else if($param == 'consignee'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.consignee');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.consignee');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }
+        }else if($param == 'plate_no'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.plate_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.plate_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }
+        }else if($param == 'hauler'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.hauler');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.hauler');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }
+        }
     }
 
     public function prntAging($type,$sizeType,$client,$class,$date_in_from,$date_in_to,$date_out_from,$date_out_to,$option,$status)
