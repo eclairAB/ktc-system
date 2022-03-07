@@ -290,6 +290,7 @@
                             <div class="modal-content">
                               <div class="modal-header" style="display: flex; align-items: center;">
                                 <h5 class="modal-title" id="dialogLabel">@{{ isEdit === true ? 'Edit Damage' : 'Add Damage' }}</h5>
+                                @{{ damagesAutocomplete.values }}
                                 <button type="button" @click="closeDialog" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: auto;">
                                   <span aria-hidden="true">&times;</span>
                                 </button>
@@ -678,6 +679,7 @@
             }
           },
           handleSubmitRepair(result) {
+            console.log('handleSubmitRepair', result)
             this.$set(this.damages, 'repair', result)
             this.$set(this.damages, 'repair_id', result.id)
             this.pasmo()
@@ -712,6 +714,7 @@
             }
           },
           handleSubmitComponent(result) {
+            console.log('handleSubmitComponent', result)
             this.$set(this.damages, 'component', result)
             this.$set(this.damages, 'component_id', result.id)
             this.pasmo()
@@ -747,6 +750,7 @@
             }
           },
           handleSubmitDamage(result) {
+            console.log('handleSubmitDamage', result)
             this.$set(this.damages, 'damage', result)
             this.$set(this.damages, 'damage_id', result.id)
             this.pasmo()
@@ -839,7 +843,7 @@
             $('#dialog').modal({backdrop: 'static', keyboard: false});
             const asd = document.querySelector('div.uppercaseText.repair.autocomplete')/*.focus()*/
             asd && asd.focus()
-            console.log(asd)
+            // console.log(asd)
           },
           closeDialog () {
             this.clearDamage()
@@ -1120,6 +1124,42 @@
           },
           testing(x) {
             console.log(x)
+          },
+          setAutocomplete() {
+            const autocompletes = document.querySelectorAll('div.uppercaseText.autocomplete > input')
+            for(let item of autocompletes) {
+              console.log(1, item)
+
+              var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+              const observer = new MutationObserver((mutations) => {
+                console.log(2, mutations)
+                mutations.forEach((mutation) => {
+                  if (mutation.type == "attributes") {
+
+                    const listNo = item.attributes['aria-owns'].value
+                    const autocompleteItem = Number(listNo.split('autocomplete-result-list-')[1])
+
+                    const elem = item.parentNode.children[1].children
+                    for(let childSelection of elem) {
+                      if(childSelection.attributes['aria-selected']) {
+
+                        const dataResultIndex = Number(childSelection.attributes['data-result-index'].value)
+
+                        if(autocompleteItem == 1) this.damagesAutocomplete.values.repair = this.damagesAutocomplete.selections.repair[dataResultIndex]
+                        if(autocompleteItem == 2) this.damagesAutocomplete.values.component = this.damagesAutocomplete.selections.component[dataResultIndex]
+                        if(autocompleteItem == 3) this.damagesAutocomplete.values.damage = this.damagesAutocomplete.selections.damage[dataResultIndex]
+
+                        childSelection.style.background = "#dbdbdb"
+                      }
+                      else {
+                        childSelection.style.background = "unset"
+                      }
+                    }
+                  }
+                })
+              })
+              observer.observe(item, {attributes: true})
+            }
           }
         },
         mounted () {
@@ -1130,6 +1170,7 @@
           this.getYard()
           this.getClass()
           this.getEmptyLoaded()
+          this.setAutocomplete()
         }
       })
     </script>
@@ -1271,6 +1312,7 @@
         const autocompletes = document.querySelectorAll('div.uppercaseText.autocomplete > input')
         for(let item of autocompletes) {
 
+          var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
           const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
               if (mutation.type == "attributes") {
@@ -1302,7 +1344,7 @@
       }
 
       setDropdownListeners()
-      setAutocomplete()
+      // setAutocomplete()
     </script>
     <!--  -->
 @stop
