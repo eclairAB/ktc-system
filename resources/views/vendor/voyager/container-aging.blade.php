@@ -387,6 +387,8 @@
       async getContainerAging () {
         this.generateLoad = true
         let payload = {
+          param: this.form.param,
+          order: this.form.order,
           option: this.form.option === undefined || this.form.option === null ? 'ALL' : this.form.option,
           type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
           sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
@@ -420,6 +422,8 @@
       async exportContainerIn () {
         this.exportLoad = true
         let payload = {
+          param: this.form.param,
+          order: this.form.order,
           option: this.form.option === undefined || this.form.option === null ? 'ALL' : this.form.option,
           type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
           sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
@@ -431,9 +435,9 @@
           date_out_from: this.form.date_out_from === undefined || this.form.date_out_from === null ? 'NA' : moment(this.form.date_out_from).format('YYYY-MM-DD'),
           date_out_to: this.form.date_out_to === undefined || this.form.date_out_to === null ? 'NA' : moment(this.form.date_out_to).format('YYYY-MM-DD')
         }
-        await axios.get(`/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}`).then(data => {
+        await axios.get(`/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}/${payload.param}/${payload.order}`).then(data => {
           this.exportLoad = false
-          window.open(`${location.origin}/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}`, "_blank");
+          window.open(`${location.origin}/excel/container_aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}/${payload.param}/${payload.order}`, "_blank");
         }).catch(error => {
           this.exportLoad = false
           console.log(error)
@@ -441,6 +445,8 @@
       },
       async printContainerAging () {
         let payload = {
+          param: this.form.param,
+          order: this.form.order,
           option: this.form.option === undefined || this.form.option === null ? 'ALL' : this.form.option,
           type: this.form.type === undefined || this.form.type === null ? 'NA' : this.form.type,
           sizeType: this.form.sizeType === undefined || this.form.sizeType === null ? 'NA' : this.form.sizeType,
@@ -452,9 +458,9 @@
           date_out_from: this.form.date_out_from === undefined || this.form.date_out_from === null ? 'NA' : moment(this.form.date_out_from).format('YYYY-MM-DD'),
           date_out_to: this.form.date_out_to === undefined || this.form.date_out_to === null ? 'NA' : moment(this.form.date_out_to).format('YYYY-MM-DD')
         }
-        await axios.get(`/admin/get/print/aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}`).then(data => {
+        await axios.get(`/admin/get/print/aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}/${payload.param}/${payload.order}`).then(data => {
           let pasmo = data.data
-          let w = window.open(`/admin/get/print/aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}`, '_blank');
+          let w = window.open(`/admin/get/print/aging/${payload.type}/${payload.sizeType}/${payload.client}/${payload.class}/${payload.date_in_from}/${payload.date_in_to}/${payload.date_out_from}/${payload.date_out_to}/${payload.option}/${payload.status}/${payload.param}/${payload.order}`, '_blank');
           w.document.write(pasmo);
           setTimeout(() => { 
               w.print();

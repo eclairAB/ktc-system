@@ -807,11 +807,11 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         }
     }
 
-    public function prntAging($type,$sizeType,$client,$class,$date_in_from,$date_in_to,$date_out_from,$date_out_to,$option,$status)
+    public function prntAging($type,$sizeType,$client,$class,$date_in_from,$date_in_to,$date_out_from,$date_out_to,$option,$status,$param,$order)
     {
         if($option == 'IN')
         {
-            $data = Container::when($type != 'NA', function ($q)  use($type){
+            $datus = Container::when($type != 'NA', function ($q)  use($type){
                 return $q->where('type_id',$type);
             })->when($sizeType != 'NA', function ($q) use($sizeType){
                 return $q->where('size_type',$sizeType);
@@ -829,21 +829,290 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 });
             })->whereNotNull('receiving_id')->whereNull('releasing_id')->with('client','sizeType','containerClass','type','receiving')->get();
     
-            foreach($data as $res)
+            foreach($datus as $res)
             {
                 $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
                 $res->total_no_days = $diff_days;
             }
-            $client_id = $client != 'NA'?$client:null;
-            $client = Client::where('id',$client_id)->first();
-            $count = count($data);
-            $in = count($data);
-            $out = 0;
-            return view('print_aging')->with(compact('data','count','option','client','in','out'));
+
+            if($param == 'container_no'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('container_no');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('container_no');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'status'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('status');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('status');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'client'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('client.code');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('client.code');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'type'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('type.code');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('type.code');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'size_type'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('size_type.size');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('size_type.size');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'container_class'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('container_class.class_code');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('container_class.class_code');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'receiving_inspected_date'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.inspected_date');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.inspected_date');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'receiving_consignee'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.consignee');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.consignee');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'releasing_inspected_date'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.inspected_date');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.inspected_date');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'releasing_consignee'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.consignee');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.consignee');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'booking_no'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.booking_no');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.booking_no');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'seal_no'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.seal_no');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.seal_no');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'total_no_days'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('total_no_days');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('total_no_days');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }
         }
         else if($option == 'OUT')
         {
-            $data = Container::when($type != 'NA', function ($q)  use($type){
+            $datus = Container::when($type != 'NA', function ($q)  use($type){
                 return $q->where('type_id',$type);
             })->when($sizeType != 'NA', function ($q) use($sizeType){
                 return $q->where('size_type',$sizeType);
@@ -861,22 +1130,290 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 });
             })->whereNotNull('releasing_id')->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
     
-            foreach($data as $res)
+            foreach($datus as $res)
             {
                 $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays($res->releasing->inspected_date);
                 $res->total_no_days = $diff_days;
             }
-    
-            $client_id = $client != 'NA'?$client:null;
-            $client = Client::where('id',$client_id)->first();
-            $count = count($data);
-            $in = 0;
-            $out = count($data);
-            return view('print_aging')->with(compact('data','count','option','client','in','out'));
+
+            if($param == 'container_no'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('container_no');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('container_no');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'status'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('status');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('status');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'client'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('client.code');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('client.code');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'type'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('type.code');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('type.code');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'size_type'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('size_type.size');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('size_type.size');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'container_class'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('container_class.class_code');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('container_class.class_code');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'receiving_inspected_date'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.inspected_date');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.inspected_date');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'receiving_consignee'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.consignee');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.consignee');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'releasing_inspected_date'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.inspected_date');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.inspected_date');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'releasing_consignee'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.consignee');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.consignee');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'booking_no'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.booking_no');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.booking_no');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'seal_no'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.seal_no');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.seal_no');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'total_no_days'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('total_no_days');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('total_no_days');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }
         }
         else if($option == 'ALL')
         {
-            $data = Container::when($type != 'NA', function ($q)  use($type){
+            $datus = Container::when($type != 'NA', function ($q)  use($type){
                 return $q->where('type_id',$type);
             })->when($sizeType != 'NA', function ($q) use($sizeType){
                 return $q->where('size_type',$sizeType);
@@ -890,38 +1427,806 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 $q->has('receiving')->orHas('releasing');
             })->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
     
-            foreach($data as $res)
+            foreach($datus as $res)
             {
                 $diff_days = isset($res->releasing)?Carbon::parse($res->receiving->inspected_date)->diffInDays($res->releasing->inspected_date):Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
                 $res->total_no_days = $diff_days;
             }
 
-            $client_id = $client != 'NA'?$client:null;
-            $client_details = Client::where('id',$client_id)->first();
-            $count = count($data);
-            $in = Container::when($type != 'NA', function ($q)  use($type){
-                return $q->where('type_id',$type);
-            })->when($sizeType != 'NA', function ($q) use($sizeType){
-                return $q->where('size_type',$sizeType);
-            })->when($client != 'NA', function ($q) use($client){
-                return $q->where('client_id',$client);
-            })->when($class != 'NA', function ($q) use($class){
-                return $q->where('class',$class);
-            })->when($status != 'NA', function ($q) use($status){
-                return $q->where('status',$status);
-            })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
-            $out = Container::when($type != 'NA', function ($q)  use($type){
-                return $q->where('type_id',$type);
-            })->when($sizeType != 'NA', function ($q) use($sizeType){
-                return $q->where('size_type',$sizeType);
-            })->when($client != 'NA', function ($q) use($client){
-                return $q->where('client_id',$client);
-            })->when($class != 'NA', function ($q) use($class){
-                return $q->where('class',$class);
-            })->when($status != 'NA', function ($q) use($status){
-                return $q->where('status',$status);
-            })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
-            return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+            if($param == 'container_no'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('container_no');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('container_no');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
+            }else if($param == 'status'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('status');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('status');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
+            }else if($param == 'client'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('client.code');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('client.code');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
+            }else if($param == 'type'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('type.code');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('type.code');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
+            }else if($param == 'size_type'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('size_type.size');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('size_type.size');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
+            }else if($param == 'container_class'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('container_class.class_code');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('container_class.class_code');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
+            }else if($param == 'receiving_inspected_date'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.inspected_date');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.inspected_date');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
+            }else if($param == 'receiving_consignee'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.consignee');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.consignee');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
+            }else if($param == 'releasing_inspected_date'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.inspected_date');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.inspected_date');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
+            }else if($param == 'releasing_consignee'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.consignee');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.consignee');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
+            }else if($param == 'booking_no'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.booking_no');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.booking_no');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
+            }else if($param == 'seal_no'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.seal_no');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.seal_no');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
+            }else if($param == 'total_no_days'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('total_no_days');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('total_no_days');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
+            }
         }
        
     }
@@ -930,7 +2235,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         if($request->option == 'IN')
         {
-            $data = Container::when($request->type != 'NA', function ($q)  use($request){
+            $datus = Container::when($request->type != 'NA', function ($q)  use($request){
                 return $q->where('type_id',$request->type);
             })->when($request->sizeType != 'NA', function ($q) use($request){
                 return $q->where('size_type',$request->sizeType);
@@ -948,19 +2253,238 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 });
             })->whereNotNull('receiving_id')->whereNull('releasing_id')->with('client','sizeType','containerClass','type','receiving')->get();
     
-            foreach($data as $res)
+            foreach($datus as $res)
             {
                 $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
                 $res->total_no_days = $diff_days;
             }
-            $van_count = count($data);
-            $in = count($data);
-            $out = 0;
-            return response()->json(compact('data','van_count','in','out'));
+
+            if($request->param == 'container_no'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('container_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('container_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'status'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('status');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('status');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'client'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('client.code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('client.code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'type'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('type.code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('type.code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'size_type'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('size_type.size');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('size_type.size');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'container_class'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('container_class.class_code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('container_class.class_code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'receiving_inspected_date'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.inspected_date');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.inspected_date');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'receiving_consignee'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.consignee');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.consignee');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'releasing_inspected_date'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.inspected_date');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.inspected_date');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'releasing_consignee'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.consignee');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.consignee');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'booking_no'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.booking_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.booking_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'seal_no'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.seal_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.seal_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'total_no_days'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('total_no_days');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('total_no_days');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }
         }
         else if($request->option == 'OUT')
         {
-            $data = Container::when($request->type != 'NA', function ($q)  use($request){
+            $datus = Container::when($request->type != 'NA', function ($q)  use($request){
                 return $q->where('type_id',$request->type);
             })->when($request->sizeType != 'NA', function ($q) use($request){
                 return $q->where('size_type',$request->sizeType);
@@ -978,19 +2502,238 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 });
             })->whereNotNull('releasing_id')->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
     
-            foreach($data as $res)
+            foreach($datus as $res)
             {
                 $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays($res->releasing->inspected_date);
                 $res->total_no_days = $diff_days;
             }
-            $van_count = count($data);
-            $in = 0;
-            $out = count($data);
-            return response()->json(compact('data','van_count','in','out'));
+            
+            if($request->param == 'container_no'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('container_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('container_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'status'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('status');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('status');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'client'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('client.code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('client.code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'type'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('type.code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('type.code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'size_type'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('size_type.size');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('size_type.size');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'container_class'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('container_class.class_code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('container_class.class_code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'receiving_inspected_date'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.inspected_date');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.inspected_date');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'receiving_consignee'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.consignee');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.consignee');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'releasing_inspected_date'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.inspected_date');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.inspected_date');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'releasing_consignee'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.consignee');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.consignee');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'booking_no'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.booking_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.booking_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'seal_no'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.seal_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.seal_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'total_no_days'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('total_no_days');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('total_no_days');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }
         }
         else if($request->option == 'ALL')
         {
-            $data = Container::when($request->type != 'NA', function ($q)  use($request){
+            $datus = Container::when($request->type != 'NA', function ($q)  use($request){
                 return $q->where('type_id',$request->type);
             })->when($request->sizeType != 'NA', function ($q) use($request){
                 return $q->where('size_type',$request->sizeType);
@@ -1004,35 +2747,754 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 $q->has('receiving')->orHas('releasing');
             })->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
     
-            foreach($data as $res)
+            foreach($datus as $res)
             {
                 $diff_days = isset($res->releasing)?Carbon::parse($res->receiving->inspected_date)->diffInDays($res->releasing->inspected_date):Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
                 $res->total_no_days = $diff_days;
             }
-            $van_count = count($data);
-            $in = Container::when($request->type != 'NA', function ($q)  use($request){
-                return $q->where('type_id',$request->type);
-            })->when($request->sizeType != 'NA', function ($q) use($request){
-                return $q->where('size_type',$request->sizeType);
-            })->when($request->client != 'NA', function ($q) use($request){
-                return $q->where('client_id',$request->client);
-            })->when($request->class != 'NA', function ($q) use($request){
-                return $q->where('class',$request->class);
-            })->when($request->status != 'NA', function ($q) use($request){
-                return $q->where('status',$request->status);
-            })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
-            $out = Container::when($request->type != 'NA', function ($q)  use($request){
-                return $q->where('type_id',$request->type);
-            })->when($request->sizeType != 'NA', function ($q) use($request){
-                return $q->where('size_type',$request->sizeType);
-            })->when($request->client != 'NA', function ($q) use($request){
-                return $q->where('client_id',$request->client);
-            })->when($request->class != 'NA', function ($q) use($request){
-                return $q->where('class',$request->class);
-            })->when($request->status != 'NA', function ($q) use($request){
-                return $q->where('status',$request->status);
-            })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
-            return response()->json(compact('data','van_count','in','out'));
+
+            if($request->param == 'container_no'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('container_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('container_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'status'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('status');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('status');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'client'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('client.code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('client.code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'type'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('type.code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('type.code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'size_type'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('size_type.size');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('size_type.size');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'container_class'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('container_class.class_code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('container_class.class_code');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'receiving_inspected_date'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.inspected_date');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.inspected_date');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'receiving_consignee'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.consignee');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.consignee');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'releasing_inspected_date'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.inspected_date');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.inspected_date');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'releasing_consignee'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.consignee');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.consignee');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'booking_no'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.booking_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.booking_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'seal_no'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('releasing.seal_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('releasing.seal_no');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'total_no_days'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('total_no_days');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('total_no_days');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }
         }
     }
 
