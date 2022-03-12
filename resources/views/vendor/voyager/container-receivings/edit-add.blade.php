@@ -291,16 +291,17 @@
                             <div class="modal-content">
                               <div class="modal-header" style="display: flex; align-items: center;">
                                 <h5 class="modal-title" id="dialogLabel">@{{ isEdit === true ? 'Edit Damage' : 'Add Damage' }}</h5>
+                                @{{ damagesAutocomplete.values }}
                                 <button type="button" @click="closeDialog" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: auto;">
                                   <span aria-hidden="true">&times;</span>
                                 </button>
                               </div>
                               <hr style="margin: 0">
                               <div class="modal-body" style="padding-bottom: 0;">
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <autocomplete
                                     ref="autocompleteRepair"
-                                    base-class="uppercaseText repair autocomplete"
+                                    :base-class="damageError.repair_id ? 'isError uppercaseText repair autocomplete' : 'uppercaseText repair autocomplete'"
                                     :search="searchRepair"
                                     :get-result-value="getResultRepair"
                                     @update="handleUpdateRepair"
@@ -309,12 +310,12 @@
                                     @blur="handleAutocompleteSubmitRepair"
                                   ></autocomplete>
                                   <label for="repair" class="form-control-placeholder"> Repair</label>
-                                  <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
+                                  <div class="customErrorText"><small>@{{ damageError.repair_id ? damageError.repair_id[0] : '' }}</small></div>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <autocomplete
                                     ref="autocompleteComponent"
-                                    base-class="uppercaseText ponent autocomplete"
+                                    :base-class="damageError.component_id ? 'isError uppercaseText ponent autocomplete' : 'uppercaseText ponent autocomplete'"
                                     :search="searchComponent"
                                     :get-result-value="getResultComponent"
                                     @update="handleUpdateComponent"
@@ -323,11 +324,12 @@
                                     @blur="handleAutocompleteSubmitComponent"
                                   ></autocomplete>
                                   <label for="component" class="form-control-placeholder"> Component</label>
+                                  <div class="customErrorText"><small>@{{ damageError.component_id ? damageError.component_id[0] : '' }}</small></div>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <autocomplete
                                     ref="autocompleteDamage"
-                                    base-class="uppercaseText damage autocomplete"
+                                    :base-class="damageError.damage_id ? 'isError uppercaseText damage autocomplete' : 'uppercaseText damage autocomplete'"
                                     :search="searchDamage"
                                     :get-result-value="getResultDamage"
                                     @update="handleUpdateDamage"
@@ -336,34 +338,36 @@
                                     @blur="handleAutocompleteSubmitDamage"
                                   ></autocomplete>
                                   <label for="damage" class="form-control-placeholder"> Damage</label>
+                                  <div class="customErrorText"><small>@{{ damageError.damage_id ? damageError.damage_id[0] : '' }}</small></div>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="location" class="form-control-placeholder"> Location</label>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <input type="number" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="length" class="form-control-placeholder"> Length</label>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <input type="number" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="width" class="form-control-placeholder"> Width</label>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <input type="text" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="quantity" class="form-control-placeholder"> Quantity</label>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <input 
                                     type="text" 
                                     disabled 
                                     name="description" 
-                                    id="description" 
-                                    class="form-control" 
+                                    id="description"
+                                    :class="damageError.description ? 'isError form-control' : 'form-control'"
                                     style="margin-top: 10px;" 
                                     v-model="damages.description"
                                   >
                                   <label for="description" class="form-control-placeholder"> Description</label>
+                                  <div class="customErrorText"><small>@{{ damageError.description ? damageError.description[0] : '' }}</small></div>
                                 </div>
                               </div>
                               <div class="modal-footer" style="text-align: left !important; padding-top: 0;">
@@ -684,6 +688,7 @@
             }
           },
           handleSubmitRepair(result) {
+            console.log('handleSubmitRepair', result)
             this.$set(this.damages, 'repair', result)
             this.$set(this.damages, 'repair_id', result.id)
             this.pasmo()
@@ -718,6 +723,7 @@
             }
           },
           handleSubmitComponent(result) {
+            console.log('handleSubmitComponent', result)
             this.$set(this.damages, 'component', result)
             this.$set(this.damages, 'component_id', result.id)
             this.pasmo()
@@ -753,6 +759,7 @@
             }
           },
           handleSubmitDamage(result) {
+            console.log('handleSubmitDamage', result)
             this.$set(this.damages, 'damage', result)
             this.$set(this.damages, 'damage_id', result.id)
             this.pasmo()
@@ -838,14 +845,17 @@
               this.damageLoad = false
               this.closeDialog()
             }).catch(error => {
-              alert('Error')
+              this.damageLoad = false
+              if (error.response.data.errors) {
+                this.damageError = error.response.data.errors
+              }
             })
           },
           addNew () {
             $('#dialog').modal({backdrop: 'static', keyboard: false});
             const asd = document.querySelector('div.uppercaseText.repair.autocomplete')/*.focus()*/
             asd && asd.focus()
-            console.log(asd)
+            // console.log(asd)
           },
           closeDialog () {
             this.clearDamage()
@@ -1126,6 +1136,42 @@
           },
           testing(x) {
             console.log(x)
+          },
+          setAutocomplete() {
+            const autocompletes = document.querySelectorAll('div.uppercaseText.autocomplete > input')
+            for(let item of autocompletes) {
+              console.log(1, item)
+
+              var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+              const observer = new MutationObserver((mutations) => {
+                console.log(2, mutations)
+                mutations.forEach((mutation) => {
+                  if (mutation.type == "attributes") {
+
+                    const listNo = item.attributes['aria-owns'].value
+                    const autocompleteItem = Number(listNo.split('autocomplete-result-list-')[1])
+
+                    const elem = item.parentNode.children[1].children
+                    for(let childSelection of elem) {
+                      if(childSelection.attributes['aria-selected']) {
+
+                        const dataResultIndex = Number(childSelection.attributes['data-result-index'].value)
+
+                        if(autocompleteItem == 1) this.damagesAutocomplete.values.repair = this.damagesAutocomplete.selections.repair[dataResultIndex]
+                        if(autocompleteItem == 2) this.damagesAutocomplete.values.component = this.damagesAutocomplete.selections.component[dataResultIndex]
+                        if(autocompleteItem == 3) this.damagesAutocomplete.values.damage = this.damagesAutocomplete.selections.damage[dataResultIndex]
+
+                        childSelection.style.background = "#dbdbdb"
+                      }
+                      else {
+                        childSelection.style.background = "unset"
+                      }
+                    }
+                  }
+                })
+              })
+              observer.observe(item, {attributes: true})
+            }
           }
         },
         mounted () {
@@ -1136,6 +1182,7 @@
           this.getYard()
           this.getClass()
           this.getEmptyLoaded()
+          this.setAutocomplete()
         }
       })
     </script>
@@ -1277,6 +1324,7 @@
         const autocompletes = document.querySelectorAll('div.uppercaseText.autocomplete > input')
         for(let item of autocompletes) {
 
+          var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
           const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
               if (mutation.type == "attributes") {
@@ -1308,7 +1356,7 @@
       }
 
       setDropdownListeners()
-      setAutocomplete()
+      // setAutocomplete()
     </script>
     <!--  -->
 @stop
