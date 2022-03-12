@@ -11,21 +11,21 @@ use Carbon\Carbon;
 class ExcelController extends Controller
 {
     //
-    public function dailyContainerIn($type,$sizeType,$client,$class,$status,$from,$to)
+    public function dailyContainerIn($type,$sizeType,$client,$class,$status,$from,$to,$param,$order)
     {
         $now = Carbon::now()->format('Y-m-d');
-        return Excel::download(new DailyContainerIn($type,$sizeType,$client,$class,$status,$from,$to), 'Daily_Container_In_'.$now.'.xlsx');
+        return Excel::download(new DailyContainerIn($type,$sizeType,$client,$class,$status,$from,$to,$param,$order), 'Daily_Container_In_'.$now.'.xlsx');
     }
 
-    public function dailyContainerOut($type,$sizeType,$client,$class,$status,$from,$to)
+    public function dailyContainerOut($type,$sizeType,$client,$class,$status,$from,$to,$param,$order)
     {
         $now = Carbon::now()->format('Y-m-d');
-        return Excel::download(new DailyContainerOut($type,$sizeType,$client,$class,$status,$from,$to), 'Daily_Container_Out_'.$now.'.xlsx');
+        return Excel::download(new DailyContainerOut($type,$sizeType,$client,$class,$status,$from,$to,$param,$order), 'Daily_Container_Out_'.$now.'.xlsx');
     }
 
-    public function containerAging($type,$sizeType,$client,$class,$date_in_from,$date_in_to,$date_out_from,$date_out_to,$option,$status)
+    public function containerAging($type,$sizeType,$client,$class,$date_in_from,$date_in_to,$date_out_from,$date_out_to,$option,$status,$param,$order)
     {
         $now = Carbon::now()->format('Y-m-d');
-        return Excel::download(new ContainerAging($type,$sizeType,$client,$class,$date_in_from,$date_in_to,$date_out_from,$date_out_to,$option,$status), 'Container_Aging_'.$now.'('.$option.').xlsx');
+        return Excel::download(new ContainerAging($type,$sizeType,$client,$class,$date_in_from,$date_in_to,$date_out_from,$date_out_to,$option,$status,$param,$order), 'Container_Aging_'.$now.'('.$option.').xlsx');
     }
 }

@@ -246,6 +246,7 @@ class PostsController extends Controller
                 'size_type'=>$receiving['size_type'],
                 'type_id'=>$receiving['type_id'],
                 'class'=>$receiving['class'],
+                'status'=>$receiving['empty_loaded'],
                 'receiving_id'=>$rec_id,
             ];
             $cont = Container::create($dataCont);

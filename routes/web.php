@@ -102,20 +102,21 @@ Route::group(['prefix' => 'admin'], function () {
     // fetch container aging
     Route::get('/container-aging/all', [ViewsController::class, "containerAging"]);
     Route::post('/get/container/aging',[QueriesController::class,"getContainerAging"]);
-    Route::get('/get/print/aging/{type}/{sizeType}/{client}/{class}/{date_in_from}/{date_in_to}/{date_out_from}/{date_out_to}/{option}/{status}',[QueriesController::class,"prntAging"]);
-    Route::get('/get/print/daily_in/{type}/{sizeType}/{client}/{class}/{status}/{from}/{to}',[QueriesController::class,"prntDailyIn"]);
-    Route::get('/get/print/daily_out/{type}/{sizeType}/{client}/{class}/{status}/{from}/{to}',[QueriesController::class,"prntDailyOut"]);
+    Route::get('/get/print/aging/{type}/{sizeType}/{client}/{class}/{date_in_from}/{date_in_to}/{date_out_from}/{date_out_to}/{option}/{status}/{param}/{order}',[QueriesController::class,"prntAging"]);
+    Route::get('/get/print/daily_in/{type}/{sizeType}/{client}/{class}/{status}/{from}/{to}/{param}/{order}',[QueriesController::class,"prntDailyIn"]);
+    Route::get('/get/print/daily_out/{type}/{sizeType}/{client}/{class}/{status}/{from}/{to}/{param}/{order}',[QueriesController::class,"prntDailyOut"]);
     // fetch container inquiry
     Route::get('/container-inquiry/{container_no}',[QueriesController::class,"containerInquiry"]);
     Route::get('/container-inquiry/download/{record_type}/{container_no}',['as' => 'admin.container-inquiry.download', 'uses' => 'App\Http\Controllers\QueriesController@saveImages']);
+    Route::get('/container-images/download/{record_type}/{container_no}',[QueriesController::class,"saveImages"]);
 
     Route::delete('/delete/damage/{id}',[UpdateController::class,"ReceivingDamageDelete"]);    
 });
 
   // EXCEL
-    Route::get('excel/daily_container_in/{type}/{sizeType}/{client}/{class}/{status}/{from}/{to}',[ExcelController::class,"dailyContainerIn"])->name('excel.daily_container_in');
-    Route::get('excel/daily_container_out/{type}/{sizeType}/{client}/{class}/{status}/{from}/{to}',[ExcelController::class,"dailyContainerOut"])->name('excel.daily_container_out');
-    Route::get('excel/container_aging/{type}/{sizeType}/{client}/{class}/{date_in_from}/{date_in_to}/{date_out_from}/{date_out_to}/{option}/{status}',[ExcelController::class,"containerAging"])->name('excel.container_aging');
+    Route::get('excel/daily_container_in/{type}/{sizeType}/{client}/{class}/{status}/{from}/{to}/{param}/{order}',[ExcelController::class,"dailyContainerIn"])->name('excel.daily_container_in');
+    Route::get('excel/daily_container_out/{type}/{sizeType}/{client}/{class}/{status}/{from}/{to}/{param}/{order}',[ExcelController::class,"dailyContainerOut"])->name('excel.daily_container_out');
+    Route::get('excel/container_aging/{type}/{sizeType}/{client}/{class}/{date_in_from}/{date_in_to}/{date_out_from}/{date_out_to}/{option}/{status}/{param}/{order}',[ExcelController::class,"containerAging"])->name('excel.container_aging');
     /*Route::group(['prefix' => 'admin'], function () {
         Voyager::routes();
     });*/
