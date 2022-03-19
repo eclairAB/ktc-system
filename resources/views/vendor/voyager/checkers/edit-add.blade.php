@@ -56,12 +56,12 @@
                                 <div class="customErrorText"><small>@{{ errors.user_id ? errors.user_id[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
-                                <input type="text" name="password" id="password" v-model="form.password" class="form-control" :class="errors.password ? 'isError' : ''">
+                                <input type="password" name="password" id="password" v-model="form.password" class="form-control" :class="errors.password ? 'isError' : ''">
                                 <label for="password" class="form-control-placeholder"> Password</label>
                                 <div class="customErrorText"><small>@{{ errors.password ? errors.password[0] : '' }}</small></div>
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group">
-                                <input type="text" name="password_confirmation" id="password_confirmation" v-model="form.password_confirmation" class="form-control" :class="errors.password_confirmation ? 'isError' : ''">
+                                <input type="password" name="password_confirmation" id="password_confirmation" v-model="form.password_confirmation" class="form-control" :class="errors.password_confirmation ? 'isError' : ''">
                                 <label for="password_confirmation" class="form-control-placeholder"> Confirm Password</label>
                                 <div class="customErrorText"><small>@{{ errors.password_confirmation ? errors.password_confirmation[0] : '' }}</small></div>
                               </div>
@@ -217,9 +217,9 @@
             this.customload = true
             let currentUrl = window.location.href
             let checkedit = currentUrl.split('/create')[currentUrl.split('/create').length -2]
-            this.$set(this.form, 'id_no', this.form.id_no.toUpperCase())
-            this.$set(this.form, 'firstname', this.form.firstname.toUpperCase())
-            this.$set(this.form, 'lastname', this.form.lastname.toUpperCase())
+            this.form.id_no && this.$set(this.form, 'id_no', this.form.id_no.toUpperCase())
+            this.form.firstname && this.$set(this.form, 'firstname', this.form.firstname.toUpperCase())
+            this.form.lastname && this.$set(this.form, 'lastname', this.form.lastname.toUpperCase())
             await axios.post('/admin/create/checker', this.form).then(data => {
               this.customload = false
               $('#savingDialog').modal('hide');
@@ -236,9 +236,9 @@
             this.customload = true
             let currentUrl = window.location.origin
             let browseUrl = `${currentUrl}/admin/checkers`
-            this.$set(this.form, 'id_no', this.form.id_no.toUpperCase())
-            this.$set(this.form, 'firstname', this.form.firstname.toUpperCase())
-            this.$set(this.form, 'lastname', this.form.lastname.toUpperCase())
+            this.form.id_no && this.$set(this.form, 'id_no', this.form.id_no.toUpperCase())
+            this.form.firstname && this.$set(this.form, 'firstname', this.form.firstname.toUpperCase())
+            this.form.lastname && this.$set(this.form, 'lastname', this.form.lastname.toUpperCase())
             await axios.post('/admin/update/checker', this.form).then(data => {
               this.customload = false
               $('#savingDialog').modal('hide');
