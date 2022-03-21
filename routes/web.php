@@ -73,6 +73,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/releasing/byId/{id}',[QueriesController::class,"getReleasingById"]);
     Route::get('/get/receiving/byId/{id}',[QueriesController::class,"getReceivingById"]);
 
+    Route::delete('delete/receiving/{id}',[PostsController::class,'deleteReceiving']);
+    Route::delete('delete/releasing/{id}',[PostsController::class,'deleteReleasing']);
+
     Route::get('/get/container/components/byId/{id}',[QueriesController::class,"getComponentsById"]);
     Route::get('/get/container/repairs/byId/{id}',[QueriesController::class,"getRepairsById"]);
     Route::get('/get/container/damages/byId/{id}',[QueriesController::class,"getDamagesById"]);

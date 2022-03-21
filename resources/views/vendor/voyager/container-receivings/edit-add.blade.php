@@ -400,6 +400,7 @@
                   </div>
 
                   <div style="display: flex; justify-content: flex-end; padding-top: 0;" v-if="isOk === true">
+                    <button style="width: 100px; margin-right: 5px;" class="btn btn-danger" @click="deleteReceiving()" v-if="form.id">Delete</button>
                     <button style="width: 100px;" class="btn btn-primary save" :disabled="loading === true" @click="form.id ? updateReceiving() : saveReceiving() ">@{{loading === false ? (form.id ? 'Update' : 'Save') : 'Loading...'}}</button>
                   </div>
 
@@ -1122,6 +1123,20 @@
                 container_photo: []
               }
             }
+          },
+          async deleteReceiving () {
+            // this.loading = true
+            await axios.delete(`/admin/delete/receiving/${this.form.id}`).then(async data => {
+              // this.loading = false
+              // $('#savingDialog').modal('hide');
+              this.errors = {}
+              let customUrl = `${window.location.origin}/admin/container-inquiry/browse`
+              window.location = customUrl
+            }).catch(error => {
+              // this.loading = false
+              // $('#savingDialog').modal('hide');
+              this.errors = error.response.data.errors
+            })
           },
           async getEmptyLoaded () {
             await axios.get(`/admin/get/emptyloaded`).then(data => {
