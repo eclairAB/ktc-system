@@ -8,7 +8,7 @@
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
-    <link rel="stylesheet" href="https://unpkg.com/vue-select@3.16.0/dist/vue-select.css">
+    <link rel="stylesheet" href="https://unpkg.com/vue-select@3.18.3/dist/vue-select.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 @stop
 
@@ -172,7 +172,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
-    <script src="https://unpkg.com/vue-select@3.16.0"></script>
+    <script src="https://unpkg.com/vue-select@3.18.3"></script>
 
     <!-- VUE -->
     <script type="text/javascript">
