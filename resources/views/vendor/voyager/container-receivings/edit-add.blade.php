@@ -1126,17 +1126,19 @@
           },
           async deleteReceiving () {
             // this.loading = true
-            await axios.delete(`/admin/delete/receiving/${this.form.id}`).then(async data => {
-              // this.loading = false
-              // $('#savingDialog').modal('hide');
-              this.errors = {}
-              let customUrl = `${window.location.origin}/admin/container-inquiry/browse`
-              window.location = customUrl
-            }).catch(error => {
-              // this.loading = false
-              // $('#savingDialog').modal('hide');
-              this.errors = error.response.data.errors
-            })
+            if(confirm("Do you really want to delete?")){
+              await axios.delete(`/admin/delete/receiving/${this.form.id}`).then(async data => {
+                // this.loading = false
+                // $('#savingDialog').modal('hide');
+                this.errors = {}
+                let customUrl = `${window.location.origin}/admin/container-inquiry/browse`
+                window.location = customUrl
+              }).catch(error => {
+                // this.loading = false
+                // $('#savingDialog').modal('hide');
+                this.errors = error.response.data.errors
+              })
+            }
           },
           async getEmptyLoaded () {
             await axios.get(`/admin/get/emptyloaded`).then(data => {
