@@ -291,7 +291,6 @@
                             <div class="modal-content">
                               <div class="modal-header" style="display: flex; align-items: center;">
                                 <h5 class="modal-title" id="dialogLabel">@{{ isEdit === true ? 'Edit Damage' : 'Add Damage' }}</h5>
-                                @{{ damagesAutocomplete.values }}
                                 <button type="button" @click="closeDialog" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: auto;">
                                   <span aria-hidden="true">&times;</span>
                                 </button>
