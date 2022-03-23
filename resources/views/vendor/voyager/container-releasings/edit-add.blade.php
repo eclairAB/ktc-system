@@ -7,7 +7,7 @@
 
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="https://unpkg.com/vue-select@3.16.0/dist/vue-select.css">
+    <link rel="stylesheet" href="https://unpkg.com/vue-select@3.18.3/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
     <style type="text/css">
       .page-title {
@@ -40,6 +40,7 @@
                 <div id="containerReleasing">
                   <!--  -->
                   <div style="display: flex; justify-content: flex-end;" v-if="form.id">
+                    <button style="margin-right: 5px;" class="btn btn-danger" @click="downloadPath" v-if="form.container_photo.length > 0"><i class="voyager-download"></i> Download All Photos</button>
                     <button class="btn btn-success" @click="printData"><i class="voyager-file-text"></i> Print</button>
                   </div>
                   <div class="panel panel-bordered" style="margin-bottom: 5px;">
@@ -157,6 +158,7 @@
                   <!--  -->
 
                   <div style="display: flex; justify-content: flex-end; padding-top: 0;" v-if="isOk === true">
+                    <button style="width: 100px; margin-right: 5px;" class="btn btn-danger" @click="deleteReleasing()" v-if="form.id">Delete</button>
                     <button style="width: 100px;" class="btn btn-primary save" :disabled="loading === true" @click="form.id ? updateReleasing() : saveReleasing() ">@{{loading === false ? (form.id ? 'Update' : 'Save') : 'Loading...'}}</button>
                   </div>
 
@@ -323,6 +325,11 @@
           loading: false
         },
         methods:{
+          async downloadPath () {
+            await axios.get(`/admin/container-images/download/releasing/${this.form.id}`).then(data => {
+              window.open(`${location.origin}/admin/container-images/download/releasing/${this.form.id}`, "_blank");
+            })
+          },
           async printData () {
             await axios.get(`/admin/get/print/releasing/${this.form.id}`).then(data => {
               let pasmo = data.data
@@ -506,7 +513,23 @@
                 container_photo: []
               }
             }
-          }
+          },
+          async deleteReleasing () {
+            // this.loading = true
+            if(confirm("Do you really want to delete?")){
+              await axios.delete(`/admin/delete/releasing/${this.form.id}`).then(async data => {
+                // this.loading = false
+                // $('#savingDialog').modal('hide');
+                this.errors = {}
+                let customUrl = `${window.location.origin}/admin/container-inquiry/browse`
+                window.location = customUrl
+              }).catch(error => {
+                // this.loading = false
+                // $('#savingDialog').modal('hide');
+                this.errors = error.response.data.errors
+              })
+            }
+          },
         },
         mounted () {
           this.getdata()

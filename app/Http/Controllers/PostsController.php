@@ -32,6 +32,7 @@ use App\Models\ContainerClass;
 use App\Models\YardLocation;
 use App\Models\Type;
 use App\Models\EirNumber;
+use App\Models\ContainerPhoto;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Auth;
@@ -391,5 +392,30 @@ class PostsController extends Controller
         }
 
         return EirNumber::insertGetId(['eir_no' => $type . $x, 'container_id' => $container_id,'created_at'=>Carbon::now(),'updated_at'=>Carbon::now()]);
+    }
+
+    public function deleteReceiving($id)
+    {
+        $conts = Container::where('receiving_id',$id)->whereNull('releasing_id')->pluck('id');
+        
+        EirNumber::whereIn('container_id',$conts)->where('eir_no','ilike','%I-%')->delete();
+        ContainerPhoto::whereIn('container_id',$conts)->where('container_type','receiving')->delete();
+        ReceivingDamage::where('receiving_id',$id)->delete();
+        Container::where('receiving_id',$id)->whereNull('releasing_id')->delete();
+        ContainerReceiving::where('id',$id)->delete();
+        $path = storage_path() . '/app/public/uploads/receiving/container/' . $id . '/';
+        array_map('unlink', glob($path."*.png"));
+    }
+
+    public function deleteReleasing($id)
+    {
+        $conts = Container::where('releasing_id',$id)->whereNotNull('receiving_id')->pluck('id');
+        
+        EirNumber::whereIn('container_id',$conts)->where('eir_no','ilike','%O-%')->delete();
+        ContainerPhoto::whereIn('container_id',$conts)->where('container_type','releasing')->delete();
+        Container::where('releasing_id',$id)->whereNotNull('receiving_id')->update(['releasing_id'=>null]);
+        ContainerReleasing::where('id',$id)->delete();
+        $path = storage_path() . '/app/public/uploads/releasing/container/' . $id . '/';
+        array_map('unlink', glob($path."*.png"));
     }
 }

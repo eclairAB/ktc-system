@@ -24,7 +24,7 @@ class ValidateStaffField extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required', Rule::unique('users','email')],
+            // 'email' => ['required', Rule::unique('users','email')],
             'password_confirmation' => 'same:password',
             'id_no' => 'required',
             'firstname' => 'required',
@@ -37,8 +37,8 @@ class ValidateStaffField extends FormRequest
     public function messages()
     {
         return [
-            'email.required' => 'Invalid email.',
-            'email.unique' => 'Email already in use.',
+            // 'email.required' => 'Invalid email.',
+            // 'email.unique' => 'Email already in use.',
             'id_no.required' => 'ID number is required.',
             'firstname.required' => 'First name is required.',
             'lastname.required' => 'Last name is required.',

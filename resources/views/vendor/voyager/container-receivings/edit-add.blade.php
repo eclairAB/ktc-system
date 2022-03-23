@@ -7,7 +7,7 @@
 
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="https://unpkg.com/vue-select@3.16.0/dist/vue-select.css">
+    <link rel="stylesheet" href="https://unpkg.com/vue-select@3.18.3/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/@trevoreyre/autocomplete-vue/dist/style.css"/>
     <style type="text/css">
@@ -44,6 +44,7 @@
                 <div id="containerReceiving">
                   <!--  -->
                   <div style="display: flex; justify-content: flex-end;" v-if="form.id">
+                    <button style="margin-right: 5px;" class="btn btn-danger" @click="downloadPath" v-if="form.container_photo.length > 0"><i class="voyager-download"></i> Download All Photos</button>
                     <button class="btn btn-success" @click="printData"><i class="voyager-file-text"></i> Print</button>
                   </div>
                   <div class="panel panel-bordered" style="margin-bottom: 5px;">
@@ -297,10 +298,10 @@
                               </div>
                               <hr style="margin: 0">
                               <div class="modal-body" style="padding-bottom: 0;">
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <autocomplete
                                     ref="autocompleteRepair"
-                                    base-class="uppercaseText repair autocomplete"
+                                    :base-class="damageError.repair_id ? 'isError uppercaseText repair autocomplete' : 'uppercaseText repair autocomplete'"
                                     :search="searchRepair"
                                     :get-result-value="getResultRepair"
                                     @update="handleUpdateRepair"
@@ -309,12 +310,12 @@
                                     @blur="handleAutocompleteSubmitRepair"
                                   ></autocomplete>
                                   <label for="repair" class="form-control-placeholder"> Repair</label>
-                                  <div class="customErrorText"><small>@{{ damageError.repair }}</small></div>
+                                  <div class="customErrorText"><small>@{{ damageError.repair_id ? damageError.repair_id[0] : '' }}</small></div>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <autocomplete
                                     ref="autocompleteComponent"
-                                    base-class="uppercaseText ponent autocomplete"
+                                    :base-class="damageError.component_id ? 'isError uppercaseText ponent autocomplete' : 'uppercaseText ponent autocomplete'"
                                     :search="searchComponent"
                                     :get-result-value="getResultComponent"
                                     @update="handleUpdateComponent"
@@ -323,11 +324,12 @@
                                     @blur="handleAutocompleteSubmitComponent"
                                   ></autocomplete>
                                   <label for="component" class="form-control-placeholder"> Component</label>
+                                  <div class="customErrorText"><small>@{{ damageError.component_id ? damageError.component_id[0] : '' }}</small></div>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <autocomplete
                                     ref="autocompleteDamage"
-                                    base-class="uppercaseText damage autocomplete"
+                                    :base-class="damageError.damage_id ? 'isError uppercaseText damage autocomplete' : 'uppercaseText damage autocomplete'"
                                     :search="searchDamage"
                                     :get-result-value="getResultDamage"
                                     @update="handleUpdateDamage"
@@ -336,34 +338,36 @@
                                     @blur="handleAutocompleteSubmitDamage"
                                   ></autocomplete>
                                   <label for="damage" class="form-control-placeholder"> Damage</label>
+                                  <div class="customErrorText"><small>@{{ damageError.damage_id ? damageError.damage_id[0] : '' }}</small></div>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="location" class="form-control-placeholder"> Location</label>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <input type="number" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="length" class="form-control-placeholder"> Length</label>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <input type="number" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="width" class="form-control-placeholder"> Width</label>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <input type="text" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="quantity" class="form-control-placeholder"> Quantity</label>
                                 </div>
-                                <div class="col-lg-12 form-group mt-3">
+                                <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <input 
                                     type="text" 
                                     disabled 
                                     name="description" 
-                                    id="description" 
-                                    class="form-control" 
+                                    id="description"
+                                    :class="damageError.description ? 'isError form-control' : 'form-control'"
                                     style="margin-top: 10px;" 
                                     v-model="damages.description"
                                   >
                                   <label for="description" class="form-control-placeholder"> Description</label>
+                                  <div class="customErrorText"><small>@{{ damageError.description ? damageError.description[0] : '' }}</small></div>
                                 </div>
                               </div>
                               <div class="modal-footer" style="text-align: left !important; padding-top: 0;">
@@ -397,6 +401,7 @@
                   </div>
 
                   <div style="display: flex; justify-content: flex-end; padding-top: 0;" v-if="isOk === true">
+                    <button style="width: 100px; margin-right: 5px;" class="btn btn-danger" @click="deleteReceiving()" v-if="form.id">Delete</button>
                     <button style="width: 100px;" class="btn btn-primary save" :disabled="loading === true" @click="form.id ? updateReceiving() : saveReceiving() ">@{{loading === false ? (form.id ? 'Update' : 'Save') : 'Loading...'}}</button>
                   </div>
 
@@ -517,7 +522,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-    <script src="https://unpkg.com/vue-select@3.16.0"></script>
+    <script src="https://unpkg.com/vue-select@3.18.3"></script>
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-date-dropdown@1.0.5/dist/vue-date-dropdown.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuejs-datepicker@1.6.2/dist/vuejs-datepicker.min.js"></script>
@@ -631,6 +636,11 @@
           }
         },
         methods:{
+          async downloadPath () {
+            await axios.get(`/admin/container-images/download/receiving/${this.form.id}`).then(data => {
+              window.open(`${location.origin}/admin/container-images/download/receiving/${this.form.id}`, "_blank");
+            })
+          },
           async printData () {
             await axios.get(`/admin/get/print/receiving/${this.form.id}`).then(data => {
               let pasmo = data.data
@@ -836,7 +846,10 @@
               this.damageLoad = false
               this.closeDialog()
             }).catch(error => {
-              alert('Error')
+              this.damageLoad = false
+              if (error.response.data.errors) {
+                this.damageError = error.response.data.errors
+              }
             })
           },
           addNew () {
@@ -1110,6 +1123,22 @@
                 inspected_by: {!! Auth::user()->role->id !!},
                 container_photo: []
               }
+            }
+          },
+          async deleteReceiving () {
+            // this.loading = true
+            if(confirm("Do you really want to delete?")){
+              await axios.delete(`/admin/delete/receiving/${this.form.id}`).then(async data => {
+                // this.loading = false
+                // $('#savingDialog').modal('hide');
+                this.errors = {}
+                let customUrl = `${window.location.origin}/admin/container-inquiry/browse`
+                window.location = customUrl
+              }).catch(error => {
+                // this.loading = false
+                // $('#savingDialog').modal('hide');
+                this.errors = error.response.data.errors
+              })
             }
           },
           async getEmptyLoaded () {

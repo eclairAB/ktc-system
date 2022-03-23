@@ -27,30 +27,34 @@
         <table style="margin-top: 20px">
           <tr style="border-top: 2px solid; border-bottom: 2px solid">
             <th scope="col">Container No.</th>
-            <th scope="col">EIR No.</th> 
+            <th scope="col">EIR</th>
             <th scope="col">Size</th>
             <th scope="col">Type</th>
             <th scope="col">Client</th>
+            <th scope="col">Date Time</th>
+            <th scope="col">Class</th>
+            <th scope="col">Remarks</th>
             <th scope="col">Consignee</th>
             <th scope="col">Plate No.</th>
             <th scope="col">Trucker</th>
-            <th scope="col">Class</th>
-            <th scope="col">Remarks</th>
-            <th scope="col">Date OUT</th>
+            <th scope="col">Date Out</th>
+            <th scope="col">Time</th>
           </tr>
-          @foreach($data as $key => $item)
+          @foreach($datus as $key => $item)
           <tr>
             <td>{{ $item->container_no }}</td>
-            <td>{{ $item->container->eirNoOut->eir_no??'' }}</td>
-            <td>{{ $item->container->sizeType->size??'' }}</td>
-            <td>{{ $item->container->type->code??'' }}</td>
-            <td>{{ $item->container->client->code??'' }}</td>
-            <td>{{ $item->consignee }}</td>
-            <td>{{ $item->plate_no }}</td>
-            <td>{{ $item->hauler }}</td>
-            <td>{{ $item->container->containerClass->class_code??'' }}</td>
-            <td>{{ $item->remarks }}</td>
-            <td>{{ Carbon\Carbon::parse($item->inspected_date)->format('Y-m-d') }}</td>
+            <td>{{ $item->eirNoOut->eir_no??'' }}</td>
+            <td>{{ $item->sizeType->size??'' }}</td>
+            <td>{{ $item->type->code??'' }}</td>
+            <td>{{ $item->client->code??'' }}</td>
+            <td>{{ Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d h:i:s A') }}</td>
+            <td>{{ $item->containerClass->class_code??'' }}</td>
+            <td>{{ $item->releasing->remarks }}</td>
+            <td>{{ $item->releasing->consignee }}</td>
+            <td>{{ $item->releasing->plate_no }}</td>
+            <td>{{ $item->releasing->hauler }}</td>
+            <td>{{ Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}</td>
+            <td>{{ Carbon\Carbon::parse($item->releasing->inspected_date)->format('h:i:s A') }}</td>
           </tr>
           @endforeach
         </table>

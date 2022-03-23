@@ -6,6 +6,7 @@
           <th style="font-weight:bold;">Type</th>
           <th style="font-weight:bold;">Status</th>
           <th style="font-weight:bold;">Client</th>
+          <th style="font-weight:bold;">Class</th>
           <th style="font-weight:bold;">Date IN</th>
           <th style="font-weight:bold;">Consignee</th>
           <th style="font-weight:bold;">Date OUT</th>
@@ -19,8 +20,9 @@
           <td>{{ $item->container_no }}</td>
           <td>{{ $item->sizeType->size??'' }}</td>
           <td>{{ $item->type->code??'' }}</td>
-          <td>{{ $item->receiving->empty_loaded??'' }}</td>
+          <td>{{ $item->status??'' }}</td>
           <td>{{ $item->client->code??'' }}</td>
+          <td>{{ $item->containerClass->class_code??'' }}</td>
           <td>{{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}</td>
           <td>{{ $item->receiving->consignee??'' }}</td>
           <td>{{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}</td>
