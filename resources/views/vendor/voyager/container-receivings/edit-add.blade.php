@@ -1372,7 +1372,7 @@
         }
       }
 
-      setDropdownListeners()
+      // setDropdownListeners()
       // setAutocomplete()
     </script>
     <!--  -->
