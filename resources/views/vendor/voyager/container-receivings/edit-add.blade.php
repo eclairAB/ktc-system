@@ -304,9 +304,7 @@
                                     :search="searchRepair"
                                     :get-result-value="getResultRepair"
                                     @update="handleUpdateRepair"
-                                    auto-select
                                     @submit="handleAutocompleteSubmitRepair"
-                                    @blur="handleAutocompleteSubmitRepair"
                                   ></autocomplete>
                                   <label for="repair" class="form-control-placeholder"> Repair</label>
                                   <div class="customErrorText"><small>@{{ damageError.repair_id ? damageError.repair_id[0] : '' }}</small></div>
@@ -318,9 +316,7 @@
                                     :search="searchComponent"
                                     :get-result-value="getResultComponent"
                                     @update="handleUpdateComponent"
-                                    auto-select
                                     @submit="handleAutocompleteSubmitComponent"
-                                    @blur="handleAutocompleteSubmitComponent"
                                   ></autocomplete>
                                   <label for="component" class="form-control-placeholder"> Component</label>
                                   <div class="customErrorText"><small>@{{ damageError.component_id ? damageError.component_id[0] : '' }}</small></div>
@@ -332,9 +328,7 @@
                                     :search="searchDamage"
                                     :get-result-value="getResultDamage"
                                     @update="handleUpdateDamage"
-                                    auto-select
                                     @submit="handleAutocompleteSubmitDamage"
-                                    @blur="handleAutocompleteSubmitDamage"
                                   ></autocomplete>
                                   <label for="damage" class="form-control-placeholder"> Damage</label>
                                   <div class="customErrorText"><small>@{{ damageError.damage_id ? damageError.damage_id[0] : '' }}</small></div>
