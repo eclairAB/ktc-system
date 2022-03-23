@@ -299,6 +299,7 @@
                               <div class="modal-body" style="padding-bottom: 0;">
                                 <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
                                   <v-select
+                                    tabindex="13"
                                     style="height: 30px !important;"
                                     :class="errors.client_id ? 'isError form-control' : 'form-control'"
                                     :options="repairList"
@@ -318,6 +319,7 @@
                                     @submit="handleAutocompleteSubmitComponent"
                                   ></autocomplete> -->
                                   <v-select
+                                    tabindex="14"
                                     style="height: 30px !important;"
                                     :class="errors.component_id ? 'isError form-control' : 'form-control'"
                                     :options="componentList"
@@ -337,6 +339,7 @@
                                     @submit="handleAutocompleteSubmitDamage"
                                   ></autocomplete> -->
                                   <v-select
+                                    tabindex="15"
                                     style="height: 30px !important;"
                                     :class="errors.damage_id ? 'isError form-control' : 'form-control'"
                                     :options="damageChoicesList"
@@ -347,23 +350,23 @@
                                   <div class="customErrorText"><small>@{{ damageError.damage_id ? damageError.damage_id[0] : '' }}</small></div>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
-                                  <input type="text" name="location" id="location" class="form-control" v-model="damages.location" style="margin-top: 10px; text-transform: uppercase;">
+                                  <input tabindex="16" type="text" name="location" id="location" class="form-control" v-model="damages.location" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="location" class="form-control-placeholder"> Location</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
-                                  <input type="number" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px; text-transform: uppercase;">
+                                  <input tabindex="17" type="number" name="length" id="length" class="form-control" v-model="damages.length" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="length" class="form-control-placeholder"> Length</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
-                                  <input type="number" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px; text-transform: uppercase;">
+                                  <input tabindex="18" type="number" name="width" id="width" class="form-control" v-model="damages.width" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="width" class="form-control-placeholder"> Width</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
-                                  <input type="text" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px; text-transform: uppercase;">
+                                  <input tabindex="19" type="text" name="quantity" id="quantity" class="form-control" v-model="damages.quantity" style="margin-top: 10px; text-transform: uppercase;">
                                   <label for="quantity" class="form-control-placeholder"> Quantity</label>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
-                                  <input 
+                                  <input
                                     type="text" 
                                     disabled 
                                     name="description" 
