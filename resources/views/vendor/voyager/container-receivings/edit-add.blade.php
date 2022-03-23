@@ -1021,6 +1021,7 @@
             this.form.hauler && this.$set(this.form, 'hauler', this.form.hauler.toUpperCase())
             this.form.plate_no && this.$set(this.form, 'plate_no', this.form.plate_no.toUpperCase())
             this.form.remarks && this.$set(this.form, 'remarks', this.form.remarks.toUpperCase())
+            this.$set(this.form, 'manufactured_date', this.pasmoDate)
             await axios.post('/admin/update/receiving', this.form).then(async data => {
               // this.loading = false
               $('#savingDialog').modal('hide');
