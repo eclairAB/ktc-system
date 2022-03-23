@@ -298,38 +298,51 @@
                               <hr style="margin: 0">
                               <div class="modal-body" style="padding-bottom: 0;">
                                 <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
-                                  <autocomplete
-                                    ref="autocompleteRepair"
-                                    :base-class="damageError.repair_id ? 'isError uppercaseText repair autocomplete' : 'uppercaseText repair autocomplete'"
-                                    :search="searchRepair"
-                                    :get-result-value="getResultRepair"
-                                    @update="handleUpdateRepair"
-                                    @submit="handleAutocompleteSubmitRepair"
-                                  ></autocomplete>
-                                  <label for="repair" class="form-control-placeholder"> Repair</label>
+                                  <v-select
+                                    style="height: 30px !important;"
+                                    :class="errors.client_id ? 'isError form-control' : 'form-control'"
+                                    :options="repairList"
+                                    v-model="damages.repair"
+                                    label="name"
+                                  ></v-select>
+                                  <label for="client" class="form-control-placeholder"> Repair</label>
                                   <div class="customErrorText"><small>@{{ damageError.repair_id ? damageError.repair_id[0] : '' }}</small></div>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
-                                  <autocomplete
+                                  <!-- <autocomplete
                                     ref="autocompleteComponent"
                                     :base-class="damageError.component_id ? 'isError uppercaseText ponent autocomplete' : 'uppercaseText ponent autocomplete'"
                                     :search="searchComponent"
                                     :get-result-value="getResultComponent"
                                     @update="handleUpdateComponent"
                                     @submit="handleAutocompleteSubmitComponent"
-                                  ></autocomplete>
+                                  ></autocomplete> -->
+                                  <v-select
+                                    style="height: 30px !important;"
+                                    :class="errors.component_id ? 'isError form-control' : 'form-control'"
+                                    :options="componentList"
+                                    v-model="damages.component"
+                                    label="name"
+                                  ></v-select>
                                   <label for="component" class="form-control-placeholder"> Component</label>
                                   <div class="customErrorText"><small>@{{ damageError.component_id ? damageError.component_id[0] : '' }}</small></div>
                                 </div>
                                 <div class="col-lg-12 form-group mt-3" style="margin-bottom: 30px !important;">
-                                  <autocomplete
+                                  <!-- <autocomplete
                                     ref="autocompleteDamage"
                                     :base-class="damageError.damage_id ? 'isError uppercaseText damage autocomplete' : 'uppercaseText damage autocomplete'"
                                     :search="searchDamage"
                                     :get-result-value="getResultDamage"
                                     @update="handleUpdateDamage"
                                     @submit="handleAutocompleteSubmitDamage"
-                                  ></autocomplete>
+                                  ></autocomplete> -->
+                                  <v-select
+                                    style="height: 30px !important;"
+                                    :class="errors.damage_id ? 'isError form-control' : 'form-control'"
+                                    :options="damageChoicesList"
+                                    v-model="damages.damage"
+                                    label="name"
+                                  ></v-select>
                                   <label for="damage" class="form-control-placeholder"> Damage</label>
                                   <div class="customErrorText"><small>@{{ damageError.damage_id ? damageError.damage_id[0] : '' }}</small></div>
                                 </div>
@@ -594,6 +607,8 @@
           loading: false,
           pasmoDate: null,
           repairList: [],
+          componentList: [],
+          damageChoicesList: [],
           componentresults: [],
           selectedIndexComponent: -1,
           submittedComponent: false,
@@ -652,75 +667,35 @@
             this.$set(this.form, 'container_no', item)
             this.searchContainer()
           },
-          searchRepair(input) {
-            this.submittedRepair = false
-            return new Promise((resolve) => {
-              if (input.length < 1) {
-                return resolve([])
-              }
-              axios.get(`/admin/get/container/repair?keyword=${input}`)
-                .then((data) => {
-                  this.damagesAutocomplete.selections.repair = data.data
-                  resolve(data.data)
-                })
+          async getRepair () {
+            let search = {
+              keyword: ''
+            }
+            await axios.get(`/admin/get/container/repair?keyword=${search.keyword}`).then( data => {
+              this.repairList = data.data
+            }).catch(error => {
+              console.log('error: ', error)
             })
           },
-          getResultRepair(result) {
-            return result.code + ' - (' +  result.name + ')'
-          },
-          handleUpdateRepair(results, selectedIndex) {
-            this.repairresults = results
-            selectedIndexRepair = selectedIndex
-          },
-          handleAutocompleteSubmitRepair(result) {
-            if (result !== undefined) {
-              this.submittedRepair = true
+          async getComponent () {
+            let search = {
+              keyword: ''
             }
-            if(result.id) this.handleSubmitRepair(result)
-            else {
-              this.handleSubmitRepair(this.damagesAutocomplete.values.repair)
-            }
-          },
-          handleSubmitRepair(result) {
-            console.log('handleSubmitRepair', result)
-            this.$set(this.damages, 'repair', result)
-            this.$set(this.damages, 'repair_id', result.id)
-            this.pasmo()
-          },
-          searchComponent(input) {
-            this.submittedComponent = false
-            return new Promise((resolve) => {
-              if (input.length < 1) {
-                return resolve([])
-              }
-              axios.get(`/admin/get/container/component?keyword=${input}`)
-                .then((data) => {
-                  this.damagesAutocomplete.selections.component = data.data
-                  resolve(data.data)
-                })
+            await axios.get(`/admin/get/container/component?keyword=${search.keyword}`).then( data => {
+              this.componentList = data.data
+            }).catch(error => {
+              console.log('error: ', error)
             })
           },
-          getResultComponent(result) {
-            return result.code + ' - (' +  result.name + ')'
-          },
-          handleUpdateComponent(results, selectedIndex) {
-            this.componentresults = results
-            selectedIndexComponent = selectedIndex
-          },
-          handleAutocompleteSubmitComponent(result) {
-            if (result !== undefined) {
-              this.submittedComponent = true
+          async getChoicesDamage () {
+            let search = {
+              keyword: ''
             }
-            if(result.id) this.handleSubmitComponent(result)
-            else {
-              this.handleSubmitComponent(this.damagesAutocomplete.values.component)
-            }
-          },
-          handleSubmitComponent(result) {
-            console.log('handleSubmitComponent', result)
-            this.$set(this.damages, 'component', result)
-            this.$set(this.damages, 'component_id', result.id)
-            this.pasmo()
+            await axios.get(`/admin/get/container/damage?keyword=${search.keyword}`).then( data => {
+              this.damageChoicesList = data.data
+            }).catch(error => {
+              console.log('error: ', error)
+            })
           },
           searchDamage(input) {
             this.submittedDamage = false
@@ -736,44 +711,15 @@
                 })
             })
           },
-          getResultDamage(result) {
-            return result.code + ' - (' +  result.name + ')'
-          },
-          handleUpdateDamage(results, selectedIndex) {
-            this.damageresults = results
-            selectedIndexDamage = selectedIndex
-          },
-          handleAutocompleteSubmitDamage(result) {
-            if (result !== undefined) {
-              this.submittedDamage = true
-            }
-            if(result.id) this.handleSubmitDamage(result)
-            else {
-              this.handleSubmitDamage(this.damagesAutocomplete.values.damage)
-            }
-          },
-          handleSubmitDamage(result) {
-            console.log('handleSubmitDamage', result)
-            this.$set(this.damages, 'damage', result)
-            this.$set(this.damages, 'damage_id', result.id)
-            this.pasmo()
-          },
           editActual (payload, key) {
             this.isEdit = true
             this.damages = payload
             this.$set(this.damages, 'key', key)
-            this.$refs.autocompleteRepair.value = payload.repair.code
-            this.$refs.autocompleteComponent.value = payload.component.code
-            this.$refs.autocompleteDamage.value = payload.damage.code
             $('#dialog').modal({backdrop: 'static', keyboard: false});
           },
           editFromList (payload, key) {
             this.isEdit = true
             this.damages = payload
-            this.$set(this.damages, 'key', key)
-            this.$refs.autocompleteRepair.value = payload.repair.code
-            this.$refs.autocompleteComponent.value = payload.component.code
-            this.$refs.autocompleteDamage.value = payload.damage.code
             $('#dialog').modal({backdrop: 'static', keyboard: false});
           },
           deleteFromList (payload) {
@@ -799,10 +745,6 @@
             this.damages = {}
             this.damageError = {}
             this.input = {}
-            this.$refs.autocompleteRepair.value = ''
-            this.$refs.autocompleteComponent.value = ''
-            this.$refs.autocompleteDamage.value = ''
-            this.repairList = []
             this.componentresults = []
             this.selectedIndexComponent = -1
             this.submittedComponent = false
@@ -821,6 +763,18 @@
             let desc = (this.damages.repair ? this.damages.repair.name.toUpperCase() : '') + ' ' + (this.damages.location ? `(${this.damages.location.toUpperCase()})` : '') + ' ' + (this.damages.damage ? this.damages.damage.name.toUpperCase() : '') + ' ' + (this.damages.component ? this.damages.component.name.toUpperCase() : '') + ' ' + (this.damages.quantity ? `(${this.damages.quantity.toUpperCase()})` : '') + ' ' + (this.damages.length ? `${this.damages.length.toUpperCase()}CM` : '') + '' + (this.damages.width ? `X${this.damages.width.toUpperCase()}CM` : '')
 
             this.$set(this.damages, 'description', desc)
+
+            if (this.damages.repair) {
+             this.$set(this.damages, 'repair_id', this.damages.repair.id)  
+            }
+
+            if (this.damages.component) {
+             this.$set(this.damages, 'component_id', this.damages.component.id)  
+            }
+
+            if (this.damages.damage) {
+             this.$set(this.damages, 'damage_id', this.damages.damage.id)  
+            }
             
             if (this.damages.location) {
               this.$set(this.damages, 'location', this.damages.location.toUpperCase())
@@ -849,7 +803,6 @@
             $('#dialog').modal({backdrop: 'static', keyboard: false});
             const asd = document.querySelector('div.uppercaseText.repair.autocomplete')/*.focus()*/
             asd && asd.focus()
-            // console.log(asd)
           },
           closeDialog () {
             this.clearDamage()
@@ -1192,6 +1145,9 @@
           this.getYard()
           this.getClass()
           this.getEmptyLoaded()
+          this.getRepair()
+          this.getComponent()
+          this.getChoicesDamage()
           // this.setAutocomplete()
         }
       })
