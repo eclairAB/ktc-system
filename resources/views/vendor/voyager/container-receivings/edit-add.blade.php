@@ -1192,7 +1192,7 @@
           this.getYard()
           this.getClass()
           this.getEmptyLoaded()
-          // this.setAutocomplete()
+          this.setAutocomplete()
         }
       })
     </script>
@@ -1365,7 +1365,7 @@
         }
       }
 
-      // setDropdownListeners()
+      setDropdownListeners()
       // setAutocomplete()
     </script>
     <!--  -->
