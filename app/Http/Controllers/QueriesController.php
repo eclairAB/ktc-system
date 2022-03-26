@@ -31,7 +31,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $class = ContainerClass::when(!empty($request->keyword), function ($q) use ($request){
             return $q->where('class_code', 'ilike', '%'.$request->keyword.'%')
             ->orwhere('class_name', 'ilike', '%'.$request->keyword.'%');
-        })->get();
+        })->orderBy('class_name','ASC')->get();
 
         return $class;
     }
@@ -60,7 +60,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $client = Client::when(!empty($request->keyword), function ($q) use ($request){
             return $q->where('code', 'ilike', '%'.$request->keyword.'%') 
             ->orwhere('name', 'ilike', '%'.$request->keyword.'%');
-        })->get();
+        })->orderBy('name','ASC')->get();
 
         return $client;
     }
@@ -94,7 +94,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         $yardloc = YardLocation::when(!empty($request->keyword), function ($q) use ($request){
             return $q->where('name', 'ilike', '%'.$request->keyword.'%');
-        })->get();
+        })->orderBy('name','ASC')->get();
 
         return $yardloc;
     }
@@ -103,7 +103,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         $dmgs = ContainerDamage::when(!empty($request->keyword), function ($q) use ($request){
             return $q->where('code', 'ilike', '%'.$request->keyword.'%');
-        })->get();
+        })->orderBy('code','ASC')->get();
 
         return $dmgs;
     }
@@ -112,7 +112,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         $repairs = ContainerRepair::when(!empty($request->keyword), function ($q) use ($request){
             return $q->where('code', 'ilike', '%'.$request->keyword.'%');
-        })->get();
+        })->orderBy('code','ASC')->get();
 
         return $repairs;
     }
@@ -121,7 +121,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         $comp = ContainerComponent::when(!empty($request->keyword), function ($q) use ($request){
             return $q->where('code', 'ilike', '%'.$request->keyword.'%');
-        })->get();
+        })->orderBy('code','ASC')->get();
 
         return $comp;
     }

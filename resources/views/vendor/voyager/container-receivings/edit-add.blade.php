@@ -121,8 +121,8 @@
                             :options="clientList"
                             v-model="form.client_id"
                             :disabled="!isOk"
-                            label="code"
-                            :reduce="code => code.id"
+                            label="name"
+                            :reduce="name => name.id"
                           ></v-select>
                           <label for="client" class="form-control-placeholder"> Client</label>
                           <div class="customErrorText"><small>@{{ errors.client_id ? errors.client_id[0] : '' }}</small></div>
