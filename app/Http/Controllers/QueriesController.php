@@ -1003,6 +1003,27 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                     $out = 0;
                     return view('print_aging')->with(compact('data','count','option','client','in','out'));
                 }
+            }else if($param == 'remarks'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.remarks');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.remarks');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
             }else if($param == 'releasing_inspected_date'){
                 $tobesorted = collect($datus);
                 if($order == 'ASC'){
@@ -1296,6 +1317,27 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                     return view('print_aging')->with(compact('data','count','option','client','in','out'));
                 }else{
                     $sorted = $tobesorted->sortByDesc('receiving.consignee');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }
+            }else if($param == 'remarks'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.remarks');
+                    $data = $sorted->values()->all();
+                     $client_id = $client != 'NA'?$client:null;
+                    $client = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('print_aging')->with(compact('data','count','option','client','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.remarks');
                     $data = $sorted->values()->all();
                      $client_id = $client != 'NA'?$client:null;
                     $client = Client::where('id',$client_id)->first();
@@ -1921,6 +1963,67 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                     })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
                     return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
                 }
+            }else if($param == 'remarks'){
+                $tobesorted = collect($datus);
+                if($order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.remarks');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.remarks');
+                    $data = $sorted->values()->all();
+                    $client_id = $client != 'NA'?$client:null;
+                    $client_details = Client::where('id',$client_id)->first();
+                    $count = count($data);
+                    $in = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($type != 'NA', function ($q)  use($type){
+                        return $q->where('type_id',$type);
+                    })->when($sizeType != 'NA', function ($q) use($sizeType){
+                        return $q->where('size_type',$sizeType);
+                    })->when($client != 'NA', function ($q) use($client){
+                        return $q->where('client_id',$client);
+                    })->when($class != 'NA', function ($q) use($class){
+                        return $q->where('class',$class);
+                    })->when($status != 'NA', function ($q) use($status){
+                        return $q->where('status',$status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('print_aging')->with(compact('data','in','out','count','option','client_details'));
+                }
             }else if($param == 'releasing_inspected_date'){
                 $tobesorted = collect($datus);
                 if($order == 'ASC'){
@@ -2251,7 +2354,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 })->when($request->date_in_to != 'NA', function ($q) use($request){
                     return $q->whereDate('inspected_date','<=',$request->date_in_to);
                 });
-            })->whereNotNull('receiving_id')->whereNull('releasing_id')->with('client','sizeType','containerClass','type','receiving')->get();
+            })->whereNotNull('receiving_id')->whereNull('releasing_id')->with('client','sizeType','containerClass','type','receiving.damages')->get();
     
             foreach($datus as $res)
             {
@@ -2395,6 +2498,23 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                     $out = 0;
                     return response()->json(compact('data','van_count','in','out'));
                 }
+            }else if($request->param == 'remarks'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.remarks');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.remarks');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return response()->json(compact('data','van_count','in','out'));
+                }
             }else if($request->param == 'releasing_inspected_date'){
                 $tobesorted = collect($datus);
                 if($request->order == 'ASC'){
@@ -2500,7 +2620,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 })->when($request->date_out_to != 'NA', function ($q) use($request){
                     return $q->whereDate('inspected_date','<=',$request->date_out_to);
                 });
-            })->whereNotNull('releasing_id')->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
+            })->whereNotNull('releasing_id')->whereNotNull('receiving_id')->with('client','sizeType','containerClass','type','receiving.damages','releasing')->orderBy('container_no','ASC')->get();
     
             foreach($datus as $res)
             {
@@ -2644,6 +2764,23 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                     $out = count($data);
                     return response()->json(compact('data','van_count','in','out'));
                 }
+            }else if($request->param == 'remarks'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.remarks');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.remarks');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return response()->json(compact('data','van_count','in','out'));
+                }
             }else if($request->param == 'releasing_inspected_date'){
                 $tobesorted = collect($datus);
                 if($request->order == 'ASC'){
@@ -2745,7 +2882,7 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return $q->where('status',$request->status);
             })->where(function($q) {
                 $q->has('receiving')->orHas('releasing');
-            })->with('client','sizeType','containerClass','type','receiving','releasing')->orderBy('container_no','ASC')->get();
+            })->with('client','sizeType','containerClass','type','receiving.damages','releasing')->orderBy('container_no','ASC')->get();
     
             foreach($datus as $res)
             {
@@ -3183,6 +3320,63 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                     return response()->json(compact('data','van_count','in','out'));
                 }else{
                     $sorted = $tobesorted->sortByDesc('receiving.consignee');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }
+            }else if($request->param == 'remarks'){
+                $tobesorted = collect($datus);
+                if($request->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.remarks');
+                    $data = $sorted->values()->all();
+                    $van_count = count($data);
+                    $in = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($request->type != 'NA', function ($q)  use($request){
+                        return $q->where('type_id',$request->type);
+                    })->when($request->sizeType != 'NA', function ($q) use($request){
+                        return $q->where('size_type',$request->sizeType);
+                    })->when($request->client != 'NA', function ($q) use($request){
+                        return $q->where('client_id',$request->client);
+                    })->when($request->class != 'NA', function ($q) use($request){
+                        return $q->where('class',$request->class);
+                    })->when($request->status != 'NA', function ($q) use($request){
+                        return $q->where('status',$request->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return response()->json(compact('data','van_count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.remarks');
                     $data = $sorted->values()->all();
                     $van_count = count($data);
                     $in = Container::when($request->type != 'NA', function ($q)  use($request){
