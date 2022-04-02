@@ -195,6 +195,23 @@ class ContainerAging implements  FromView, ShouldAutoSize
                     $out = 0;
                     return view('excel.container_aging',compact('data','count','in','out'));
                 }
+            }else if($this->param == 'remarks'){
+                $tobesorted = collect($datus);
+                if($this->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.remarks');
+                    $data = $sorted->values()->all();
+                     $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('excel.container_aging',compact('data','count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.remarks');
+                    $data = $sorted->values()->all();
+                     $count = count($data);
+                    $in = count($data);
+                    $out = 0;
+                    return view('excel.container_aging',compact('data','count','in','out'));
+                }
             }else if($this->param == 'releasing_inspected_date'){
                 $tobesorted = collect($datus);
                 if($this->order == 'ASC'){
@@ -438,6 +455,23 @@ class ContainerAging implements  FromView, ShouldAutoSize
                     return view('excel.container_aging',compact('data','count','in','out'));
                 }else{
                     $sorted = $tobesorted->sortByDesc('receiving.consignee');
+                    $data = $sorted->values()->all();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('excel.container_aging',compact('data','count','in','out'));
+                }
+            }else if($this->param == 'remarks'){
+                $tobesorted = collect($datus);
+                if($this->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.remarks');
+                    $data = $sorted->values()->all();
+                    $count = count($data);
+                    $in = 0;
+                    $out = count($data);
+                    return view('excel.container_aging',compact('data','count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.remarks');
                     $data = $sorted->values()->all();
                     $count = count($data);
                     $in = 0;
@@ -983,6 +1017,63 @@ class ContainerAging implements  FromView, ShouldAutoSize
                     return view('excel.container_aging',compact('data','count','in','out'));
                 }else{
                     $sorted = $tobesorted->sortByDesc('receiving.consignee');
+                    $data = $sorted->values()->all();
+                    $count = count($data);
+                    $in = Container::when($this->type != 'NA', function ($q)  {
+                        return $q->where('type_id',$this->type);
+                    })->when($this->sizeType != 'NA', function ($q) {
+                        return $q->where('size_type',$this->sizeType);
+                    })->when($this->client != 'NA', function ($q) {
+                        return $q->where('client_id',$this->client);
+                    })->when($this->class != 'NA', function ($q) {
+                        return $q->where('class',$this->class);
+                    })->when($this->status != 'NA', function ($q) {
+                        return $q->where('status',$this->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($this->type != 'NA', function ($q)  {
+                        return $q->where('type_id',$this->type);
+                    })->when($this->sizeType != 'NA', function ($q) {
+                        return $q->where('size_type',$this->sizeType);
+                    })->when($this->client != 'NA', function ($q) {
+                        return $q->where('client_id',$this->client);
+                    })->when($this->class != 'NA', function ($q) {
+                        return $q->where('class',$this->class);
+                    })->when($this->status != 'NA', function ($q) {
+                        return $q->where('status',$this->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('excel.container_aging',compact('data','count','in','out'));
+                }
+            }else if($this->param == 'remarks'){
+                $tobesorted = collect($datus);
+                if($this->order == 'ASC'){
+                    $sorted = $tobesorted->sortBy('receiving.remarks');
+                    $data = $sorted->values()->all();
+                    $count = count($data);
+                    $in = Container::when($this->type != 'NA', function ($q)  {
+                        return $q->where('type_id',$this->type);
+                    })->when($this->sizeType != 'NA', function ($q) {
+                        return $q->where('size_type',$this->sizeType);
+                    })->when($this->client != 'NA', function ($q) {
+                        return $q->where('client_id',$this->client);
+                    })->when($this->class != 'NA', function ($q) {
+                        return $q->where('class',$this->class);
+                    })->when($this->status != 'NA', function ($q) {
+                        return $q->where('status',$this->status);
+                    })->has('receiving')->whereNotNull('receiving_id')->whereNull('releasing_id')->count();
+                    $out = Container::when($this->type != 'NA', function ($q)  {
+                        return $q->where('type_id',$this->type);
+                    })->when($this->sizeType != 'NA', function ($q) {
+                        return $q->where('size_type',$this->sizeType);
+                    })->when($this->client != 'NA', function ($q) {
+                        return $q->where('client_id',$this->client);
+                    })->when($this->class != 'NA', function ($q) {
+                        return $q->where('class',$this->class);
+                    })->when($this->status != 'NA', function ($q) {
+                        return $q->where('status',$this->status);
+                    })->has('releasing')->whereNotNull('receiving_id')->whereNotNull('releasing_id')->count();
+                    return view('excel.container_aging',compact('data','count','in','out'));
+                }else{
+                    $sorted = $tobesorted->sortByDesc('receiving.remarks');
                     $data = $sorted->values()->all();
                     $count = count($data);
                     $in = Container::when($this->type != 'NA', function ($q)  {

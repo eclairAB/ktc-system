@@ -41,6 +41,8 @@
             <th scope="col">Class</th>
             <th scope="col">Date In</th>
             <th scope="col">Consignee</th>
+            <th scope="col">Damages</th>
+            <th scope="col">Remarks</th>
             <th scope="col">Date Out</th>
             <th scope="col">Consignee</th>
             <th scope="col">Booking</th>
@@ -57,6 +59,14 @@
             <td>{{ $item->containerClass->class_code??'' }}</td>
             <td>{{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}</td>
             <td>{{ $item->receiving->consignee??'' }}</td>
+            <td>
+                @foreach($item->receiving->damages as $key=> $dmg)
+                <div>
+                  {{ $key + 1 }}.) {{ $dmg->description }}
+                </div>
+                @endforeach
+            </td>
+            <td>{{ $item->receiving->remarks??'' }}</td>
             <td>{{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}</td>
             <td>{{ $item->releasing->consignee??'' }}</td>
             <td>{{ $item->releasing->booking_no??'' }}</td>
