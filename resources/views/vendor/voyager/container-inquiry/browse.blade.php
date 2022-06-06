@@ -119,7 +119,7 @@
                                 <td style="padding: 0 10px; line-height: 30px; white-space: nowrap;">
                                     {{ $item->containerClass->class_code??'' }}
                                 </td>   
-                                <td>
+                                <td style="padding: 0 10px; line-height: 30px; white-space: nowrap;">
                                     @foreach($item->receiving->damages as $key=> $dmg)
                                         <div>
                                             {{ $key + 1 }}.) {{ $dmg->description }}
