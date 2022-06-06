@@ -121,8 +121,8 @@
                             :options="clientList"
                             v-model="form.client_id"
                             :disabled="!isOk"
-                            label="code"
-                            :reduce="code => code.id"
+                            label="name"
+                            :reduce="name => name.id"
                           ></v-select>
                           <label for="client" class="form-control-placeholder"> Client</label>
                           <div class="customErrorText"><small>@{{ errors.client_id ? errors.client_id[0] : '' }}</small></div>
@@ -304,7 +304,7 @@
                                     :class="errors.client_id ? 'isError form-control' : 'form-control'"
                                     :options="repairList"
                                     v-model="damages.repair"
-                                    label="name"
+                                    label="code"
                                   ></v-select>
                                   <label for="client" class="form-control-placeholder"> Repair</label>
                                   <div class="customErrorText"><small>@{{ damageError.repair_id ? damageError.repair_id[0] : '' }}</small></div>
@@ -324,7 +324,7 @@
                                     :class="errors.component_id ? 'isError form-control' : 'form-control'"
                                     :options="componentList"
                                     v-model="damages.component"
-                                    label="name"
+                                    label="code"
                                   ></v-select>
                                   <label for="component" class="form-control-placeholder"> Component</label>
                                   <div class="customErrorText"><small>@{{ damageError.component_id ? damageError.component_id[0] : '' }}</small></div>
@@ -344,7 +344,7 @@
                                     :class="errors.damage_id ? 'isError form-control' : 'form-control'"
                                     :options="damageChoicesList"
                                     v-model="damages.damage"
-                                    label="name"
+                                    label="code"
                                   ></v-select>
                                   <label for="damage" class="form-control-placeholder"> Damage</label>
                                   <div class="customErrorText"><small>@{{ damageError.damage_id ? damageError.damage_id[0] : '' }}</small></div>
