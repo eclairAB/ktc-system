@@ -187,12 +187,13 @@
     
     </div>
 
-    <div class="panel panel-default" style="margin-top: 15px;">
+    <!-- <div class="panel panel-default" style="margin-top: 15px;"> -->
+    <div class="panel panel-default">
       <div class="panel-body">
-        <div style="color: black; font-weight: bold; text-align: center; margin-bottom: 10px;">
+        <!-- <div style="color: black; font-weight: bold; text-align: center; margin-bottom: 10px;">
             <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
             <span>Container Aging and Inventory</span>
-        </div>
+        </div> -->
         <div style="overflow: auto; max-height: 500px;">
           <table class="table table-bordered" style="margin-bottom: 0; color: black;">
             <thead>
