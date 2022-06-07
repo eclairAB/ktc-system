@@ -3,7 +3,7 @@
         <tr>
           <th style="font-weight:bold;">Container No.</th> 
           <th style="font-weight:bold;">EIR No.</th> 
-          <th style="font-weight:bold;">EIR</th> 
+          <th style="font-weight:bold;">Cus. EIR</th> 
           <th style="font-weight:bold;">Size</th>
           <th style="font-weight:bold;">Type</th>
           <th style="font-weight:bold;">Client</th>
