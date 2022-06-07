@@ -3,7 +3,7 @@
         <tr>
           <th style="font-weight:bold;">Container No.</th> 
           <th style="font-weight:bold;">EIR No.</th> 
-          <th style="font-weight:bold;">Cus. EIR</th> 
+          <th style="font-weight:bold;">EIR</th> 
           <th style="font-weight:bold;">Size</th>
           <th style="font-weight:bold;">Type</th>
           <th style="font-weight:bold;">Client</th>
@@ -21,7 +21,7 @@
         <tr>
           <td>{{ $item->container_no }}</td>
           <td>{{ $item->eirNoIn->eir_no??'' }}</td>
-          <td>{{ ' ' }}</td>
+          <td>{{ $item->eir??'' }}</td>
           <td>{{ $item->sizeType->size??'' }}</td>
           <td>{{ $item->type->code??'' }}</td>
           <td>{{ $item->client->code??'' }}</td>

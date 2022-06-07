@@ -23,6 +23,7 @@ class ContainerReceiving extends Model
         'plate_no',
         'remarks',
         'type_id',
+        'eir',
     ];
 
     public function photos()

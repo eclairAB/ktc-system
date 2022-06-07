@@ -51,10 +51,10 @@
                           <label for="id_no" class="form-control-placeholder"> EIR No.</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
-                          <input type="time" name="id_no" id="id_no" v-model="form.eir" class="form-control">
+                          <input type="number" name="id_no" id="id_no" v-model="form.eir" class="form-control">
                           <label for="id_no" class="form-control-placeholder"> EIR</label>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
+                        <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
                           <vuejs-datepicker
                             v-model="form.inspected_date"
                             :input-class="errors.inspected_date ? 'isError form-control isDate' : 'form-control isDate'"
@@ -66,11 +66,11 @@
                           </vuejs-datepicker>
                           <label for="id_no" class="form-control-placeholder"> Inspection Date</label>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
+                        <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
                           <input type="time" name="id_no" id="id_no" v-model="form.inspected_time" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inspection Time</label>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
+                        <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
                           <input type="text" name="id_no" id="id_no" disabled :value="form.id ? form.inspected_by.name : loginUser" class="form-control" style="height: 37px;">
                           <label for="id_no" class="form-control-placeholder"> Inspected By</label>
                         </div>
