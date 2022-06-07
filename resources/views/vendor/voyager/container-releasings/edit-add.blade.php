@@ -51,6 +51,10 @@
                           <label for="id_no" class="form-control-placeholder"> EIR No.</label>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
+                          <input type="time" name="id_no" id="id_no" v-model="form.eir" class="form-control">
+                          <label for="id_no" class="form-control-placeholder"> EIR</label>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 0;">
                           <vuejs-datepicker
                             v-model="form.inspected_date"
                             :input-class="errors.inspected_date ? 'isError form-control isDate' : 'form-control isDate'"
