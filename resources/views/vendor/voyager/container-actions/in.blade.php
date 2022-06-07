@@ -117,10 +117,6 @@
       </div>
     </div>
   
-  </div>
-
-  <!-- <div class="panel panel-default" style="margin-top: 15px;"> -->
-  <div class="panel panel-default">
     <div class="panel-body">
       <div style="color: black; font-weight: bold; text-align: center; margin-bottom: 10px;">
           <!-- <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br> -->
