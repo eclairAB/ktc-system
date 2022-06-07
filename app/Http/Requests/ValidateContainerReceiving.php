@@ -43,6 +43,7 @@ class ValidateContainerReceiving extends FormRequest
             'container_photo'=> 'nullable',
             'remarks'=> 'nullable',
             'type_id'=> 'required',
+            'eir'=> 'nullable',
         ];
     }
 
