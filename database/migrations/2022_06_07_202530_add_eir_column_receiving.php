@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStatusContainersTable extends Migration
+class AddEirColumnReceiving extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddStatusContainersTable extends Migration
      */
     public function up()
     {
-        Schema::table('containers', function (Blueprint $table) {
+        Schema::table('container_receivings', function (Blueprint $table) {
             //
-            $table->string('status')->nullable();
+            $table->string('eir')->nullable();
         });
     }
 
@@ -26,9 +26,9 @@ class AddStatusContainersTable extends Migration
      */
     public function down()
     {
-        Schema::table('containers', function (Blueprint $table) {
+        Schema::table('container_receivings', function (Blueprint $table) {
             //
-            $table->dropColumn('status');
+            $table->dropColumn('eir');
         });
     }
 }
