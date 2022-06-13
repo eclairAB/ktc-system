@@ -289,7 +289,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
       $(function () {
           $('#container_no').keyup(function() {
             var number = $(this).val();
@@ -305,7 +305,7 @@
             $(this).val(foo);
           });
       });
-    </script>
+    </script> -->
 
     <!-- VUE -->
     <script type="text/javascript">
