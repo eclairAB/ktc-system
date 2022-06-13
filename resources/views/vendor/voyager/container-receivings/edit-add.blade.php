@@ -309,7 +309,15 @@
                                     :options="repairList"
                                     v-model="damages.repair"
                                     label="code"
-                                  ></v-select>
+                                    :filter="fuseRepair"
+                                  >
+                                    <template slot="selected-option" slot-scope="option">
+                                      <span>@{{option.code}} - @{{option.name}}</span>
+                                    </template>
+                                    <template slot="option" slot-scope="option">
+                                      @{{option.code}} - @{{option.name}}
+                                    </template>
+                                  </v-select>
                                   <label for="client" class="form-control-placeholder"> Repair</label>
                                   <div class="customErrorText"><small>@{{ damageError.repair_id ? damageError.repair_id[0] : '' }}</small></div>
                                 </div>
@@ -329,7 +337,15 @@
                                     :options="componentList"
                                     v-model="damages.component"
                                     label="code"
-                                  ></v-select>
+                                    :filter="fuseComponent"
+                                  >
+                                    <template slot="selected-option" slot-scope="option">
+                                      <span>@{{option.code}} - @{{option.name}}</span>
+                                    </template>
+                                    <template slot="option" slot-scope="option">
+                                      @{{option.code}} - @{{option.name}}
+                                    </template>
+                                  </v-select>
                                   <label for="component" class="form-control-placeholder"> Component</label>
                                   <div class="customErrorText"><small>@{{ damageError.component_id ? damageError.component_id[0] : '' }}</small></div>
                                 </div>
@@ -347,9 +363,17 @@
                                     style="height: 30px !important;"
                                     :class="errors.damage_id ? 'isError form-control' : 'form-control'"
                                     :options="damageChoicesList"
+                                    :filter="fuseDamage"
                                     v-model="damages.damage"
                                     label="code"
-                                  ></v-select>
+                                  >
+                                    <template slot="selected-option" slot-scope="option">
+                                      <span>@{{option.code}} - @{{option.name}}</span>
+                                    </template>
+                                    <template slot="option" slot-scope="option">
+                                      @{{option.code}} - @{{option.name}}
+                                    </template>
+                                  </v-select>
                                   <label for="damage" class="form-control-placeholder"> Damage</label>
                                   <div class="customErrorText"><small>@{{ damageError.damage_id ? damageError.damage_id[0] : '' }}</small></div>
                                 </div>
@@ -544,7 +568,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/@trevoreyre/autocomplete-vue"></script>
 
-    <script type="text/javascript">
+   <!--  <script type="text/javascript">
       $(function () {
           $('#container_no').keyup(function() {
             var number = $(this).val();
@@ -566,7 +590,7 @@
           //   }
           // });
       });
-    </script>
+    </script> -->
 
     <!-- VUE -->
     <script type="text/javascript">
@@ -651,6 +675,33 @@
           }
         },
         methods:{
+          fuseDamage (options, search) {
+            const fuse = new Fuse(options, {
+              keys: ['code', 'name'],
+              shouldSort: true,
+            })
+            return search.length
+              ? fuse.search(search).map(({ item }) => item)
+              : fuse.list
+          },
+          fuseRepair (options, search) {
+            const fuse = new Fuse(options, {
+              keys: ['code', 'name'],
+              shouldSort: true,
+            })
+            return search.length
+              ? fuse.search(search).map(({ item }) => item)
+              : fuse.list
+          },
+          fuseComponent (options, search) {
+            const fuse = new Fuse(options, {
+              keys: ['code', 'name'],
+              shouldSort: true,
+            })
+            return search.length
+              ? fuse.search(search).map(({ item }) => item)
+              : fuse.list
+          },
           async downloadPath () {
             await axios.get(`/admin/container-images/download/receiving/${this.form.id}`).then(data => {
               window.open(`${location.origin}/admin/container-images/download/receiving/${this.form.id}`, "_blank");
