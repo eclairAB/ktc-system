@@ -568,7 +568,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/@trevoreyre/autocomplete-vue"></script>
 
-    <script type="text/javascript">
+   <!--  <script type="text/javascript">
       $(function () {
           $('#container_no').keyup(function() {
             var number = $(this).val();
@@ -590,7 +590,7 @@
           //   }
           // });
       });
-    </script>
+    </script> -->
 
     <!-- VUE -->
     <script type="text/javascript">
