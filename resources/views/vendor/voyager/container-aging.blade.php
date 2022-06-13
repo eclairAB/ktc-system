@@ -20,7 +20,7 @@
 
     <div class="panel panel-default" style="margin-top: 15px;">
       
-      <div class="panel-body" style="background-color: #fff; border: 0;">
+      <div class="panel-body" style="background-color: #fff; border: 0; padding-bottom: 0;">
         <div class="row">
           <div class="col-xs-12" style="margin-bottom: 0;">
             <div class="row" style="margin: 0; width: 100%;">
@@ -185,11 +185,7 @@
         </div>
       </div>
     
-    </div>
-
-    <!-- <div class="panel panel-default" style="margin-top: 15px;"> -->
-    <div class="panel panel-default">
-      <div class="panel-body">
+      <div class="panel-body" style="padding-top: 0;">
         <div style="color: black; font-weight: bold; text-align: center; margin-bottom: 10px;">
             <!-- <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br> -->
             <span>Container Aging and Inventory</span>

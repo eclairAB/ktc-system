@@ -18,6 +18,7 @@ class ContainerReleasing extends Model
         'plate_no',
         'seal_no',
         'remarks',
+        'eir',
     ];
 
     public function inspector()

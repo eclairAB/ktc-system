@@ -34,6 +34,7 @@ class ValidateContainerReleasing extends FormRequest
             'seal_no'=> 'nullable',
             'container_photo'=> 'nullable',
             'remarks'=> 'nullable',
+            'eir'=> 'nullable',
         ];
     }
 
