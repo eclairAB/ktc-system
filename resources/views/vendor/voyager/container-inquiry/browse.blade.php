@@ -126,7 +126,7 @@
                                         </div>
                                     @endforeach
                                 </td>   
-                                <td style="padding: 0 10px; line-height: 30px; white-space: nowrap;">
+                                <td style="padding: 0 10px; line-height: 30px; word-break:">
                                     {{ $item->receiving->remarks??'' }}
                                 </td>
                             </tr>
