@@ -202,20 +202,20 @@
                 <th @click="customSort('container_class')" scope="col" style="white-space: nowrap; cursor: pointer;">Class</th>
                 <th @click="customSort('receiving_inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date In</th>
                 <th @click="customSort('receiving_consignee')" scope="col" style="white-space: nowrap; cursor: pointer;">Consignee</th>
-                <th scope="col" style="white-space: nowrap">Damages</th>
-                <th @click="customSort('remarks')" scope="col" style="white-space: nowrap; cursor: pointer;">Remarks</th>
                 <th @click="customSort('releasing_inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date Out</th>
                 <th @click="customSort('releasing_consignee')" scope="col" style="white-space: nowrap; cursor: pointer;">Consignee</th>
                 <th @click="customSort('booking_no')" scope="col" style="white-space: nowrap; cursor: pointer;">Booking</th>
                 <th @click="customSort('seal_no')" scope="col" style="white-space: nowrap; cursor: pointer;">Seal</th>
                 <th @click="customSort('total_no_days')" scope="col" style="white-space: nowrap; cursor: pointer;">Days</th>
+                <th scope="col" style="white-space: nowrap">Damages</th>
+                <th @click="customSort('remarks')" scope="col" style="white-space: nowrap; cursor: pointer;">Remarks</th>
               </tr>
             </thead>
             <tbody v-if="containerAgingList.length > 0">
               <tr v-for="(item, index) in containerAgingList" :key="index">
                 <td style="white-space: nowrap" class="viewItemOnClick"
                 v-on:click="reroute(item.releasing_id,item.receiving_id)">@{{ item.container_no }}</td>
-                <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.code : '' }}</td>
+                <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.size : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.status }}</td>
                 <td style="white-space: nowrap">@{{ item.client ? item.client.code : '' }}</td>
@@ -225,12 +225,6 @@
                   v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}
                 </td>
                 <td style="white-space: nowrap">@{{ item.receiving ? item.receiving.consignee : '' }}</td>
-                <td style="white-space: nowrap">
-                  <div v-for="(item,i) in item.receiving.damages" :key="i">
-                    @{{ i + 1 }}.) @{{ item.description }}
-                  </div>
-                </td>
-                <td style="white-space: nowrap">@{{ item.receiving ? item.receiving.remarks : '' }}</td>
                 <td style="white-space: nowrap"
                   :class="item.releasing_id ? 'viewItemOnClick' : ''"
                   v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}
@@ -239,6 +233,12 @@
                 <td style="white-space: nowrap">@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.releasing ? item.releasing.seal_no : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.total_no_days }}</td>
+                <td style="white-space: nowrap">
+                  <div v-for="(item,i) in item.receiving.damages" :key="i">
+                    @{{ i + 1 }}.) @{{ item.description }}
+                  </div>
+                </td>
+                <td style="white-space: nowrap">@{{ item.receiving ? item.receiving.remarks : '' }}</td>
               </tr>
             </tbody>
             <tbody v-else>
