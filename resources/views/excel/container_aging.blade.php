@@ -9,13 +9,13 @@
           <th style="font-weight:bold;">Class</th>
           <th style="font-weight:bold;">Date IN</th>
           <th style="font-weight:bold;">Consignee</th>
-          <th style="font-weight:bold;">Damages</th>
-          <th style="font-weight:bold;">Remarks</th>
           <th style="font-weight:bold;">Date OUT</th>
           <th style="font-weight:bold;">Consignee</th>
           <th style="font-weight:bold;">Booking</th>
           <th style="font-weight:bold;">Seal</th>
           <th style="font-weight:bold;">Days</th>
+          <th style="font-weight:bold;">Damages</th>
+          <th style="font-weight:bold;">Remarks</th>
         </tr>
         @foreach($data as $key => $item)
         <tr>
@@ -27,6 +27,11 @@
           <td>{{ $item->containerClass->class_code??'' }}</td>
           <td>{{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}</td>
           <td>{{ $item->receiving->consignee??'' }}</td>
+          <td>{{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}</td>
+          <td>{{ $item->releasing->consignee??'' }}</td>
+          <td>{{ $item->releasing->booking_no??'' }}</td>
+          <td>{{ $item->releasing->seal_no??'' }}</td>
+          <td>{{ $item->total_no_days }}</td>
           <td>
               @foreach($item->receiving->damages as $key=> $dmg)
               <div>
@@ -35,11 +40,6 @@
               @endforeach
           </td>
           <td>{{ $item->receiving->remarks??'' }}</td>
-          <td>{{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}</td>
-          <td>{{ $item->releasing->consignee??'' }}</td>
-          <td>{{ $item->releasing->booking_no??'' }}</td>
-          <td>{{ $item->releasing->seal_no??'' }}</td>
-          <td>{{ $item->total_no_days }}</td>
         </tr>
       @endforeach
 </table>
