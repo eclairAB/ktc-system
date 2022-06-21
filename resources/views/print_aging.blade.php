@@ -33,20 +33,12 @@
         </div>
         <table style="margin-top: 20px">
           <tr style="border-top: 2px solid; border-bottom: 2px solid">
-            <th scope="col">Container No.</th>
-            <th scope="col">Size</th>
+            <th scope="col">Van #</th>
             <th scope="col">Type</th>
+            <th scope="col">Size</th>
             <th scope="col">Status</th>
-            <th scope="col">Client</th>
-            <th scope="col">Class</th>
-            <th scope="col">Date In</th>
-            <th scope="col">Consignee</th>
-            <th scope="col">Damages</th>
-            <th scope="col">Remarks</th>
-            <th scope="col">Date Out</th>
-            <th scope="col">Consignee</th>
-            <th scope="col">Booking</th>
-            <th scope="col">Seal</th>
+            <th scope="col">Date IN</th>
+            <th scope="col">Date OUT</th>
             <th scope="col">Days</th>
           </tr>
           @foreach($data as $key => $item)
@@ -55,22 +47,8 @@
             <td>{{ $item->sizeType->size??'' }}</td>
             <td>{{ $item->type->code??'' }}</td>
             <td>{{ $item->status??'' }}</td>
-            <td>{{ $item->client->code??'' }}</td>
-            <td>{{ $item->containerClass->class_code??'' }}</td>
             <td>{{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}</td>
-            <td>{{ $item->receiving->consignee??'' }}</td>
-            <td>
-                @foreach($item->receiving->damages as $key=> $dmg)
-                <div>
-                  {{ $key + 1 }}.) {{ $dmg->description }}
-                </div>
-                @endforeach
-            </td>
-            <td>{{ $item->receiving->remarks??'' }}</td>
             <td>{{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}</td>
-            <td>{{ $item->releasing->consignee??'' }}</td>
-            <td>{{ $item->releasing->booking_no??'' }}</td>
-            <td>{{ $item->releasing->seal_no??'' }}</td>
             <td>{{ isset($item->total_no_days)?$item->total_no_days:0 }}</td>
           </tr>
           @endforeach
