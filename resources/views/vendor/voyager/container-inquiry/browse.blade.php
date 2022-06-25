@@ -1,5 +1,38 @@
 @extends('voyager::master')
 @section('content')
+
+@php
+    function remarkBuilder($x)
+    {
+        $min_char_per_line = 80;
+        $column = [];
+
+        $line_words = [];
+        $current_word = 1;
+        $char_counter = 0;
+
+        $remark_words = explode(' ', $x);
+        foreach ($remark_words as $item) {
+
+            if(($char_counter + strlen($item)) >= $min_char_per_line || $current_word == count($remark_words)) {
+                array_push($line_words, $item . "<br>");
+                $final_line = implode(' ', $line_words);
+                array_push($column, $final_line);
+
+                $char_counter = 0;
+                $line_words = [];
+            }
+            else {
+                array_push($line_words, $item);
+                $char_counter += strlen($item);
+            }
+            $current_word++;
+
+        }
+        echo implode(' ', $column);
+    }
+@endphp
+
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
 <style>
     .containers_ {
@@ -26,7 +59,7 @@
                 </div>
                
             </form>
-            <button class="btn btn-sm btn-primary pull-right edit" @click="clearFilters()">
+            <button class="btn btn-sm btn-primary pull-right edit" v-on:click="clearFilters()">
                 Clear
             </button>
         </div>
@@ -35,42 +68,42 @@
                 <table style="width: 100%;">
                     <thead>
                         <tr>
-                          <th style="padding: 10px 10px; white-space: nowrap;">
-                              Container
-                          </th>
-                          <th style="padding: 10px 10px; white-space: nowrap;">
-                              Size
-                          </th>
-                          <th style="padding: 10px 10px; white-space: nowrap;">
-                              Type
-                          </th>
-                          <th style="padding: 10px 10px; white-space: nowrap;">
-                              Eir-in
-                          </th>
-                          <th style="padding: 10px 10px; white-space: nowrap;">
-                              Eir-out
-                          </th>
-                          <th style="padding: 10px 10px; white-space: nowrap;">
-                              Date In
-                          </th>
-                          <th style="padding: 10px 10px; white-space: nowrap;">
-                              Date Out
-                          </th>
-                          <th style="padding: 10px 10px; white-space: nowrap;">
-                              Status
-                          </th>
-                          <th style="padding: 10px 10px; white-space: nowrap;">
-                              Client
-                          </th>
-                          <th style="padding: 10px 10px; white-space: nowrap;">
-                              Class
-                          </th>
-                          <th style="padding: 10px 10px; white-space: nowrap;">
-                              Damages
-                          </th>
-                          <th style="padding: 10px 10px; white-space: nowrap;">
-                              Remarks
-                          </th>
+                            <th style="padding: 10px 10px; white-space: nowrap;">
+                                Container
+                            </th>
+                            <th style="padding: 10px 10px; white-space: nowrap;">
+                                Size
+                            </th>
+                            <th style="padding: 10px 10px; white-space: nowrap;">
+                                Type
+                            </th>
+                            <th style="padding: 10px 10px; white-space: nowrap;">
+                                Eir-in
+                            </th>
+                            <th style="padding: 10px 10px; white-space: nowrap;">
+                                Eir-out
+                            </th>
+                            <th style="padding: 10px 10px; white-space: nowrap;">
+                                Date In
+                            </th>
+                            <th style="padding: 10px 10px; white-space: nowrap;">
+                                Date Out
+                            </th>
+                            <th style="padding: 10px 10px; white-space: nowrap;">
+                                Status
+                            </th>
+                            <th style="padding: 10px 10px; white-space: nowrap;">
+                                Client
+                            </th>
+                            <th style="padding: 10px 10px; white-space: nowrap;">
+                                Class
+                            </th>
+                            <th style="padding: 10px 10px; white-space: nowrap;">
+                                Damages
+                            </th>
+                            <th style="padding: 10px 10px; white-space: nowrap;">
+                                Remarks
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -126,8 +159,9 @@
                                         </div>
                                     @endforeach
                                 </td>   
-                                <td style="padding: 0 10px; line-height: 30px; word-break:">
-                                    {{ $item->receiving->remarks??'' }}
+                                <td style="padding: 0 10px; line-height: 20px; white-space: nowrap;">
+                                    {{-- {{ $item->receiving->remarks??'' }}<br> --}}
+                                    {{ $item->receiving->remarks ? remarkBuilder($item->receiving->remarks) : '' }}
                                 </td>
                             </tr>
                         @empty
@@ -152,24 +186,24 @@
     },
     methods: {
         rerouteReceiving(receiving_id) {
-			let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
-			window.location = customUrl
-		},
-		rerouteReleasing(releasing_id) {
+            let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
+            window.location = customUrl
+        },
+        rerouteReleasing(releasing_id) {
             if(releasing_id) {
-    			let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
-    			window.location = customUrl
+                let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+                window.location = customUrl
             }
-		},
+        },
         reroute(releasing_id,receiving_id) {
         if(releasing_id)
         {
-          let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
-          window.location = customUrl
+            let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+            window.location = customUrl
         }
         else{
-          let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
-          window.location = customUrl
+            let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
+            window.location = customUrl
         }
       },
         submitForm(page_) {
@@ -192,7 +226,7 @@
             document.querySelector("input[name='page']").value = filter.page
 
             if (!page) { // when filter returns only 1 page
-              document.querySelector("input[name='page']").value = 1          
+                document.querySelector("input[name='page']").value = 1          
             }
 
             localStorage.setItem('inquiry_request_filters', JSON.stringify(filter))
