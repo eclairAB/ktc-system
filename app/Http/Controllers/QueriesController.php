@@ -250,9 +250,14 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     }
 
     function imageEncode($path) {
-        $imageUrl = file_get_contents( storage_path($path) );
-        $image = base64_encode($imageUrl);
-        return 'data:image/png;base64,'.$image;
+        if(file_exists( storage_path($path) )) {
+            $imageUrl = file_get_contents( storage_path($path) );
+            $image = base64_encode($imageUrl);
+            return 'data:image/png;base64,'.$image;
+        }
+        else {
+            return null;
+        }
     }
 
     public function getSizeTypeByAll()

@@ -144,7 +144,7 @@
           </thead>
           <tbody v-if="containerInList.length > 0">
             <tr  v-for="(item, index) in containerInList" :key="index">
-              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.receiving.id)">@{{ item.container_no }}</td>
+              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.receiving.id, item.id)">@{{ item.container_no }}</td>
               <td style="white-space: nowrap">@{{ item.eir_no_in ? item.eir_no_in.eir_no : '' }}</td>
               <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.size : '' }}</td>
               <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
@@ -160,7 +160,7 @@
               <td style="white-space: nowrap">@{{ item.receiving.consignee }}</td>
               <td style="white-space: nowrap">@{{ item.receiving.plate_no }}</td>
               <td style="white-space: nowrap">@{{ item.receiving.hauler }}</td>
-              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.receiving.id)">@{{ moment(item.receiving.inspected_date).format('YYYY-MM-DD') }}</td>
+              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.receiving.id, item.id)">@{{ moment(item.receiving.inspected_date).format('YYYY-MM-DD') }}</td>
               <td style="white-space: nowrap">@{{ moment(item.receiving.inspected_date).format('hh:mm:ss A') }}</td>
             </tr>
           </tbody>
@@ -251,7 +251,8 @@
         }
         this.getContainerIn()
       },
-      reroute(receiving_id) {
+      reroute(receiving_id, container_id) {
+        localStorage.setItem('container_id', container_id)
         let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
         window.location = customUrl
       },

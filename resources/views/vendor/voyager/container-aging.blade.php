@@ -214,7 +214,7 @@
             <tbody v-if="containerAgingList.length > 0">
               <tr v-for="(item, index) in containerAgingList" :key="index">
                 <td style="white-space: nowrap" class="viewItemOnClick"
-                v-on:click="reroute(item.releasing_id,item.receiving_id)">@{{ item.container_no }}</td>
+                v-on:click="reroute(item.releasing_id, item.receiving_id, item.id)">@{{ item.container_no }}</td>
                 <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.size : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.status }}</td>
@@ -222,12 +222,12 @@
                 <td style="white-space: nowrap">@{{ item.container_class ? item.container_class.class_code : '' }}</td>
                 <td style="white-space: nowrap"
                   class="viewItemOnClick"
-                  v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}
+                  v-on:click="rerouteReceiving(item.receiving_id, item.id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}
                 </td>
                 <td style="white-space: nowrap">@{{ item.receiving ? item.receiving.consignee : '' }}</td>
                 <td style="white-space: nowrap"
                   :class="item.releasing_id ? 'viewItemOnClick' : ''"
-                  v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}
+                  v-on:click="rerouteReleasing(item.releasing_id, item.id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}
                 </td>
                 <td style="white-space: nowrap">@{{ item.releasing ? item.releasing.consignee : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
@@ -365,17 +365,20 @@
         }
         this.getContainerAging()
       },
-      rerouteReceiving(receiving_id) {
+      rerouteReceiving(receiving_id, container_id) {
+        localStorage.setItem('container_id', container_id)
         let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
         window.location = customUrl
       },
-      rerouteReleasing(releasing_id) {
+      rerouteReleasing(releasing_id, container_id) {
+        localStorage.setItem('container_id', container_id)
         if(releasing_id) {
           let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
           window.location = customUrl
         }
       },
-      reroute(releasing_id,receiving_id) {
+      reroute(releasing_id,receiving_id,container_id) {
+        localStorage.setItem('container_id', container_id)
         if(releasing_id)
         {
           let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`

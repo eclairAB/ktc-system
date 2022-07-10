@@ -43,6 +43,17 @@
             <div class="col-md-12">
                 <div id="containerReceiving">
                   <!--  -->
+                  @if(array_reverse(explode('/', Request::path()))[0] == 'edit')
+                    <div row style="display: -webkit-box;">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin: 0; padding: 0;">
+                          <button class="btn btn-primary btn-block" v-on:click="reroute('receivings')" style="border: 1px solid white;" :style="action === 'receiving' ? 'border-bottom: 4px solid black;' : '' ">Container Receiving</button> 
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin: 0; padding: 0;">
+                          <button class="btn btn-primary btn-block" v-on:click="reroute('releasings')" style="border: 1px solid white;" :style="action === 'releasing' ? 'border-bottom: 4px solid black;' : '' ">Container Releasing</button>
+                        </div>
+                    </div>
+                  @endif
+
                   <div style="display: flex; justify-content: flex-end;" v-if="form.id">
                     <button style="margin-right: 5px;" class="btn btn-danger" @click="downloadPath" v-if="form.container_photo.length > 0"><i class="voyager-download"></i> Download All Photos</button>
                     <button class="btn btn-success" @click="printData"><i class="voyager-file-text"></i> Print</button>
@@ -604,6 +615,8 @@
         },
         data: {
           form: {},
+          tabbing: {},
+          action: 'receiving',
           container_photo: [],
           loginUser: `{!! Auth::user()->name !!}`,
           clientList: [],
@@ -675,6 +688,23 @@
           }
         },
         methods:{
+          reroute(x) {
+            if(x == 'receivings') {
+              let customUrl = `${window.location.origin}/admin/container-receivings/${ this.tabbing.receiving_id }/edit`
+              window.location = customUrl
+            }
+            else {
+              let customUrl = `${window.location.origin}/admin/container-releasings/${ this.tabbing.releasing_id }/edit`
+              if( this.tabbing.releasing_id ) {
+                window.location = customUrl
+              }
+            }
+          },
+          getTabRoutes() {
+            axios.get(`/admin/container-inquiry/tabbing/${ localStorage.getItem('container_id') }/`).then(data => {
+              this.tabbing = data.data
+            })
+          },
           fuseDamage (options, search) {
             const fuse = new Fuse(options, {
               keys: ['code', 'name'],
@@ -1118,6 +1148,7 @@
                 this.form.container_photo = this.container_photo
                 this.isOk = true
                 this.getDamages()
+                this.getTabRoutes()
               }).catch(error => {
                 console.log('error: ', error)
               })

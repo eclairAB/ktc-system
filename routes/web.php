@@ -109,6 +109,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get/print/daily_in/{type}/{sizeType}/{client}/{class}/{status}/{from}/{to}/{param}/{order}',[QueriesController::class,"prntDailyIn"]);
     Route::get('/get/print/daily_out/{type}/{sizeType}/{client}/{class}/{status}/{from}/{to}/{param}/{order}',[QueriesController::class,"prntDailyOut"]);
     // fetch container inquiry
+    Route::get('/container-inquiry/tabbing/{id}', [PostsController::class,'releasingReceivingTab']);
+
     Route::get('/container-inquiry/{container_no}',[QueriesController::class,"containerInquiry"]);
     Route::get('/container-inquiry/download/{record_type}/{container_no}',['as' => 'admin.container-inquiry.download', 'uses' => 'App\Http\Controllers\QueriesController@saveImages']);
     Route::get('/container-images/download/{record_type}/{container_no}',[QueriesController::class,"saveImages"]);
