@@ -418,4 +418,29 @@ class PostsController extends Controller
         $path = storage_path() . '/app/public/uploads/releasing/container/' . $id . '/';
         array_map('unlink', glob($path."*.png"));
     }
+
+    public function releasingReceivingTab($id)
+    {
+        $container_ids = Container::where('id', $id)
+            // ->where('container_no', $container_no)
+            ->select('receiving_id', 'releasing_id')
+            ->first();
+        return $container_ids;
+
+        /*if($receiving == 'receiving') {
+            $container_ids = ContainerReceiving::where('id', $id)
+                ->where('container_no', $container_no)
+                // ->select('receiving_id', 'releasing_id')
+                ->first();
+        }
+        else {
+            $container_ids = ContainerReleasing::where('id', $id)
+                ->where('container_no', $container_no)
+                // ->select('receiving_id', 'releasing_id')
+                ->first();
+        }
+        return $container_ids;*/
+
+
+    }
 }

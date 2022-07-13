@@ -11,6 +11,40 @@
       .form-error {
         border: 1px solid #ff0000;
       }
+      tbody td {
+        vertical-align: middle !important;
+      }
+      .app-container {
+        height: 100%;
+      }
+      .app-container .row.content-container {
+        height: 100%;
+      }
+      .app-container .row.content-container .container-fluid {
+        height: 100%;
+      }
+      .app-container .row.content-container .container-fluid .side-body.padding-top {
+        height: 100%;
+      }
+      .app-container .row.content-container .container-fluid .side-body.padding-top #containerIn {
+        height: 100%;
+      }
+      .app-container .row.content-container .container-fluid .side-body.padding-top #containerIn .panel.panel-default {
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+      }
+      .app-container .row.content-container .container-fluid .side-body.padding-top #containerIn .panel.panel-default .panel-body:nth-child(2) {
+        height:  fit-content;
+        display: flex;
+        flex-direction: column;
+      }
+      @media (max-height: 915px) {
+
+        .app-container .row.content-container .container-fluid .side-body.padding-top #containerIn .panel.panel-default .panel-body:nth-child(2) {
+          max-height: 415px;
+        }
+      }
     </style>
 @stop
 
@@ -190,7 +224,7 @@
             <!-- <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br> -->
             <span>Container Aging and Inventory</span>
         </div>
-        <div style="overflow: auto; max-height: 500px;">
+        <div class="table-container" style="overflow: auto; height: 100%;">
           <table class="table table-bordered" style="margin-bottom: 0; color: black;">
             <thead>
               <tr>
@@ -211,10 +245,10 @@
                 <th @click="customSort('remarks')" scope="col" style="white-space: nowrap; cursor: pointer;">Remarks</th>
               </tr>
             </thead>
-            <tbody v-if="containerAgingList.length > 0">
+            <tbody id="content-list" v-if="containerAgingList.length > 0">
               <tr v-for="(item, index) in containerAgingList" :key="index">
                 <td style="white-space: nowrap" class="viewItemOnClick"
-                v-on:click="reroute(item.releasing_id,item.receiving_id)">@{{ item.container_no }}</td>
+                v-on:click="reroute(item.releasing_id, item.receiving_id, item.id)">@{{ item.container_no }}</td>
                 <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.size : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.status }}</td>
@@ -222,12 +256,12 @@
                 <td style="white-space: nowrap">@{{ item.container_class ? item.container_class.class_code : '' }}</td>
                 <td style="white-space: nowrap"
                   class="viewItemOnClick"
-                  v-on:click="rerouteReceiving(item.receiving_id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}
+                  v-on:click="rerouteReceiving(item.receiving_id, item.id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}
                 </td>
                 <td style="white-space: nowrap">@{{ item.receiving ? item.receiving.consignee : '' }}</td>
                 <td style="white-space: nowrap"
                   :class="item.releasing_id ? 'viewItemOnClick' : ''"
-                  v-on:click="rerouteReleasing(item.releasing_id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}
+                  v-on:click="rerouteReleasing(item.releasing_id, item.id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}
                 </td>
                 <td style="white-space: nowrap">@{{ item.releasing ? item.releasing.consignee : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
@@ -238,7 +272,7 @@
                     @{{ i + 1 }}.) @{{ item.description }}
                   </div>
                 </td>
-                <td style="white-space: nowrap">@{{ item.receiving ? item.receiving.remarks : '' }}</td>
+                <td style="white-space: nowrap;">@{{ item.receiving ? item.receiving.remarks : '' }}</td>
               </tr>
             </tbody>
             <tbody v-else>
@@ -365,17 +399,20 @@
         }
         this.getContainerAging()
       },
-      rerouteReceiving(receiving_id) {
+      rerouteReceiving(receiving_id, container_id) {
+        localStorage.setItem('container_id', container_id)
         let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
         window.location = customUrl
       },
-      rerouteReleasing(releasing_id) {
+      rerouteReleasing(releasing_id, container_id) {
+        localStorage.setItem('container_id', container_id)
         if(releasing_id) {
           let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
           window.location = customUrl
         }
       },
-      reroute(releasing_id,receiving_id) {
+      reroute(releasing_id,receiving_id,container_id) {
+        localStorage.setItem('container_id', container_id)
         if(releasing_id)
         {
           let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
@@ -411,6 +448,10 @@
           this.van_total = data.data.van_count
           this.van_in = data.data.in
           this.van_out = data.data.out
+
+          setTimeout(() => {
+            this.remarkLoaded()
+          }, 500)
           if (data.data.data.length === 0) {
             Swal.fire({
               title: '',
@@ -517,6 +558,41 @@
         await axios.get(`/admin/get/emptyloaded`).then(data => {
           this.emptyLoadedList = data.data
         })
+      },
+      remarkLoaded() {
+        const remarks = document.querySelectorAll('tbody#content-list td:last-child')
+        remarks.forEach(item => {
+          console.log(item)
+          item.innerText = this.remarkBuilder(item.innerText)
+        })
+      },
+      remarkBuilder(x) {
+        const min_char_per_line = 80
+        let column = []
+
+        let line_words = []
+        let current_word = 1
+        let char_counter = 0
+
+        const remark_words = x.split(' ')
+        
+        remark_words.forEach(item => {
+
+          if ((char_counter + item.length) >= min_char_per_line || current_word == remark_words.length) {
+            line_words.push(item + '\n')
+            const final_line = line_words.join(' ')
+            column.push(final_line)
+            
+            char_counter = 0
+            line_words = []
+          }
+          else {
+            line_words.push(item)
+            char_counter += item.length
+          }
+          current_word++
+        })
+        return column.join(' ')
       }
     },
     mounted () {

@@ -15,7 +15,7 @@
         foreach ($remark_words as $item) {
 
             if(($char_counter + strlen($item)) >= $min_char_per_line || $current_word == count($remark_words)) {
-                array_push($line_words, $item . "<br>");
+                array_push($line_words, "<span>" .  $item . "</span><br>");
                 $final_line = implode(' ', $line_words);
                 array_push($column, $final_line);
 
@@ -114,7 +114,7 @@
                             >
                                 <td class="viewItemOnClick"
                                     style="padding: 0 10px; line-height: 30px; white-space: nowrap;"
-                                    v-on:click="reroute('{{ $item->releasing_id }}','{{ $item->receiving_id }}')">
+                                    v-on:click="reroute('{{ $item->releasing_id }}','{{ $item->receiving_id }}', '{{ $item->id }}')">
                                     {{ $item->container_no }}
                                 </td>
                                 <td style="padding: 0 10px; line-height: 30px; white-space: nowrap;">
@@ -132,14 +132,14 @@
                                 <td 
                                     class="viewItemOnClick"
                                     style="padding: 0 10px; line-height: 30px; white-space: nowrap;"
-                                    v-on:click="rerouteReceiving('{{ $item->receiving_id }}')"
+                                    v-on:click="rerouteReceiving('{{ $item->receiving_id }}', '{{ $item->id }}')"
                                 >
                                     {{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}
                                 </td>
                                 <td 
                                     :class="'{{ $item->releasing_id }}' ? 'viewItemOnClick' : ''"
                                     style="padding: 0 10px; line-height: 30px; white-space: nowrap;"
-                                    v-on:click="rerouteReleasing('{{ $item->releasing_id }}')"
+                                    v-on:click="rerouteReleasing('{{ $item->releasing_id }}', '{{ $item->id }}')"
                                 >
                                     {{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}
                                 </td> 
@@ -185,27 +185,30 @@
         searchinput: '',
     },
     methods: {
-        rerouteReceiving(receiving_id) {
+        rerouteReceiving(receiving_id, container_id) {
+            localStorage.setItem('container_id', container_id)
             let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
             window.location = customUrl
         },
-        rerouteReleasing(releasing_id) {
+        rerouteReleasing(releasing_id, container_id) {
+            localStorage.setItem('container_id', container_id)
             if(releasing_id) {
                 let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
                 window.location = customUrl
             }
         },
-        reroute(releasing_id,receiving_id) {
-        if(releasing_id)
-        {
-            let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
-            window.location = customUrl
-        }
-        else{
-            let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
-            window.location = customUrl
-        }
-      },
+        reroute(releasing_id, receiving_id, container_id) {
+            localStorage.setItem('container_id', container_id)
+            if(releasing_id)
+            {
+                let customUrl = `${window.location.origin}/admin/container-releasings/${releasing_id}/edit`
+                window.location = customUrl
+            }
+            else{
+                let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
+                window.location = customUrl
+            }
+        },
         submitForm(page_) {
             const page = document.querySelector("ul.pagination li.active span")
             let filter = {

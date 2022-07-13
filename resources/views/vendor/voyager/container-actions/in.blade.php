@@ -1,3 +1,39 @@
+@section('css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style type="text/css">
+      .app-container {
+        height: 100%;
+      }
+      .app-container .row.content-container {
+        height: 100%;
+      }
+      .app-container .row.content-container .container-fluid {
+        height: 100%;
+      }
+      .app-container .row.content-container .container-fluid .side-body.padding-top {
+        height: 100%;
+      }
+      .app-container .row.content-container .container-fluid .side-body.padding-top #containerIn {
+        height: 100%;
+      }
+      .app-container .row.content-container .container-fluid .side-body.padding-top #containerIn .panel.panel-default {
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+      }
+      .app-container .row.content-container .container-fluid .side-body.padding-top #containerIn .panel.panel-default .panel-body:nth-child(2) {
+        height:  fit-content;
+        display: flex;
+        flex-direction: column;
+      }
+      @media (max-height: 915px) {
+
+        .app-container .row.content-container .container-fluid .side-body.padding-top #containerIn .panel.panel-default .panel-body:nth-child(2) {
+          max-height: 415px;
+        }
+      }
+    </style>
+@stop
 <div id="containerIn">
 
   <div class="panel panel-default" style="margin-top: 15px;">
@@ -122,7 +158,7 @@
           <!-- <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br> -->
           <span>Container Daily In Report</span>
       </div>
-      <div style="overflow: auto; max-height: 500px;">
+      <div class="table-container" style="overflow: auto; height: 100%;">
         <table class="table table-bordered" style="margin-bottom: 0; color: black;">
           <thead>
             <tr>
@@ -144,7 +180,7 @@
           </thead>
           <tbody v-if="containerInList.length > 0">
             <tr  v-for="(item, index) in containerInList" :key="index">
-              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.receiving.id)">@{{ item.container_no }}</td>
+              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.receiving.id, item.id)">@{{ item.container_no }}</td>
               <td style="white-space: nowrap">@{{ item.eir_no_in ? item.eir_no_in.eir_no : '' }}</td>
               <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.size : '' }}</td>
               <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
@@ -160,7 +196,7 @@
               <td style="white-space: nowrap">@{{ item.receiving.consignee }}</td>
               <td style="white-space: nowrap">@{{ item.receiving.plate_no }}</td>
               <td style="white-space: nowrap">@{{ item.receiving.hauler }}</td>
-              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.receiving.id)">@{{ moment(item.receiving.inspected_date).format('YYYY-MM-DD') }}</td>
+              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.receiving.id, item.id)">@{{ moment(item.receiving.inspected_date).format('YYYY-MM-DD') }}</td>
               <td style="white-space: nowrap">@{{ moment(item.receiving.inspected_date).format('hh:mm:ss A') }}</td>
             </tr>
           </tbody>
@@ -251,7 +287,8 @@
         }
         this.getContainerIn()
       },
-      reroute(receiving_id) {
+      reroute(receiving_id, container_id) {
+        localStorage.setItem('container_id', container_id)
         let customUrl = `${window.location.origin}/admin/container-receivings/${receiving_id}/edit`
         window.location = customUrl
       },
