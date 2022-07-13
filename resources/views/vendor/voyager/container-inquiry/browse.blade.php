@@ -15,7 +15,7 @@
         foreach ($remark_words as $item) {
 
             if(($char_counter + strlen($item)) >= $min_char_per_line || $current_word == count($remark_words)) {
-                array_push($line_words, $item . "<br>");
+                array_push($line_words, "<span>" .  $item . "</span><br>");
                 $final_line = implode(' ', $line_words);
                 array_push($column, $final_line);
 

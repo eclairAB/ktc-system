@@ -1,3 +1,39 @@
+@section('css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style type="text/css">
+      .app-container {
+        height: 100%;
+      }
+      .app-container .row.content-container {
+        height: 100%;
+      }
+      .app-container .row.content-container .container-fluid {
+        height: 100%;
+      }
+      .app-container .row.content-container .container-fluid .side-body.padding-top {
+        height: 100%;
+      }
+      .app-container .row.content-container .container-fluid .side-body.padding-top #containerIn {
+        height: 100%;
+      }
+      .app-container .row.content-container .container-fluid .side-body.padding-top #containerIn .panel.panel-default {
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+      }
+      .app-container .row.content-container .container-fluid .side-body.padding-top #containerIn .panel.panel-default .panel-body:nth-child(2) {
+        height:  fit-content;
+        display: flex;
+        flex-direction: column;
+      }
+      @media (max-height: 915px) {
+
+        .app-container .row.content-container .container-fluid .side-body.padding-top #containerIn .panel.panel-default .panel-body:nth-child(2) {
+          max-height: 415px;
+        }
+      }
+    </style>
+@stop
 <div id="containerOut">
 
   <div class="panel panel-default" style="margin-top: 15px;">
@@ -121,7 +157,7 @@
           <!-- <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br> -->
           <span>Container Daily Out Report</span>
       </div>
-      <div style="overflow: auto; max-height: 500px;">
+      <div class="table-container" style="overflow: auto; height: 100%;">
         <table class="table table-bordered" style="margin-bottom: 0; color: black;">
           <thead>
             <tr>
