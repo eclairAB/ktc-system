@@ -16,6 +16,7 @@ use App\Models\ContainerRepair;
 use App\Models\ContainerClass;
 use App\Models\YardLocation;
 use Carbon\Carbon;
+use App\Models\Container;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
