@@ -34,11 +34,11 @@
           <td style="width:50px;">{{ $item->receiving->plate_no }}</td>
           <td style="width:50px;">{{ $item->receiving->hauler }}</td>
           <td style="width:50px; overflow: hidden;">
-              @foreach($item->receiving->damages as $key=> $dmg)
+            @foreach($item->receiving->damages as $item)
               <div>
-                {{ $key + 1 }}.) {{ $dmg->description }}<br>
+               {{ $item['description'] }}<br>
               </div>
-              @endforeach
+            @endforeach
           </td>
           <td style="width:50px;">{{ $item->receiving->remarks }}</td>
           <td style="width:50px;">{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d h:i:s') }}</td>
