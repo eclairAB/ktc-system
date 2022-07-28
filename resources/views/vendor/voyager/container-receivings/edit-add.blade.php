@@ -102,8 +102,8 @@
                             tabindex="1"
                             type="text"
                             name="container_no"
-                            ng-maxlength="8"
-                            maxlength="8"
+                            ng-maxlength="13"
+                            maxlength="13"
                             placeholder="####-######-#"
                             v-model="form.container_no"
                             @input="searchContainer()":class="containerError.message ? 'isError form-control' : 'form-control'"
@@ -953,7 +953,7 @@
             })
           },
           searchContainer () {
-            if (this.form.container_no.length === 8) {
+            if (this.form.container_no.length >= 8) {
               clearTimeout(this.timer)
               this.timer = setTimeout(() => {
                 const payload = {
