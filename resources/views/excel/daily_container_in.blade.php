@@ -30,7 +30,7 @@
           <td style="width:50px;">{{ $item->client->name??'' }}</td>
           <td style="width:50px;">{{ $item->receiving->consignee }}</td>
           <td style="width:50px;">{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}</td>
-          <td style="width:50px;">{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('h:i:s') }}</td>
+          <td style="width:50px;">{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('h:i') }}</td>
           <td style="width:50px;">{{ $item->receiving->plate_no }}</td>
           <td style="width:50px;">{{ $item->receiving->hauler }}</td>
           <td style="width:50px; overflow: hidden;">
@@ -41,7 +41,7 @@
             @endforeach
           </td>
           <td style="width:50px;">{{ $item->receiving->remarks }}</td>
-          <td style="width:50px;">{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d h:i:s') }}</td>
+          <td style="width:50px;">{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d h:i') }}</td>
         </tr>
       @endforeach
 </table>
