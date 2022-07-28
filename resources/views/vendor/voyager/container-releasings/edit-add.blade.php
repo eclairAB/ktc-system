@@ -391,7 +391,7 @@
               this.timer = setTimeout(() => {
                 const payload = {
                   type: 'releasing',
-                  container_no: this.form.container_no
+                  container_no: this.form.container_no.toUpperCase()
                 }
                 axios.get(`/admin/get/receiving/details?container_no=${payload.container_no}&type=releasing`, payload)
                 .then(data => {
