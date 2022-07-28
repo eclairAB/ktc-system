@@ -16,6 +16,7 @@ use App\Models\ContainerRepair;
 use App\Models\ContainerClass;
 use App\Models\YardLocation;
 use Carbon\Carbon;
+use App\Models\Container;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
@@ -73,6 +74,10 @@ class UpdateController extends Controller
         $receiving = $request->all();
         $rec = ContainerReceiving::where('id',$request->id)->first();
         $rec->update($receiving);
+
+        $container = $request->all();
+        $cont = Container::where('receiving_id',$request->id)->first();
+        $cont->update($container);
 
         if(count($receiving['container_photo']) > 0) {
             foreach ($receiving['container_photo'] as $key => $value) {
