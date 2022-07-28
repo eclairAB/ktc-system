@@ -56,7 +56,7 @@ class ContainerAging implements  FromView, ShouldAutoSize
             foreach($datus as $res)
             {
                 $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
-                $res->total_no_days = $diff_days;
+                $res->total_no_days = $diff_days + 1;
             }
 
             if($this->param == 'container_no'){
@@ -322,7 +322,7 @@ class ContainerAging implements  FromView, ShouldAutoSize
             foreach($datus as $res)
             {
                 $diff_days = Carbon::parse($res->receiving->inspected_date)->diffInDays($res->releasing->inspected_date);
-                $res->total_no_days = $diff_days;
+                $res->total_no_days = $diff_days + 1;
             }
 
             if($this->param == 'container_no'){
@@ -584,7 +584,7 @@ class ContainerAging implements  FromView, ShouldAutoSize
             foreach($datus as $res)
             {
                 $diff_days = isset($res->releasing)?Carbon::parse($res->receiving->inspected_date)->diffInDays($res->releasing->inspected_date):Carbon::parse($res->receiving->inspected_date)->diffInDays('now');
-                $res->total_no_days = $diff_days;
+                $res->total_no_days = $diff_days + 1;
             }
 
             if($this->param == 'container_no'){
