@@ -163,8 +163,8 @@
             <tr>
               <th @click="customSort('container_no')" style="text-align: left; white-space: nowrap; cursor: pointer;" scope="col">Container No.</th>
               <th @click="customSort('eir_no')" scope="col" style="white-space: nowrap; cursor: pointer;">EIR</th>
-              <th @click="customSort('size_type')" scope="col" style="white-space: nowrap; cursor: pointer;">Size</th>
               <th @click="customSort('type')" scope="col" style="white-space: nowrap; cursor: pointer;">Type</th>
+              <th @click="customSort('size_type')" scope="col" style="white-space: nowrap; cursor: pointer;">Size</th>
               <th @click="customSort('client')" scope="col" style="white-space: nowrap; cursor: pointer;">Client</th>
               <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date Time</th>
               <th @click="customSort('container_class')" scope="col" style="white-space: nowrap; cursor: pointer;">Class</th>
@@ -180,17 +180,17 @@
             <tr v-for="(item, index) in containerOutList" :key="index">
               <td style="white-space: nowrap" class="viewItemOnClick"  v-on:click="reroute(item.releasing.id, item.id)">@{{ item.container_no }}</td>
               <td style="white-space: nowrap">@{{ item.eir_no_out ? item.eir_no_out.eir_no : '' }}</td>
+              <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>\
               <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.size : '' }}</td>
-              <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
               <td style="white-space: nowrap">@{{ item.client ? item.client.code : ''  }}</td>
-              <td style="white-space: nowrap">@{{ moment(item.releasing.inspected_date).format('YYYY-MM-DD hh:mm:ss A') }}</td>
+              <td style="white-space: nowrap">@{{ moment(item.releasing.inspected_date).format('DD/MM/YYYY HH:mm') }}</td>
               <td style="white-space: nowrap">@{{ item.container_class ? item.container_class.class_name : '' }}</td>
               <td style="white-space: nowrap">@{{ item.releasing.remarks }}</td>
               <td style="white-space: nowrap">@{{ item.releasing.consignee }}</td>
               <td style="white-space: nowrap">@{{ item.releasing.plate_no }}</td>
               <td style="white-space: nowrap">@{{ item.releasing.hauler }}</td>
-              <td style="white-space: nowrap" class="viewItemOnClick"  v-on:click="reroute(item.releasing.id, item.id)">@{{ moment(item.releasing.inspected_date).format('YYYY-MM-DD') }}</td>
-              <td style="white-space: nowrap">@{{ moment(item.releasing.inspected_date).format('hh:mm:ss A') }}</td>
+              <td style="white-space: nowrap" class="viewItemOnClick"  v-on:click="reroute(item.releasing.id, item.id)">@{{ moment(item.releasing.inspected_date).format('DD/MM/YYYY') }}</td>
+              <td style="white-space: nowrap">@{{ moment(item.releasing.inspected_date).format('HH:mm') }}</td>
             </tr>
           </tbody>
           <tbody v-else>

@@ -22,7 +22,7 @@
         <div style="width: 100%; text-align: center;">
           <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br>
           <small><b>Container Daily In Report</b></small><br>
-          <small>Print Date: {{ Carbon\Carbon::now()->format('Y-m-d') }}</small>
+          <small>Print Date: {{ Carbon\Carbon::now()->format('d/m/Y') }}</small>
         </div>
         <table style="margin-top: 20px">
           <tr style="border-top: 2px solid; border-bottom: 2px solid">
@@ -48,7 +48,7 @@
               <td>{{ $item->sizeType->size??'' }}</td>
               <td>{{ $item->type->code??'' }}</td>
               <td>{{ $item->client->code??'' }}</td>
-              <td>{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d h:i:s A') }}</td>
+              <td>{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('d/m/Y H:i') }}</td>
               <td>{{ $item->containerClass->class_code??'' }}</td>
               <td>
                 @foreach($item->receiving->damages as $key=> $dmg)
@@ -61,8 +61,8 @@
             <td>{{ $item->receiving->consignee }}</td>
             <td>{{ $item->receiving->plate_no }}</td>
             <td>{{ $item->receiving->hauler }}</td>
-            <td>{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}</td>
-            <td>{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('h:i:s A') }}</td>
+            <td>{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('d/m/Y') }}</td>
+            <td>{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('H:i') }}</td>
             </tr>
           @endforeach
         </table>

@@ -37,13 +37,13 @@
           <div>DATE: </div>
         </div>
         <div style="width: 40%; border: 1px solid; border-left: 0px !important; padding: 10px 5px; text-align: center;">
-          <b>{{ Carbon\Carbon::parse($releasing->created_at)->format('M. d, Y') }}</b>
+          <b>{{ Carbon\Carbon::parse($releasing->created_at)->format('d/m/Y') }}</b>
         </div>
         <div style="width: 15%; border: 1px solid; border-left: 0px !important; padding: 10px 5px">
           TIME:
         </div>
         <div style="width: 30%; border: 1px solid; border-left: 0px !important; padding: 10px 5px; text-align: center;">
-          <b>{{ date('h:i A', strtotime($releasing->created_at)) }}</b>
+          <b>{{ date('H:i', strtotime($releasing->created_at)) }}</b>
         </div>
       </div>
       <div style="width: 55%; display: flex; border: 1px solid; align-items: center; padding: 0 5px; font-size: 10px;">
@@ -235,13 +235,13 @@
           <div>DATE: </div>
         </div>
         <div style="width: 40%; border: 1px solid; border-left: 0px !important; padding: 10px 5px; text-align: center;">
-          <b>{{ Carbon\Carbon::parse($releasing->created_at)->format('M. d, Y') }}</b>
+          <b>{{ Carbon\Carbon::parse($releasing->created_at)->format('d/m/Y') }}</b>
         </div>
         <div style="width: 15%; border: 1px solid; border-left: 0px !important; padding: 10px 5px">
           TIME:
         </div>
         <div style="width: 30%; border: 1px solid; border-left: 0px !important; padding: 10px 5px; text-align: center;">
-          <b>{{ date('h:i A', strtotime($releasing->created_at)) }}</b>
+          <b>{{ date('H:i', strtotime($releasing->created_at)) }}</b>
         </div>
       </div>
       <div style="width: 55%; display: flex; border: 1px solid; align-items: center; padding: 0 5px; font-size: 10px;">

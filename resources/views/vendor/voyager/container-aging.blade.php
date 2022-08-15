@@ -229,8 +229,8 @@
             <thead>
               <tr>
                 <th @click="customSort('container_no')" scope="col" style="white-space: nowrap; cursor: pointer;">Container No.</th>
-                <th @click="customSort('size_type')" scope="col" style="white-space: nowrap; cursor: pointer;">Size</th>
                 <th @click="customSort('type')" scope="col" style="white-space: nowrap; cursor: pointer;">Type</th>
+                <th @click="customSort('size_type')" scope="col" style="white-space: nowrap; cursor: pointer;">Size</th>
                 <th @click="customSort('status')" scope="col" style="white-space: nowrap; cursor: pointer;">Status</th>
                 <th @click="customSort('client')" scope="col" style="white-space: nowrap; cursor: pointer;">Client</th>
                 <th @click="customSort('container_class')" scope="col" style="white-space: nowrap; cursor: pointer;">Class</th>
@@ -249,19 +249,19 @@
               <tr v-for="(item, index) in containerAgingList" :key="index">
                 <td style="white-space: nowrap" class="viewItemOnClick"
                 v-on:click="reroute(item.releasing_id, item.receiving_id, item.id)">@{{ item.container_no }}</td>
-                <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.size : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
+                <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.size : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.status }}</td>
                 <td style="white-space: nowrap">@{{ item.client ? item.client.code : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.container_class ? item.container_class.class_code : '' }}</td>
                 <td style="white-space: nowrap"
                   class="viewItemOnClick"
-                  v-on:click="rerouteReceiving(item.receiving_id, item.id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('YYYY-MM-DD') : '' }}
+                  v-on:click="rerouteReceiving(item.receiving_id, item.id)">@{{ item.receiving ? moment(item.receiving.inspected_date).format('DD/MM/YYYY') : '' }}
                 </td>
                 <td style="white-space: nowrap">@{{ item.receiving ? item.receiving.consignee : '' }}</td>
                 <td style="white-space: nowrap"
                   :class="item.releasing_id ? 'viewItemOnClick' : ''"
-                  v-on:click="rerouteReleasing(item.releasing_id, item.id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('YYYY-MM-DD') : '' }}
+                  v-on:click="rerouteReleasing(item.releasing_id, item.id)">@{{ item.releasing ? moment(item.releasing.inspected_date).format('DD/MM/YYYY') : '' }}
                 </td>
                 <td style="white-space: nowrap">@{{ item.releasing ? item.releasing.consignee : '' }}</td>
                 <td style="white-space: nowrap">@{{ item.releasing ? item.releasing.booking_no : '' }}</td>
