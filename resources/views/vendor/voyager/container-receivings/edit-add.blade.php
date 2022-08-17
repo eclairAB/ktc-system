@@ -120,6 +120,7 @@
                             tabindex="2"
                             :class="errors.size_type ? 'isError form-control' : 'form-control'"
                             :options="sizeTypeList"
+                            @option:selected="selectedSize"
                             style="height: 30px !important;"
                             v-model="form.size_type"
                             :disabled="!isOk"
@@ -135,6 +136,7 @@
                             tabindex="3"
                             :class="errors.client_id ? 'isError form-control' : 'form-control'"
                             :options="clientList"
+                            @option:selected="selectedClient"
                             v-model="form.client_id"
                             :disabled="!isOk"
                             label="name"
@@ -149,6 +151,7 @@
                             tabindex="4"
                             :class="errors.yard_location ? 'isError form-control' : 'form-control'"
                             :options="yardList"
+                            @option:selected="selectedYard"
                             :disabled="!isOk"
                             v-model="form.yard_location"
                             label="name"
@@ -162,6 +165,7 @@
                             tabindex="5"
                             :class="errors.type_id ? 'isError form-control' : 'form-control'"
                             :options="typeList"
+                            @option:selected="selectedType"
                             style="height: 30px !important;"
                             v-model="form.type_id"
                             :disabled="!isOk"
@@ -177,6 +181,7 @@
                             tabindex="6"
                             :class="errors.class ? 'isError form-control' : 'form-control'"
                             :options="classList"
+                            @option:selected="selectedClass"
                             v-model="form.class"
                             :disabled="!isOk"
                             label="class_code"
@@ -191,6 +196,7 @@
                             tabindex="7"
                             :class="errors.empty_loaded ? 'isError form-control' : 'form-control'"
                             :options="emptyLoadedList"
+                            @option:selected="selectedStatus"
                             v-model="form.empty_loaded"
                             :disabled="!isOk"
                             label="name"
@@ -689,6 +695,24 @@
           }
         },
         methods:{
+          selectedSize(){
+            this.dropDownForms.size_type = this.form.size_type
+          },
+          selectedClient(){
+            this.dropDownForms.client_id = this.form.client_id
+          },
+          selectedYard(){
+            this.dropDownForms.yard_location = this.form.yard_location
+          },
+          selectedType(){
+            this.dropDownForms.type_id = this.form.type_id
+          },
+          selectedClass(){
+            this.dropDownForms.class = this.form.class
+          },
+          selectedStatus(){
+            this.dropDownForms.empty_loaded = this.form.empty_loaded
+          },
           reroute(x) {
             if(x == 'receivings') {
               let customUrl = `${window.location.origin}/admin/container-receivings/${ this.tabbing.receiving_id }/edit`
