@@ -97,7 +97,8 @@
                         {{-- <button class="btn btn-success" onclick="test()"> Add element</button> --}}
                         {{-- <button class="btn btn-success" onclick="test2()"> remove element</button> --}}
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px;">
-                          <input
+                          <input 
+                            ref="container_no"
                             id="container_no"
                             tabindex="1"
                             type="text"
@@ -1228,6 +1229,7 @@
           }
         },
         mounted () {
+          this.$refs.container_no.focus()
           this.getdata()
           this.getSize()
           this.getType()
