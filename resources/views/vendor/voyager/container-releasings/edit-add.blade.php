@@ -565,8 +565,20 @@
               })
             }
           },
+          checkInquiry() {
+            setTimeout(() => {
+              const x = localStorage.getItem('inquiry_receiving_container')
+              if(x) {
+                this.form.container_no = x
+                localStorage.removeItem('inquiry_receiving_container')
+
+                this.searchContainer()
+              }
+            }, 500)
+          },
         },
         mounted () {
+          this.checkInquiry()
           this.getdata()
         }
       })

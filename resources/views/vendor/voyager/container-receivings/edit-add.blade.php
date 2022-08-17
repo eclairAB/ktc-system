@@ -719,8 +719,13 @@
               window.location = customUrl
             }
             else {
-              let customUrl = `${window.location.origin}/admin/container-releasings/${ this.tabbing.releasing_id }/edit`
               if( this.tabbing.releasing_id ) {
+                let customUrl = `${window.location.origin}/admin/container-releasings/${ this.tabbing.releasing_id }/edit`
+                window.location = customUrl
+              }
+              else {
+                let customUrl = `${window.location.origin}/admin/container-releasings/create`
+                localStorage.setItem('inquiry_receiving_container', this.form.container_no)
                 window.location = customUrl
               }
             }
