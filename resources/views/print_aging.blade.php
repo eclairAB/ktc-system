@@ -29,7 +29,7 @@
         </div>
         <div style="font-size: 14px; display: flex; justify-content: space-between;">
           <b>{{ isset($client_details)?$client_details->code:'' }}</b>
-          <span>Print Date: {{ Carbon\Carbon::now()->format('Y-m-d') }}</span>
+          <span>Print Date: {{ Carbon\Carbon::now()->format('d/m/Y') }}</span>
         </div>
         <table style="margin-top: 20px">
           <tr style="border-top: 2px solid; border-bottom: 2px solid">
@@ -47,8 +47,8 @@
             <td>{{ $item->sizeType->size??'' }}</td>
             <td>{{ $item->type->code??'' }}</td>
             <td>{{ $item->status??'' }}</td>
-            <td>{{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}</td>
-            <td>{{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}</td>
+            <td>{{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('d/m/Y') }}</td>
+            <td>{{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('d/m/Y') }}</td>
             <td>{{ isset($item->total_no_days)?$item->total_no_days:0 }}</td>
           </tr>
           @endforeach

@@ -72,10 +72,10 @@
                                 Container
                             </th>
                             <th style="padding: 10px 10px; white-space: nowrap;">
-                                Size
+                                Type
                             </th>
                             <th style="padding: 10px 10px; white-space: nowrap;">
-                                Type
+                                Size
                             </th>
                             <th style="padding: 10px 10px; white-space: nowrap;">
                                 Eir-in
@@ -118,11 +118,11 @@
                                     {{ $item->container_no }}
                                 </td>
                                 <td style="padding: 0 10px; line-height: 30px; white-space: nowrap;">
-                                    {{ $item->sizeType->size??'' }}
-                                </td> 
-                                <td style="padding: 0 10px; line-height: 30px; white-space: nowrap;">
                                     {{ $item->type->code??'' }}
-                                </td>    
+                                </td>  
+                                <td style="padding: 0 10px; line-height: 30px; white-space: nowrap;">
+                                    {{ $item->sizeType->size??'' }}
+                                </td>   
                                 <td style="padding: 0 10px; line-height: 30px; white-space: nowrap;">
                                     {{ $item->eirNoIn->eir_no??'' }}
                                 </td>    
@@ -134,14 +134,14 @@
                                     style="padding: 0 10px; line-height: 30px; white-space: nowrap;"
                                     v-on:click="rerouteReceiving('{{ $item->receiving_id }}', '{{ $item->id }}')"
                                 >
-                                    {{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('Y-m-d') }}
+                                    {{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('d/m/Y') }}
                                 </td>
                                 <td 
                                     :class="'{{ $item->releasing_id }}' ? 'viewItemOnClick' : ''"
                                     style="padding: 0 10px; line-height: 30px; white-space: nowrap;"
                                     v-on:click="rerouteReleasing('{{ $item->releasing_id }}', '{{ $item->id }}')"
                                 >
-                                    {{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('Y-m-d') }}
+                                    {{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('d/m/Y') }}
                                 </td> 
                                 <td style="padding: 0 10px; line-height: 30px; white-space: nowrap;">
                                     {{ $item->status }}
