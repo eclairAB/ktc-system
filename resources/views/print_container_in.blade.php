@@ -28,8 +28,8 @@
           <tr style="border-top: 2px solid; border-bottom: 2px solid">
             <th scope="col">Container No.</th> 
             <th scope="col">EIR</th>
-            <th scope="col">Size</th>
             <th scope="col">Type</th>
+            <th scope="col">Size</th>
             <th scope="col">Client</th>
             <th scope="col">Date Time</th>
             <th scope="col">Class</th>
@@ -45,8 +45,8 @@
             <tr>
               <td>{{ $item->container_no }}</td>
               <td>{{ $item->eirNoIn->eir_no??'' }}</td>
-              <td>{{ $item->sizeType->size??'' }}</td>
               <td>{{ $item->type->code??'' }}</td>
+              <td>{{ $item->sizeType->size??'' }}</td>
               <td>{{ $item->client->code??'' }}</td>
               <td>{{ Carbon\Carbon::parse($item->receiving->inspected_date)->format('d/m/Y H:i') }}</td>
               <td>{{ $item->containerClass->class_code??'' }}</td>

@@ -44,8 +44,8 @@
           @foreach($data as $key => $item)
           <tr>
             <td>{{ $item->container_no }}</td>
-            <td>{{ $item->sizeType->size??'' }}</td>
             <td>{{ $item->type->code??'' }}</td>
+            <td>{{ $item->sizeType->size??'' }}</td>
             <td>{{ $item->status??'' }}</td>
             <td>{{ is_null($item->receiving)?'':Carbon\Carbon::parse($item->receiving->inspected_date)->format('d/m/Y') }}</td>
             <td>{{ is_null($item->releasing)?'':Carbon\Carbon::parse($item->releasing->inspected_date)->format('d/m/Y') }}</td>
