@@ -108,7 +108,7 @@
                           <label for="class" class="form-control-placeholder"> Class</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
-                          <input type="text" name="manufactured_date" disabled id="manufactured_date" :value="moment(containerInfo.manufactured_date).format('MM/YYYY')" style="height: 37px;" class="form-control">
+                          <input type="text" name="manufactured_date" disabled id="manufactured_date" :value="containerInfo.manufactured_date ? moment(containerInfo.manufactured_date).format('MM/YYYY'): ''" style="height: 37px;" class="form-control">
                           <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
