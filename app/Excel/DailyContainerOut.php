@@ -52,121 +52,121 @@ class DailyContainerOut implements  FromView, ShouldAutoSize
             if($this->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('container_no');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }else{
                 $sorted = $tobesorted->sortByDesc('container_no');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }
         }else if($this->param == 'eir_no'){
             $tobesorted = collect($data);
             if($this->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('eirNoOut.eir_no');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }else{
                 $sorted = $tobesorted->sortByDesc('eirNoOut.eir_no');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }
         }else if($this->param == 'client'){
             $tobesorted = collect($data);
             if($this->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('client.code');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }else{
                 $sorted = $tobesorted->sortByDesc('client.code');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }
         }else if($this->param == 'type'){
             $tobesorted = collect($data);
             if($this->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('type.code');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }else{
                 $sorted = $tobesorted->sortByDesc('type.code');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }
         }else if($this->param == 'size_type'){
             $tobesorted = collect($data);
             if($this->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('size_type.size');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }else{
                 $sorted = $tobesorted->sortByDesc('size_type.size');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }
         }else if($this->param == 'container_class'){
             $tobesorted = collect($data);
             if($this->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('container_class.class_code');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }else{
                 $sorted = $tobesorted->sortByDesc('container_class.class_code');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }
         }else if($this->param == 'inspected_date'){
             $tobesorted = collect($data);
             if($this->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('releasing.inspected_date');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }else{
                 $sorted = $tobesorted->sortByDesc('releasing.inspected_date');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }
         }else if($this->param == 'remarks'){
             $tobesorted = collect($data);
             if($this->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('releasing.remarks');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }else{
                 $sorted = $tobesorted->sortByDesc('releasing.remarks');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }
         }else if($this->param == 'consignee'){
             $tobesorted = collect($data);
             if($this->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('releasing.consignee');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }else{
                 $sorted = $tobesorted->sortByDesc('releasing.consignee');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }
         }else if($this->param == 'plate_no'){
             $tobesorted = collect($data);
             if($this->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('releasing.plate_no');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }else{
                 $sorted = $tobesorted->sortByDesc('releasing.plate_no');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }
         }else if($this->param == 'hauler'){
             $tobesorted = collect($data);
             if($this->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('releasing.hauler');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }else{
                 $sorted = $tobesorted->sortByDesc('releasing.hauler');
                 $datus = $sorted->values()->all();
-                return view('excel.daily_container_in',compact('datus'));
+                return view('excel.daily_container_out',compact('datus'));
             }
         }
     }
