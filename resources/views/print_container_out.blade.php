@@ -37,6 +37,8 @@
             <th scope="col">Consignee</th>
             <th scope="col">Plate No.</th>
             <th scope="col">Trucker</th>
+            <th scope="col">Booking No.</th>
+            <th scope="col">Seal No.</th>
             <th scope="col">Date Out</th>
             <th scope="col">Time</th>
           </tr>
@@ -53,6 +55,8 @@
             <td>{{ $item->releasing->consignee }}</td>
             <td>{{ $item->releasing->plate_no }}</td>
             <td>{{ $item->releasing->hauler }}</td>
+            <td>{{ $item->releasing->booking_no }}</td>
+            <td>{{ $item->releasing->seal_no }}</td>
             <td>{{ Carbon\Carbon::parse($item->releasing->inspected_date)->format('d/m/Y') }}</td>
             <td>{{ Carbon\Carbon::parse($item->releasing->inspected_date)->format('H:i') }}</td>
           </tr>

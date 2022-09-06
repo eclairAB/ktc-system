@@ -521,6 +521,24 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 $sorted = $tobesorted->sortByDesc('releasing.hauler');
                 return $sorted->values()->all();
             }
+        }else if($request->param == 'booking_no'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.booking_no');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.booking_no');
+                return $sorted->values()->all();
+            }
+        }else if($request->param == 'seal_no'){
+            $tobesorted = collect($data);
+            if($request->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.seal_no');
+                return $sorted->values()->all();
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.seal_no');
+                return $sorted->values()->all();
+            }
         }
     }
 
@@ -806,6 +824,28 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 return view('print_container_out')->with(compact('datus'));
             }else{
                 $sorted = $tobesorted->sortByDesc('releasing.hauler');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }
+        }else if($param == 'booking_no'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.booking_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.booking_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }
+        }else if($param == 'seal_no'){
+            $tobesorted = collect($data);
+            if($order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.seal_no');
+                $datus = $sorted->values()->all();
+                return view('print_container_out')->with(compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.seal_no');
                 $datus = $sorted->values()->all();
                 return view('print_container_out')->with(compact('datus'));
             }
