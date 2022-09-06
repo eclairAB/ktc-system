@@ -168,6 +168,28 @@ class DailyContainerOut implements  FromView, ShouldAutoSize
                 $datus = $sorted->values()->all();
                 return view('excel.daily_container_out',compact('datus'));
             }
+        }else if($this->param == 'booking_no'){
+            $tobesorted = collect($data);
+            if($this->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.booking_no');
+                $datus = $sorted->values()->all();
+                return view('excel.daily_container_out',compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.booking_no');
+                $datus = $sorted->values()->all();
+                return view('excel.daily_container_out',compact('datus'));
+            }
+        }else if($this->param == 'seal_no'){
+            $tobesorted = collect($data);
+            if($this->order == 'ASC'){
+                $sorted = $tobesorted->sortBy('releasing.seal_no');
+                $datus = $sorted->values()->all();
+                return view('excel.daily_container_out',compact('datus'));
+            }else{
+                $sorted = $tobesorted->sortByDesc('releasing.seal_no');
+                $datus = $sorted->values()->all();
+                return view('excel.daily_container_out',compact('datus'));
+            }
         }
     }
 }
