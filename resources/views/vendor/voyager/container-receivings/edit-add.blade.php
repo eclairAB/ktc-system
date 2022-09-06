@@ -209,7 +209,7 @@
                           <vuejs-datepicker
                             tabindex="8"
                             v-model="form.manufactured_date"
-                            :placeholder="pasmoDate === undefined ? 'mm/yyyy' : moment(pasmoDate).format('MM/yyyy')"
+                            :placeholder="pasmoDate === undefined ? 'mm/yyyy' : moment(pasmoDate).format('MM/YYYY')"
                             :input-class="errors.manufactured_date ? 'isError form-control isDate' : 'form-control isDate'"
                             :typeable="true"
                             name="manufactured_date"

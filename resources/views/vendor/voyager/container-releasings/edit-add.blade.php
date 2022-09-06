@@ -108,7 +108,7 @@
                           <label for="class" class="form-control-placeholder"> Class</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
-                          <input type="text" name="manufactured_date" disabled id="manufactured_date" :value="moment(containerInfo.manufactured_date).format('MMMM YYYY')" style="height: 37px;" class="form-control">
+                          <input type="text" name="manufactured_date" disabled id="manufactured_date" :value="moment(containerInfo.manufactured_date).format('MM/YYYY')" style="height: 37px;" class="form-control">
                           <label for="manufactured_date" class="form-control-placeholder"> Manufactured Date</label>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 15px;">
@@ -521,17 +521,22 @@
                 id: parseInt(dataId)
               }
               await axios.get(`/admin/get/releasing/byId/${payload.id}`).then(data => {
-                this.form = data.data
+                if(data.data) {
+                  this.form = Object.assign(this.form, data.data)
+                }
                 axios.get(`/admin/get/details/forUpdate?container_no=${data.data.container_no}`, data.data).then(data => {
                   this.containerInfo = data.data
                   this.getTabRoutes()
                 })
-                this.form.inspected_by = data.data.inspector
-                for (let index of Object.keys(data.data.photos)) {
-                  let wawex = {
-                    storage_path: data.data.photos[index].encoded[0]
+
+                this.form.inspected_by = Object.assign(this.form.inspected_by, data.data.inspector)
+                if(data.data.photos.length > 0) {
+                  for (let index of Object.keys(data.data.photos)) {
+                    let wawex = {
+                      storage_path: data.data.photos[index].encoded[0]
+                    }
+                    this.container_photo.push(wawex)
                   }
-                  this.container_photo.push(wawex)
                 }
                 this.form.container_photo = this.container_photo
                 this.form.inspected_time = moment(this.form.inspected_date).format('HH:mm')
@@ -570,6 +575,7 @@
               const x = localStorage.getItem('inquiry_receiving_container')
               if(x) {
                 this.form.container_no = x
+                console.log('form', this.form)
                 localStorage.removeItem('inquiry_receiving_container')
 
                 this.searchContainer()
