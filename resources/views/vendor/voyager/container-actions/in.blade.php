@@ -1,8 +1,19 @@
+@extends('voyager::master')
+
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/vue-select@3.16.0/dist/vue-select.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
     <style type="text/css">
+      .form-control {
+        color: black !important;
+      }
+      .form-error {
+        border: 1px solid #ff0000;
+      }
+      tbody td {
+        vertical-align: middle !important;
+      }
       .app-container {
         height: 100%;
       }
@@ -251,7 +262,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://unpkg.com/vue-select@3.16.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-date-dropdown@1.0.5/dist/vue-date-dropdown.min.js"></script>
@@ -503,9 +514,4 @@
   })
 
 </script>
-
-<style type="text/css">
-  .form-control {
-    color: black !important;
-  }
-</style>
+@stop
