@@ -304,100 +304,144 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('container_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('container_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'eir_no'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('eirNoIn.eir_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('eirNoIn.eir_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'client'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('client.code');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('client.code');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'type'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('type.code');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('type.code');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'size_type'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('size_type.size');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('size_type.size');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'container_class'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('container_class.class_code');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('container_class.class_code');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'inspected_date'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('receiving.inspected_date');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('receiving.inspected_date');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'remarks'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('receiving.remarks');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('receiving.remarks');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'consignee'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('receiving.consignee');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('receiving.consignee');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'plate_no'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('receiving.plate_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('receiving.plate_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'hauler'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('receiving.hauler');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('receiving.hauler');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }
     }
@@ -426,118 +470,170 @@ class QueriesController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('container_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('container_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'eir_no'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('eirNoOut.eir_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('eirNoOut.eir_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'client'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('client.code');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('client.code');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'type'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('type.code');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('type.code');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'size_type'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('size_type.size');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('size_type.size');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'container_class'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('container_class.class_code');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('container_class.class_code');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'inspected_date'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('releasing.inspected_date');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('releasing.inspected_date');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'remarks'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('releasing.remarks');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('releasing.remarks');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'consignee'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('releasing.consignee');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('releasing.consignee');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'plate_no'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('releasing.plate_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('releasing.plate_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'hauler'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('releasing.hauler');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('releasing.hauler');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'booking_no'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('releasing.booking_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('releasing.booking_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }else if($request->param == 'seal_no'){
             $tobesorted = collect($data);
             if($request->order == 'ASC'){
                 $sorted = $tobesorted->sortBy('releasing.seal_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }else{
                 $sorted = $tobesorted->sortByDesc('releasing.seal_no');
-                return $sorted->values()->all();
+                $data = $sorted->values()->all();
+                $count = count($data);
+                return response()->json(compact('data','count'));
             }
         }
     }

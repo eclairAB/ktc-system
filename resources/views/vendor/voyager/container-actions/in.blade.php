@@ -1,5 +1,7 @@
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="https://unpkg.com/vue-select@3.16.0/dist/vue-select.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
     <style type="text/css">
       .app-container {
         height: 100%;
@@ -34,187 +36,195 @@
       }
     </style>
 @stop
-<div id="containerIn">
 
-  <div class="panel panel-default" style="margin-top: 15px;">
-    
-    <div class="panel-body" style="background-color: #fff; border: 0; padding-bottom: 0;">
-      <div class="row">
-        <div class="col-xs-12" style="margin-bottom: 0;">
-          <div class="row" style="margin: 0; width: 100%;">
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin: 0;">
-              <span style="font-weight: bold; font-size: 18px;">Daily Container In Report</span>
-            </div>
-            <div id="wawex" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin: 0;">
-              <div>
-                <button class="btn btn-primary" :disabled="generateLoad" @click="getContainerIn">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
-                <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
-                <button class="btn btn-danger" :disabled="printLoad" @click="printContainerIn">@{{ exportLoad === false ? 'Print' : 'Loading...' }}</button>
+@section('content')
+<body>
+  <div id="containerIn">
+
+    <div class="panel panel-default" style="margin-top: 15px;">
+      <div class="panel-body" style="background-color: #fff; border: 0; padding-bottom: 0;">
+        <div class="row">
+          <div class="col-xs-12" style="margin-bottom: 0;">
+            <div class="row" style="margin: 0; width: 100%;">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin: 0;">
+                <span style="font-weight: bold; font-size: 18px;">Daily Container In Report</span>
+              </div>
+              <div id="wawex" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin: 0;">
+                <div>
+                  <button class="btn btn-primary" :disabled="generateLoad" @click="getContainerIn">@{{ generateLoad === false ? 'Generate' : 'Loading...' }}</button>
+                  <button class="btn btn-success" :disabled="exportLoad" @click="exportContainerIn">@{{ exportLoad === false ? 'Export to Excel' : 'Loading...' }}</button>
+                  <button class="btn btn-danger" :disabled="printLoad" @click="printContainerIn">@{{ exportLoad === false ? 'Print' : 'Loading...' }}</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-xs-12" style="margin-bottom: 10px;">
-          <hr style="margin: 5px 0;">
-        </div>
-        <div class="col-xs-12" style="margin: 0;">
-          <div class="row" style="padding: 0 15px;">
+          <div class="col-xs-12" style="margin-bottom: 10px;">
+            <hr style="margin: 5px 0;">
+          </div>
+          <div class="col-xs-12" style="margin: 0;">
+            <div class="row" style="padding: 0 15px;">
 
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-              <vuejs-datepicker
-                v-model="form.from"
-                placeholder="mm/dd/yyyyy"
-                input-class="form-control"
-                :typeable="true"
-                name="from"
-                :format="dateFormat"
-                :required="true"
-                @input="getClient">
-              </vuejs-datepicker>
-              <label for="from" class="form-control-placeholder"> Date In</span></label>
-            </div>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <vuejs-datepicker
+                  v-model="form.from"
+                  placeholder="mm/dd/yyyyy"
+                  input-class="form-control"
+                  :typeable="true"
+                  name="from"
+                  :format="dateFormat"
+                  :required="true"
+                  @input="getClient">
+                </vuejs-datepicker>
+                <label for="from" class="form-control-placeholder"> Date In</span></label>
+              </div>
 
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-              <vuejs-datepicker
-                v-model="form.to"
-                placeholder="mm/dd/yyyyy"
-                input-class="form-control"
-                :typeable="true"
-                name="to"
-                :format="dateFormat"
-                :required="true"
-                @input="getClient">
-              </vuejs-datepicker>
-              <label for="to" class="form-control-placeholder"> Date To</span></label>
-            </div>
-            
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-              <v-select
-                style="height: 37px !important;"
-                :options="clientList"
-                v-model="form.client"
-                label="code"
-                class="form-control"
-                :reduce="code => code.id"
-              ></v-select>
-              <label for="client" class="form-control-placeholder"> Client</span></label>
-            </div>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <vuejs-datepicker
+                  v-model="form.to"
+                  placeholder="mm/dd/yyyyy"
+                  input-class="form-control"
+                  :typeable="true"
+                  name="to"
+                  :format="dateFormat"
+                  :required="true"
+                  @input="getClient">
+                </vuejs-datepicker>
+                <label for="to" class="form-control-placeholder"> Date To</span></label>
+              </div>
+              
+              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <v-select
+                  style="height: 37px !important;"
+                  :options="clientList"
+                  v-model="form.client"
+                  label="code"
+                  class="form-control"
+                  :reduce="code => code.id"
+                ></v-select>
+                <label for="client" class="form-control-placeholder"> Client</span></label>
+              </div>
 
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-              <v-select
-                class="form-control"
-                :options="typeList"
-                style="height: 37px !important;"
-                v-model="form.type"
-                label="code"
-                :reduce="code => code.id"
-              ></v-select>
-              <label for="type" class="form-control-placeholder"> Type</label>
-            </div>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <v-select
+                  class="form-control"
+                  :options="typeList"
+                  style="height: 37px !important;"
+                  v-model="form.type"
+                  label="code"
+                  :reduce="code => code.id"
+                ></v-select>
+                <label for="type" class="form-control-placeholder"> Type</label>
+              </div>
 
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-              <v-select
-                class="form-control"
-                :options="emptyLoadedList"
-                style="height: 37px !important;"
-                v-model="form.status"
-                label="name"
-                :reduce="name => name.name"
-              ></v-select>
-              <label for="type" class="form-control-placeholder"> Status</label>
-            </div>
+              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <v-select
+                  class="form-control"
+                  :options="emptyLoadedList"
+                  style="height: 37px !important;"
+                  v-model="form.status"
+                  label="name"
+                  :reduce="name => name.name"
+                ></v-select>
+                <label for="type" class="form-control-placeholder"> Status</label>
+              </div>
 
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-              <v-select
-                :options="sizeTypeList"
-                style="height: 37px !important;"
-                v-model="form.sizeType"
-                class="form-control"
-                label="code"
-                :reduce="code => code.id"
-              ></v-select>
-              <label for="code" class="form-control-placeholder"> Size</label>
-            </div>
-            
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
-              <v-select
-                style="height: 37px !important;"
-                class="form-control"
-                :options="classList"
-                v-model="form.class"
-                label="class_code"
-                :reduce="class_code => class_code.id"
-              ></v-select>
-              <label for="class" class="form-control-placeholder"> Class</span></label>
-            </div>
+              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <v-select
+                  :options="sizeTypeList"
+                  style="height: 37px !important;"
+                  v-model="form.sizeType"
+                  class="form-control"
+                  label="code"
+                  :reduce="code => code.id"
+                ></v-select>
+                <label for="code" class="form-control-placeholder"> Size</label>
+              </div>
+              
+              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-group" style="padding-right: 5px; padding-left: 5px; margin-bottom: 10px;">
+                <v-select
+                  style="height: 37px !important;"
+                  class="form-control"
+                  :options="classList"
+                  v-model="form.class"
+                  label="class_code"
+                  :reduce="class_code => class_code.id"
+                ></v-select>
+                <label for="class" class="form-control-placeholder"> Class</span></label>
+              </div>
 
+            </div>
           </div>
         </div>
       </div>
+    
+      <div class="panel-body" style="padding-top: 0;">
+        <div style="color: black; font-weight: bold; text-align: center; margin-bottom: 10px;">
+            <!-- <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br> -->
+            <span>Container Daily In Report</span>
+        </div>
+        <div class="table-container" style="overflow: auto; height: 100%;">
+          <table class="table table-bordered" style="margin-bottom: 0; color: black;">
+            <thead>
+              <tr>
+                <th @click="customSort('container_no')" style="text-align: left; white-space: nowrap; cursor: pointer;" scope="col">Container No.</th>
+                <th @click="customSort('eir_no')" scope="col" style="white-space: nowrap; cursor: pointer;">EIR</th>
+                <th @click="customSort('type')" scope="col" style="white-space: nowrap; cursor: pointer;">Type</th>
+                <th @click="customSort('size_type')" scope="col" style="white-space: nowrap; cursor: pointer;">Size</th>
+                <th @click="customSort('client')" scope="col" style="white-space: nowrap; cursor: pointer;">Client</th>
+                <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date Time</th>
+                <th @click="customSort('container_class')" scope="col" style="white-space: nowrap; cursor: pointer;">Class</th>
+                <th scope="col" style="white-space: nowrap">Damages</th>
+                <th @click="customSort('remarks')" scope="col" style="white-space: nowrap; cursor: pointer;">Remarks</th>
+                <th @click="customSort('consignee')" scope="col" style="white-space: nowrap; cursor: pointer;">Consignee</th>
+                <th @click="customSort('plate_no')" scope="col" style="white-space: nowrap; cursor: pointer;">Plate No.</th>
+                <th @click="customSort('hauler')" scope="col" style="white-space: nowrap; cursor: pointer;">Trucker</th>
+                <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date In</th>
+                <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Time</th>
+              </tr>
+            </thead>
+            <tbody v-if="containerInList.length > 0">
+              <tr  v-for="(item, index) in containerInList" :key="index">
+                <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.receiving.id, item.id)">@{{ item.container_no }}</td>
+                <td style="white-space: nowrap">@{{ item.eir_no_in ? item.eir_no_in.eir_no : '' }}</td>
+                <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
+                <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.size : '' }}</td>
+                <td style="white-space: nowrap">@{{ item.client ? item.client.code : ''  }}</td>
+                <td style="white-space: nowrap">@{{ moment(item.receiving.inspected_date).format('DD/MM/YYYY HH:mm') }}</td>
+                <td style="white-space: nowrap">@{{ item.container_class ? item.container_class.class_code : '' }}</td>
+                <td style="white-space: nowrap">
+                  <div v-for="(item,i) in item.receiving.damages" :key="i">
+                    @{{ i + 1 }}.) @{{ item.description }}
+                  </div>
+                </td>
+                <td style="white-space: nowrap">@{{ item.receiving.remarks }}</td>
+                <td style="white-space: nowrap">@{{ item.receiving.consignee }}</td>
+                <td style="white-space: nowrap">@{{ item.receiving.plate_no }}</td>
+                <td style="white-space: nowrap">@{{ item.receiving.hauler }}</td>
+                <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.receiving.id, item.id)">@{{ moment(item.receiving.inspected_date).format('DD/MM/YYYY') }}</td>
+                <td style="white-space: nowrap">@{{ moment(item.receiving.inspected_date).format('HH:mm') }}</td>
+              </tr>
+            </tbody>
+            <tbody v-else>
+              <tr>
+                <td colspan="14" style="text-align: center;" v-if="tableLoad === true">
+                  <div class="lds-facebook"><div></div><div></div><div></div></div><br>
+                  <div>Fetching...</div>
+                </td>
+                <td colspan="14" style="text-align: center;" v-else>No Data Available</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="display: flex; margin-top: 10px;">
+            <div v-if="containerInList.length > 0" style="font-weight:bold; display: flex; margin-right: 20px; align-items: center;">
+              <div style="margin-left: 50px;margin-top: -8px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">@{{ van_total }}</div>
+            </div>
+          </div>
+        </div>
+      </div>  
     </div>
-  
-    <div class="panel-body" style="padding-top: 0;">
-      <div style="color: black; font-weight: bold; text-align: center; margin-bottom: 10px;">
-          <!-- <img src = "{{ asset('/images/kudos.png') }}" width="150px" /><br> -->
-          <span>Container Daily In Report</span>
-      </div>
-      <div class="table-container" style="overflow: auto; height: 100%;">
-        <table class="table table-bordered" style="margin-bottom: 0; color: black;">
-          <thead>
-            <tr>
-              <th @click="customSort('container_no')" style="text-align: left; white-space: nowrap; cursor: pointer;" scope="col">Container No.</th>
-              <th @click="customSort('eir_no')" scope="col" style="white-space: nowrap; cursor: pointer;">EIR</th>
-              <th @click="customSort('type')" scope="col" style="white-space: nowrap; cursor: pointer;">Type</th>
-              <th @click="customSort('size_type')" scope="col" style="white-space: nowrap; cursor: pointer;">Size</th>
-              <th @click="customSort('client')" scope="col" style="white-space: nowrap; cursor: pointer;">Client</th>
-              <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date Time</th>
-              <th @click="customSort('container_class')" scope="col" style="white-space: nowrap; cursor: pointer;">Class</th>
-              <th scope="col" style="white-space: nowrap">Damages</th>
-              <th @click="customSort('remarks')" scope="col" style="white-space: nowrap; cursor: pointer;">Remarks</th>
-              <th @click="customSort('consignee')" scope="col" style="white-space: nowrap; cursor: pointer;">Consignee</th>
-              <th @click="customSort('plate_no')" scope="col" style="white-space: nowrap; cursor: pointer;">Plate No.</th>
-              <th @click="customSort('hauler')" scope="col" style="white-space: nowrap; cursor: pointer;">Trucker</th>
-              <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Date In</th>
-              <th @click="customSort('inspected_date')" scope="col" style="white-space: nowrap; cursor: pointer;">Time</th>
-            </tr>
-          </thead>
-          <tbody v-if="containerInList.length > 0">
-            <tr  v-for="(item, index) in containerInList" :key="index">
-              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.receiving.id, item.id)">@{{ item.container_no }}</td>
-              <td style="white-space: nowrap">@{{ item.eir_no_in ? item.eir_no_in.eir_no : '' }}</td>
-              <td style="white-space: nowrap">@{{ item.type ? item.type.code : '' }}</td>
-              <td style="white-space: nowrap">@{{ item.size_type ? item.size_type.size : '' }}</td>
-              <td style="white-space: nowrap">@{{ item.client ? item.client.code : ''  }}</td>
-              <td style="white-space: nowrap">@{{ moment(item.receiving.inspected_date).format('DD/MM/YYYY HH:mm') }}</td>
-              <td style="white-space: nowrap">@{{ item.container_class ? item.container_class.class_code : '' }}</td>
-              <td style="white-space: nowrap">
-                <div v-for="(item,i) in item.receiving.damages" :key="i">
-                  @{{ i + 1 }}.) @{{ item.description }}
-                </div>
-              </td>
-              <td style="white-space: nowrap">@{{ item.receiving.remarks }}</td>
-              <td style="white-space: nowrap">@{{ item.receiving.consignee }}</td>
-              <td style="white-space: nowrap">@{{ item.receiving.plate_no }}</td>
-              <td style="white-space: nowrap">@{{ item.receiving.hauler }}</td>
-              <td style="white-space: nowrap" class="viewItemOnClick" v-on:click="reroute(item.receiving.id, item.id)">@{{ moment(item.receiving.inspected_date).format('DD/MM/YYYY') }}</td>
-              <td style="white-space: nowrap">@{{ moment(item.receiving.inspected_date).format('HH:mm') }}</td>
-            </tr>
-          </tbody>
-          <tbody v-else>
-            <tr>
-              <td colspan="14" style="text-align: center;" v-if="tableLoad === true">
-                <div class="lds-facebook"><div></div><div></div><div></div></div><br>
-                <div>Fetching...</div>
-              </td>
-              <td colspan="14" style="text-align: center;" v-else>No Data Available</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>  
-  </div>
 
-</div>
+  </div>
+</body>
 
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script>
@@ -274,7 +284,8 @@
       tableLoad: false,
       generateLoad: false,
       exportLoad: false,
-      printLoad: false
+      printLoad: false,
+      van_total: '',
     },
     methods: {
       customSort (data) {
@@ -373,8 +384,9 @@
           }
           await axios.post(`/admin/get/daily_in`, payload).then(data => {
             this.generateLoad = false
-            this.containerInList = data.data
-            if (data.data.length === 0) {
+            this.containerInList = data.data.data
+            this.van_total = data.data.count
+            if (data.data.data.length === 0) {
               Swal.fire({
                 title: '',
                 text: 'No record found!',

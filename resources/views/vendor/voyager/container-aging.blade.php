@@ -53,7 +53,6 @@
   <div id="containerIn">
 
     <div class="panel panel-default" style="margin-top: 15px;">
-      
       <div class="panel-body" style="background-color: #fff; border: 0; padding-bottom: 0;">
         <div class="row">
           <div class="col-xs-12" style="margin-bottom: 0;">
@@ -288,15 +287,15 @@
           <div style="display: flex; margin-top: 10px;">
             <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex; margin-right: 20px; align-items: center;">
               Van Count: 
-              <div style="margin-left: 10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">@{{ van_total }}</div>
+              <div style="margin-left: 10px;margin-top: -10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">@{{ van_total }}</div>
             </div>
             <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex; margin-right: 20px; align-items: center;">
               IN: 
-              <div style="margin-left: 10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">@{{ van_in }}</div>
+              <div style="margin-left: 10px;margin-top: -10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">@{{ van_in }}</div>
             </div>
             <div v-if="containerAgingList.length > 0" style="font-weight:bold; display: flex; margin-right: 20px; align-items: center;">
               OUT: 
-              <div style="margin-left: 10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">@{{ van_out }}</div>
+              <div style="margin-left: 10px;margin-top: -10px; padding: 0 3px; border: 1px solid; background: white; width: 70px; text-align: right;">@{{ van_out }}</div>
             </div>
           </div>
         </div>
